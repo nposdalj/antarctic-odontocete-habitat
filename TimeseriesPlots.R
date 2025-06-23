@@ -2,20 +2,44 @@ library(tidyverse)
 library(gridExtra)
 
 # Load data from EIE/CI site
-CI <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Antarc_EIE_01_Odontocetes.csv")
+CI <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/data/Antarc_EIE_01_Odontocetes.csv")
 CI <- CI[-c(1:2,7)]
 # Load data from SSI/KGI site
-KGI <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Antarc_SSI_01_Odontocetes.csv")
+KGI <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/data/Antarc_SSI_01_Odontocetes.csv")
 KGI <- KGI[-c(1:2,7)]
 # Load data from EI site
-EI <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Antarc_EI_01_Odontocetes.csv")
+EI <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/data/Antarc_EI_01_Odontocetes.csv")
 EI <- EI[-c(1:2,7:12)]
 # Join all data into one dataframe and save it
 CI$Site <- "CI"
 KGI$Site <- "KGI"
 EI$Site <- "EI"
 odontocete <- rbind(CI, KGI, EI)
-write.csv(odontocete,"C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Antarc_Odontocetes.csv")
+write.csv(odontocete,"C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/data/Antarc_Odontocetes.csv")
+
+# Function to write out full name of a species/site code
+name <- function(abbrev) {
+  if (abbrev == "CI") {
+    fullname <- "Clarence Island"
+  } else if (abbrev == "KGI") {
+    fullname <- "King George Island"
+  } else if (abbrev == "EI") {
+    fullname <- "Elephant Island"
+  } else if (abbrev == "BW29") {
+    fullname <- "Southern Bottlenose Whale"
+  } else if (abbrev == "BW37") {
+    fullname <- "Gray's and Strap-toothed Whale BW37"
+  } else if (abbrev == "BW58") {
+    fullname <- "Gray's and Strap-toothed Whale BW58"
+  } else if (abbrev == "Gm") {
+    fullname <- "Long-finned Pilot Whale"
+  } else if (abbrev == "Oo") {
+    fullname <- "Killer Whale"
+  } else {
+    fullname <- "Sperm Whale"
+  }
+  return(fullname)
+}
 
 # Timeseries plots
 odontocete <- odontocete %>% # Reformat dataframe
@@ -50,9 +74,9 @@ timeseries <- function(site, species) { # Function to create a timeseries plot
     summarise(Duration = sum(Call.time, na.rm = TRUE))
   daily$Duration <- daily$Duration / 3600
   # Creating the site- and species-specific timeseries
-  ggplot(data = daily, mapping = aes(x = Date, y = Duration)) + geom_col() + 
+  ggplot(data = daily, mapping = aes(x = Date, y = Duration)) + geom_col(width = 0.9) + 
     scale_x_date(limits = c(b1, b2), date_labels = "%b %Y")+ 
-    labs(subtitle = species, y = "Duration (hrs)")
+    labs(subtitle = name(species), y = "Duration (hrs)")
 }
 
 bySite_ts <- function(site) { # Function to aggregate all plots from a particular site
@@ -60,7 +84,7 @@ bySite_ts <- function(site) { # Function to aggregate all plots from a particula
   final_plot <- grid.arrange(timeseries(site, "BW29"), timeseries(site, "BW37"), 
                              timeseries(site, "BW58"), timeseries(site, "Gm"), 
                              timeseries(site, "Oo"), timeseries(site, "Pm"),
-                             nrow = 6, top = site)
+                             nrow = 6, top = name(site))
   return(final_plot)
 }
 
