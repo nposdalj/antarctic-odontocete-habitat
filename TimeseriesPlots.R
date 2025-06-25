@@ -2,20 +2,19 @@ library(tidyverse)
 library(gridExtra)
 
 # Load data from EIE/CI site
-CI <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/data/Antarc_EIE_01_Odontocetes.csv")
+CI <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Data/Antarc_EIE_01_Odontocetes.csv")
 CI <- CI[-c(1:2,7)]
 # Load data from SSI/KGI site
-KGI <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/data/Antarc_SSI_01_Odontocetes.csv")
+KGI <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Data/Antarc_SSI_01_Odontocetes.csv")
 KGI <- KGI[-c(1:2,7)]
 # Load data from EI site
-EI <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/data/Antarc_EI_01_Odontocetes.csv")
+EI <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Data/Antarc_EI_01_Odontocetes.csv")
 EI <- EI[-c(1:2,7:12)]
 # Join all data into one dataframe and save it
 CI$Site <- "CI"
 KGI$Site <- "KGI"
 EI$Site <- "EI"
 odontocete <- rbind(CI, KGI, EI)
-write.csv(odontocete,"C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/data/Antarc_Odontocetes.csv")
 
 # Function to write out full name of a species/site code
 name <- function(abbrev) {
@@ -51,6 +50,7 @@ odontocete <- odontocete %>% # Reformat dataframe
     # New column that has length of call in seconds
   )
 odontocete$Call.time[odontocete$Call.time == 0] <- 1 # If a call is 0 seconds, correct to 1
+write.csv(odontocete,"C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Data/Antarc_Odontocetes.csv")
 
 timeseries <- function(site, species) { # Function to create a timeseries plot
   # Setting date range bounds for each site
@@ -70,17 +70,26 @@ timeseries <- function(site, species) { # Function to create a timeseries plot
   # Filtering dataframe by the relevant site and species
   filtered <- filter(odontocete, Site == site & Species.Code == species)
   # Creating new dataframe that stores the total call duration (hours) for each day
-  daily <- filtered %>% group_by(Date) %>% 
-    summarise(Duration = sum(Call.time, na.rm = TRUE))
+  daily <- filtered %>% group_by(Date, Call) %>%
+    summarise(Duration = sum(Call.time, na.rm = TRUE), .groups = "drop")
   daily$Duration <- daily$Duration / 3600
   # Creating the site- and species-specific timeseries
-  ggplot(data = daily, mapping = aes(x = Date, y = Duration)) + geom_col(width = 0.9) + 
+  ggplot(data = daily, mapping = aes(x = Date, y = Duration, fill = Call)) + geom_col(width = 0.9) + 
     scale_x_date(limits = c(b1, b2), date_labels = "%b %Y")+ 
-    labs(subtitle = name(species), y = "Duration (hrs)")
+    labs(subtitle = name(species), y = "Duration (hrs)") + 
+    guides(fill = guide_legend(keywidth = .6, keyheight = 0.4)) +
+    theme(
+      legend.position = "bottom", legend.title = element_text(size = 8, face = "bold"),
+      legend.text = element_text(size = 8), 
+      plot.subtitle = element_text(size = 9, face = "bold"), axis.title = element_text(size = 9),
+      axis.text = element_text(size = 7), legend.margin = margin(c(0, 0, 0.2, 0), unit = 'cm'), 
+      plot.margin = unit(c(0.2, 0.5, 0.2, 0.5), units = "line")
+      )
 }
 
 bySite_ts <- function(site) { # Function to aggregate all plots from a particular site
   # Joining all species-specific timeseries into one figure
+  windows(width = 20, height = 30)
   final_plot <- grid.arrange(timeseries(site, "BW29"), timeseries(site, "BW37"), 
                              timeseries(site, "BW58"), timeseries(site, "Gm"), 
                              timeseries(site, "Oo"), timeseries(site, "Pm"),
