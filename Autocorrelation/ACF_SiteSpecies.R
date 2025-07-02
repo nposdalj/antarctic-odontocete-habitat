@@ -123,7 +123,7 @@ FindACF <- function(site, site_presence, acf_table) {
     species_sum <- sum(species_data)
     
     # Base code to generate acf plots/values can be found in Natalie's GitHub:
-    # SeasonalityAnalysis\GAM_GEEs\WAT\General\SiteSpecific_GAMGEE_knots4_WAT.R
+    # SeasonalityAnalysis/GAM_GEEs/WAT/General/SiteSpecific_GAMGEE_knots4_WAT.R
     
     if (species_sum == 0) { # If no data for this species, return 0 for acf_value
       acf_table[row_index, species] <- 0 }
@@ -156,7 +156,7 @@ FindPACF <- function(site, site_presence, pacf_table) {
     species_sum <- sum(species_data)
     
     # Base code to generate acf plots/values can be found in Natalie's GitHub:
-    # SeasonalityAnalysis\GAM_GEEs\WAT\General\SiteSpecific_GAMGEE_knots4_WAT.R
+    # SeasonalityAnalysis/GAM_GEEs/WAT/General/SiteSpecific_GAMGEE_knots4_WAT.R
     
     if (species_sum == 0) { # If no data for this species, return 0 for acf_value
       pacf_table[row_index, species] <- 0 }
@@ -176,3 +176,9 @@ FindPACF <- function(site, site_presence, pacf_table) {
 pacf_table <- FindPACF("EI", EI_presence, pacf_table)
 pacf_table <- FindPACF("KGI", KGI_presence, pacf_table)
 pacf_table <- FindPACF("CI", CI_presence, pacf_table)
+
+# ----------------Step 3: Exporting tables---------------
+directory <- "C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Autocorrelation"
+write.csv(acf_table, paste(directory, "/acf_table.csv", sep = ""), row.names = F)
+write.csv(pacf_table, paste(directory, "/pacf_table.csv", sep = ""), row.names = F)
+write.csv(detection_table, paste(directory, "/binned_detections.csv", sep = ""), row.names = F)

@@ -13,6 +13,7 @@ library(gganimate)
 library(ggplot2)
 library(plotdap)
 
+# --------------Step 1: Access ERRDAP data-------------------
 saveDir = paste("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data",sep="")
 # # Regions = c('ENP','CCE','CentralPac')
 # Regions = c('CentralPac')
@@ -83,3 +84,50 @@ GetSST('CI')
 #   
 # }
 # }
+
+# ------------------Step 2: Extract Data-----------------
+# Load ERDDAP SST data
+EI_sst <- nc_open("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/EI_SST_2014.nc/683aefaef697b5b3566df97963a5795b.nc")
+KGI_sst <- nc_open("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/KGI_SST_2015-2016.nc/d845de2ea7f37f907cc6bbcfc07dd9a3.nc")
+CI_sst <- nc_open("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/CI_SST_2016.nc/eab0cca18b09862e5e68457478cf25d0.nc")
+
+dfFromNC <- function(data) {
+  # Extracting relevant data
+  time <- ncvar_get(data, 'time')
+  lat <- ncvar_get(data, 'latitude')
+  lon <- ncvar_get(data, 'longitude')
+  sst <- ncvar_get(data, 'sstMasked')
+  # fillvalue <- ncatt_get(data, "sea_surface_temperature", "_FillValue")
+  # sst[sst==fillvalue$value] <- NA
+  time_obs <- as.POSIXct(time, origin = "1970-01-01", tz="UTC") # Changing from seconds to time
+  
+  # Creating a dataframe with all variables
+  lonlattime <- expand.grid(lon = lon, lat = lat, time = time_obs)
+  df <- data.frame(lon = lonlattime$lon, lat = lonlattime$lat, date = lonlattime$time,
+                   sst = as.vector(sst))
+  df <- na.omit(df) # removing missing data
+  
+  # Creating a dataframe with daily spatial averages
+  avg_df <- df %>% group_by(date) %>% summarize(sst = mean(sst))
+  return(avg_df)
+}
+# Constructing site dataframes
+EI_df <- dfFromNC(EI_sst)
+KGI_df <- dfFromNC(KGI_sst)
+CI_df <- dfFromNC(CI_sst)
+
+# Function to create timeseries by site
+SSTtimeseries <- function(data, site) {
+  data$date <- as.Date(data$date)
+  
+  windows(16,4)
+  sst <- ggplot(data = data, mapping = aes(x = date, y = sst)) + geom_line(color = "tan", size = 2) + 
+    geom_point(color = "saddlebrown", size = 1) + 
+    labs(x = "Date", y = "Sea Surface Temperature (C)", title = site) + scale_x_date(date_labels = "%b %Y") +
+    theme(axis.title = element_text(size = 13))
+  return(sst)
+}
+# Construct timeseries for all sites
+SSTtimeseries(EI_df, "Elephant Island")
+SSTtimeseries(KGI_df, "King George Island")
+SSTtimeseries(CI_df, "Clarence Island")

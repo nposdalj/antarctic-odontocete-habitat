@@ -2,9 +2,9 @@ library(lubridate)
 library(CopernicusMarine)
 library(stars)
 library(ncdf4) # package for netcdf manipulation
-#library(RNetCDF)
 library(raster) # package for raster manipulation
 library(tidyverse)
+library(gridExtra) # for grid.arrange
 
 # -----------Step 1: Access Copernicus data-----------
 # Was getting 404 error when trying to download data (even though I changed function to match the updated CopernicusMarine library)
@@ -48,44 +48,64 @@ dfFromNC <- function(data) {
   time <- ncvar_get(data, 'time')
   lat <- ncvar_get(data, 'latitude')
   lon <- ncvar_get(data, 'longitude')
-  ssh <- as.vector(ncvar_get(data, 'zos'))
-  n_velocity <- as.vector(ncvar_get(data, 'vo'))
-  e_velocity <- as.vector(ncvar_get(data, 'uo'))
-  salinity <- as.vector(ncvar_get(data, 'so'))
-  mixed_layer <- as.vector(ncvar_get(data, 'mlotst'))
-  
-  # Cleaning up latitude, longitude, and time variables
+  ssh <- ncvar_get(data, 'zos')
+  n_velocity <- ncvar_get(data, 'vo')
+  e_velocity <- ncvar_get(data, 'uo')
+  salinity <- ncvar_get(data, 'so')
+  mixed_layer <- ncvar_get(data, 'mlotst')
   time_obs <- as.POSIXct(time, origin = "1970-01-01", tz="UTC") # Changing from seconds to time
-  lonlattime <- as.matrix(expand.grid(lon,lat,time_obs))
-  
+
   # Creating a dataframe with all variables
-  lonlat <- expand.grid(lon = lon, lat = lat, time = time_obs)
-  
-  df <- data.frame(
-    long = lonlat$lon,
-    lat = lonlat$lat,
-    date = lonlat$time,
-    ssh = as.vector(ssh),
-    n_velocity = as.vector(n_velocity),
-    e_velocity = as.vector(e_velocity),
-    salinity = as.vector(salinity),
-    mixed_layer = as.vector(mixed_layer)
-  )
-  # df <- data.frame(cbind(lonlattime, ssh, n_velocity, e_velocity, salinity, mixed_layer))
-  # colnames(df) <- c("long","lat","date","ssh", "n_velocity",
-  #                         "e_velocity", "salinity", "mixed_layer")
+  lonlattime <- expand.grid(lon = lon, lat = lat, time = time_obs)
+  df <- data.frame(lon = lonlattime$lon, lat = lonlattime$lat, date = lonlattime$time,
+                   ssh = as.vector(ssh), n_velocity = as.vector(n_velocity),
+                   e_velocity = as.vector(e_velocity), salinity = as.vector(salinity),
+                   mixed_layer = as.vector(mixed_layer))
 
   # Creating a dataframe with daily spatial averages
   avg_df <- df %>% group_by(date) %>% summarize(ssh = mean(ssh), n_velocity = mean(n_velocity),
                                                 e_velocity = mean(e_velocity), salinity = mean(salinity),
                                                 mixed_layer = mean(mixed_layer))
-
   return(avg_df)
-  }
-dfFromNC(EI_cop)
+}
+# Constructing site dataframes
+EI_df <- dfFromNC(EI_cop)
 KGI_df <- dfFromNC(KGI_cop)
 CI_df <- dfFromNC(CI_cop)
 
-CopTimeseries <- function(data) {
+# Function to create timeseries by site
+CopTimeseries <- function(data, site) {
+  data$date <- as.Date(data$date)
+  # sea surface height
+  ssh <- ggplot(data = data, mapping = aes(x = date, y = ssh)) + geom_line(color = "tomato", size = 1) + 
+    labs(x = "Sea Surface Height", y = "meters") + scale_x_date(date_labels = "%b %Y") + 
+    theme(plot.margin = unit(c(1, 0.5, 1, 0.5), units = "line"))
+  # north sea water velocity
+  n_velocity <- ggplot(data = data, mapping = aes(x = date, y = n_velocity)) + 
+    geom_line(color = "mediumpurple", size = 1) + 
+    labs(x = "Northward Sea Water Velocity", y = "m/s") + scale_x_date(date_labels = "%b %Y") + 
+    theme(plot.margin = unit(c(1, 0.5, 1, 0.5), units = "line"))
+  # east sea water velocity
+  e_velocity <- ggplot(data = data, mapping = aes(x = date, y = e_velocity)) + 
+    geom_line(color = "orchid", size = 1) + 
+    labs(x = "Eastward Sea Water Velocity", y = "m/s") + scale_x_date(date_labels = "%b %Y") + 
+    theme(plot.margin = unit(c(1, 0.5, 1, 0.5), units = "line"))
+  # salinity
+  salinity <- ggplot(data = data, mapping = aes(x = date, y = salinity)) + geom_line(color = "gold", size = 1) + 
+    labs(x = "Salinity", y = "psu") + scale_x_date(date_labels = "%b %Y") + 
+    theme(plot.margin = unit(c(1, 0.5, 1, 0.5), units = "line"))
+  # mixed layer depth
+  mixed <- ggplot(data = data, mapping = aes(x = date, y = mixed_layer)) + 
+    geom_line(color = "mediumseagreen", size = 1) + 
+    labs(x = "Mixed Layer Thickness", y = "meters") + scale_x_date(date_labels = "%b %Y") +
+    theme(plot.margin = unit(c(1, 0.5, 1, 0.5), units = "line"))
+  
+  # Arrange plots to one figure
+  windows()
+  final_plot <- grid.arrange(ssh, n_velocity, e_velocity, salinity, mixed, nrow = 5, top = site)
   
 }
+# Construct timeseries for all sites
+CopTimeseries(EI_df, "Elephant Island")
+CopTimeseries(KGI_df, "King George Island")
+CopTimeseries(CI_df, "Clarence Island")
