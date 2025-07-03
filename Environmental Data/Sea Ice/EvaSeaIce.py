@@ -8,12 +8,12 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 # path to shape file (locate within same folder of notebook)
-mask_path = 'C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Sea Ice/EI_circle.shp' #your circular or polygon mask shape file created in qgis
-site_path = 'C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Sea Ice/EI_point.shp' #your coordinates as a point shape file created in qgis
+mask_path = 'C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Sea Ice/QGIS/EI30.shp' #your circular or polygon mask shape file created in qgis
+site_path = 'C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Sea Ice/QGIS/EI.shp' #your coordinates as a point shape file created in qgis
 
 # For file saving:
 maskLocation = 'SeaIce' # Name/prefix that will be used for naming the files that will be created
-path = 'C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Sea Ice/Data' # Where you want your files to be saved. 
+path = 'C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Sea Ice' # Where you want your files to be saved. 
 
 # Note: The full saving location will be as follows {path}/{maskLocation}/{year}_{maskLocation}_MeanIceConcentration.png'. Within your path, you need to have created a folder named exactly as your "maskLocation". Otherwise it will throw an error.
 
@@ -21,7 +21,7 @@ path = 'C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmenta
 # Load shape files for the sites and masks
 site_gpd = gpd.read_file(site_path)
 mask_gpd = gpd.read_file(mask_path)
-mask_gpd = mask_gpd.to_crs('EPSG:3413')  # Match the projections to the target one
+mask_gpd = mask_gpd.to_crs('EPSG:3412')  # Match the projections to the target one
 
 # Grab the important stuff for projection
 canarc_bs = site_gpd.iloc[0]

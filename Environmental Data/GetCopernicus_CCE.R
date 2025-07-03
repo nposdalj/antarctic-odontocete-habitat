@@ -37,7 +37,7 @@ library(gridExtra) # for grid.arrange
 # )
 # }
 
-# -----------------Step 2: Construct Timeseries-------------------
+# -----------------Step 2: Extract Data-------------------
 # Load Copernicus data
 EI_cop <- nc_open("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Copernicus/EI_cmems_mod_glo_phy_my_0.083deg_P1D-m_1751320063762.nc")
 KGI_cop <- nc_open("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Copernicus/KGI_cmems_mod_glo_phy_my_0.083deg_P1D-m_1751320609977.nc")
@@ -73,6 +73,24 @@ EI_df <- dfFromNC(EI_cop)
 KGI_df <- dfFromNC(KGI_cop)
 CI_df <- dfFromNC(CI_cop)
 
+# --------------------------Step 3: Compute EKE--------------------------
+getEKE <- function(data) {
+  # get u' and v' for EKE equation
+  u_mean <- mean(data$e_velocity) 
+  v_mean <- mean(data$n_velocity)
+  data$u_prime <- data$e_velocity - u_mean
+  data$v_prime <- data$n_velocity - v_mean
+  
+  # EKE = 1/2((u')^2 + (v')^2)
+  # units: cm^2/s^2
+  data$EKE <- (0.5 * ((data$u_prime^2) + (data$v_prime^2))) * 10000
+  return(data)
+}
+EI_df <- getEKE(EI_df)
+KGI_df <- getEKE(KGI_df)
+CI_df <- getEKE(CI_df)
+
+# -------------------------Step 4: Make Timeseries------------------------
 # Function to create timeseries by site
 CopTimeseries <- function(data, site) {
   data$date <- as.Date(data$date)
@@ -80,15 +98,10 @@ CopTimeseries <- function(data, site) {
   ssh <- ggplot(data = data, mapping = aes(x = date, y = ssh)) + geom_line(color = "tomato", size = 1) + 
     labs(x = "Sea Surface Height", y = "meters") + scale_x_date(date_labels = "%b %Y") + 
     theme(plot.margin = unit(c(1, 0.5, 1, 0.5), units = "line"))
-  # north sea water velocity
-  n_velocity <- ggplot(data = data, mapping = aes(x = date, y = n_velocity)) + 
+  # eddy kinetic energy
+    EKE <- ggplot(data = data, mapping = aes(x = date, y = EKE)) + 
     geom_line(color = "mediumpurple", size = 1) + 
-    labs(x = "Northward Sea Water Velocity", y = "m/s") + scale_x_date(date_labels = "%b %Y") + 
-    theme(plot.margin = unit(c(1, 0.5, 1, 0.5), units = "line"))
-  # east sea water velocity
-  e_velocity <- ggplot(data = data, mapping = aes(x = date, y = e_velocity)) + 
-    geom_line(color = "orchid", size = 1) + 
-    labs(x = "Eastward Sea Water Velocity", y = "m/s") + scale_x_date(date_labels = "%b %Y") + 
+    labs(x = "Eddy Kinetic Energy", y = "cm^2/s^2") + scale_x_date(date_labels = "%b %Y") + 
     theme(plot.margin = unit(c(1, 0.5, 1, 0.5), units = "line"))
   # salinity
   salinity <- ggplot(data = data, mapping = aes(x = date, y = salinity)) + geom_line(color = "gold", size = 1) + 
@@ -102,7 +115,7 @@ CopTimeseries <- function(data, site) {
   
   # Arrange plots to one figure
   windows()
-  final_plot <- grid.arrange(ssh, n_velocity, e_velocity, salinity, mixed, nrow = 5, top = site)
+  final_plot <- grid.arrange(ssh, EKE, salinity, mixed, nrow = 4, top = site)
   
 }
 # Construct timeseries for all sites

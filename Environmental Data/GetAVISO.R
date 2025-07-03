@@ -1,10 +1,25 @@
+library(rerddap)
+library(rerddapXtracto)
+library(ncdf4)
+library(parsedate)
+library(sp)
+library(gganimate)
+library(ggplot2)
+library(plotdap)
+library(abind)
+
+# Only relevant AVISO variables are EKE and (maybe) temperature
+# Ignore functions for other variables (data already obtained from Copernicus)
+
+# --------------------Step 1: Load AVISO data--------------------------
 LoadAVISO <- function(envDir){
-
-filenameStatAll = paste(envDir,"CCE_2006.nc",sep="")#load files as data frame
-AVISO <<- nc_open(filenameStatAll)
-names(AVISO$var)
+  
+  filenameStatAll = paste(envDir,"dt_global_allsat_eke_y2014_m03.nc",sep="")#load files as data frame
+  names(AVISO$var)
 }
+envDir <- "C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/AVISO/EKE/"
 
+# ---------------- Step NA: Functions for other variables--------------
 GetSSH <- function(envDir,Region){
   inFilePaths = list.files(path=envDir, pattern=Region, full.names=TRUE) #look for all files
   for (ss in 1:(length(inFilePaths)-1)){
@@ -162,6 +177,7 @@ axis(1,1:n,format(SAL_dates[K]),las = 3)
 box()
 }
 
+# ----------------------Step 2: SST-------------------
 GetTEMP <- function(AVISO){
 #thetao - temperature
 v3=AVISO$var[[1]]
@@ -209,6 +225,8 @@ axis(1,1:n,format(TEMP_dates[K]),las = 3)
 box()
 }
 
+# ------------------- Step 3: EKE ---------------------
+# Function for EKE from velocity:
 GetEKE <- function(AVISO){
 #uo - eastward velocity
 v4=AVISO$var[[4]]
@@ -317,3 +335,10 @@ EKE$time=as.Date(EKE$time)
 EKE <<- EKE
 }
 
+# Function to combine EKE files into one timeseries & plot
+accessEKE <- function() {
+  
+}
+
+# ----------------Step 4: FSLEs----------------
+# ----------------Step 5: Call Functions--------------
