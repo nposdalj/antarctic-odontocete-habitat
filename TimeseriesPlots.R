@@ -1,6 +1,8 @@
 library(tidyverse)
 library(gridExtra)
+library(lubridate)
 
+# -----------------Step 1: Prepping data---------------------
 # Load data from EIE/CI site
 CI <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Data/Antarc_EIE_01_Odontocetes.csv")
 CI <- CI[-c(1:2,7)]
@@ -39,8 +41,6 @@ name <- function(abbrev) {
   }
   return(fullname)
 }
-
-# Timeseries plots
 odontocete <- odontocete %>% # Reformat dataframe
   mutate(
     Start.time = mdy_hms(Start.time), # Change from character to time format
@@ -52,7 +52,10 @@ odontocete <- odontocete %>% # Reformat dataframe
 odontocete$Call.time[odontocete$Call.time == 0] <- 1 # If a call is 0 seconds, correct to 1
 write.csv(odontocete,"C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Data/Antarc_Odontocetes.csv")
 
-timeseries <- function(site, species) { # Function to create a timeseries plot
+
+
+# --------------Step 2: Cumulative daily hours timeseries---------------
+hrTimeseries <- function(site, species) { # Function to create a timeseries plot
   # Setting date range bounds for each site
   if (site == "EI") {
     b1 <- as.Date("2014-03-05")
@@ -87,17 +90,62 @@ timeseries <- function(site, species) { # Function to create a timeseries plot
       )
 }
 
-bySite_ts <- function(site) { # Function to aggregate all plots from a particular site
+hrSite_ts <- function(site) { # Function to aggregate all plots from a particular site
   # Joining all species-specific timeseries into one figure
   windows(width = 20, height = 30)
-  final_plot <- grid.arrange(timeseries(site, "BW29"), timeseries(site, "BW37"), 
-                             timeseries(site, "BW58"), timeseries(site, "Gm"), 
-                             timeseries(site, "Oo"), timeseries(site, "Pm"),
+  final_plot <- grid.arrange(hrTimeseries(site, "BW29"), hrTimeseries(site, "BW37"), 
+                             hrTimeseries(site, "BW58"), hrTimeseries(site, "Gm"), 
+                             hrTimeseries(site, "Oo"), hrTimeseries(site, "Pm"),
                              nrow = 6, top = name(site))
   return(final_plot)
 }
 
 # Generating timeseries plots for Elephant Island, King George Island, and Clarence Island
-EI_ts <- bySite_ts("EI")
-KGI_ts <- bySite_ts("KGI")
-CI_ts <- bySite_ts("CI")
+EI_ts <- hrSite_ts("EI")
+KGI_ts <- hrSite_ts("KGI")
+CI_ts <- hrSite_ts("CI")
+
+
+# ----------------Step 3: Daily Binned Timeseries------------
+dailyDetections <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Data/dailyDetections.csv")
+
+dayTimeseries <- function(site, species) { # Function to create a timeseries plot
+  # Filtering dataframe by the relevant site
+  filtered <- filter(dailyDetections, Site == site)
+  filtered$Day <- as.Date(filtered$Day, "%Y-%m-%d")
+  
+  # Setting date range bounds
+  b1 <- min(filtered$Day, na.rm = TRUE)
+  b2 <- max(filtered$Day, na.rm = TRUE)
+  
+  # Adding a week start date variable to group data
+  filtered$week_start <- floor_date(filtered$Day, unit = "week")
+  
+  # Creating new dataframe that stores the total call days for each week, only for the relevant species
+  weekly <- filtered %>% group_by(week_start) %>%
+    summarise(total_days = sum(.data[[species]], na.rm = TRUE), .groups = "drop")
+  # Creating the site- and species-specific timeseries
+  ggplot(data = weekly, mapping = aes(x = week_start, y = total_days)) + geom_col(width = 1, color = "mediumvioletred") +
+    scale_x_date(limits = c(b1, b2), date_labels = "%b %Y")+
+    labs(subtitle = name(species), y = NULL, x = NULL) +
+    theme(
+      plot.subtitle = element_text(size = 9, face = "bold"), 
+      plot.margin = unit(c(0.2, 0.5, 0.2, 0.5), units = "line")
+   )
+}
+
+daySite_ts <- function(site) { # Function to aggregate all plots from a particular site
+  # Joining all species-specific timeseries into one figure
+  windows(width = 20, height = 30)
+  final_plot <- grid.arrange(dayTimeseries(site, "BW29"), dayTimeseries(site, "BW37"), 
+                             dayTimeseries(site, "BW58"), dayTimeseries(site, "Gm"), 
+                             dayTimeseries(site, "Oo"), dayTimeseries(site, "Pm"),
+                             nrow = 6, top = name(site), left = "Number of Days Detected",
+                             bottom = "Week")
+  return(final_plot)
+}
+
+# Generating timeseries plots for Elephant Island, King George Island, and Clarence Island
+EI_week <- daySite_ts("EI")
+KGI_week <- daySite_ts("KGI")
+CI_week <- daySite_ts("CI")
