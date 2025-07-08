@@ -3,8 +3,6 @@ library(lubridate)
 library(tidyverse)
 library(gridExtra)
 
-#test <- readMat("/Users/trisha/R/antarctic-odontocete-habitat/Environmental Data/HYCOM/Data/W303E304S61N59_20140310T0000Z.mat")
-
 # --------------------------Step 1: read files----------------------------
 readHYCOM <- function(site, start, end) {
   start <- as.Date(start)
