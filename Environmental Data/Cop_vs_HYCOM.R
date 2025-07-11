@@ -7,6 +7,8 @@ library(stars)
 library(ncdf4) # package for netcdf manipulation
 library(raster) # package for raster manipulation
 library(gridExtra) # for grid.arrange
+library(multDM) # For Diebold-Mariono test
+library(ggpubr)
 
 # --------------------------Step 1: Read HYCOM ----------------------------
 readHYCOM <- function(site, start, end) {
@@ -108,30 +110,84 @@ CI_copDF <- dfFromNC("CI",CI_cop)
 
 
 # -------------------- Step 3: Salinity/Temp Timeseries--------------
-cop_HYCOM_ts <- function(cop, hycom, site) {
+# Loading aqua data
+# EI_aqua <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Salinity_aqua/ EI_salinity.csv")
+# KGI_aqua <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Salinity_aqua/ KGI_salinity.csv")
+# CI_aqua <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Salinity_aqua/ CI_salinity.csv")
+EI_aqua <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/SST_ERDDAP/EI_SST.csv")
+KGI_aqua <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/SST_ERDDAP/KGI_SST.csv")
+CI_aqua <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/SST_ERDDAP/CI_SST.csv")
+
+
+cop_HYCOM_ts <- function(cop, hycom, aqua, site) {
   # Extracting surface HYCOM values and seeing NAs
   hycom_surf <- filter(hycom, depth == 0)
   print(paste(sum(is.na(cop$sst)), "NA temp values and ", sum(is.na(cop$salinity)), 
               "NA salinity values for Copernicus at site ",site))
   print(paste(sum(is.na(hycom_surf$temp)), "NA temp values and ", sum(is.na(hycom_surf$salt)), 
-              "NA salinity values for Copernicus at site ",site))
+              "NA salinity values for HYCOM at site ",site))
+  print(paste(sum(is.na(aqua$sst)), "NA sst values for Aqua MODIS at site ",site))
   
   # Combining two sources into one dataframe
   combined <- data.frame(cbind(date = cop$date, cop_temp = cop$sst, cop_sal = cop$salinity,
-                    hycom_temp = hycom_surf$temp, hycom_sal = hycom_surf$salt))
+                    hycom_temp = hycom_surf$temp, hycom_sal = hycom_surf$salt, aqua_temp = aqua$sst))
   combined$date <- as.POSIXct(combined$date, origin = "1970-01-01", tz="UTC") # Changing from seconds to time
   combined$date <- as.Date(combined$date, "%Y-%m-%d", tx = "UTC")
   
   # Making combined timeseries plot
   temp <- ggplot(data = combined, aes(date)) + geom_line(aes(y=cop_temp,color = 'Copernicus')) +
-    geom_line(aes(y=hycom_temp, color='HYCOM')) + labs(y = "Temperature (C)", color = "Source", x = NULL) +
-    scale_x_date(date_labels = "%b %Y") + scale_color_manual(values = c("Copernicus"='red', "HYCOM"='blue'))
+    geom_line(aes(y=hycom_temp, color='HYCOM')) + 
+    geom_point(aes(y=aqua_temp, color='Aqua MODIS'),size=1.5) +
+    labs(y = "Temperature (C)", color = "Source", x = NULL) +
+    scale_x_date(date_labels = "%b %Y") + ylim(-2,4) +
+    scale_color_manual(values = c("Copernicus"='red', "HYCOM"='blue', 'Aqua MODIS' = 'darkgreen'))
+  
   salinity <- ggplot(data = combined, aes(date)) + geom_line(aes(y=cop_sal,color = 'Copernicus')) +
-    geom_line(aes(y=hycom_sal, color='HYCOM')) + labs(y = "Salinity (psu)", color = "Source", x = NULL) +
-    scale_x_date(date_labels = "%b %Y") + scale_color_manual(values = c("Copernicus"='red', "HYCOM"='blue'))
+    geom_line(aes(y=hycom_sal, color='HYCOM')) +  ylim(33,35) +
+    labs(y = "Salinity (psu)", color = "Source", x = NULL) +
+    scale_x_date(date_labels = "%b %Y") + scale_color_manual(values = c("Copernicus"='red', "HYCOM"='blue', 'aqua'='darkgreen'))
   final <- grid.arrange(temp, salinity, nrow = 2, top = site)
 }
+# geom_line(aes(y=aqua_sal, color = 'aqua')) +
 # Making timeseries for each site
-cop_HYCOM_ts(EI_copDF, EI_HYCOM, 'Elephant Island')
-cop_HYCOM_ts(KGI_copDF, KGI_HYCOM, 'King George Island')
-cop_HYCOM_ts(CI_copDF, CI_HYCOM, 'Clarence Island')
+cop_HYCOM_ts(EI_copDF, EI_HYCOM, EI_aqua, 'Elephant Island')
+cop_HYCOM_ts(KGI_copDF, KGI_HYCOM, KGI_aqua, 'King George Island')
+cop_HYCOM_ts(CI_copDF, CI_HYCOM, CI_aqua, 'Clarence Island')
+
+
+
+# ----------------Step 4: Statistical Testing------------------
+statTest <- function(cop, hycom, aqua, site) {
+
+  hycom_surf <- filter(hycom, depth == 0)
+  cop <- rename(cop, cop_temp=sst, cop_sal=salinity)
+  hycom_surf <- rename(hycom_surf, hycom_temp=temp, hycom_sal=salt)
+  aqua <- rename(aqua,aqua_temp=sst)
+  aqua$date <- as.Date(aqua$date, format="%Y-%m-%d")
+  combined <- left_join(cop, hycom_surf, by='date')
+  combined <- left_join(combined, aqua, by='date')
+  #combined <- data.frame(cbind(date = cop$date, cop_temp = cop$sst, cop_sal = cop$salinity,
+                             #  hycom_temp = hycom_surf$temp, hycom_sal = hycom_surf$salt, aqua_temp = aqua$sst))
+  #combined$date <- as.POSIXct(combined$date, origin = "1970-01-01", tz="UTC") # Changing from seconds to time
+  cleaned <- combined %>% filter(!is.na(cop_temp) & !is.na(hycom_temp) & !is.na(aqua_temp))
+  
+  qqplots <- list(ggqqplot(combined,x='hycom_temp', title='HYCOM temp'), 
+                  ggqqplot(combined,x='cop_temp', title='Copernicus temp'),
+                  ggqqplot(combined,x='hycom_sal', title='HYCOM salinity'), 
+                  ggqqplot(combined,x='cop_sal', title='Copernicus salinity'))
+  do.call(grid.arrange, c(qqplots, nrow = 2, top = site))
+  
+  print(paste("HYCOM vs Copernicus Temperature at ",site))
+  print(t.test(combined$hycom_temp, combined$cop_temp, paired=TRUE))
+  print(paste("HYCOM vs Copernicus Salinity at ",site))
+  print(t.test(combined$hycom_sal, combined$cop_sal, paired=TRUE))
+
+  # Testing which matches Aqua MODIS better
+  print(DM.test(cleaned$hycom_temp, cleaned$cop_temp, cleaned$aqua_temp, loss.type='AE',c=FALSE, H1='more'))
+  print(DM.test(cleaned$hycom_temp, cleaned$cop_temp, cleaned$aqua_temp, loss.type='AE',c=FALSE, H1='less'))
+  print(DM.test(cleaned$hycom_temp, cleaned$cop_temp, cleaned$aqua_temp, loss.type='AE',c=FALSE, H1='same'))
+
+}
+statTest(EI_copDF, EI_HYCOM, EI_aqua,"Elephant Island")
+statTest(KGI_copDF, KGI_HYCOM, KGI_aqua,"King George Island")
+statTest(CI_copDF, CI_HYCOM,CI_aqua, "Clarence Island")

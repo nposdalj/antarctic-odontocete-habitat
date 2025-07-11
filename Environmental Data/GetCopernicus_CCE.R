@@ -6,37 +6,6 @@ library(raster) # package for raster manipulation
 library(tidyverse)
 library(gridExtra) # for grid.arrange
 
-# -----------Step 1: Access Copernicus data-----------
-# Was getting 404 error when trying to download data (even though I changed function to match the updated CopernicusMarine library)
-# Downloaded Copernicus data directly from the website
-# Variables (daily resolution): east water velocity, north water velocity, SSH, mixed layer thickness, salinity
-
-# YEARS = c(2014, 2015, 2016)
-# 
-# for (i in 1:length(YEARS)){
-#   year = YEARS[i]
-#   out_dir = paste("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data",as.character(year),".nc",sep = "")
-#   timerange1 = paste(as.character(year),"-01-01",sep="")
-#   timerange2 = paste(as.character(year),"-12-31",sep="")
-#   cms_download_subset(
-#     username = getOption("CopernicusMarine_uid", "tsharan"),
-#     password = getOption("CopernicusMarine_pwd", "H!ghfr3qu3ncy"),
-#     destination = out_dir,
-#     product = "GLOBAL_MULTIYEAR_PHY_001_030", # changed from GLOBAL_REANALYSIS_PHY_001_031
-#     layer = "cmems_mod_glo_phy_my_0.083deg_P1D-m_202311/zos",
-#     variable = "zos",
-#     # output = "netcdf",
-#     region = c(-59, -62, -52, -60), # bounding box 52 t0 59 W & 60 to 62 S
-#     timerange = c(timerange1,timerange2),
-#   # sub_variables = c("mlotst_mean","so_mean","thetao_mean","uo_mean",
-#   # "vo_mean","zos_mean"),
-#   # sub_variables = c("mlotst_mean","mlotst_std","so_mean","so_std","thetao_mean","thetao_std","uo_mean",
-#   #                   "uo_std","vo_mean","vo_std","zos_mean","zos_std"),
-# #   #verticalrange = c(0.5057600140571594,1.56)
-#   #verticalrange = c(0,-2)
-# )
-# }
-
 # -----------------Step 2: Extract Data-------------------
 # Load Copernicus data
 # surface data, all vars 
@@ -70,11 +39,11 @@ dfFromNC <- function(data) {
                    sice_e_veloc = as.vector(sice_e_veloc), sice_n_veloc = as.vector(sice_n_veloc))
 
   # Creating a dataframe with daily spatial averages
-  avg_df <- df %>% group_by(date) %>% summarize(ssh = mean(ssh), n_velocity = mean(n_velocity),
-                                                e_velocity = mean(e_velocity), salinity = mean(salinity),
-                                                mixed_layer = mean(mixed_layer), sice_conc = mean(sice_conc),
-                                                sice_thick = mean(sice_thick), sice_e_veloc = mean(sice_e_veloc),
-                                                sice_n_veloc = mean(sice_n_veloc))
+  avg_df <- df %>% group_by(date) %>% summarize(ssh = mean(ssh, na.rm=TRUE), n_velocity = mean(n_velocity, na.rm=TRUE),
+                                                e_velocity = mean(e_velocity, na.rm=TRUE), salinity = mean(salinity, na.rm=TRUE),
+                                                mixed_layer = mean(mixed_layer, na.rm=TRUE), sice_conc = mean(sice_conc, na.rm=TRUE),
+                                                sice_thick = mean(sice_thick, na.rm=TRUE), sice_e_veloc = mean(sice_e_veloc, na.rm=TRUE),
+                                                sice_n_veloc = mean(sice_n_veloc, na.rm=TRUE))
   return(avg_df)
 }
 # Constructing site dataframes
@@ -132,32 +101,34 @@ CopTimeseries(EI_df, "Elephant Island")
 CopTimeseries(KGI_df, "King George Island")
 CopTimeseries(CI_df, "Clarence Island")
 
-# -------------------------Step 4: Make Sea Ice Data Timeseries------------------------
+# -------------------------Step 5: Make Sea Ice Data Timeseries------------------------
 # Function to create timeseries by site
 IceTimeseries <- function(data, site) {
+  data$sice_conc <- data$sice_conc * 100
   data$date <- as.Date(data$date)
+  
   # sea ice thickness
-  thickness <- ggplot(data = data, mapping = aes(x = date, y = sice_thick)) + geom_line(color = "tomato", size = 1) + 
+  thickness <- ggplot(data = data, mapping = aes(x = date, y = sice_thick)) + geom_line(color = "navy", size = 1) + 
     labs(x = "Sea Ice Thickness", y = "meters") + scale_x_date(date_labels = "%b %Y") + 
     theme(plot.margin = unit(c(1, 0.5, 1, 0.5), units = "line"))
-  # 
-  EKE <- ggplot(data = data, mapping = aes(x = date, y = EKE)) + 
-    geom_line(color = "mediumpurple", size = 1) + 
-    labs(x = "Eddy Kinetic Energy", y = "cm^2/s^2") + scale_x_date(date_labels = "%b %Y") + 
+  # sea ice concentration
+  concentration <- ggplot(data = data, mapping = aes(x = date, y = sice_conc)) + 
+    geom_line(color = "blue", size = 1) + 
+    labs(x = "Sea Ice Concentration", y = "%") + scale_x_date(date_labels = "%b %Y") +
     theme(plot.margin = unit(c(1, 0.5, 1, 0.5), units = "line"))
   # salinity
-  salinity <- ggplot(data = data, mapping = aes(x = date, y = salinity)) + geom_line(color = "gold", size = 1) + 
-    labs(x = "Salinity", y = "psu") + scale_x_date(date_labels = "%b %Y") + 
+  nvelocity <- ggplot(data = data, mapping = aes(x = date, y = sice_n_veloc)) + geom_line(color = "mediumslateblue", size = 1) + 
+    labs(x = "Sea Ice North Velocity", y = "m/s") + scale_x_date(date_labels = "%b %Y") + 
     theme(plot.margin = unit(c(1, 0.5, 1, 0.5), units = "line"))
   # mixed layer depth
-  mixed <- ggplot(data = data, mapping = aes(x = date, y = mixed_layer)) + 
-    geom_line(color = "mediumseagreen", size = 1) + 
-    labs(x = "Mixed Layer Thickness", y = "meters") + scale_x_date(date_labels = "%b %Y") +
+  evelocity <- ggplot(data = data, mapping = aes(x = date, y = sice_e_veloc)) + 
+    geom_line(color = "dodgerblue", size = 1) + 
+    labs(x = "Sea Ice East Velocity", y = "m/s") + scale_x_date(date_labels = "%b %Y") +
     theme(plot.margin = unit(c(1, 0.5, 1, 0.5), units = "line"))
   
   # Arrange plots to one figure
   windows()
-  final_plot <- grid.arrange(ssh, EKE, salinity, mixed, nrow = 4, top = site)
+  final_plot <- grid.arrange(thickness, concentration, nvelocity, evelocity, nrow = 4, top = site)
   
 }
 # Construct timeseries for all sites

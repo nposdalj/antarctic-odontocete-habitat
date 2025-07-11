@@ -47,3 +47,12 @@ AAO <- AAO %>% subset(select = c(aao_index_cdas, date)) %>%
                         (date >= '2016-02-04' & date <= '2016-12-02'))
 # Add AAO to final dataset
 allData <- merge(allData, AAO, by=intersect(names(allData), names(AAO)))
+
+
+# -------------------- Step 2: Format/Add HYCOM/Copernicus Data--------
+# sst, salinity, depth variables, eke, ssh, etc.
+# ice variables
+
+# -------------------- Step 3: Format/Add Chlorophyll------------
+# -------------------- Step 4: Format/Add FSLEs------------
+# ------------------- Step 5: Format/Add Sea Ice (if not from model) ----------

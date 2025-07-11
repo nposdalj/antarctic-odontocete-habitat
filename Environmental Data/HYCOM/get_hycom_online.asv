@@ -63,7 +63,7 @@ end
 function D = get_hycom_online(aimpath, region, timeTick, varList, URL)
 %% Clarence Island Island LONG
 clc;clearvars
-aimpath = "D:/HYCOM long";
+aimpath = "D:\HYCOM long";
 region = [306.016567 307.016567 -61.751867 -60.751867]; % +/- 0.5 degrees from CI
 timeList = datetime(2014,7,1):datetime(2016,4,30);
 varList = {'ssh','temp','salt','u','v'};

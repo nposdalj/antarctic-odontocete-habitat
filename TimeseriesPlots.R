@@ -127,7 +127,7 @@ dayTimeseries <- function(site, species) { # Function to create a timeseries plo
   # Creating the site- and species-specific timeseries
   ggplot(data = weekly, mapping = aes(x = week_start, y = total_days)) + geom_col(width = 1, color = "mediumvioletred") +
     scale_x_date(limits = c(b1, b2), date_labels = "%b %Y")+
-    labs(subtitle = name(species), y = NULL, x = NULL) +
+    labs(subtitle = name(species), y = NULL, x = NULL) + ylim(0,7) +
     theme(
       plot.subtitle = element_text(size = 9, face = "bold"), 
       plot.margin = unit(c(0.2, 0.5, 0.2, 0.5), units = "line")
