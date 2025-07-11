@@ -82,11 +82,11 @@ subsetAVISO <- function(site) {
   return(df)
 }
 EI_fsle <- subsetAVISO('EI')
-write.csv(EI_fsle, "D:/FSLE/EI_fsle")
+write.csv(EI_fsle, "C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/AVISO/EI_fsle")
 KGI_fsle <- subsetAVISO('KGI')
-write.csv(EI_fsle, "D:/FSLE/KGI_fsle")
+write.csv(KGI_fsle, "C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/AVISO/KGI_fsle")
 CI_fsle <- subsetAVISO('CI')
-write.csv(EI_fsle, "D:/FSLE/CI_fsle")
+write.csv(CI_fsle, "C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/AVISO/CI_fsle")
 
 LoadAVISO <- function(envDir){
   
