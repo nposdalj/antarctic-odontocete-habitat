@@ -110,14 +110,18 @@ CI_copDF <- dfFromNC("CI",CI_cop)
 
 
 # -------------------- Step 3: Salinity/Temp Timeseries--------------
-# Loading aqua data
-# EI_aqua <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Salinity_aqua/ EI_salinity.csv")
-# KGI_aqua <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Salinity_aqua/ KGI_salinity.csv")
-# CI_aqua <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Salinity_aqua/ CI_salinity.csv")
+# Loading remotely sensed data
+# commenting out salinity because values seemed unreasonable
+# EI_sal <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Salinity_aqua/ EI_salinity.csv")
+# KGI_sal <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Salinity_aqua/ KGI_salinity.csv")
+# CI_sal <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Salinity_aqua/ CI_salinity.csv")
 EI_aqua <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/SST_ERDDAP/EI_SST.csv")
 KGI_aqua <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/SST_ERDDAP/KGI_SST.csv")
 CI_aqua <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/SST_ERDDAP/CI_SST.csv")
-
+# Merging into one
+# EI_aqua <- merge(EI_temp, EI_sal, by=intersect(names(EI_temp), names(EI_sal)))
+# KGI_aqua <- merge(KGI_temp, KGI_sal, by=intersect(names(KGI_temp), names(KGI_sal)))
+# CI_aqua <- merge(CI_temp, CI_sal, by=intersect(names(CI_temp), names(CI_sal)))
 
 cop_HYCOM_ts <- function(cop, hycom, aqua, site) {
   # Extracting surface HYCOM values and seeing NAs
@@ -158,7 +162,7 @@ cop_HYCOM_ts(CI_copDF, CI_HYCOM, CI_aqua, 'Clarence Island')
 
 # ----------------Step 4: Statistical Testing------------------
 statTest <- function(cop, hycom, aqua, site) {
-
+  # First, matching dataframes to each other
   hycom_surf <- filter(hycom, depth == 0)
   cop <- rename(cop, cop_temp=sst, cop_sal=salinity)
   hycom_surf <- rename(hycom_surf, hycom_temp=temp, hycom_sal=salt)
@@ -166,26 +170,57 @@ statTest <- function(cop, hycom, aqua, site) {
   aqua$date <- as.Date(aqua$date, format="%Y-%m-%d")
   combined <- left_join(cop, hycom_surf, by='date')
   combined <- left_join(combined, aqua, by='date')
-  #combined <- data.frame(cbind(date = cop$date, cop_temp = cop$sst, cop_sal = cop$salinity,
-                             #  hycom_temp = hycom_surf$temp, hycom_sal = hycom_surf$salt, aqua_temp = aqua$sst))
-  #combined$date <- as.POSIXct(combined$date, origin = "1970-01-01", tz="UTC") # Changing from seconds to time
   cleaned <- combined %>% filter(!is.na(cop_temp) & !is.na(hycom_temp) & !is.na(aqua_temp))
   
+  # Checking normality
+  # QQ plots to visualize
   qqplots <- list(ggqqplot(combined,x='hycom_temp', title='HYCOM temp'), 
                   ggqqplot(combined,x='cop_temp', title='Copernicus temp'),
                   ggqqplot(combined,x='hycom_sal', title='HYCOM salinity'), 
                   ggqqplot(combined,x='cop_sal', title='Copernicus salinity'))
   do.call(grid.arrange, c(qqplots, nrow = 2, top = site))
+  # Shapiro-Wilk Test to formally check for normality
+  htemp_norm <- shapiro.test(combined$hycom_temp)
+  ctemp_norm <- shapiro.test(combined$cop_temp)
+  hsal_norm <- shapiro.test(combined$hycom_sal)
+  csal_norm <- shapiro.test(combined$cop_sal)
+  variable <- c(htemp_norm[4], ctemp_norm[4], hsal_norm[4], csal_norm[4])
+  W_stat <- c(htemp_norm[1], ctemp_norm[1], hsal_norm[1], csal_norm[1])
+  p_value <- c(htemp_norm[2], ctemp_norm[2], hsal_norm[2], csal_norm[2])
+  norm_check <- cbind(variable, W_stat, p_value)
+  print("Checking for normality of each variable: ")
+  print(norm_check)
   
-  print(paste("HYCOM vs Copernicus Temperature at ",site))
-  print(t.test(combined$hycom_temp, combined$cop_temp, paired=TRUE))
-  print(paste("HYCOM vs Copernicus Salinity at ",site))
-  print(t.test(combined$hycom_sal, combined$cop_sal, paired=TRUE))
-
+  # Testing to see if there is a difference between models
+  # t-test (parametric)
+  t_temp <- t.test(combined$hycom_temp, combined$cop_temp, paired=TRUE)
+  t_sal <- t.test(combined$hycom_sal, combined$cop_sal, paired=TRUE)
+  # Wilcoxon signed-rank test (non-parametric)
+  wilc_temp <- wilcox.test(combined$hycom_temp, combined$cop_temp, paired=TRUE, alternative='two.sided')
+  wilc_sal <- wilcox.test(combined$hycom_sal, combined$cop_sal, paired=TRUE, alternative='two.sided')
+  # Making table
+  test <- c('t-test','t-test','wilcoxon','wilcoxon')
+  test_stat <- c(t_temp$statistic,t_sal$statistic,wilc_temp$statistic,wilc_sal$statistic)
+  p_value <- c(t_temp$p.value,t_sal$p.value,wilc_temp$p.value,wilc_sal$p.value)
+  diff_test <- cbind(test,test_stat,p_value)
+  print("Checking to see if HYCOM and Copernicus significantly differ: ")
+  print(diff_test)
+  
   # Testing which matches Aqua MODIS better
-  print(DM.test(cleaned$hycom_temp, cleaned$cop_temp, cleaned$aqua_temp, loss.type='AE',c=FALSE, H1='more'))
-  print(DM.test(cleaned$hycom_temp, cleaned$cop_temp, cleaned$aqua_temp, loss.type='AE',c=FALSE, H1='less'))
-  print(DM.test(cleaned$hycom_temp, cleaned$cop_temp, cleaned$aqua_temp, loss.type='AE',c=FALSE, H1='same'))
+  # Diebold-Mariano test to:
+  #     (1) Check if both models match remotely sensed data equally well
+  #     (2) Check which model matches better, and if this is statistically significant
+  # For temperature
+  same <- DM.test(cleaned$hycom_temp, cleaned$cop_temp, cleaned$aqua_temp, loss.type='AE',c=FALSE, H1='same')
+  more <- DM.test(cleaned$hycom_temp, cleaned$cop_temp, cleaned$aqua_temp, loss.type='AE',c=FALSE, H1='more')
+  less <- DM.test(cleaned$hycom_temp, cleaned$cop_temp, cleaned$aqua_temp, loss.type='AE',c=FALSE, H1='less')
+  # Making table
+  alternative_hypothesis <- c("different accuracy", "HYCOM more accurate", "HYCOM less accurate")
+  test_stat <- c(same$statistic,more$statistic,less$statistic)
+  p_value <- c(same$p.value,more$p.value,less$p.value)
+  dm_test <- cbind(alternative_hypothesis, test_stat, p_value)
+  print("Diebold-Mariano test to determine more accurate forecast (for temperature only): ")
+  print(dm_test)
 
 }
 statTest(EI_copDF, EI_HYCOM, EI_aqua,"Elephant Island")
