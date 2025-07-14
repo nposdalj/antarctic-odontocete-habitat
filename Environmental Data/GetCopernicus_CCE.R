@@ -135,3 +135,11 @@ IceTimeseries <- function(data, site) {
 IceTimeseries(EI_df, "Elephant Island")
 IceTimeseries(KGI_df, "King George Island")
 IceTimeseries(CI_df, "Clarence Island")
+
+# --------------------- Step 6: Save Data ---------------
+EI_df$Site <- 'EI'
+KGI_df$Site <- 'KGI'
+CI_df$Site <- 'CI'
+
+final <- rbind(EI_df,KGI_df,CI_df)
+write.csv(final, "/Copernicus.csv") # write destination

@@ -2,13 +2,13 @@
 library(tidyverse)
 
 # ---------------- Step 0: Create base final dataframe-------------
-dailyDetection <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Data/dailyDetections.csv")
+dailyDetection <- read.csv("/Users/trisha/R/antarctic-odontocete-habitat/data/dailyDetections.csv")
 allData <- dailyDetection
 allData$date <- allData$Day
 allData <- allData %>% subset(select = -Day)
 
 # --------------- Step 1: Format/Add Antarctic Oscillation Index ----------------
-AAO <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Daily_AAO.csv")
+AAO <- read.csv("/Users/trisha/R/antarctic-odontocete-habitat/Environmental Data/Daily_AAO.csv")
 
 # Make date column
 # Add zero in front of single digit dates
@@ -52,7 +52,27 @@ allData <- merge(allData, AAO, by=intersect(names(allData), names(AAO)))
 # -------------------- Step 2: Format/Add HYCOM/Copernicus Data--------
 # sst, salinity, depth variables, eke, ssh, etc.
 # ice variables
+copHYCOM <- read.csv("FILEPATH")
+allData <- merge(allData, copHYCOM, by=intersect(names(allData), names(copHYCOM)))
 
 # -------------------- Step 3: Format/Add Chlorophyll------------
+chlA <- read.csv("FILEPATH")
+allData <- merge(allData, chlA, by=intersect(names(allData), names(chlA)))
+
 # -------------------- Step 4: Format/Add FSLEs------------
+EI_fsle <- read.csv("/Users/trisha/R/antarctic-odontocete-habitat/Environmental Data/AVISO/EI_fsle")
+KGI_fsle <- read.csv("/Users/trisha/R/antarctic-odontocete-habitat/Environmental Data/AVISO/KGI_fsle")
+CI_fsle <- read.csv("/Users/trisha/R/antarctic-odontocete-habitat/Environmental Data/AVISO/CI_fsle")
+
+EI_fsle$Site <- "EI"
+KGI_fsle$Site <- "KGI"
+CI_fsle$Site <- "CI"
+
+all_fsle <- rbind(EI_fsle, KGI_fsle, CI_fsle)
+all_fsle$X <- NULL
+
+allData <- merge(allData, all_fsle, by=intersect(names(allData), names(all_fsle)))
+
 # ------------------- Step 5: Format/Add Sea Ice (if not from model) ----------
+# -------------------- Step 6: Save Final Dataframe -------------------
+write.csv(allData, "/Users/trisha/R/antarctic-odontocete-habitat/data/modelDataset.csv")

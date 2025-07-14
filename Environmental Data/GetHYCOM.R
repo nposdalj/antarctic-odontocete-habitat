@@ -91,3 +91,11 @@ plotHYCOM <- function(data, depth_layer, site) {
 plotHYCOM(EI_df, 0, "Elephant Island")
 plotHYCOM(KGI_df, 0, "King George Island")
 plotHYCOM(CI_df, 0, "Clarence Island")
+
+# ----------------- Step 3: Save Data -------------------
+EI_df$Site <- 'EI'
+KGI_df$Site <- 'KGI'
+CI_df$Site <- 'CI'
+
+final <- rbind(EI_df,KGI_df,CI_df)
+write.csv(final, "/HYCOM.csv") # write destination
