@@ -2,13 +2,13 @@
 library(tidyverse)
 
 # ---------------- Step 0: Create base final dataframe-------------
-dailyDetection <- read.csv("/Users/trisha/R/antarctic-odontocete-habitat/data/dailyDetections.csv")
+dailyDetection <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Data/dailyDetections.csv")
 allData <- dailyDetection
 allData$date <- allData$Day
 allData <- allData %>% subset(select = -Day)
 
 # --------------- Step 1: Format/Add Antarctic Oscillation Index ----------------
-AAO <- read.csv("/Users/trisha/R/antarctic-odontocete-habitat/Environmental Data/Daily_AAO.csv")
+AAO <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Daily_AAO.csv")
 
 # Make date column
 # Add zero in front of single digit dates
@@ -49,20 +49,20 @@ AAO <- AAO %>% subset(select = c(aao_index_cdas, date)) %>%
 allData <- merge(allData, AAO, by=intersect(names(allData), names(AAO)))
 
 
-# -------------------- Step 2: Format/Add HYCOM/Copernicus Data--------
+# -------------------- Step 2: Add Copernicus Data--------
 # sst, salinity, depth variables, eke, ssh, etc.
 # ice variables
-copHYCOM <- read.csv("FILEPATH")
-allData <- merge(allData, copHYCOM, by=intersect(names(allData), names(copHYCOM)))
+copernicus <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Copernicus/copernicus.csv")
+allData <- merge(allData, copernicus, by=intersect(names(allData), names(copernicus)))
 
 # -------------------- Step 3: Format/Add Chlorophyll------------
 chlA <- read.csv("FILEPATH")
 allData <- merge(allData, chlA, by=intersect(names(allData), names(chlA)))
 
 # -------------------- Step 4: Format/Add FSLEs------------
-EI_fsle <- read.csv("/Users/trisha/R/antarctic-odontocete-habitat/Environmental Data/AVISO/EI_fsle")
-KGI_fsle <- read.csv("/Users/trisha/R/antarctic-odontocete-habitat/Environmental Data/AVISO/KGI_fsle")
-CI_fsle <- read.csv("/Users/trisha/R/antarctic-odontocete-habitat/Environmental Data/AVISO/CI_fsle")
+EI_fsle <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/AVISO/EI_fsle")
+KGI_fsle <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/AVISO/KGI_fsle")
+CI_fsle <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/AVISO/CI_fsle")
 
 EI_fsle$Site <- "EI"
 KGI_fsle$Site <- "KGI"
@@ -75,4 +75,4 @@ allData <- merge(allData, all_fsle, by=intersect(names(allData), names(all_fsle)
 
 # ------------------- Step 5: Format/Add Sea Ice (if not from model) ----------
 # -------------------- Step 6: Save Final Dataframe -------------------
-write.csv(allData, "/Users/trisha/R/antarctic-odontocete-habitat/data/modelDataset.csv")
+write.csv(allData, "C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Data")
