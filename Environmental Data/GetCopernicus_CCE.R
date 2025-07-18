@@ -159,11 +159,11 @@ IceTimeseries <- function(data, site) {
     geom_line(color = "blue", size = 1) + 
     labs(x = "Sea Ice Concentration", y = "%") + scale_x_date(date_labels = "%b %Y") +
     theme(plot.margin = unit(c(1, 0.5, 1, 0.5), units = "line"))
-  # salinity
+  # northward velocity
   nvelocity <- ggplot(data = data, mapping = aes(x = date, y = sice_n_veloc)) + geom_line(color = "mediumslateblue", size = 1) + 
     labs(x = "Sea Ice North Velocity", y = "m/s") + scale_x_date(date_labels = "%b %Y") + 
     theme(plot.margin = unit(c(1, 0.5, 1, 0.5), units = "line"))
-  # mixed layer depth
+  # eastward velocity
   evelocity <- ggplot(data = data, mapping = aes(x = date, y = sice_e_veloc)) + 
     geom_line(color = "dodgerblue", size = 1) + 
     labs(x = "Sea Ice East Velocity", y = "m/s") + scale_x_date(date_labels = "%b %Y") +

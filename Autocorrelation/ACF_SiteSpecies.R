@@ -203,7 +203,7 @@ ResidACF <- function(site, site_presence, acf_table) {
     if (species_sum == 0) { # If no data for this species, return 0 for acf_value
       acf_table[row_index, species] <- 0 }
     else { 
-      formula <- as.formula(paste(species, "~ bs(Day, k=4) + Diel")) # ADD/REMOVE + Diel based on hour or day
+      formula <- as.formula(paste(species, "~ bs(Day, k=4)")) # ADD/REMOVE + Diel based on hour or day
       BlockMod <- glm(formula, data = site_presence, family = binomial)
       ACF = acf(residuals(BlockMod), lag.max = 1500) 
       CI = ggfortify:::confint.acf(ACF)
@@ -244,7 +244,7 @@ ModACF <- function(site, site_presence, acf_table) {
     if (species_sum == 0) { # If no data for this species, return 0 for acf_value
       acf_table[row_index, species] <- 0 }
     else { 
-      formula <- as.formula(paste(species, "~ bs(Day, k=4) + Diel")) # ADD/REMOVE + Diel based on hour or day
+      formula <- as.formula(paste(species, "~ bs(Day, k=4)")) # ADD/REMOVE + Diel based on hour or day
       BlockMod <- glm(formula, data = site_presence, family = binomial)
       ACF = acf(fitted(BlockMod), lag.max = 1500) 
       CI = ggfortify:::confint.acf(ACF)
@@ -266,6 +266,10 @@ hrModACF <- ModACF("CI", CI_hr, hrModACF)
 dayModACF <- ModACF("EI", EI_day, dayModACF)
 dayModACF <- ModACF("KGI", KGI_day, dayModACF)
 dayModACF <- ModACF("CI", CI_day, dayModACF)
+
+# Saving acf data
+write.csv(dayResidACF, "C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Autocorrelation/acf_table.csv", row.names = F)
+write.csv(dayDetection, "C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Autocorrelation/binned_detections.csv", row.names = F)
 
 # # ------------ NOT USING: Step 2c: PACF table --------------
 # # Function to build pacf table
