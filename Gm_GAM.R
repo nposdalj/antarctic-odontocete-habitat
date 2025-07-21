@@ -893,3 +893,54 @@ KGI_gam <- gam(Gm ~ s(AAO,k=8) + s(FSLE,k=3) + s(ice_conc,k=3) + s(EKE_0,k=3) +
 CI_gam <- gam(Gm ~ s(AAO) + s(FSLE) + s(SSH) + s(mixed_layer) + s(ice_conc) + s(temperature_0) +
              s(EKE_0) + s(salinity_644) + s(EKE_644), 
              data = CI_binned, family = binomial,method='REML')
+# AIC()
+# 89.17834
+# ....................................
+# summary()
+# Family: binomial 
+# Link function: logit 
+# 
+# Formula:
+#   Gm ~ s(AAO) + s(FSLE) + s(SSH) + s(mixed_layer) + s(ice_conc) + 
+#   s(temperature_0) + s(EKE_0) + s(salinity_644) + s(EKE_644)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)
+# (Intercept)   -6.063      4.185  -1.449    0.147
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq p-value
+# s(AAO)           1.000  1.000  0.032   0.858
+# s(FSLE)          2.964  3.725  4.650   0.267
+# s(SSH)           2.080  2.645  1.346   0.643
+# s(mixed_layer)   1.000  1.000  0.665   0.415
+# s(ice_conc)      1.000  1.000  0.013   0.909
+# s(temperature_0) 3.997  4.834  7.473   0.178
+# s(EKE_0)         2.571  3.250  4.275   0.258
+# s(salinity_644)  4.400  5.027  6.423   0.271
+# s(EKE_644)       1.000  1.000  0.428   0.513
+# 
+# R-sq.(adj) =  0.428   Deviance explained = 57.2%
+# -REML = 34.681  Scale est. = 1         n = 155
+# ...............................................
+# gam.check()
+# Method: REML   Optimizer: outer newton
+# full convergence after 13 iterations.
+# Gradient range [-1.126189e-05,2.928699e-06]
+# (score 34.68143 & scale 1).
+# Hessian positive definite, eigenvalue range [2.554391e-07,0.6002361].
+# Model rank =  82 / 82 
+# 
+# Basis dimension (k) checking results. Low p-value (k-index<1) may
+# indicate that k is too low, especially if edf is close to k'.
+# 
+#                    k'  edf k-index p-value
+# s(AAO)           9.00 1.00    1.18    1.00
+# s(FSLE)          9.00 2.96    1.25    1.00
+# s(SSH)           9.00 2.08    1.12    0.97
+# s(mixed_layer)   9.00 1.00    1.12    0.96
+# s(ice_conc)      9.00 1.00    1.04    0.72
+# s(temperature_0) 9.00 4.00    1.14    0.98
+# s(EKE_0)         9.00 2.57    0.95    0.34
+# s(salinity_644)  9.00 4.40    0.98    0.47
+# s(EKE_644)       9.00 1.00    1.08    0.90
