@@ -38,7 +38,7 @@ name <- function(abbrev) {
 }
 
 # ------------- Step 1: Load Data -----------------
-allData <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Data/allData_40km_FSLEhfdeg.csv")
+allData <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Data/allData_40km.csv")
 allData <- allData %>% subset(select=-X)
 allData$date <- as.Date(allData$date, "%Y-%m-%d")
 # Filter by species relevant data
@@ -98,24 +98,30 @@ binByACF <- function(site, bin) {
   # Expression to summarize species presence
   species_expr <- set_names(list(expr(as.integer(any(!!sym(species) == 1)))), species)
   
-  # EDIT HERE
   # Taking the average of environnmental variables
   summarize_cols <- list(julian_day = mean_col("julian_day"), AAO = mean_col("AAO"),
                          SSH = mean_col("SSH"), FSLE = mean_col("FSLE"), mixed_layer = mean_col("mixed_layer"),
                          ice_conc = mean_col("ice_conc"), ice_thickness = mean_col("ice_thickness"),
                          ice_diff = mean_col("ice_diff"),
                          temperature_0 = mean_col("temperature_0"), salinity_0 = mean_col("salinity_0"),
-                         EKE_0 = mean_col("EKE_0"))
+                         EKE_0 = mean_col("EKE_0"), chla_0 = mean_col('chla_0'),
+                         o2_0 = mean_col('o2_0'), productivity_0 = mean_col('productivity_0'))
   
   # Adding shallow dive depth for applicable variables
   summarize_cols[[paste0("temperature_", depths[2])]] <- mean_col(paste0("temperature_", depths[2]))
   summarize_cols[[paste0("salinity_", depths[2])]] <- mean_col(paste0("salinity_", depths[2]))
   summarize_cols[[paste0("EKE_", depths[2])]] <- mean_col(paste0("EKE_", depths[2]))
+  summarize_cols[[paste0("chla_", depths[2])]] <- mean_col(paste0("chla_", depths[2]))
+  summarize_cols[[paste0("o2_", depths[2])]] <- mean_col(paste0("o2_", depths[2]))
+  summarize_cols[[paste0("productivity_", depths[2])]] <- mean_col(paste0("productivity_", depths[2]))
   # Adding deep dive depth for species with multiple depths
   if (species != "BW29") {
     summarize_cols[[paste0("temperature_", depths[3])]] <- mean_col(paste0("temperature_", depths[3]))
     summarize_cols[[paste0("salinity_", depths[3])]] <- mean_col(paste0("salinity_", depths[3]))
     summarize_cols[[paste0("EKE_", depths[3])]] <- mean_col(paste0("EKE_", depths[3]))
+    summarize_cols[[paste0("chla_", depths[3])]] <- mean_col(paste0("chla_", depths[3]))
+    summarize_cols[[paste0("o2_", depths[3])]] <- mean_col(paste0("o2_", depths[3]))
+    summarize_cols[[paste0("productivity_", depths[3])]] <- mean_col(paste0("productivity_", depths[3]))
   }
   
   # Joining together dataframes and grouping to make final binned data
@@ -153,15 +159,74 @@ binned_plot <- grid.arrange(binnedTimeseries(EI_binned,'EI',EI_acf), binnedTimes
 # Not including any variables at depth for initial predictors.
 # Also, not modeling AAO (varies on yearly timescales) and ice thickness
 # Only including julian day for KGI, since it has almost 1 year of data
-if(species != 'BW29') {
-  intl_predictors <- c("AAO", "FSLE", "SSH", "mixed_layer", "ice_conc", "ice_thickness", 'ice_diff',
-                       "salinity_0", "temperature_0", "EKE_0",'o2_0','chla_0','productivity_0', 'julian_day',
-                       paste0("salinity_", depths[2]), paste0("temperature_", depths[2]), paste0("EKE_", depths[2]),
-                       paste0("salinity_", depths[3]), paste0("temperature_", depths[3]), paste0("EKE_", depths[3]),
-                       paste0('chla_',depths[2]), paste0('o2_',depths[2]), paste0('productivity_',depths[2]),
-                       paste0('chla_',depths[3]), paste0('o2_',depths[3]), paste0('productivity_',depths[3]))
-} else
-  intl_predictors <- c("AAO", "FSLE", "SSH", "mixed_layer", "ice_conc", "ice_thickness", 'ice_diff',
-                       "salinity_0", "temperature_0", "EKE_0", 'julian_day',
-                       paste0("salinity_", depths[2]), paste0("temperature_", depths[2]), paste0("EKE_", depths[2]))
+
+# ELEPHANT ISLAND
+intl_predictors <- c("FSLE", "SSH", "mixed_layer", "ice_conc", 'ice_diff', "salinity_0", 
+                     "temperature_0", "EKE_0",'o2_0','chla_0','productivity_0')
 mod_formula <- paste(species, "~", paste(intl_predictors, collapse = " + "))
+EI_vif <- glm(as.formula(mod_formula), family = binomial, data = EI_binned)
+
+# KING GEORGE ISLAND
+# adding julian day into initial formula
+intl_predictors <- c("FSLE", "SSH", "mixed_layer", "ice_conc", 'ice_diff', "salinity_0", 
+                     "temperature_0", "EKE_0",'o2_0','chla_0','productivity_0', 'julian_day')
+mod_formula <- paste(species, "~", paste(intl_predictors, collapse = " + "))
+KGI_vif <- glm(as.formula(mod_formula), family = binomial, data = KGI_binned)
+vif(KGI_vif)
+# FSLE            SSH    mixed_layer       ice_conc       ice_diff     salinity_0  temperature_0 
+# 1.501086       2.069468       7.185479       3.138806       1.568101       4.337320      35.906240 
+# EKE_0           o2_0         chla_0 productivity_0     julian_day 
+# 1.074483      13.137926       7.994408      14.278968       3.180173
+
+# removing temp_0
+KGI_pred <- c("FSLE", "SSH", "mixed_layer", "ice_conc", 'ice_diff', "salinity_0", 
+                    "EKE_0",'o2_0','chla_0','productivity_0', 'julian_day')
+mod_formula <- paste(species, "~", paste(KGI_pred, collapse = " + "))
+KGI_vif <- glm(as.formula(mod_formula), family = binomial, data = KGI_binned)
+vif(KGI_vif)
+# FSLE            SSH    mixed_layer       ice_conc       ice_diff     salinity_0          EKE_0 
+# 1.454792       2.028160       4.876820       2.908102       1.357751       4.092606       1.072813 
+# o2_0         chla_0 productivity_0     julian_day 
+# 2.755725       7.688033       6.222557       3.105939 
+
+# removing chlorophyll
+KGI_pred <- c("FSLE", "SSH", "mixed_layer", "ice_conc", 'ice_diff', "salinity_0", 
+              "EKE_0",'o2_0','productivity_0', 'julian_day')
+mod_formula <- paste(species, "~", paste(KGI_pred, collapse = " + "))
+KGI_vif <- glm(as.formula(mod_formula), family = binomial, data = KGI_binned)
+vif(KGI_vif)
+# FSLE            SSH    mixed_layer       ice_conc       ice_diff     salinity_0          EKE_0 
+# 1.434252       1.877656       4.388842       2.821834       1.358126       3.954242       1.064858 
+# o2_0 productivity_0     julian_day 
+# 2.577644       2.466533       2.559630 
+
+# Final predictors for KGI: FSLE, SSH, mixed layer depth, sea ice concentration, difference
+# in ice concentration, salinity, EKE, oxygen, net primary production, julian day
+
+# CLARENCE ISLAND
+intl_predictors <- c("FSLE", "SSH", "mixed_layer", "ice_conc", 'ice_diff', "salinity_0", 
+                     "temperature_0", "EKE_0",'o2_0','chla_0','productivity_0')
+mod_formula <- paste(species, "~", paste(intl_predictors, collapse = " + "))
+CI_vif <- glm(as.formula(mod_formula), family = binomial, data = CI_binned)
+
+
+# -------------- Step 5: Build GAMs ------------------------
+# Function to visualize GAMs on a probability scale with the proper confidence interval
+# Run this for each iteration of the model
+plotGam <- function(gam) {
+  return(plot(gam,trans=plogis,shift=coef(gam)[1],seWithMean=TRUE))
+}
+# Run this if all plots should be in one figure
+plotGam1 <- function(gam) {
+  return(plot(gam,trans=plogis,shift=coef(gam)[1],seWithMean=TRUE,pages=1))
+}
+
+# ELEPHANT ISLAND
+
+# KING GEORGE ISLAND
+# initial gam based on list of KGI predictors
+KGI_gam <- gam(Gm ~ s(FSLE) + s(SSH) + s(mixed_layer) + s(ice_conc) + s(ice_diff) + s(salinity_0) +
+                 s(EKE_0) + s(o2_0) + s(productivity_0) + s(julian_day), 
+               data = KGI_binned, family=binomial,method='REML')
+
+# CLARENCE ISLAND
