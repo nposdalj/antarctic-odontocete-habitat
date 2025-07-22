@@ -225,8 +225,78 @@ plotGam1 <- function(gam) {
 
 # KING GEORGE ISLAND
 # initial gam based on list of KGI predictors
-KGI_gam <- gam(Gm ~ s(FSLE) + s(SSH) + s(mixed_layer) + s(ice_conc) + s(ice_diff) + s(salinity_0) +
-                 s(EKE_0) + s(o2_0) + s(productivity_0) + s(julian_day), 
+KGI_gam <- gam(Gm ~ s(FSLE,k=4) + s(SSH,k=4) + s(mixed_layer,k=4) + s(ice_conc,k=4) + 
+                 s(ice_diff,k=4) + s(salinity_0,k=4) +
+                 s(EKE_0,k=4) + s(o2_0,k=4) + s(productivity_0,k=4) + s(julian_day,k=4), 
                data = KGI_binned, family=binomial,method='REML')
+# summary()
+# 
+# Family: binomial 
+# Link function: logit 
+# 
+# Formula:
+#   Gm ~ s(FSLE, k = 4) + s(SSH, k = 4) + s(mixed_layer, k = 4) + 
+#   s(ice_conc, k = 4) + s(ice_diff, k = 4) + s(salinity_0, k = 4) + 
+#   s(EKE_0, k = 4) + s(o2_0, k = 4) + s(productivity_0, k = 4) + 
+#   s(julian_day, k = 4)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)
+# (Intercept)   -27.92      22.88   -1.22    0.222
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq p-value   
+# s(FSLE)           2.114  2.491  1.003 0.55932   
+# s(SSH)            1.000  1.000  1.182 0.27698   
+# s(mixed_layer)    1.000  1.000  0.999 0.31765   
+# s(ice_conc)       1.854  1.979  1.201 0.54380   
+# s(ice_diff)       1.000  1.000  1.967 0.16078   
+# s(salinity_0)     1.000  1.000  0.004 0.95116   
+# s(EKE_0)          1.620  1.904  0.888 0.60863   
+# s(o2_0)           1.000  1.000  3.732 0.05338 . 
+# s(productivity_0) 1.000  1.000  8.726 0.00314 **
+#   s(julian_day)     1.000  1.000  0.821 0.36501   
+# ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =  0.446   Deviance explained = 46.8%
+# -REML = 40.187  Scale est. = 1         n = 181
+# ....................................................................
+# concurvity()
+# para   s(FSLE)    s(SSH) s(mixed_layer) s(ice_conc) s(ice_diff) s(salinity_0)  s(EKE_0)
+# worst    2.335937e-22 0.5864634 0.8963933      0.8580711   0.9781698   0.6751140     0.9866093 0.7140100
+# observed 2.335937e-22 0.3744678 0.8620985      0.8393429   0.9401030   0.2933448     0.9572558 0.4814734
+# estimate 2.335937e-22 0.5344532 0.8692273      0.8262123   0.9578391   0.3229273     0.9541493 0.4209709
+# s(o2_0) s(productivity_0) s(julian_day)
+# worst    0.9716414         0.9703266     0.9920461
+# observed 0.9527751         0.9398072     0.8546254
+# estimate 0.9541944         0.9029360     0.8914166
+# .....................................................................
+# gam.check()
+# 
+# Method: REML   Optimizer: outer newton
+# full convergence after 19 iterations.
+# Gradient range [-1.697423e-05,6.362028e-06]
+# (score 40.1868 & scale 1).
+# Hessian positive definite, eigenvalue range [1.443786e-06,0.3172399].
+# Model rank =  31 / 31 
+# 
+# Basis dimension (k) checking results. Low p-value (k-index<1) may
+# indicate that k is too low, especially if edf is close to k'.
+# 
+#                     k'  edf k-index p-value    
+# s(FSLE)           3.00 2.11    0.96    0.34    
+# s(SSH)            3.00 1.00    0.92    0.17    
+# s(mixed_layer)    3.00 1.00    0.97    0.33    
+# s(ice_conc)       3.00 1.85    0.84    0.02 *  
+#   s(ice_diff)       3.00 1.00    0.79  <2e-16 ***
+#   s(salinity_0)     3.00 1.00    0.96    0.34    
+# s(EKE_0)          3.00 1.62    1.05    0.78    
+# s(o2_0)           3.00 1.00    0.83    0.01 ** 
+#   s(productivity_0) 3.00 1.00    0.91    0.17    
+# s(julian_day)     3.00 1.00    0.80  <2e-16 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
 
 # CLARENCE ISLAND
