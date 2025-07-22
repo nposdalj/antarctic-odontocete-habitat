@@ -10,10 +10,10 @@ allData <- dailyDetection
 allData$date <- allData$Day
 allData <- allData %>% subset(select = -Day)
 # Choose variables + sites + species to plot
-environmental_vars <- c('AAO','FSLE','SSH','EKE','temperature','salinity',
+environmental_vars <- c('AAO','FSLE','SSH','EKE','temperature','salinity', 'chla','o2','productivity',
                         'mixed_layer','ice_conc','ice_thickness') 
-# options: AAO, FSLE, SSH, EKE, temperature, salinity, mixed_layer, 
-# ice_conc (sea ice concentration), ice_thickness (sea ice thickness)
+# options: AAO, FSLE, SSH, EKE, temperature, salinity, mixed_layer, chla (chlorophyll), o2 (oxygen),
+# productivity (primary production), ice_conc (sea ice concentration), ice_thickness (sea ice thickness)
 species <- c('Gm') # options: BW29, BW37, BW58, Oo, Pm, Gm
 # BW29 = Southern bottlenose whale, BW37 & BW58 = Gray's and strap-toothed whales
 # Oo = Killer whale, Pm = Sperm Whale, Gm = Long-finned pilot whale
@@ -64,8 +64,8 @@ allData <- rename(allData, AAO = aao_index_cdas)
 
 # -------------------- Step 2: Add Copernicus Data--------
 # sst, salinity, depth variables, eke, ssh, etc.
-# ice variables
-copernicus <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Copernicus/copernicus.csv")
+# ice variables, chlorophyll, oxygen
+copernicus <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Copernicus/copernicus_40km.csv")
 allData <- merge(allData, copernicus, by=intersect(names(allData), names(copernicus)))
 allData <- allData %>% rename(SSH=ssh) %>% rename(temperature=temp) %>%
   rename(ice_conc=sice_conc) %>% rename(ice_thickness=sice_thick)
@@ -73,9 +73,9 @@ allData <- allData %>% rename(SSH=ssh) %>% rename(temperature=temp) %>%
 allData[is.na(allData)] <- 0
 
 # -------------------- Step 3: Format/Add FSLEs------------
-EI_fsle <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/AVISO/EI_fsle")
-KGI_fsle <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/AVISO/KGI_fsle")
-CI_fsle <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/AVISO/CI_fsle")
+EI_fsle <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/AVISO/EI_fsle_hfdeg")
+KGI_fsle <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/AVISO/KGI_fsle_hfdeg")
+CI_fsle <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/AVISO/CI_fsle_hfdeg")
 
 EI_fsle$Site <- "EI"
 KGI_fsle$Site <- "KGI"
@@ -93,7 +93,7 @@ allData <- rename(allData, FSLE=fsle)
 allData <- allData %>% subset(select=-c(X,n_velocity,e_velocity,sice_e_veloc,sice_n_veloc))
 
 # Setting variable categories for current dataframe
-depth_varying <- c("temperature", "salinity", 'EKE')
+depth_varying <- c("temperature", "salinity", 'EKE','chla','productivity','o2')
 surf_vars <- c("AAO",'SSH','mixed_layer','ice_conc','ice_thickness','FSLE')
 species_vars <- c('BW29','BW37','BW58','Gm',"Pm", "Oo")
 grouping_vars <- c("date", "depth", "Site")
@@ -135,15 +135,15 @@ timeseriesPlots <- function(sites, species, vars) {
     for(sp in species){ # Make plots for each species at this site
       # Setting and filtering by species dive depths
       if(sp =='BW29') {
-        depths <- c(0.494, 763.333)}
+        depths <- c(0.5, 768.0)}
       else if(sp=='BW37' | sp=='BW58') {
-        depths <- c(0.494, 65.807, 902.339) }
+        depths <- c(0.5, 67.0, 920.0) }
       else if(sp=='Oo') {
-        depths <- c(0.494, 11.405, 453.938) }
+        depths <- c(0.5, 11.0, 455.0) }
       else if(sp=='Pm') {
-        depths <- c(0.494, 380.213, 1684.284)}
+        depths <- c(0.5, 375.0, 1665.0)}
       else if(sp=='Gm') {
-        depths <- c(0.494, 15.810, 643.567) }
+        depths <- c(0.5, 16.0, 635.0) }
       else {
         print("Species code not valid. Check inputs.") }
       species_specific <- filtered %>% select(any_of(c('date','Site','depth',sp, vars))) %>%
@@ -199,7 +199,7 @@ makePlot <- function(data, var, depths) {
     color <- 'darkred'
   } else if(var=='mixed_layer'){
     label <- 'Mixed Layer Depth (m)'
-    color <- 'darkolivegreen'
+    color <- 'darkcyan'
   } else if(var=='ice_thickness'){
     label <- 'Sea Ice Thickness (m)'
     color <- 'navy'
@@ -218,12 +218,22 @@ makePlot <- function(data, var, depths) {
   } else if(var == 'FSLE') {
       label <- 'FSLE'
       color <- 'orange'
+  } else if(var == 'o2') {
+    label <- 'Oxygen Concentration (mmol/m3)'
+    #color <- 'saddlebrown'
+  } else if(var == 'chla') {
+    label <- 'Chlorophyll (mg/m3)'
+    #color <- 'darkolivegreen'
+  } else if(var == 'productivity') {
+    label <- "Net Primary Production (mg/m3/day carbon)"
+    #color <- 'dimgray'
   }
   
   # Plotting across depths for relevant variables
-  if (var=='temperature' | var == 'EKE' | var == 'salinity') {
+  if (var=='temperature' | var == 'EKE' | var == 'salinity' | var=='o2' | var=='productivity' | 
+      var == 'chla') {
     # Renaming the surface depth
-    data <- data %>% mutate(depth = ifelse(depth == 0.494, 'surface', as.character(depth)))
+    data <- data %>% mutate(depth = ifelse(depth == 0.5, 'surface', as.character(depth)))
     # Returning plot colored by depth
     return(ggplot(data = data, aes(x=date, y=get(var), color=factor(depth))) + 
              geom_line() + 

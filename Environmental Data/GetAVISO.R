@@ -16,24 +16,25 @@ library(dplyr)
 subsetAVISO <- function(site) {
   directory <- "D:/FSLE/AVISO_Global_FSLE/dt_global_allsat_madt_fsle_"
   
+  # Defining 40 km bounding box
   if (site == 'EI'){
     # site lat-long: -60.8869, -55.95400
-    latitude = c(-59.3869,-61.3869)
-    longitude = c(303.406, 304.406)
+    latitude = c(-60.52602,-61.24778)
+    longitude = c(303.30745, 304.78455)
     years = c(2014)
     start <- as.Date('20140305',format='%Y%m%d')
     end <- as.Date('20140717',format='%Y%m%d') }
   if (site == 'KGI'){
     # site lat-long: -61.457817, -57.941917
-    latitude = c(-60.957817,-61.957817)
-    longitude = c(302.558083, 303.558083)
+    latitude = c(-61.09694, -61.8187)
+    longitude = c(301.30604, 302.81012)
     years = c(2015,2016)
     start <- as.Date('20150210',format='%Y%m%d')
     end <- as.Date('20160129',format='%Y%m%d') }
   if (site == 'CI'){
     # site lat-long: -61.251867, -53.483433
-    latitude = c(-60.751867,-61.751867)
-    longitude = c(306.016567, 307.016567)
+    latitude = c(-60.89099, -61.61275)
+    longitude = c(305.76946, 307.26368)
     years = c(2016)
     start <- as.Date('20160204',format='%Y%m%d')
     end <- as.Date('20161202',format='%Y%m%d') }
