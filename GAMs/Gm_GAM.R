@@ -220,6 +220,7 @@ CI_vif <- glm(as.formula(mod_formula), family = binomial, data = CI_binned)
 # -------------- Step 5: Build GAMs ------------------------
 # Function to visualize GAMs on a probability scale with the proper confidence interval
 # Run this for each iteration of the model
+# NOTE: NEED TO EDIT PLOT FUNCTIONS TO ACCOUNT FOR MODELS WITH LINEAR TERMS
 plotGam <- function(gam) {
   return(plot(gam,trans=plogis,shift=coef(gam)[1],seWithMean=TRUE))
 }
@@ -328,6 +329,19 @@ KGI_gam <- gam(Gm ~ s(FSLE,k=4), family = binomial, method = "REML", data = KGI_
 # 
 # R-sq.(adj) =  0.0028   Deviance explained = 1.82%
 # -REML = 77.199  Scale est. = 1         n = 181
+# gam.check()
+# Method: REML   Optimizer: outer newton
+# full convergence after 3 iterations.
+# Gradient range [-3.110683e-06,-3.110683e-06]
+# (score 77.1986 & scale 1).
+# Hessian positive definite, eigenvalue range [0.1435551,0.1435551].
+# Model rank =  4 / 4 
+# 
+# Basis dimension (k) checking results. Low p-value (k-index<1) may
+# indicate that k is too low, especially if edf is close to k'.
+# 
+#           k'  edf k-index p-value
+# s(FSLE) 3.00 1.94    0.94    0.3
 
 KGI_gam <- gam(Gm ~ s(SSH,k=4), family = binomial, method = "REML", data = KGI_binned)
 # plot shows significant relationship (higher SSH, higher probability) 
@@ -399,6 +413,7 @@ KGI_gam <- gam(Gm ~ s(ice_conc,k=4), family = binomial, method = "REML", data = 
 # R-sq.(adj) =  0.125   Deviance explained =   19%
 # -REML = 62.293  Scale est. = 1         n = 181
 
+
 KGI_gam <- gam(Gm ~ s(ice_diff,k=4), family = binomial, method = "REML", data = KGI_binned)
 # error bars big towards beginning, but trend looks alright
 # Family: binomial 
@@ -419,6 +434,22 @@ KGI_gam <- gam(Gm ~ s(ice_diff,k=4), family = binomial, method = "REML", data = 
 # 
 # R-sq.(adj) =  0.00503   Deviance explained = 2.11%
 # -REML =  76.63  Scale est. = 1         n = 181
+# gam.check()
+# Method: REML   Optimizer: outer newton
+# full convergence after 4 iterations.
+# Gradient range [-1.467041e-05,-1.467041e-05]
+# (score 76.6299 & scale 1).
+# Hessian positive definite, eigenvalue range [0.2613356,0.2613356].
+# Model rank =  4 / 4 
+# 
+# Basis dimension (k) checking results. Low p-value (k-index<1) may
+# indicate that k is too low, especially if edf is close to k'.
+# 
+#               k'  edf k-index p-value    
+# s(ice_diff) 3.00 1.86    0.68  <2e-16 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
 
 KGI_gam <- gam(Gm ~ s(salinity_0,k=4), family = binomial, method = "REML", data = KGI_binned)
 # borderline fails horizontal line test, but clear trend in salinity
@@ -539,13 +570,64 @@ KGI_gam <- gam(Gm ~ s(julian_day,k=4), family = binomial, method = "REML", data 
 # R-sq.(adj) =  0.236   Deviance explained = 24.9%
 # -REML = 61.037  Scale est. = 1         n = 181
 
-# Variables that were significant (p < 0.05): SSH, salinity, oxygen, net primary production, julian day
+# Variables that were significant (p < 0.05): SSH (linear), salinity, oxygen, net primary production (linear), julian day
 # Variables that were insignifacnt: FSLE, mixed layer depth, EKE, ice concentration, ice concentration difference
-# Still include ice concentration (p=0.15) and/or ice concentration difference (p=0.417) because ecologically important
+# Still including ice concentration (p=0.15) and/or ice concentration difference (p=0.417) because ecologically important
 
-# Next steps: one by one build final model for binned by ACF (two days)
-# Repeat process for other binning lengths (3 and 5 days) to reduce amount of 0s
-# Pick best model
+# Next step: one by one, add significant variables to model
+# Starting with linear terms
+KGI_gam <- gam(Gm ~ SSH + productivity_0, family = binomial, method = 'REML', data = KGI_binned)
+# AIC: 113.4565
+# summary:
+# Family: binomial 
+# Link function: logit 
+# 
+# Formula:
+#   Gm ~ SSH + productivity_0
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)    
+# (Intercept)    63.34362   15.71880   4.030 5.58e-05 ***
+#   SSH            39.41786    9.69153   4.067 4.76e-05 ***
+#   productivity_0 -0.14846    0.04641  -3.199  0.00138 ** 
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# 
+# R-sq.(adj) =  0.302   Deviance explained = 29.5%
+# -REML = 53.206  Scale est. = 1         n = 181
+
+# Adding sea ice concentration, building rest of model around it
+KGI_gam <- gam(Gm ~ SSH + productivity_0 + s(ice_conc,k=4), family = binomial, method = 'REML', data = KGI_binned)
+# AIC: 101.0181
+# summary:
+# Family: binomial 
+# Link function: logit 
+# 
+# Formula:
+#   Gm ~ SSH + productivity_0 + s(ice_conc, k = 4)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)    
+# (Intercept)    -1.99801   30.53945  -0.065 0.947837    
+# SSH            13.43412   13.05840   1.029 0.303587    
+# productivity_0 -0.17350    0.04998  -3.472 0.000517 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq p-value
+# s(ice_conc) 1.825  1.972   1.17   0.553
+# 
+# R-sq.(adj) =  0.381   Deviance explained = 40.3%
+# -REML = 44.221  Scale est. = 1         n = 181
+# ............................................................
+KGI_binned$weights <- ifelse(KGI_binned$Gm == 1, 27, 1)
+KGI_gam <- gam(Gm ~ SSH + productivity_0 + s(ice_conc,k=4), family = binomial, method = 'REML', 
+               weights=weights,data = KGI_binned)
+
+# Trying 4 day bins, similar variable-by-variable initial approach
+KGI_gam <- gam(Gm ~ s(ice_conc, k=4), family=binomial, method='REML',data=KGI_4day)
 
 
 # CLARENCE ISLAND
