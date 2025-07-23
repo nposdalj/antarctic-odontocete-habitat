@@ -80,7 +80,7 @@ if(species =='BW29') {
   print('Species code not valid. Check inputs.')
 
 
-# ------------- Step 2: Average by ACF EDIT STEP ------------
+# ------------- Step 2: Average by ACF ------------
 acf_table <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Autocorrelation/acf_table.csv")
 acfVal <- function(site) {
   row_idx <- which(acf_table$site == site) # Row index for the site
@@ -138,6 +138,13 @@ KGI_acf <- acfVal('KGI')
 KGI_binned <- binByACF('KGI',KGI_acf)
 CI_acf <- acfVal('CI')
 CI_binned <- binByACF('CI',CI_acf)
+
+# ACF binned (2 days) has 154 0s, 27 1s (14% 1s)
+KGI_3day <- binByACF('KGI',3) # 101 0s, 22 1s (18% 1s)
+KGI_4day <- binByACF('KGI',4) # 74 0s, 19 1s (20% 1s)
+KGI_5day <- binByACF('KGI',5) # 60 0s, 17 1s (22% 1s)
+KGI_6day <- binByACF('KGI',6) # 50 0s, 15 1s (23% 1s)
+KGI_week <- binByACF('KGI',7) # 44 0s, 14 1s (24% 1s)
 
 
 # ------------- Step 3: Plot Presence Timeseries --------------
@@ -297,6 +304,248 @@ KGI_gam <- gam(Gm ~ s(FSLE,k=4) + s(SSH,k=4) + s(mixed_layer,k=4) + s(ice_conc,k
 # s(julian_day)     3.00 1.00    0.80  <2e-16 ***
 #   ---
 #   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+# Building GAM one predictor at a time because multivariate GAM above had difficult to interpret results
+KGI_gam <- gam(Gm ~ s(FSLE,k=4), family = binomial, method = "REML", data = KGI_binned)
+# plot does not show significance (horizontal line test), but does show shape
+# summary(KGI_gam)
+# 
+# Family: binomial 
+# Link function: logit 
+# 
+# Formula:
+#   Gm ~ s(FSLE, k = 4)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)    
+# (Intercept)  -1.7618     0.2116  -8.326   <2e-16 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq p-value
+# s(FSLE) 1.945  2.337  0.907   0.573
+# 
+# R-sq.(adj) =  0.0028   Deviance explained = 1.82%
+# -REML = 77.199  Scale est. = 1         n = 181
+
+KGI_gam <- gam(Gm ~ s(SSH,k=4), family = binomial, method = "REML", data = KGI_binned)
+# plot shows significant relationship (higher SSH, higher probability) 
+# Family: binomial 
+# Link function: logit 
+# 
+# Formula:
+#   Gm ~ s(SSH, k = 4)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)    
+# (Intercept)  -2.5621     0.4052  -6.323 2.57e-10 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq  p-value    
+# s(SSH)   1      1  15.61 7.77e-05 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =   0.14   Deviance explained = 19.3%
+# -REML = 61.996  Scale est. = 1         n = 181
+# ..................................................
+# AIC(KGI_gam) = 127.1259
+# Trying linear fit because edf is 1
+KGI_gam <- gam(Gm ~ SSH, family = binomial, method = 'REML', data=KGI_binned)
+# AIC() = 127.1255
+# Very marginal difference, but going with linear fit for SSH
+
+KGI_gam <- gam(Gm ~ s(mixed_layer,k=4), family = binomial, method = "REML", data = KGI_binned)
+# large error bar at very end, but reasonable errors for mixed layers between 15 to 80 m
+# Doesn't pass horizontal line test
+# Family: binomial 
+# Link function: logit 
+# 
+# Formula:
+#   Gm ~ s(mixed_layer, k = 4)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)    
+# (Intercept)  -1.9392     0.2633  -7.365 1.78e-13 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq p-value
+# s(mixed_layer) 2.483    2.8   4.59   0.208
+# 
+# R-sq.(adj) =  0.0236   Deviance explained = 5.14%
+# -REML = 75.615  Scale est. = 1         n = 181
+
+KGI_gam <- gam(Gm ~ s(ice_conc,k=4), family = binomial, method = "REML", data = KGI_binned)
+# not great: full-range error bars for concentrations of ~0.25 and above (trendline makes sense however)
+# Family: binomial 
+# Link function: logit 
+# 
+# Formula:
+#   Gm ~ s(ice_conc, k = 4)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)
+# (Intercept)   -23.33      19.35  -1.205    0.228
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq p-value
+# s(ice_conc) 1.853  1.981  4.139    0.15
+# 
+# R-sq.(adj) =  0.125   Deviance explained =   19%
+# -REML = 62.293  Scale est. = 1         n = 181
+
+KGI_gam <- gam(Gm ~ s(ice_diff,k=4), family = binomial, method = "REML", data = KGI_binned)
+# error bars big towards beginning, but trend looks alright
+# Family: binomial 
+# Link function: logit 
+# 
+# Formula:
+#   Gm ~ s(ice_diff, k = 4)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)    
+# (Intercept)  -1.7902     0.2197  -8.149 3.68e-16 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq p-value
+# s(ice_diff) 1.864   2.22  2.152   0.417
+# 
+# R-sq.(adj) =  0.00503   Deviance explained = 2.11%
+# -REML =  76.63  Scale est. = 1         n = 181
+
+KGI_gam <- gam(Gm ~ s(salinity_0,k=4), family = binomial, method = "REML", data = KGI_binned)
+# borderline fails horizontal line test, but clear trend in salinity
+# Family: binomial 
+# Link function: logit 
+# 
+# Formula:
+#   Gm ~ s(salinity_0, k = 4)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)    
+# (Intercept)  -2.4923     0.4385  -5.684 1.31e-08 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq p-value   
+# s(salinity_0) 2.162  2.535  11.02 0.00862 **
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =  0.0965   Deviance explained = 16.9%
+# -REML = 65.595  Scale est. = 1         n = 181
+
+KGI_gam <- gam(Gm ~ s(EKE_0,k=4), family = binomial, method = "REML", data = KGI_binned)
+# minor trend, good amount of variability
+# Family: binomial 
+# Link function: logit 
+# 
+# Formula:
+#   Gm ~ s(EKE_0, k = 4)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)    
+# (Intercept)  -1.7431     0.2089  -8.346   <2e-16 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq p-value
+# s(EKE_0) 1.32  1.563  0.213   0.886
+# 
+# R-sq.(adj) =  -0.00509   Deviance explained = 0.314%
+# -REML =  77.49  Scale est. = 1         n = 181
+
+KGI_gam <- gam(Gm ~ s(o2_0,k=4), family = binomial, method = "REML", data = KGI_binned)
+# reasonable trend in plot, reasonable error bars
+# Family: binomial 
+# Link function: logit 
+# 
+# Formula:
+#   Gm ~ s(o2_0, k = 4)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)    
+# (Intercept)  -2.1809     0.3051  -7.149 8.75e-13 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq p-value   
+# s(o2_0) 2.499  2.822  12.91 0.00462 **
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =  0.0955   Deviance explained = 13.4%
+# -REML = 69.103  Scale est. = 1         n = 181
+
+KGI_gam <- gam(Gm ~ s(productivity_0,k=4), family = binomial, method = "REML", data = KGI_binned)
+# Clear trend in presence based off plot
+# Family: binomial 
+# Link function: logit 
+# 
+# Formula:
+#   Gm ~ s(productivity_0, k = 4)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)    
+# (Intercept)  -2.0638     0.2869  -7.194 6.27e-13 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq p-value   
+# s(productivity_0)   1      1  9.116 0.00253 **
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =  0.0647   Deviance explained = 9.12%
+# -REML = 70.042  Scale est. = 1         n = 181
+# .....................................................
+# AIC() = 142.5871
+# Trying linear fit because edf is 1
+KGI_gam <- gam(Gm ~ productivity_0, family = binomial, method = 'REML', data = KGI_binned)
+# AIC() = 142,5868
+# Marginal difference, but going with linear fit for NPP
+
+KGI_gam <- gam(Gm ~ s(julian_day,k=4), family = binomial, method = "REML", data = KGI_binned)
+# Clear seasonal trend, showing more spring/early summer presence
+# Family: binomial 
+# Link function: logit 
+# 
+# Formula:
+#   Gm ~ s(julian_day, k = 4)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)    
+# (Intercept)  -2.5203     0.4072  -6.189 6.04e-10 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq  p-value    
+# s(julian_day) 2.748  2.954  21.52 8.86e-05 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =  0.236   Deviance explained = 24.9%
+# -REML = 61.037  Scale est. = 1         n = 181
+
+# Variables that were significant (p < 0.05): SSH, salinity, oxygen, net primary production, julian day
+# Variables that were insignifacnt: FSLE, mixed layer depth, EKE, ice concentration, ice concentration difference
+# Still include ice concentration (p=0.15) and/or ice concentration difference (p=0.417) because ecologically important
+
+# Next steps: one by one build final model for binned by ACF (two days)
+# Repeat process for other binning lengths (3 and 5 days) to reduce amount of 0s
+# Pick best model
 
 
 # CLARENCE ISLAND
