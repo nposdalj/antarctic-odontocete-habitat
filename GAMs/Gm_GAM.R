@@ -1,5 +1,3 @@
-# Currently working with 40 km radius for all variables EXCEPT FSLE
-# Change the loaded file when FSLE is corrected
 library(tidyverse)
 library(mgcv)
 library(car)
@@ -38,7 +36,7 @@ name <- function(abbrev) {
 }
 
 # ------------- Step 1: Load Data -----------------
-allData <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Data/allData_40km.csv")
+allData <- read.csv("/Users/trisha/R/antarctic-odontocete-habitat/Data/allData_40km.csv")
 allData <- allData %>% subset(select=-X)
 allData$date <- as.Date(allData$date, "%Y-%m-%d")
 # Filter by species relevant data
@@ -81,7 +79,7 @@ if(species =='BW29') {
 
 
 # ------------- Step 2: Average by ACF ------------
-acf_table <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Autocorrelation/acf_table.csv")
+acf_table <- read.csv("/Users/trisha/R/antarctic-odontocete-habitat/Autocorrelation/acf_table.csv")
 acfVal <- function(site) {
   row_idx <- which(acf_table$site == site) # Row index for the site
   acf_val <- acf_table[row_idx,species][[1]]
@@ -219,8 +217,9 @@ CI_vif <- glm(as.formula(mod_formula), family = binomial, data = CI_binned)
 
 # -------------- Step 5: Build GAMs ------------------------
 # Function to visualize GAMs on a probability scale with the proper confidence interval
-# Run this for each iteration of the model
-# NOTE: NEED TO EDIT PLOT FUNCTIONS TO ACCOUNT FOR MODELS WITH LINEAR TERMS
+# Run this for each iteration of the model to plot smooth terms
+# Currently running into issues with plots: they look more reasonable without including model intercept
+#      -> remove shift argument and seWithMean argument?
 plotGam <- function(gam) {
   return(plot(gam,trans=plogis,shift=coef(gam)[1],seWithMean=TRUE))
 }
@@ -622,9 +621,255 @@ KGI_gam <- gam(Gm ~ SSH + productivity_0 + s(ice_conc,k=4), family = binomial, m
 # R-sq.(adj) =  0.381   Deviance explained = 40.3%
 # -REML = 44.221  Scale est. = 1         n = 181
 # ............................................................
-KGI_binned$weights <- ifelse(KGI_binned$Gm == 1, 27, 1)
+# Adding weights to make the ratio of 1s to 0s near 1:1
+KGI_binned$weights <- ifelse(KGI_binned$Gm == 1, 5, 1)
 KGI_gam <- gam(Gm ~ SSH + productivity_0 + s(ice_conc,k=4), family = binomial, method = 'REML', 
                weights=weights,data = KGI_binned)
+# AIC: 227.155 (jump is okay because weights changed)
+# summary
+# Formula:
+#   Gm ~ SSH + productivity_0 + s(ice_conc, k = 4)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)    
+# (Intercept)    -12.84468   22.15035  -0.580    0.562    
+# SSH              7.47595    7.70685   0.970    0.332    
+# productivity_0  -0.15815    0.02648  -5.971 2.35e-09 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq p-value
+# s(ice_conc) 1.895  1.993  2.148   0.326
+# 
+# R-sq.(adj) =  0.463   Deviance explained = 45.5%
+# -REML = 109.99  Scale est. = 1         n = 181
+
+# Dropping SSH because it is no longer significant
+KGI_gam <- gam(Gm ~ productivity_0 + s(ice_conc,k=4), family = binomial, method = 'REML', 
+               weights=weights,data = KGI_binned)
+# AIC: 226.7411
+# summary
+# Formula:
+#   Gm ~ productivity_0 + s(ice_conc, k = 4)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)    
+# (Intercept)    -23.92483   17.81480  -1.343    0.179    
+# productivity_0  -0.17054    0.02355  -7.241 4.46e-13 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq p-value
+# s(ice_conc) 1.894  1.993  2.425   0.279
+# 
+# R-sq.(adj) =  0.465   Deviance explained = 45.2%
+# -REML = 113.53  Scale est. = 1         n = 181
+
+# Now adding in more significant smooth terms
+KGI_gam <- gam(Gm ~ productivity_0 + s(ice_conc,k=4) + s(o2_0,k=4), family = binomial, method = 'REML', 
+               weights=weights,data = KGI_binned)
+# AIC: 227.3305
+# summary:
+# Formula:
+#   Gm ~ productivity_0 + s(ice_conc, k = 4) + s(o2_0, k = 4)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)    
+# (Intercept)    -23.02691   17.50413  -1.316    0.188    
+# productivity_0  -0.15742    0.02759  -5.705 1.16e-08 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq p-value
+# s(ice_conc) 1.878  1.988  2.579   0.249
+# s(o2_0)     1.862  2.262  3.283   0.231
+# 
+# R-sq.(adj) =  0.474   Deviance explained = 46.2%
+# -REML = 113.07  Scale est. = 1         n = 181
+# Removing sea ice concentration (will add back at end) to see if it is confounding effect of other smooths
+KGI_gam <- gam(Gm ~ productivity_0 + s(o2_0,k=4), family = binomial, method = 'REML', 
+               weights=weights,data = KGI_binned)
+# summary:
+# Formula:
+#   Gm ~ productivity_0 + s(o2_0, k = 4)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)    
+# (Intercept)     0.17990    0.22454   0.801    0.423    
+# productivity_0 -0.09595    0.02157  -4.449 8.63e-06 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq  p-value    
+# s(o2_0) 2.501  2.828  29.45 2.11e-06 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =  0.239   Deviance explained = 21.4%
+# -REML = 164.13  Scale est. = 1         n = 181
+
+# ice concentration is important, deviance explained dropped by around ~20% without it
+# Continuing to build GAM with significant terms from earlier, will add sea ice back at end
+# Adding salinity now
+KGI_gam <- gam(Gm ~ productivity_0 + s(o2_0,k=4) + s(salinity_0,k=4), family = binomial, method = 'REML', 
+               weights=weights,data = KGI_binned)
+# AIC: 230.8216
+# summary:
+# Formula:
+#   Gm ~ productivity_0 + s(o2_0, k = 4) + s(salinity_0, k = 4)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)    
+# (Intercept)    -0.62127    0.49547  -1.254     0.21    
+# productivity_0 -0.17156    0.02319  -7.399 1.37e-13 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq  p-value    
+# s(o2_0)       1.000  1.000   7.41  0.00649 ** 
+#   s(salinity_0) 2.761  2.952  26.05 1.02e-05 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =  0.465   Deviance explained = 45.2%
+# -REML = 117.45  Scale est. = 1         n = 181
+# .............................................
+# None of concurvity or gam.check outputs were concerning
+# Even though AIC slightly increased, keeping it in the model for now
+#    - It has a significant effect & increases % deviance explained
+
+
+# Next step: adding in julian day
+KGI_gam <- gam(Gm ~ productivity_0 + s(o2_0,k=4) + s(salinity_0,k=4) + s(julian_day,k=4), 
+               family = binomial, method = 'REML', weights=weights,data = KGI_binned)
+# AIC: 227.8585
+# summary:
+# Formula:
+#   Gm ~ productivity_0 + s(o2_0, k = 4) + s(salinity_0, k = 4) + 
+#   s(julian_day, k = 4)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)    
+# (Intercept)    -0.95468    0.57359  -1.664    0.096 .  
+# productivity_0 -0.17739    0.02394  -7.410 1.26e-13 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq  p-value    
+# s(o2_0)       1.000  1.000 11.539 0.000682 ***
+#   s(salinity_0) 2.805  2.967 18.385 0.000393 ***
+#   s(julian_day) 1.000  1.000  4.098 0.042946 *  
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =  0.473   Deviance explained = 46.4%
+# -REML =  115.3  Scale est. = 1         n = 181
+# .....................................................
+# Salinity and julian day have high concurvity (0.91), will deal with this after adding back sea ice
+
+# Adding sea ice concentration back in
+KGI_gam <- gam(Gm ~ productivity_0 + s(o2_0,k=4) + s(salinity_0,k=4) + s(julian_day,k=4) + s(ice_conc,k=4), 
+               family = binomial, method = 'REML', weights=weights,data = KGI_binned)
+# AIC: 225.6064
+# summary:
+# Formula:
+#   Gm ~ productivity_0 + s(o2_0, k = 4) + s(salinity_0, k = 4) + 
+#   s(julian_day, k = 4) + s(ice_conc, k = 4)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)    
+# (Intercept)    -17.60052   14.15379  -1.244    0.214    
+# productivity_0  -0.17401    0.02544  -6.841 7.87e-12 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq p-value   
+# s(o2_0)       1.000  1.000  6.783 0.00921 **
+#   s(salinity_0) 1.000  1.000  1.449 0.22879   
+# s(julian_day) 1.000  1.000  2.734 0.09826 . 
+# s(ice_conc)   1.853  1.982  2.033 0.32873   
+# ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =  0.475   Deviance explained =   47%
+# -REML = 110.44  Scale est. = 1         n = 181
+# ....................................................
+# Most problematic concurvity is between ice concentration and salinity, going to remove salinity
+
+# Next step: removing salinity
+KGI_gam <- gam(Gm ~ productivity_0 + s(o2_0,k=4) + s(julian_day,k=4) + s(ice_conc,k=4), 
+               family = binomial, method = 'REML', weights=weights,data = KGI_binned)
+# AIC: 224.9739
+# summary:
+# Formula:
+#   Gm ~ productivity_0 + s(o2_0, k = 4) + s(julian_day, k = 4) + 
+#   s(ice_conc, k = 4)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)    
+# (Intercept)    -18.57047   14.65539  -1.267    0.205    
+# productivity_0  -0.18234    0.02497  -7.303 2.81e-13 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq p-value  
+# s(o2_0)       1.000  1.000  6.032  0.0140 *
+#   s(julian_day) 1.000  1.000  5.147  0.0233 *
+#   s(ice_conc)   1.856  1.983  3.180  0.1728  
+# ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =  0.477   Deviance explained = 46.7%
+# -REML = 111.21  Scale est. = 1         n = 181
+# ............................................
+# Some issues with julian day & sea ice concentration concurvity, but these are just in worst concurvity
+#     - ignoring for now because observed and estimate concurvity are very reasonable (ranging from 0.15 to 0.25)
+# However, gam.check shows significant values for all three variables (but especially for julian day)
+#     - going to increase k for julian day
+
+# Next step: trying different k for julian day
+KGI_gam <- gam(Gm ~ productivity_0 + s(o2_0,k=4) + s(julian_day,k=8) + s(ice_conc,k=4), 
+               family = binomial, method = 'REML', weights=weights,data = KGI_binned)
+# gam.check:
+# Method: REML   Optimizer: outer newton
+# full convergence after 9 iterations.
+# Gradient range [-6.806735e-06,2.415695e-06]
+# (score 111.207 & scale 1).
+# Hessian positive definite, eigenvalue range [6.638096e-06,0.3405381].
+# Model rank =  15 / 15 
+# 
+# Basis dimension (k) checking results. Low p-value (k-index<1) may
+# indicate that k is too low, especially if edf is close to k'.
+# 
+#                 k'  edf k-index p-value    
+# s(o2_0)       3.00 1.00    0.80   0.005 ** 
+#   s(julian_day) 7.00 1.00    0.72  <2e-16 ***
+#   s(ice_conc)   3.00 1.86    0.78   0.010 ** 
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# .................................................
+# gam.check output above stayed the same after doubling k (as did AIC and summary)
+# likely culprit: missing predictors
+#   - hypothesis: variables at depth better explain species presence (surface is limitation for this model)
+# plots imply we should return to k=4 for julian day
+
+# final model:
+KGI_final <- gam(Gm ~ productivity_0 + s(o2_0,k=4) + s(julian_day,k=4) + s(ice_conc,k=4), 
+               family = binomial, method = 'REML', weights=weights,data = KGI_binned)
+# sea ice concentration still not significant, but its p-value is now down to 0.17
+#    - if i remove sea ice concentration, deviance explain goes own to 42.3% and AIC increases to 244.5775
+# keeping weights in as well, without them p-values of all predictors skyrocket
+# my guess: this model will become significant for sea ice concentration 
+#   once we figure out why its standard error is so high
+#     - at that point, will further develop model to see if other predictors are also significant
 
 # Trying 4 day bins, similar variable-by-variable initial approach
 KGI_gam <- gam(Gm ~ s(ice_conc, k=4), family=binomial, method='REML',data=KGI_4day)
