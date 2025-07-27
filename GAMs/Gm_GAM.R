@@ -1172,7 +1172,171 @@ KGI_gam <- gam(Gm ~ s(ice_conc,k=4,sp=0.1) + s(mixed_layer,sp=0.1,k=4) + s(produ
 # R-sq.(adj) =  0.465   Deviance explained = 44.5%
 # UBRE = 0.28299  Scale est. = 1         n = 181
 # ...........................................
-# recap decision here
+# concurvity doesn't look problematic, but not keeping mixed layer depth (since it is no longer significant)
+
+# Dropping mixed layer depth
+KGI_gam <- gam(Gm ~ s(ice_conc,k=4,sp=0.1) + s(productivity_0,sp=0.1,k=4),
+               family = binomial, weights=weights,data = KGI_binned)
+# AIC: 231.6787
+# summary:
+# Formula:
+#   Gm ~ s(ice_conc, k = 4, sp = 0.1) + s(productivity_0, sp = 0.1, 
+#                                         k = 4)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)    
+# (Intercept)   -2.230      0.578  -3.858 0.000114 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq  p-value    
+# s(ice_conc)       1.140  1.259  13.18 0.000314 ***
+#   s(productivity_0) 1.634  1.998  67.76  < 2e-16 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =  0.461   Deviance explained = 43.9%
+# UBRE = 0.27999  Scale est. = 1         n = 181
+
+# Adding in oxygen concentration
+KGI_gam <- gam(Gm ~ s(ice_conc,k=4,sp=0.1) + s(productivity_0,sp=0.1,k=4) + s(o2_0,k=4,sp=0.1),
+               family = binomial, weights=weights,data = KGI_binned)
+# AIC: 233.5662
+# summary:
+# Formula:
+#   Gm ~ s(ice_conc, k = 4, sp = 0.1) + s(productivity_0, sp = 0.1, 
+#                                         k = 4) + s(o2_0, k = 4, sp = 0.1)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)    
+# (Intercept)  -2.3996     0.6359  -3.774 0.000161 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq  p-value    
+# s(ice_conc)       1.094  1.179 11.970 0.000468 ***
+#   s(productivity_0) 1.466  1.767 49.361  < 2e-16 ***
+#   s(o2_0)           1.554  1.885  1.999 0.294160    
+# ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =  0.461   Deviance explained = 44.1%
+# UBRE = 0.29042  Scale est. = 1         n = 181
+# ......................................................
+# oxygen is not significant, scrapping it for next model
+
+# Replacing oxygen concentration with julian day
+KGI_gam <- gam(Gm ~ s(ice_conc,k=4,sp=0.1) + s(productivity_0,sp=0.1,k=4) + s(julian_day,k=4,sp=0.1),
+               family = binomial, weights=weights,data = KGI_binned)
+# AIC: 232.8101
+# summary:
+# Formula:
+#   Gm ~ s(ice_conc, k = 4, sp = 0.1) + s(productivity_0, sp = 0.1, 
+#                                         k = 4) + s(julian_day, k = 4, sp = 0.1)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)    
+# (Intercept)  -2.2568     0.5834  -3.868  0.00011 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq  p-value    
+# s(ice_conc)       1.135  1.250 13.062 0.000327 ***
+#   s(productivity_0) 1.578  1.913 21.710 1.48e-05 ***
+#   s(julian_day)     1.297  1.523  0.026 0.962129    
+# ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =  0.459   Deviance explained = 44.2%
+# UBRE = 0.28624  Scale est. = 1         n = 181
+# ....................................................
+# julian day and ice concentration have problematic concurvity
+# julian day not significant, removing it
+
+# Replacing julian day with salinity
+KGI_gam <- gam(Gm ~ s(ice_conc,k=4,sp=0.1) + s(productivity_0,sp=0.1,k=4) + s(salinity_0,k=4,sp=0.1),
+               family = binomial, weights=weights,data = KGI_binned)
+# AIC: 232.1874
+# summary:
+# Formula:
+#   Gm ~ s(ice_conc, k = 4, sp = 0.1) + s(productivity_0, sp = 0.1, 
+#                                         k = 4) + s(salinity_0, k = 4, sp = 0.1)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)    
+# (Intercept)  -2.1706     0.5907  -3.675 0.000238 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq p-value    
+# s(ice_conc)       1.142  1.261  6.764 0.00962 ** 
+#   s(productivity_0) 1.615  1.969 55.141 < 2e-16 ***
+#   s(salinity_0)     1.655  1.997  1.641 0.43257    
+# ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =  0.464   Deviance explained = 44.6%
+# UBRE = 0.2828  Scale est. = 1         n = 181
+# ..................................................
+# salinity and ice concentration have problematic concurvity
+# salinity not significant, removing it
+
+# Replacing salinity with sea surface height
+KGI_gam <- gam(Gm ~ s(ice_conc,k=4,sp=0.1) + s(productivity_0,sp=0.1,k=4) + s(SSH,k=4,sp=0.1),
+               family = binomial, weights=weights,data = KGI_binned)
+# AIC: 231.6068
+# summary:
+# Formula:
+#   Gm ~ s(ice_conc, k = 4, sp = 0.1) + s(productivity_0, sp = 0.1, 
+#                                         k = 4) + s(SSH, k = 4, sp = 0.1)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)    
+# (Intercept)  -2.4301     0.6616  -3.673  0.00024 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq p-value    
+# s(ice_conc)       1.104  1.195  10.08 0.00127 ** 
+#   s(productivity_0) 1.618  1.978  48.32 < 2e-16 ***
+#   s(SSH)            1.379  1.646   1.13 0.33579    
+# ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =  0.463   Deviance explained = 44.6%
+# UBRE = 0.2796  Scale est. = 1         n = 181
+# ...............................................
+# SSH not significant, dropping it from final model
+
+# final KGI model: ice concentration and net primary production are significant (43.9% deviance explained)
+KGI_final <- gam(Gm ~ s(ice_conc,k=4,sp=0.1) + s(productivity_0,sp=0.1,k=4),
+               family = binomial, weights=weights,data = KGI_binned)
+# AIC: 231.6787
+# summary:
+# Formula:
+#   Gm ~ s(ice_conc, k = 4, sp = 0.1) + s(productivity_0, sp = 0.1, 
+#                                         k = 4)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)    
+# (Intercept)   -2.230      0.578  -3.858 0.000114 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq  p-value    
+# s(ice_conc)       1.140  1.259  13.18 0.000314 ***
+#   s(productivity_0) 1.634  1.998  67.76  < 2e-16 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =  0.461   Deviance explained = 43.9%
+# UBRE = 0.27999  Scale est. = 1         n = 181
 
 # Scrapped strategies below:
 # Trying 4 day bins, similar variable-by-variable initial approach
