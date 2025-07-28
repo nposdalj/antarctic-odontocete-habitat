@@ -1,11 +1,11 @@
 ## Overview
 Habitat modeling code for odontocete detections at three HARP sites off the Antarctic Peninsula (near the South Shetland Islands) from 2014 to 2016. Detected odontocetes include sperm whales, killer whales, 
-long-finned pilot whales, southern bottlenose whales (BW29), and Gray's and strap-toothed whales (BW37 and BW58). Detected baleen whales will be habitat modeled separately.
+long-finned pilot whales, southern bottlenose whales (BW29), and Gray's and strap-toothed whales (BW37 and BW58). Detected baleen whales will be habitat modeled separately. Models used are generalized additive models (GAMs).
 
 ## Procedure
 ### Step 1: Create timeseries of species detections.
 Loaded detections (with start and end times) are in three files in the "Data" folder titled Antarc_SITECODE_01_Odontocetes.csv. Use TimeseriesPlots.R to create a site-by-site, species-by-species timeseries of detections.
-Options include total hours of clicks detected per day and number of days with binary daily presence per week.
+Options include total hours of clicks detected per day and number of days with binary daily presence per week. Save all site detections to Antarc_Odontocetes.csv
 
 ### Step 2: Load environmental data and create timeseries.
 #### First, find data sources.
@@ -27,8 +27,13 @@ Scripts are titled GetSOURCE.R. Run this to read the specified variable/s from t
 to a .csv format.
 
 ### Step 3: Determine ACF values.
+In the "Autocorrelation" folder, use ACF_SiteSpecies.R to generate a table of ACF values (daily) and save it to acf_table.csv. Also, create a similar table of days with detected presence (binned_detections.csv), to 
+quickly quantify which sites and species have enough data to develop a model. Also creates a dataframe with all days HARPs were active and whether or not specific species were detected at each site, saved to 
+DailyDetections.csv in the "Data" folder.
 
 ### Step 4: Create final dataframe to use in models.
+In the main folder, use FinalData.R to create a dataframe that combines daily binary presence for each species with all the environmental variables (including at biologically relevant depth bins). This dataframe
+will be used to create the GAMs. User can also specify species, sites, and variables of interest to create a stacked timeseries that visualizes temporal trends in presence.
 
 ### Step 5: Make GAMs to model site-by-site, species-by-species presence on environmental predictors.
 
