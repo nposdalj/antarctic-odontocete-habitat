@@ -4,6 +4,8 @@ long-finned pilot whales, southern bottlenose whales (BW29), and Gray's and stra
 
 ## Procedure
 ### Step 1: Create timeseries of species detections.
+*Input:* Species detections data (start/end time format for each encounter)
+*Output:* Timeseries of species detections
 Loaded detections (with start and end times) are in three files in the "Data" folder titled Antarc_SITECODE_01_Odontocetes.csv. Use TimeseriesPlots.R to create a site-by-site, species-by-species timeseries of detections.
 Options include total hours of clicks detected per day and number of days with binary daily presence per week. Save all site detections to Antarc_Odontocetes.csv
 
@@ -18,8 +20,8 @@ bounding box (40 km square) and time range for each site to the specified folder
 
 *Clarence Island (CI):* 02/04/2016 to 12/02/2016; latitude range: -60.89099, -61.61275; longitude range: -54.23054, -52.73632, site coordinates: (-61.251867, -53.483433)
 
-*Downloaded/accessed data:* Aqua MODIS (chlrophyll-a), SMOS (salinity), ERDDAP (SST, salinity), AVISO (FSLEs; data downloaded on working disk), HYCOM (salinity, temperature at depths), OCNET (chlrophyll-a),
-University of Bremen (sea ice, code does not work), Copernicus (salinity, temperature, chlorophyll, net primary production, EKE, ice variables, mixed layer thickness, SSH; at depth when applicable),
+*Downloaded/accessed data:* [Aqua MODIS ](https://cwcgom.aoml.noaa.gov/erddap/griddap/miamiModisAquaChlor.html)(chlrophyll-a), SMOS (salinity), [ERDDAP](https://coastwatch.noaa.gov/cwn/products/sea-surface-salinity-near-real-time-miras-smos.html) (SST, salinity), AVISO (FSLEs; data downloaded on working disk), [HYCOM](https://tds.hycom.org/thredds/catalogs/GLBv0.08/expt_53.X.html) (salinity, temperature at depths), OCNET (chlrophyll-a; did not use because out of bounding box),
+[University of Bremen](https://seaice.uni-bremen.de/sea-ice-concentration/amsre-amsr2/) (sea ice, code does not work), Copernicus (salinity, temperature, chlorophyll, net primary production, EKE, ice variables, mixed layer thickness, SSH; at depth when applicable),
 daily AAO index
 
 #### Next, use the script for each data source.
