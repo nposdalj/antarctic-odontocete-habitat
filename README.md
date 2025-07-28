@@ -36,6 +36,13 @@ In the main folder, use FinalData.R to create a dataframe that combines daily bi
 will be used to create the GAMs. User can also specify species, sites, and variables of interest to create a stacked timeseries that visualizes temporal trends in presence.
 
 ### Step 5: Make GAMs to model site-by-site, species-by-species presence on environmental predictors.
+In the "GAMs" folder, there is one modeling script for each species that creates site-specific models for presence. The code automatically bins the final dataframe by ACF value (instead of daily bins) and filters for the relevant species (and depth levels). Then, it plots a timeseries for that species presence across all sites using the binned data. After that, a VIF analysis is conducted on all potential environmental variables to remove highly correlated variables. 
+
+In order to build the final GAMs, a single regression is first made with each of the remaining environmental predictors after the VIF analysis. Then, variables are added to the model one at a time until a final model is determined with only significant predictors. Components of the model such as number of knots, smoothing parameter, weights, etc. are also changed as needed to settle on the best model.
+
+
+### Step 6: Visualize GAMs
 
 ## Notes
-Cop v hycom script to choose which model
+- **Cop_vs_HYCOM.R:** This script (located in the "Environmental Data" folder) was used to determine whether Copernicus or HYCOM provided a better model for remotely sensed environmental data that had too many gaps (such as SST). Copernicus was determined to be better and was used as a primary data source for the GAMs.
+- **"Site Map" folder:** This script (in MATLAB) generates a map of the Antarctic sites from which HARP data was gathered.
