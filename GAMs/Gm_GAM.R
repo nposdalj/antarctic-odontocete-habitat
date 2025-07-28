@@ -34,9 +34,8 @@ name <- function(abbrev) {
   }
   return(fullname)
 }
-
 # ------------- Step 1: Load Data -----------------
-allData <- read.csv("/Users/trisha/R/antarctic-odontocete-habitat/Data/allData_40km.csv")
+allData <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Data/allData_40km.csv")
 allData <- allData %>% subset(select=-X)
 allData$date <- as.Date(allData$date, "%Y-%m-%d")
 # Filter by species relevant data
@@ -79,7 +78,7 @@ if(species =='BW29') {
 
 
 # ------------- Step 2: Average by ACF ------------
-acf_table <- read.csv("/Users/trisha/R/antarctic-odontocete-habitat/Autocorrelation/acf_table.csv")
+acf_table <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Autocorrelation/acf_table.csv")
 acfVal <- function(site) {
   row_idx <- which(acf_table$site == site) # Row index for the site
   acf_val <- acf_table[row_idx,species][[1]]
@@ -169,7 +168,56 @@ binned_plot <- grid.arrange(binnedTimeseries(EI_binned,'EI',EI_acf), binnedTimes
 intl_predictors <- c("FSLE", "SSH", "mixed_layer", "ice_conc", 'ice_diff', "salinity_0", 
                      "temperature_0", "EKE_0",'o2_0','chla_0','productivity_0')
 mod_formula <- paste(species, "~", paste(intl_predictors, collapse = " + "))
-EI_vif <- glm(as.formula(mod_formula), family = binomial, data = EI_binned)
+# EI vif model is not converging when run as a logistic regression, so running as a linear regression instead
+EI_vif <- glm(as.formula(mod_formula), data = EI_binned)
+vif(EI_vif)
+# FSLE            SSH    mixed_layer       ice_conc       ice_diff     salinity_0  temperature_0          EKE_0 
+# 3.382882       3.502149      10.615710       4.851180       1.662875       6.492951      62.931785       2.065895 
+# o2_0         chla_0 productivity_0 
+# 45.191425      18.595415      31.252547 
+
+# dropping surface temperature
+EI_pred <- c("FSLE", "SSH", "mixed_layer", "ice_conc", 'ice_diff', "salinity_0", 
+                     "EKE_0",'o2_0','chla_0','productivity_0')
+mod_formula <- paste(species, "~", paste(EI_pred, collapse = " + "))
+EI_vif <- glm(as.formula(mod_formula), data = EI_binned)
+vif(EI_vif)
+# FSLE            SSH    mixed_layer       ice_conc       ice_diff     salinity_0          EKE_0           o2_0 
+# 3.282633       2.517868      10.230747       3.218531       1.576815       6.092952       1.926940      29.632412 
+# chla_0 productivity_0 
+# 17.952308      29.381096 
+
+# dropping oxygen concentration
+EI_pred <- c("FSLE", "SSH", "mixed_layer", "ice_conc", 'ice_diff', "salinity_0", 
+             "EKE_0",'chla_0','productivity_0')
+mod_formula <- paste(species, "~", paste(EI_pred, collapse = " + "))
+EI_vif <- glm(as.formula(mod_formula), data = EI_binned)
+vif(EI_vif)
+# FSLE            SSH    mixed_layer       ice_conc       ice_diff     salinity_0          EKE_0         chla_0 
+# 2.344244       2.312049       6.504563       2.909992       1.412285       5.643441       1.562109      17.376457 
+# productivity_0 
+# 13.381785
+
+# dropping chlorophyll
+EI_pred <- c("FSLE", "SSH", "mixed_layer", "ice_conc", 'ice_diff', "salinity_0", 
+             "EKE_0",'productivity_0')
+mod_formula <- paste(species, "~", paste(EI_pred, collapse = " + "))
+EI_vif <- glm(as.formula(mod_formula), data = EI_binned)
+vif(EI_vif)
+# FSLE            SSH    mixed_layer       ice_conc       ice_diff     salinity_0          EKE_0 productivity_0 
+# 2.323856       1.322337       4.990213       2.516687       1.309875       4.470306       1.560237      10.007252
+
+# dropping net primay production
+EI_pred <- c("FSLE", "SSH", "mixed_layer", "ice_conc", 'ice_diff', "salinity_0", 
+             "EKE_0")
+mod_formula <- paste(species, "~", paste(EI_pred, collapse = " + "))
+EI_vif <- glm(as.formula(mod_formula), data = EI_binned)
+vif(EI_vif)
+# FSLE         SSH mixed_layer    ice_conc    ice_diff  salinity_0       EKE_0 
+# 1.318511    1.319653    2.164988    2.195313    1.218722    1.496380    1.471647 
+
+# Final predictors for Elephant Island: FSLE, SSH, mixed layer depth, sea ice concentraiton,
+#   difference in ice concentration, salinity, EKE
 
 # KING GEORGE ISLAND
 # adding julian day into initial formula
@@ -213,7 +261,45 @@ intl_predictors <- c("FSLE", "SSH", "mixed_layer", "ice_conc", 'ice_diff', "sali
                      "temperature_0", "EKE_0",'o2_0','chla_0','productivity_0')
 mod_formula <- paste(species, "~", paste(intl_predictors, collapse = " + "))
 CI_vif <- glm(as.formula(mod_formula), family = binomial, data = CI_binned)
+vif(CI_vif)
+# FSLE            SSH    mixed_layer       ice_conc       ice_diff     salinity_0  temperature_0          EKE_0 
+# 2.074398       4.868523       5.451428       2.252767       1.733800       5.569607      26.476691       1.185552 
+# o2_0         chla_0 productivity_0 
+# 6.712699       7.278121      15.015548 
 
+# removing SST
+CI_pred <- c("FSLE", "SSH", "mixed_layer", "ice_conc", 'ice_diff', "salinity_0", 
+                     "EKE_0",'o2_0','chla_0','productivity_0')
+mod_formula <- paste(species, "~", paste(CI_pred, collapse = " + "))
+CI_vif <- glm(as.formula(mod_formula), family = binomial, data = CI_binned)
+vif(CI_vif)
+# FSLE            SSH    mixed_layer       ice_conc       ice_diff     salinity_0          EKE_0           o2_0 
+# 2.065587       4.476783       5.408579       1.651700       1.675378       5.277622       1.191292       2.727239 
+# chla_0 productivity_0 
+# 7.083603       6.214762 
+
+# removing chlorophyll
+CI_pred <- c("FSLE", "SSH", "mixed_layer", "ice_conc", 'ice_diff', "salinity_0", 
+             "EKE_0",'o2_0','productivity_0')
+mod_formula <- paste(species, "~", paste(CI_pred, collapse = " + "))
+CI_vif <- glm(as.formula(mod_formula), family = binomial, data = CI_binned)
+vif(CI_vif)
+# FSLE            SSH    mixed_layer       ice_conc       ice_diff     salinity_0          EKE_0           o2_0 
+# 1.974961       4.161409       5.036607       1.725923       1.707362       5.221869       1.227570       2.554227 
+# productivity_0 
+# 2.335373
+
+# removing salinity
+CI_pred <- c("FSLE", "SSH", "mixed_layer", "ice_conc", 'ice_diff',  
+             "EKE_0",'o2_0','productivity_0')
+mod_formula <- paste(species, "~", paste(CI_pred, collapse = " + "))
+CI_vif <- glm(as.formula(mod_formula), family = binomial, data = CI_binned)
+vif(CI_vif)
+# FSLE            SSH    mixed_layer       ice_conc       ice_diff          EKE_0           o2_0 productivity_0 
+# 1.971877       2.347452       2.614383       1.658311       1.642630       1.187306       1.931834       2.141908 
+
+# Final Clarence Island predictors: FSLE, SSH, mixed layer thickness, sea ice concentration,
+#   ice concentration difference, EKE, oxygen concentration, net primary production
 
 # -------------- Step 5: Build GAMs ------------------------
 # Function to visualize GAMs on a probability scale with the proper confidence interval
@@ -228,9 +314,158 @@ plotGam1 <- function(gam) {
   return(plot(gam,trans=plogis,shift=coef(gam)[1],seWithMean=TRUE,pages=1))
 }
 
-# ELEPHANT ISLAND
+# -------------------- Step 5a: Elephant Island GAM ------------------------------
+# starting by building GAMs one predictor at a time to find significant variables
+# Similar process: weighing to reach roughly 1:1 1s to 0s and setting initial knots at 4, smoothing at 0.1
+# List of predictors are stored in EI_pred include FSLE, SSH, mixed layer, ice concentration, 
+#   ice concentration difference, EKE, salinity
 
-# KING GEORGE ISLAND
+# not adding weights for EI because ratio of 0s to 1s is already close to 1:1 (13:17)
+
+# starting with FSLE
+EI_gam <- gam(Gm ~ s(FSLE,k=4,sp=0.1), family=binomial, data=EI_binned)
+# summary:
+# Formula:
+#   Gm ~ s(FSLE, k = 4, sp = 0.1)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)
+# (Intercept)   0.2756     0.3732   0.738     0.46
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq p-value
+# s(FSLE) 1.43  1.731  0.609   0.569
+# 
+# R-sq.(adj) =  0.0247   Deviance explained = 5.24%
+# UBRE = 0.45869  Scale est. = 1         n = 30
+
+# sea surface height
+EI_gam <- gam(Gm ~ s(SSH,k=4,sp=0.1), family=binomial, data=EI_binned)
+# summary:
+# Formula:
+#   Gm ~ s(SSH, k = 4, sp = 0.1)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)
+# (Intercept)   0.2696     0.3695    0.73    0.466
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq p-value
+# s(SSH) 1.488  1.809  0.129   0.916
+# 
+# R-sq.(adj) =  -0.0357   Deviance explained = 1.27%
+# UBRE = 0.51703  Scale est. = 1         n = 30
+
+# mixed layer depth
+EI_gam <- gam(Gm ~ s(mixed_layer,k=4,sp=0.1), family=binomial, data=EI_binned)
+# summary:
+# Formula:
+#   Gm ~ s(mixed_layer, k = 4, sp = 0.1)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)
+# (Intercept)   0.6672     0.5397   1.236    0.216
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq p-value  
+# s(mixed_layer) 1.044  1.087  5.054  0.0236 *
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =  0.301   Deviance explained = 29.7%
+# UBRE = 0.097976  Scale est. = 1         n = 30
+
+# ice concentration
+EI_gam <- gam(Gm ~ s(ice_conc,k=4,sp=0.1), family=binomial, data=EI_binned)
+# summary:
+# Formula:
+#   Gm ~ s(ice_conc, k = 4, sp = 0.1)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)
+# (Intercept)   0.4991     0.4903   1.018    0.309
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq p-value
+# s(ice_conc) 1.167  1.311  2.644   0.114
+# 
+# R-sq.(adj) =  0.144   Deviance explained = 14.8%
+# UBRE = 0.31068  Scale est. = 1         n = 30
+
+# ice concentration difference
+EI_gam <- gam(Gm ~ s(ice_diff,k=4,sp=0.1), family=binomial, data=EI_binned)
+# summary:
+# Formula:
+#   Gm ~ s(ice_diff, k = 4, sp = 0.1)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)
+# (Intercept)   0.2866     0.3752   0.764    0.445
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq p-value
+# s(ice_diff) 1.52  1.832  1.187   0.489
+# 
+# R-sq.(adj) =  0.026   Deviance explained = 6.28%
+# UBRE = 0.45053  Scale est. = 1         n = 30
+
+# salinity
+EI_gam <- gam(Gm ~ s(salinity_0,k=4,sp=0.1), family=binomial, data=EI_binned)
+# summary
+# Formula:
+#   Gm ~ s(salinity_0, k = 4, sp = 0.1)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)
+# (Intercept)   0.2560     0.4018   0.637    0.524
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq p-value
+# s(salinity_0) 1.249  1.457  3.624   0.113
+# 
+# R-sq.(adj) =  0.0977   Deviance explained = 11.4%
+# UBRE = 0.36219  Scale est. = 1         n = 30
+
+# eddy kinetic energy
+EI_gam <- gam(Gm ~ s(EKE_0,k=4,sp=0.1), family=binomial, data=EI_binned)
+# summary:
+# Formula:
+#   Gm ~ s(EKE_0, k = 4, sp = 0.1)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)
+# (Intercept)   0.2722     0.3871   0.703    0.482
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq p-value
+# s(EKE_0) 1.415  1.712  2.722   0.229
+# 
+# R-sq.(adj) =  0.112   Deviance explained = 11.2%
+# UBRE = 0.37621  Scale est. = 1         n = 30
+
+# The only significant predictor is mixed layer depth
+# playing with different smoothing parameters, basis functions to find best model
+EI_gam <- gam(Gm ~ s(mixed_layer,k=4,sp=0.1), family=binomial, data=EI_binned)
+# AIC: 32.93928
+# gam.check does not indicate that k should be increased, trying it anyways:
+EI_gam <- gam(Gm ~ s(mixed_layer,k=8,sp=0.1), family=binomial, data=EI_binned)
+# AIC: 33.1593
+
+# AIC went up, reverting to k = 4
+# trying sp = 0.01
+EI_gam <- gam(Gm ~ s(mixed_layer,k=8,sp=0.01), family=binomial, data=EI_binned)
+# AIC: 34.43422
+# AIC went up, trying sp = 1
+EI_gam <- gam(Gm ~ s(mixed_layer,k=8,sp=1), family=binomial, data=EI_binned)
+# AIC: 32.91472
+# negligible reduction in AIC, sticking with sp = 0.1
+
+# final model: mixed layer thickness as only significant predictor
+# Could be a result of less data (~30 data points vs 150+ for CI and KGI)
+#   could also have to do with weighing - EI did not need to have detections weighed at all to reach 1:1 ratio
+EI_final <- gam(Gm ~ s(mixed_layer,k=4,sp=0.1), family=binomial, data=EI_binned)
+
+# -------------------- Step 5b: King George Island GAM -------------------------
 # initial gam based on list of KGI predictors
 KGI_gam <- gam(Gm ~ s(FSLE,k=4) + s(SSH,k=4) + s(mixed_layer,k=4) + s(ice_conc,k=4) + 
                  s(ice_diff,k=4) + s(salinity_0,k=4) +
@@ -1345,4 +1580,450 @@ KGI_gam <- gam(Gm ~ s(ice_conc, k=4), family=binomial, method='REML',data=KGI_4d
 #   - so, we are sticking with ACF binned data
 
 
-# CLARENCE ISLAND
+# --------------------- Step 5c: Clarence Island GAM ------------------------------------
+# starting by building GAMs one predictor at a time to find significant variables
+# Similar to KGI: weighing to reach roughly 1:1 1s to 0s and setting initial knots at 4, smoothing at 0.1
+# List of predictors are stored in CI_pred, include FSLE, SSH, mixed layer, ice concentration, 
+#   ice concentration difference, EKE, oxygen concentration, net primary production
+
+# adding weights for CI
+# weighing presence (1s) at 10 because there are roughly 10x more 0s than 1s in the CI dataframe
+CI_binned$weights <- ifelse(CI_binned$Gm == 1, 10, 1)
+
+# Starting with FSLE
+CI_gam <- gam(Gm ~ s(FSLE,k=4,sp=0.1),family=binomial,weights=weights,data=CI_binned)
+# summary:
+# Formula:
+#   Gm ~ s(FSLE, k = 4, sp = 0.1)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)
+# (Intercept)  -0.1258     0.1278  -0.985    0.325
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq p-value   
+# s(FSLE) 2.171  2.577  16.11  0.0027 **
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =  0.0391   Deviance explained =  5.2%
+# UBRE = 1.4235  Scale est. = 1         n = 155
+
+# Sea surface height
+CI_gam <- gam(Gm ~ s(SSH,k=4,sp=0.1),family=binomial,weights=weights,data=CI_binned)
+# summary:
+# Formula:
+#   Gm ~ s(SSH, k = 4, sp = 0.1)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)
+# (Intercept)  -0.1657     0.1311  -1.263    0.207
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq  p-value    
+# s(SSH) 2.124  2.517  20.51 9.47e-05 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =  0.0525   Deviance explained = 6.27%
+# UBRE = 1.3959  Scale est. = 1         n = 155
+
+# mixed layer depth
+CI_gam <- gam(Gm ~ s(mixed_layer,k=4,sp=0.1),family=binomial,weights=weights,data=CI_binned)
+# summary:
+# Formula:
+#   Gm ~ s(mixed_layer, k = 4, sp = 0.1)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)  
+# (Intercept)  -0.2165     0.1304  -1.661   0.0968 .
+# ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq  p-value    
+# s(mixed_layer) 2.133  2.516   28.2 2.58e-06 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =  0.118   Deviance explained = 11.3%
+# UBRE = 1.2703  Scale est. = 1         n = 15
+
+# sea ice concentration
+CI_gam <- gam(Gm ~ s(ice_conc,k=4,sp=0.1),family=binomial,weights=weights,data=CI_binned)
+# summary:
+# Family: binomial 
+# Link function: logit 
+# 
+# Formula:
+#   Gm ~ s(ice_conc, k = 4, sp = 0.1)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)
+# (Intercept)  -0.1407     0.1333  -1.056    0.291
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq p-value   
+# s(ice_conc) 2.008  2.403  12.43 0.00535 **
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =  0.0347   Deviance explained = 4.88%
+# UBRE = 1.4293  Scale est. = 1         n = 155
+
+# difference in ice concentration
+CI_gam <- gam(Gm ~ s(ice_diff,k=4,sp=0.1),family=binomial,weights=weights,data=CI_binned)
+# summary:
+# Formula:
+#   Gm ~ s(ice_diff, k = 4, sp = 0.1)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)
+# (Intercept)  -0.1770     0.1268  -1.396    0.163
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq  p-value    
+# s(ice_diff) 2.037  2.396  26.41 6.93e-06 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =  0.0946   Deviance explained = 10.3%
+# UBRE = 1.2931  Scale est. = 1         n = 155
+
+# eddy kinetic energy
+CI_gam <- gam(Gm ~ s(EKE_0,k=4,sp=0.1),family=binomial,weights=weights,data=CI_binned)
+# summary:
+# Formula:
+#   Gm ~ s(EKE_0, k = 4, sp = 0.1)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)
+# (Intercept) -0.03953    0.12104  -0.327    0.744
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq p-value
+# s(EKE_0) 1.949  2.377  4.198   0.118
+# 
+# R-sq.(adj) =  0.00681   Deviance explained = 1.74%
+# UBRE = 1.5076  Scale est. = 1         n = 155
+
+# oxygen concentration
+CI_gam <- gam(Gm ~ s(o2_0,k=4,sp=0.1),family=binomial,weights=weights,data=CI_binned)
+# summary:
+# Formula:
+#   Gm ~ s(o2_0, k = 4, sp = 0.1)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)   
+# (Intercept)  -0.5179     0.1788  -2.897  0.00377 **
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq  p-value    
+# s(o2_0) 2.081  2.489  34.17 6.87e-07 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =  0.155   Deviance explained = 16.4%
+# UBRE = 1.1414  Scale est. = 1         n = 155
+
+# net primary production
+CI_gam <- gam(Gm ~ s(productivity_0,k=4,sp=0.1),family=binomial,weights=weights,data=CI_binned)
+# Formula:
+#   Gm ~ s(productivity_0, k = 4, sp = 0.1)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)   
+# (Intercept)  -0.5124     0.1854  -2.763  0.00572 **
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq  p-value    
+# s(productivity_0) 1.61  1.937   28.8 4.99e-07 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =  0.111   Deviance explained = 13.5%
+# UBRE = 1.2084  Scale est. = 1         n = 155
+
+# significant variables: FSLE, SSH, mixed layer, ice concentration, ice difference, oxygen, primary production
+
+# Starting model with sea ice concentration and FSLE
+CI_gam <- gam(Gm ~ s(ice_conc,k=4,sp=0.1) + s(FSLE,k=4,sp=0.1), 
+              family=binomial, weights=weights, data=CI_binned)
+# AIC: 357.4603
+# summary:
+# Formula:
+#   Gm ~ s(ice_conc, k = 4, sp = 0.1) + s(FSLE, k = 4, sp = 0.1)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)  
+# (Intercept)  -0.2526     0.1378  -1.833   0.0668 .
+# ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq p-value   
+# s(ice_conc) 2.008  2.395  15.43 0.00107 **
+#   s(FSLE)     2.154  2.562  17.75 0.00113 **
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =  0.0917   Deviance explained = 10.9%
+# UBRE = 1.3062  Scale est. = 1         n = 155
+# ......................................................
+# concurvity, plots, and gam.check all look good, moving on
+
+# adding SSH
+CI_gam <- gam(Gm ~ s(ice_conc,k=4,sp=0.1) + s(FSLE,k=4,sp=0.1) + s(SSH,k=4,sp=0.1), 
+              family=binomial, weights=weights, data=CI_binned)
+# AIC: 314.7286
+# summary:
+# Formula:
+#   Gm ~ s(ice_conc, k = 4, sp = 0.1) + s(FSLE, k = 4, sp = 0.1) + 
+#   s(SSH, k = 4, sp = 0.1)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)    
+# (Intercept)  -0.6613     0.1809  -3.656 0.000256 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq  p-value    
+# s(ice_conc) 1.925  2.315  12.79  0.00221 ** 
+#   s(FSLE)     1.962  2.363  28.88 1.82e-06 ***
+#   s(SSH)      1.953  2.339  32.60 1.76e-06 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =  0.205   Deviance explained = 22.7%
+# UBRE = 1.0305  Scale est. = 1         n = 155
+# ....................................................
+# all aspects of model look good, moving on
+
+# adding mixed layer depth
+CI_gam <- gam(Gm ~ s(ice_conc,k=4,sp=0.1) + s(FSLE,k=4,sp=0.1) + s(SSH,k=4,sp=0.1) +
+                s(mixed_layer,k=4,sp=0.1), 
+              family=binomial, weights=weights, data=CI_binned)
+# AIC: 307.9628
+# summary:
+# Formula:
+#   Gm ~ s(ice_conc, k = 4, sp = 0.1) + s(FSLE, k = 4, sp = 0.1) + 
+#   s(SSH, k = 4, sp = 0.1) + s(mixed_layer, k = 4, sp = 0.1)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)    
+# (Intercept)  -0.7225     0.1874  -3.856 0.000115 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq  p-value    
+# s(ice_conc)    1.867  2.236  8.171 0.013654 *  
+#   s(FSLE)        1.912  2.312 24.925 1.25e-05 ***
+#   s(SSH)         1.881  2.266 16.926 0.000378 ***
+#   s(mixed_layer) 1.955  2.355  7.185 0.132973    
+# ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =  0.237   Deviance explained = 25.4%
+# UBRE = 0.98686  Scale est. = 1         n = 155
+# ...................................................
+# concurvity and plots look good, but dropping mixed layer thickness because not significant
+
+# dropping mixed layer and adding ice concentration difference
+CI_gam <- gam(Gm ~ s(ice_conc,k=4,sp=0.1) + s(FSLE,k=4,sp=0.1) + s(SSH,k=4,sp=0.1) +
+                s(ice_diff,k=4,sp=0.1), 
+              family=binomial, weights=weights, data=CI_binned)
+# AIC: 282.4115
+# summary:
+# Formula:
+#   Gm ~ s(ice_conc, k = 4, sp = 0.1) + s(FSLE, k = 4, sp = 0.1) + 
+#   s(SSH, k = 4, sp = 0.1) + s(ice_diff, k = 4, sp = 0.1)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)    
+# (Intercept)  -1.0133     0.2298  -4.409 1.04e-05 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq  p-value    
+# s(ice_conc) 1.661  2.001  9.867  0.00732 ** 
+#   s(FSLE)     1.941  2.342 29.057 1.85e-06 ***
+#   s(SSH)      1.900  2.277 28.467 1.72e-06 ***
+#   s(ice_diff) 1.757  2.155 23.868 1.32e-05 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =  0.275   Deviance explained = 31.7%
+# UBRE = 0.82201  Scale est. = 1         n = 155
+# ..........................................................
+# concurvity, plots looking good, moving on
+
+# adding oxygen concentration
+CI_gam <- gam(Gm ~ s(ice_conc,k=4,sp=0.1) + s(FSLE,k=4,sp=0.1) + s(SSH,k=4,sp=0.1) +
+                s(ice_diff,k=4,sp=0.1) + s(o2_0,k=4,sp=0.1), 
+              family=binomial, weights=weights, data=CI_binned)
+# AIC: 232.1649
+# summary:
+# Formula:
+#   Gm ~ s(ice_conc, k = 4, sp = 0.1) + s(FSLE, k = 4, sp = 0.1) + 
+#   s(SSH, k = 4, sp = 0.1) + s(ice_diff, k = 4, sp = 0.1) + 
+#   s(o2_0, k = 4, sp = 0.1)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)    
+# (Intercept)  -1.6156     0.3008  -5.371 7.81e-08 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq  p-value    
+# s(ice_conc) 1.551  1.863  14.05 0.001328 ** 
+#   s(FSLE)     1.844  2.229  20.55 7.14e-05 ***
+#   s(SSH)      1.759  2.142  18.77 0.000117 ***
+#   s(ice_diff) 1.711  2.097  18.72 0.000118 ***
+#   s(o2_0)     1.692  2.002  28.38 1.18e-06 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =  0.433   Deviance explained = 45.3%
+# UBRE = 0.49784  Scale est. = 1         n = 155
+# ...................................................
+# plots and concurvity look good, adding next variable
+
+# adding net primary production
+CI_gam <- gam(Gm ~ s(ice_conc,k=4,sp=0.1) + s(FSLE,k=4,sp=0.1) + s(SSH,k=4,sp=0.1) +
+                s(ice_diff,k=4,sp=0.1) + s(o2_0,k=4,sp=0.1) + s(productivity_0,k=4,sp=0.1), 
+              family=binomial, weights=weights, data=CI_binned)
+# AIC: 222.4125
+# summary:
+# Formula:
+#   Gm ~ s(ice_conc, k = 4, sp = 0.1) + s(FSLE, k = 4, sp = 0.1) + 
+#   s(SSH, k = 4, sp = 0.1) + s(ice_diff, k = 4, sp = 0.1) + 
+#   s(o2_0, k = 4, sp = 0.1) + s(productivity_0, k = 4, sp = 0.1)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)    
+# (Intercept)  -2.2073     0.4315  -5.115 3.13e-07 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq  p-value    
+# s(ice_conc)       1.541  1.848 21.383 4.48e-05 ***
+#   s(FSLE)           1.798  2.171 21.033 5.34e-05 ***
+#   s(SSH)            1.713  2.099 16.768 0.000325 ***
+#   s(ice_diff)       1.695  2.073 19.682 6.69e-05 ***
+#   s(o2_0)           1.268  1.467  6.794 0.117709    
+# s(productivity_0) 1.309  1.525 12.505 0.000845 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =  0.449   Deviance explained = 48.2%
+# UBRE = 0.43492  Scale est. = 1         n = 155
+# ....................................................
+# oxygen is no longer significant, has slightly problematic concurvity with primary production (0.77)
+
+# dropping oxygen
+CI_gam <- gam(Gm ~ s(ice_conc,k=4,sp=0.1) + s(FSLE,k=4,sp=0.1) + s(SSH,k=4,sp=0.1) +
+                s(ice_diff,k=4,sp=0.1) + s(productivity_0,k=4,sp=0.1), 
+              family=binomial, weights=weights, data=CI_binned)
+# AIC: 229.8938
+# summary:
+# Formula:
+#   Gm ~ s(ice_conc, k = 4, sp = 0.1) + s(FSLE, k = 4, sp = 0.1) + 
+#   s(SSH, k = 4, sp = 0.1) + s(ice_diff, k = 4, sp = 0.1) + 
+#   s(productivity_0, k = 4, sp = 0.1)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)    
+# (Intercept)  -1.7520     0.3163  -5.539 3.04e-08 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq  p-value    
+# s(ice_conc)       1.578  1.905  18.39 0.000171 ***
+#   s(FSLE)           1.835  2.209  31.78 1.29e-06 ***
+#   s(SSH)            1.796  2.180  17.23 0.000361 ***
+#   s(ice_diff)       1.687  2.068  21.81 2.45e-05 ***
+#   s(productivity_0) 1.387  1.643  27.58 1.04e-06 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =  0.428   Deviance explained = 45.7%
+# UBRE = 0.48319  Scale est. = 1         n = 155
+# ....................................................
+# plots and concurvity look good
+# before finalizing model, will mess around with k values and smoothing parameter
+
+# increasing k for ice concentration since it has a significant p-value in gam.check()
+CI_gam <- gam(Gm ~ s(ice_conc,k=8,sp=0.1) + s(FSLE,k=4,sp=0.1) + s(SSH,k=4,sp=0.1) +
+                s(ice_diff,k=4,sp=0.1) + s(productivity_0,k=4,sp=0.1), 
+              family=binomial, weights=weights, data=CI_binned)
+# AIC: 229.8938
+# gam.check
+# Method: UBRE   Optimizer: outer newton
+# Model required no smoothing parameter selectionModel rank =  20 / 20 
+# 
+# Basis dimension (k) checking results. Low p-value (k-index<1) may
+# indicate that k is too low, especially if edf is close to k'.
+# 
+#                     k'  edf k-index p-value  
+# s(ice_conc)       7.00 2.04    0.72   0.015 *
+#   s(FSLE)           3.00 1.83    0.90   0.645  
+# s(SSH)            3.00 1.79    0.90   0.655  
+# s(ice_diff)       3.00 1.68    0.76   0.050 *
+#   s(productivity_0) 3.00 1.38    0.88   0.490  
+# ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# ...................................................................
+# plot does not look like it needed more knots/basis functions
+# increasing k only made ice difference significant in gam.check as well
+# pattern likely still exists in gam.check because depth variables are unaccounted for
+# keeping all k values at 4
+
+# trying smaller smoothing parameter
+CI_gam <- gam(Gm ~ s(ice_conc,k=8,sp=0.01) + s(FSLE,k=4,sp=0.01) + s(SSH,k=4,sp=0.01) +
+                s(ice_diff,k=4,sp=0.01) + s(productivity_0,k=4,sp=0.01), 
+              family=binomial, weights=weights, data=CI_binned)
+# AIC: 220.371
+# summary:
+# Formula:
+#   Gm ~ s(ice_conc, k = 8, sp = 0.01) + s(FSLE, k = 4, sp = 0.01) + 
+#   s(SSH, k = 4, sp = 0.01) + s(ice_diff, k = 4, sp = 0.01) + 
+#   s(productivity_0, k = 4, sp = 0.01)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)    
+# (Intercept)  -2.3234     0.4789  -4.852 1.23e-06 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq  p-value    
+# s(ice_conc)       3.007  3.621  18.02 0.001010 ** 
+#   s(FSLE)           2.577  2.852  28.18 8.61e-06 ***
+#   s(SSH)            2.580  2.858  14.96 0.002578 ** 
+#   s(ice_diff)       2.487  2.823  18.44 0.000356 ***
+#   s(productivity_0) 1.981  2.274  30.09 1.36e-06 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =  0.461   Deviance explained = 50.4%
+# UBRE = 0.42175  Scale est. = 1         n = 155
+# .....................................................
+# significance for ice concentration is no longer there in gam.check
+# plots are showing more granular trends
+# will keep sp at 0.01 but won't decrease more because error bars will grow
+
+# final model for Clarence Island
+# significant variables: ice concentration, FSLE, SSH, ice concentration difference, primary production
+CI_final <- gam(Gm ~ s(ice_conc,k=8,sp=0.01) + s(FSLE,k=4,sp=0.01) + s(SSH,k=4,sp=0.01) +
+                s(ice_diff,k=4,sp=0.01) + s(productivity_0,k=4,sp=0.01), 
+              family=binomial, weights=weights, data=CI_binned)
