@@ -255,8 +255,7 @@ vif(CI_vif)
 # -------------- Step 5: Build GAMs ------------------------
 # Function to visualize GAMs on a probability scale with the proper confidence interval
 # Run this for each iteration of the model to plot smooth terms
-# Currently running into issues with plots: they look more reasonable without including model intercept
-#      -> remove shift argument and seWithMean argument?
+
 plotGam <- function(gam) {
   return(plot(gam,trans=plogis,shift=coef(gam)[1],seWithMean=TRUE))
 }
