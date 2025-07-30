@@ -35,7 +35,7 @@ name <- function(abbrev) {
   return(fullname)
 }
 # ------------- Step 1: Load Data -----------------
-allData <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Data/allData_40km.csv")
+allData <- read.csv("/Users/trisha/R/antarctic-odontocete-habitat/Data/allData_40km.csv")
 allData <- allData %>% subset(select=-X)
 allData$date <- as.Date(allData$date, "%Y-%m-%d")
 # Filter by species relevant data
@@ -78,7 +78,7 @@ if(species =='BW29') {
 
 
 # ------------- Step 2: Average by ACF ------------
-acf_table <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Autocorrelation/acf_table.csv")
+acf_table <- read.csv("/Users/trisha/R/antarctic-odontocete-habitat/Autocorrelation/acf_table.csv")
 acfVal <- function(site) {
   row_idx <- which(acf_table$site == site) # Row index for the site
   acf_val <- acf_table[row_idx,species][[1]]
@@ -558,6 +558,111 @@ KGI_gam <- gam(BW37 ~ s(julian_day,k=4,sp=0.1), family=binomial, data=KGI_binned
 # R-sq.(adj) =  0.161   Deviance explained = 15.7%
 # UBRE = 0.31444  Scale est. = 1         n = 24
 
+# significant variables: SSH, mixed layer depth
+
+# combining both into one model
+KGI_gam <- gam(BW37 ~ s(SSH,k=4,sp=0.1) + s(mixed_layer,k=4,sp=0.1),
+               family=binomial, data=KGI_binned)
+# AIC: 20.35083
+# summary:
+# Formula:
+#   BW37 ~ s(SSH, k = 4, sp = 0.1) + s(mixed_layer, k = 4, sp = 0.1)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)
+# (Intercept)   0.8666     0.7369   1.176     0.24
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq p-value  
+# s(SSH)         1.184  1.340  5.378  0.0487 *
+#   s(mixed_layer) 1.141  1.267  3.715  0.1075  
+# ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =  0.686   Deviance explained = 56.9%
+# UBRE = -0.15205  Scale est. = 1         n = 24
+# ................................................
+# even though mixed layer depth currently not significant, it has minimal concurvity with SSH
+#   it also contributes to lower AIC and higher deviance explained
+# going to see if changing smoothing parameter makes it significant
+
+# changing smoothing parameter for mixed layer depth
+KGI_gam <- gam(BW37 ~ s(SSH,k=4,sp=0.1) + s(mixed_layer,k=4,sp=1),
+               family=binomial, data=KGI_binned)
+# AIC: 20.46859
+# summary:
+# Formula:
+#   BW37 ~ s(SSH, k = 4, sp = 0.1) + s(mixed_layer, k = 4, sp = 1)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)
+# (Intercept)   0.9113     0.7358   1.239    0.216
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq p-value  
+# s(SSH)         1.185  1.342  5.263  0.0512 .
+# s(mixed_layer) 1.016  1.032  3.327  0.0745 .
+# ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =  0.682   Deviance explained = 55.7%
+# UBRE = -0.14714  Scale est. = 1         n = 24
+# ..........................................
+# lower smoothing
+KGI_gam <- gam(BW37 ~ s(SSH,k=4,sp=0.1) + s(mixed_layer,k=4,sp=0.01),
+               family=binomial, data=KGI_binned)
+# Formula:
+#   BW37 ~ s(SSH, k = 4, sp = 0.1) + s(mixed_layer, k = 4, sp = 0.01)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)
+# (Intercept)   0.6976     0.7560   0.923    0.356
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq p-value  
+# s(SSH)         1.176  1.326  5.829  0.0392 *
+#   s(mixed_layer) 1.645  2.036  3.289  0.2048  
+# ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =    0.7   Deviance explained = 61.2%
+# UBRE = -0.16778  Scale est. = 1         n = 24
+#...............................................
+# higher smoothing for both variables
+KGI_gam <- gam(BW37 ~ s(SSH,k=4,sp=1) + s(mixed_layer,k=4,sp=1),
+               family=binomial, data=KGI_binned)
+# Formula:
+#   BW37 ~ s(SSH, k = 4, sp = 1) + s(mixed_layer, k = 4, sp = 1)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)
+# (Intercept)   0.9448     0.7302   1.294    0.196
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq p-value  
+# s(SSH)         1.023  1.045  4.949  0.0297 *
+#   s(mixed_layer) 1.016  1.032  3.231  0.0787 .
+# ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =  0.681   Deviance explained = 55.1%
+# UBRE = -0.15273  Scale est. = 1         n = 24
+# ..............................................
+# dropping mixed layer depth because still not significant
+
+# model has just SSH, changing smoothing & basis functions
+KGI_gam <- gam(BW37 ~ s(SSH,k=4,sp=1),
+               family=binomial, data=KGI_binned) # AIC: 22.8688
+KGI_gam <- gam(BW37 ~ s(SSH,k=4,sp=0.01),
+               family=binomial, data=KGI_binned) # AIC: 24.37222
+# changing smoothing to 1, even though AIC increases the partial effect plot becomes more interpretable
+KGI_gam <- gam(BW37 ~ s(SSH,k=8,sp=1),
+               family=binomial, data=KGI_binned) # AIC: 22.97687
+# negligile impact on confidence interval, AIC, so keeping knots at 4
+
+# final model for KGI (AIC = 22.8688, deviance explained 40.7%)
+KGI_final <- gam(BW37 ~ s(SSH,k=4,sp=1),
+               family=binomial, data=KGI_binned)
 
 # -------------------- Step 5c: Clarence Island GAM ------------------------------
 # starting by building GAMs one predictor at a time to find significant variables
@@ -740,3 +845,242 @@ CI_gam <- gam(BW37 ~ s(chla_0,k=4,sp=0.1), weights=weights, family=binomial, dat
 # significant predictors for CI: FSLE, SSH, mixed layer depth, oxygen concentration, temperature, chlorophyll
 # adding these variables one at a time to develop final model
 
+# FSLE and SSH
+CI_gam <- gam(BW37 ~ s(FSLE,k=4,sp=0.1) + s(SSH,k=4,sp=0.1),
+              weights=weights, family=binomial, data=CI_binned)
+# AIC: 152.8525
+# Formula:
+# BW37 ~ s(FSLE, k = 4, sp = 0.1) + s(SSH, k = 4, sp = 0.1)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)   
+# (Intercept)  -0.7697     0.2472  -3.113  0.00185 **
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq p-value   
+# s(FSLE) 1.869  2.226  15.66 0.00183 **
+#   s(SSH)  1.512  1.837  17.09 0.00384 **
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =  0.268   Deviance explained = 27.8%
+# UBRE = 0.88707  Scale est. = 1         n = 81
+# ..................................................
+# concurvity and plots not problematic
+
+# adding mixed layer depth
+CI_gam <- gam(BW37 ~ s(FSLE,k=4,sp=0.1) + s(SSH,k=4,sp=0.1) + s(mixed_layer,k=4,sp=0.1),
+              weights=weights, family=binomial, data=CI_binned)
+# AIC: 149.8564
+# Formula:
+#   BW37 ~ s(FSLE, k = 4, sp = 0.1) + s(SSH, k = 4, sp = 0.1) + s(mixed_layer, 
+#                                                                 k = 4, sp = 0.1)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)    
+# (Intercept)  -0.8664     0.2591  -3.344 0.000825 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq p-value   
+# s(FSLE)        1.857  2.209 14.460 0.00315 **
+#   s(SSH)         1.525  1.855 12.367 0.00797 **
+#   s(mixed_layer) 1.480  1.785  5.071 0.14657   
+# ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =  0.289   Deviance explained = 30.8%
+# UBRE = 0.85008  Scale est. = 1         n = 81
+# .................................................
+# plots & concurvities look alright
+# removing mixed layer because not significant
+
+# removing mixed layer, adding in oxygen concentration
+CI_gam <- gam(BW37 ~ s(FSLE,k=4,sp=0.1) + s(SSH,k=4,sp=0.1) + s(o2_0,k=4,sp=0.1),
+              weights=weights, family=binomial, data=CI_binned)
+# AIC: 142.4519
+# summary:
+# Formula:
+#   BW37 ~ s(FSLE, k = 4, sp = 0.1) + s(SSH, k = 4, sp = 0.1) + s(o2_0, 
+#                                                                 k = 4, sp = 0.1)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)    
+# (Intercept)  -1.0139     0.2884  -3.515  0.00044 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq p-value   
+# s(FSLE) 1.781  2.113  9.619 0.01306 * 
+#   s(SSH)  1.472  1.775 14.404 0.00995 **
+#   s(o2_0) 1.759  2.096  7.655 0.01518 * 
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =  0.337   Deviance explained = 34.6%
+# UBRE = 0.75867  Scale est. = 1         n = 81
+# ................................................
+# plots and concurvities look reasonable
+
+# adding in temperature
+CI_gam <- gam(BW37 ~ s(FSLE,k=4,sp=0.1) + s(SSH,k=4,sp=0.1) + s(o2_0,k=4,sp=0.1) +
+                s(temperature_0,k=4,sp=0.1),
+              weights=weights, family=binomial, data=CI_binned)
+# # AIC: 110.2529
+# Formula:
+#   BW37 ~ s(FSLE, k = 4, sp = 0.1) + s(SSH, k = 4, sp = 0.1) + s(o2_0, 
+#                                                                 k = 4, sp = 0.1) + s(temperature_0, k = 4, sp = 0.1)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)    
+# (Intercept)  -1.7518     0.4366  -4.013    6e-05 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq  p-value    
+# s(FSLE)          1.599  1.885  0.080    0.948    
+# s(SSH)           1.390  1.648  4.270    0.159    
+# s(o2_0)          1.396  1.639  0.133    0.870    
+# s(temperature_0) 1.619  1.886 18.910 5.11e-05 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =   0.52   Deviance explained = 51.8%
+# UBRE = 0.36115  Scale est. = 1         n = 81
+# ................................................
+# temperature has near problematic concurvity with oxygen
+# will try removing oxygen first
+
+# removing oxygen
+CI_gam <- gam(BW37 ~ s(FSLE,k=4,sp=0.1) + s(SSH,k=4,sp=0.1) +
+                s(temperature_0,k=4,sp=0.1),
+              weights=weights, family=binomial, data=CI_binned)
+# AIC: 109.326
+# Formula:
+#   BW37 ~ s(FSLE, k = 4, sp = 0.1) + s(SSH, k = 4, sp = 0.1) + s(temperature_0, 
+#                                                                 k = 4, sp = 0.1)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)    
+# (Intercept)  -1.7679     0.4252  -4.158 3.21e-05 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq p-value    
+# s(FSLE)          1.661  1.974  0.327   0.846    
+# s(SSH)           1.402  1.674  5.142   0.137    
+# s(temperature_0) 1.649  1.944 23.038 6.6e-06 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =  0.517   Deviance explained = 50.9%
+# UBRE = 0.3497  Scale est. = 1         n = 81
+# ....................................................
+# keeping oxygen out of model because of lower AIC without it
+# FSLE has least significant effect, removing it next
+
+# removing FSLE
+CI_gam <- gam(BW37 ~ s(SSH,k=4,sp=0.1) +
+                s(temperature_0,k=4,sp=0.1),
+              weights=weights, family=binomial, data=CI_binned)
+# AIC: 106.3866
+# Formula:
+#   BW37 ~ s(SSH, k = 4, sp = 0.1) + s(temperature_0, k = 4, sp = 0.1)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)    
+# (Intercept)  -1.7373     0.4131  -4.206  2.6e-05 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq p-value    
+# s(SSH)           1.418  1.701  5.262   0.132    
+# s(temperature_0) 1.703  2.034 34.212  <2e-16 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =  0.528   Deviance explained = 50.8%
+# UBRE = 0.31342  Scale est. = 1         n = 81
+# ............................................
+# model got better without keeping FSLE
+# if remove SSH, AIC will go up (110.8671 based on model of just temp at line 789)
+# will keep SSH and temperature for now, see if adding another variable changes
+
+# adding chlorophyll
+CI_gam <- gam(BW37 ~ s(SSH,k=4,sp=0.1) + s(chla_0,k=4,sp=0.1) + 
+                s(temperature_0,k=4,sp=0.1),
+              weights=weights, family=binomial, data=CI_binned)
+# AIC: 106.5035
+# Formula:
+#   BW37 ~ s(SSH, k = 4, sp = 0.1) + s(chla_0, k = 4, sp = 0.1) + 
+#   s(temperature_0, k = 4, sp = 0.1)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)    
+# (Intercept)  -1.8303     0.4845  -3.777 0.000159 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq  p-value    
+# s(SSH)           1.391  1.662  3.599 0.211041    
+# s(chla_0)        1.359  1.608  1.021 0.345442    
+# s(temperature_0) 1.612  1.897 16.050 0.000188 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =  0.531   Deviance explained =   52%
+# UBRE = 0.31486  Scale est. = 1         n = 81
+# ..............................................
+# concurvity is not problematic
+# will drop SSH first to see if chlorophyll becomes significant
+
+# dropping SSH
+CI_gam <- gam(BW37 ~ s(chla_0,k=4,sp=0.1) + 
+                s(temperature_0,k=4,sp=0.1),
+              weights=weights, family=binomial, data=CI_binned)
+# AIC: 108.7752
+# Formula:
+#   BW37 ~ s(chla_0, k = 4, sp = 0.1) + s(temperature_0, k = 4, sp = 0.1)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)    
+# (Intercept)  -1.6738     0.4298  -3.894 9.86e-05 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq  p-value    
+# s(chla_0)        1.387  1.659  1.639     0.23    
+# s(temperature_0) 1.643  1.947 22.478 8.74e-06 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =  0.505   Deviance explained = 49.5%
+# UBRE = 0.3429  Scale est. = 1         n = 81
+# ................................................
+# chlorophyll still not significant, dropping it from model
+
+# dropping chlorophyll, only keeping temperature
+# refer to line 789 for output
+# now, experimenting with different knots/smoothing
+CI_gam <- gam(BW37 ~ s(temperature_0,k=4,sp=0.01),
+              weights=weights, family=binomial, data=CI_binned) # AIC: 100.9191
+CI_gam <- gam(BW37 ~ s(temperature_0,k=4,sp=1),
+              weights=weights, family=binomial, data=CI_binned) # AIC: 140.6829
+# changin sp to 1 since trend is stronger and AIC is much lower
+# checking knots
+CI_gam <- gam(BW37 ~ s(temperature_0,k=8,sp=1),
+              weights=weights, family=binomial, data=CI_binned) # AIC: 123.3664
+# AIC increased, model is not as good
+
+# final model for CI (AIC = 100.9191, 52.6% explained)
+CI_final <- gam(BW37 ~ s(temperature_0,k=4,sp=0.01),
+              weights=weights, family=binomial, data=CI_binned)
