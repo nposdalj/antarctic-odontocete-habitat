@@ -10,8 +10,6 @@ library(abind)
 library(dplyr)
 library(gridExtra)
 
-# Only relevant AVISO variables are FSLE
-# Ignore functions for other variables (data already obtained from Copernicus)
 
 # --------------------Step 1: Subset and Save Relevant AVISO data--------------------------
 subsetAVISO <- function(site) {
@@ -94,15 +92,15 @@ CI_fsle <- subsetAVISO('CI')
 write.csv(CI_fsle, "C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/AVISO/CI_fsle")
 
 # ------------------ Step 2: FSLE Timeseries -------------------------
-EI_fsle <- ggplot(data = EI_fsle, mapping = aes(x = date, y = fsle)) + 
+EI_fsleplot <- ggplot(data = EI_fsle, mapping = aes(x = date, y = fsle)) + 
   geom_line(color = "mediumvioletred", linewidth = 0.7) + 
   labs(x = NULL, y = "FSLE Magnitude", title="Elephant Island") +
   scale_x_date(date_labels = "%b %Y")
-KGI_fsle <- ggplot(data = KGI_fsle, mapping = aes(x = date, y = fsle)) + 
+KGI_fsleplot <- ggplot(data = KGI_fsle, mapping = aes(x = date, y = fsle)) + 
   geom_line(color = "mediumvioletred", linewidth = 0.7) + 
   labs(x = NULL, y = "FSLE Magnitude", title="King George Island") +
   scale_x_date(date_labels = "%b %Y")
-CI_fsle <- ggplot(data = CI_fsle, mapping = aes(x = date, y = fsle)) + 
+CI_fsleplot <- ggplot(data = CI_fsle, mapping = aes(x = date, y = fsle)) + 
   geom_line(color = "mediumvioletred", linewidth = 0.7) + 
   labs(x = NULL, y = "FSLE Magnitude", title="Clarence Island") +
   scale_x_date(date_labels = "%b %Y")
@@ -120,9 +118,9 @@ CI_fslv <- ggplot(data = CI_fsle, mapping = aes(x = date, y = fsle_orient)) +
   labs(x = NULL, y = "FSLE Orientation", title="Clarence Island") +
   scale_x_date(date_labels = "%b %Y")
 
-EI <- grid.arrange(EI_fsle, EI_fslv, nrow=2)
-KGI <- grid.arrange(KGI_fsle, KGI_fslv, nrow=2)
-CI <- grid.arrange(CI_fsle, CI_fslv, nrow=2)
+EI <- grid.arrange(EI_fsleplot, EI_fslv, nrow=2)
+KGI <- grid.arrange(KGI_fsleplot, KGI_fslv, nrow=2)
+CI <- grid.arrange(CI_fsleplot, CI_fslv, nrow=2)
 
 
 
