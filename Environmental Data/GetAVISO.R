@@ -8,6 +8,7 @@ library(ggplot2)
 library(plotdap)
 library(abind)
 library(dplyr)
+library(gridExtra)
 
 # Only relevant AVISO variables are FSLE
 # Ignore functions for other variables (data already obtained from Copernicus)
@@ -66,15 +67,18 @@ subsetAVISO <- function(site) {
     
     fsle <- ncvar_get(nc, "fsle_max", start = c(min(lon_idx), min(lat_idx),1),
                      count = c(length(lon_idx), length(lat_idx),1))
+    fsle_orient <- ncvar_get(nc, "theta_max", start = c(min(lon_idx), min(lat_idx),1),
+                             count = c(length(lon_idx), length(lat_idx),1))
     
     grid <- expand.grid(lon = lon[lon_idx], lat = lat[lat_idx], time = time)
-    grid$temp <- as.vector(fsle)
+    grid$fsle <- as.vector(fsle)
+    grid$fsle_orient <- as.vector(fsle_orient)
     grid$date <- as.Date(current)
     
     # Average over space for each depth
     daily_avg <- grid %>%
       group_by(date) %>%
-      summarise(fsle = mean(fsle, na.rm = TRUE),
+      summarise(fsle = mean(fsle, na.rm = TRUE), fsle_orient = mean(fsle_orient,na.rm=TRUE),
                 .groups = "drop")
     
     df <- bind_rows(df, daily_avg)
@@ -90,17 +94,35 @@ CI_fsle <- subsetAVISO('CI')
 write.csv(CI_fsle, "C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/AVISO/CI_fsle")
 
 # ------------------ Step 2: FSLE Timeseries -------------------------
-EI <- ggplot(data = EI_fsle, mapping = aes(x = date, y = fsle)) + 
+EI_fsle <- ggplot(data = EI_fsle, mapping = aes(x = date, y = fsle)) + 
   geom_line(color = "mediumvioletred", linewidth = 0.7) + 
-  labs(x = NULL, y = "FSLE", title="Elephant Island") +
+  labs(x = NULL, y = "FSLE Magnitude", title="Elephant Island") +
   scale_x_date(date_labels = "%b %Y")
-KGI <- ggplot(data = KGI_fsle, mapping = aes(x = date, y = fsle)) + 
+KGI_fsle <- ggplot(data = KGI_fsle, mapping = aes(x = date, y = fsle)) + 
   geom_line(color = "mediumvioletred", linewidth = 0.7) + 
-  labs(x = NULL, y = "FSLE", title="King George Island") +
+  labs(x = NULL, y = "FSLE Magnitude", title="King George Island") +
   scale_x_date(date_labels = "%b %Y")
-CI <- ggplot(data = CI_fsle, mapping = aes(x = date, y = fsle)) + 
+CI_fsle <- ggplot(data = CI_fsle, mapping = aes(x = date, y = fsle)) + 
   geom_line(color = "mediumvioletred", linewidth = 0.7) + 
-  labs(x = NULL, y = "FSLE", title="Clarence Island") +
+  labs(x = NULL, y = "FSLE Magnitude", title="Clarence Island") +
   scale_x_date(date_labels = "%b %Y")
+
+EI_fslv <- ggplot(data = EI_fsle, mapping = aes(x = date, y = fsle_orient)) + 
+  geom_line(color = "cornflowerblue", linewidth = 0.7) + 
+  labs(x = NULL, y = "FSLE Orientation", title="Elephant Island") +
+  scale_x_date(date_labels = "%b %Y")
+KGI_fslv <- ggplot(data = KGI_fsle, mapping = aes(x = date, y = fsle_orient)) + 
+  geom_line(color = "cornflowerblue", linewidth = 0.7) + 
+  labs(x = NULL, y = "FSLE Orientation", title="King George Island") +
+  scale_x_date(date_labels = "%b %Y")
+CI_fslv <- ggplot(data = CI_fsle, mapping = aes(x = date, y = fsle_orient)) + 
+  geom_line(color = "cornflowerblue", linewidth = 0.7) + 
+  labs(x = NULL, y = "FSLE Orientation", title="Clarence Island") +
+  scale_x_date(date_labels = "%b %Y")
+
+EI <- grid.arrange(EI_fsle, EI_fslv, nrow=2)
+KGI <- grid.arrange(KGI_fsle, KGI_fslv, nrow=2)
+CI <- grid.arrange(CI_fsle, CI_fslv, nrow=2)
+
 
 

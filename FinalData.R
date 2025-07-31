@@ -11,10 +11,10 @@ allData$date <- allData$Day
 allData <- allData %>% subset(select = -Day)
 # Choose variables + sites + species to plot
 environmental_vars <- c('AAO','FSLE','SSH','EKE','temperature','salinity', 'chla','o2','productivity',
-                        'mixed_layer','ice_conc','ice_thickness','ice_diff') 
+                        'mixed_layer','ice_conc','ice_thickness','ice_diff','fsle_orient') 
 # options: AAO, FSLE, SSH, EKE, temperature, salinity, mixed_layer, chla (chlorophyll), o2 (oxygen),
 #   productivity (primary production), ice_conc (sea ice concentration), ice_thickness (sea ice thickness),
-#   ice_diff (daily difference in ice concentration)
+#   ice_diff (daily difference in ice concentration), fsle_orient (orientation of fsle vector)
 species <- c('Oo','BW37','BW29') # options: BW29, BW37, BW58, Oo, Pm, Gm
 # BW29 = Southern bottlenose whale, BW37 & BW58 = Gray's and strap-toothed whales
 # Oo = Killer whale, Pm = Sperm Whale, Gm = Long-finned pilot whale
@@ -104,7 +104,7 @@ allData <- allData %>% subset(select=-c(X,n_velocity,e_velocity,sice_e_veloc,sic
 
 # Setting variable categories for current dataframe
 depth_varying <- c("temperature", "salinity", 'EKE','chla','productivity','o2')
-surf_vars <- c("AAO",'SSH','mixed_layer','ice_conc','ice_thickness','FSLE','ice_diff')
+surf_vars <- c("AAO",'SSH','mixed_layer','ice_conc','ice_thickness','FSLE','fsle_orient','ice_diff')
 species_vars <- c('BW29','BW37','BW58','Gm',"Pm", "Oo")
 grouping_vars <- c("date", "depth", "Site")
 
