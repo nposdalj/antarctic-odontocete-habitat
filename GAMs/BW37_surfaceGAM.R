@@ -436,7 +436,7 @@ EI_gam <- gam(BW37 ~ s(EKE_0,k=4,sp=0.1), family=binomial, data=EI_binned)
 # -------------------- Step 5b: King George Island GAM ------------------------------
 # starting by building GAMs one predictor at a time to find significant variables
 # Setting initial knots at 4, smoothing at 0.1
-# NOT weighing for BW37 at EI since over half of bins have presence
+# NOT weighing for BW37 at KGI since over half of bins have presence
 # List of predictors are stored in EI_pred include FSLE, SSH, mixed layer depth, difference in ice,
 #   eddy kinetic energy, oxygen, julian day
 
