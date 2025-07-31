@@ -11,9 +11,10 @@ allData$date <- allData$Day
 allData <- allData %>% subset(select = -Day)
 # Choose variables + sites + species to plot
 environmental_vars <- c('AAO','FSLE','SSH','EKE','temperature','salinity', 'chla','o2','productivity',
-                        'mixed_layer','ice_conc','ice_thickness') 
+                        'mixed_layer','ice_conc','ice_thickness','ice_diff') 
 # options: AAO, FSLE, SSH, EKE, temperature, salinity, mixed_layer, chla (chlorophyll), o2 (oxygen),
-# productivity (primary production), ice_conc (sea ice concentration), ice_thickness (sea ice thickness)
+#   productivity (primary production), ice_conc (sea ice concentration), ice_thickness (sea ice thickness),
+#   ice_diff (daily difference in ice concentration)
 species <- c('Gm') # options: BW29, BW37, BW58, Oo, Pm, Gm
 # BW29 = Southern bottlenose whale, BW37 & BW58 = Gray's and strap-toothed whales
 # Oo = Killer whale, Pm = Sperm Whale, Gm = Long-finned pilot whale
@@ -71,6 +72,10 @@ allData <- allData %>% rename(SSH=ssh) %>% rename(temperature=temp) %>%
   rename(ice_conc=sice_conc) %>% rename(ice_thickness=sice_thick)
 # replacing NA in ice variables with 0
 allData[is.na(allData)] <- 0
+# Adding ice difference column
+allData <- allData %>% mutate(ice_diff = ice_conc - lag(ice_conc, n = 1))
+allData <- allData %>% mutate(ice_diff = if_else(date %in% as.Date(
+  c('2014-03-05', '2015-02-10', '2016-02-04')), 0, ice_diff))
 
 # -------------------- Step 3: Format/Add FSLEs------------
 EI_fsle <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/AVISO/EI_fsle_40km")
@@ -94,7 +99,7 @@ allData <- allData %>% subset(select=-c(X,n_velocity,e_velocity,sice_e_veloc,sic
 
 # Setting variable categories for current dataframe
 depth_varying <- c("temperature", "salinity", 'EKE','chla','productivity','o2')
-surf_vars <- c("AAO",'SSH','mixed_layer','ice_conc','ice_thickness','FSLE')
+surf_vars <- c("AAO",'SSH','mixed_layer','ice_conc','ice_thickness','FSLE','ice_diff')
 species_vars <- c('BW29','BW37','BW58','Gm',"Pm", "Oo")
 grouping_vars <- c("date", "depth", "Site")
 
@@ -112,11 +117,6 @@ species_wide <- allData %>% select(date, Site, all_of(species_vars)) %>% distinc
 allData_wide <- depth_wide %>% left_join(surf_wide, by = c("date", "Site")) %>%
   left_join(species_wide, by = c("date", "Site")) %>% distinct()
 allData_wide$julian_day <- yday(allData_wide$date)
-
-# Adding ice difference column
-allData_wide <- allData_wide %>% mutate(ice_diff = ice_conc - lag(ice_conc, n = 1))
-allData_wide <- allData_wide %>% mutate(ice_diff = if_else(date %in% as.Date(
-  c('2014-03-05', '2015-02-10', '2016-02-04')), 0, ice_diff))
 
 write.csv(allData_wide, "C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Data/allData.csv")
 
@@ -227,6 +227,9 @@ makePlot <- function(data, var, depths) {
   } else if(var == 'productivity') {
     label <- "Net Primary Production (mg/m3/day carbon)"
     #color <- 'dimgray'
+  } else if(var == 'ice_diff') {
+    label <- "Daily Change in Sea Ice concentration"
+    color <- 'saddlebrown'
   }
   
   # Plotting across depths for relevant variables
