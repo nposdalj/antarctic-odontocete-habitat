@@ -15,7 +15,7 @@ environmental_vars <- c('AAO','FSLE','SSH','EKE','temperature','salinity', 'chla
 # options: AAO, FSLE, SSH, EKE, temperature, salinity, mixed_layer, chla (chlorophyll), o2 (oxygen),
 #   productivity (primary production), ice_conc (sea ice concentration), ice_thickness (sea ice thickness),
 #   ice_diff (daily difference in ice concentration), fsle_orient (orientation of fsle vector)
-species <- c('Oo','BW37','BW29') # options: BW29, BW37, BW58, Oo, Pm, Gm
+species <- c('Oo','BW37','BW29','Pm','Gm') # options: BW29, BW37, BW58, Oo, Pm, Gm
 # BW29 = Southern bottlenose whale, BW37 & BW58 = Gray's and strap-toothed whales
 # Oo = Killer whale, Pm = Sperm Whale, Gm = Long-finned pilot whale
 sites <- c('KGI', 'EI','CI') # options: EI, KGI, CI
@@ -235,6 +235,9 @@ makePlot <- function(data, var, depths) {
   } else if(var == 'ice_diff') {
     label <- "Daily Change in Sea Ice concentration"
     color <- 'saddlebrown'
+  } else if(var == 'fsle_orient') {
+    label <- "Orientation of FSLE Vector"
+    color <- 'dimgray'
   }
   
   # Plotting across depths for relevant variables
