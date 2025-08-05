@@ -5,7 +5,7 @@ library(gridExtra)
 library(patchwork)
 
 # ---------------- Step 0: Create base final dataframe-------------
-dailyDetection <- read.csv("/Users/trisha/R/antarctic-odontocete-habitat/Data/dailyDetections.csv")
+dailyDetection <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Data/dailyDetections.csv")
 allData <- dailyDetection
 allData$date <- allData$Day
 allData <- allData %>% subset(select = -Day)
@@ -15,13 +15,13 @@ environmental_vars <- c('AAO','FSLE','SSH','EKE','temperature','salinity', 'chla
 # options: AAO, FSLE, SSH, EKE, temperature, salinity, mixed_layer, chla (chlorophyll), o2 (oxygen),
 #   productivity (primary production), ice_conc (sea ice concentration), ice_thickness (sea ice thickness),
 #   ice_diff (daily difference in ice concentration), fsle_orient (orientation of fsle vector)
-species <- c('Oo','BW37','BW29','Pm','Gm') # options: BW29, BW37, BW58, Oo, Pm, Gm
+species <- c('Oo') # options: BW29, BW37, BW58, Oo, Pm, Gm
 # BW29 = Southern bottlenose whale, BW37 & BW58 = Gray's and strap-toothed whales
 # Oo = Killer whale, Pm = Sperm Whale, Gm = Long-finned pilot whale
 sites <- c('KGI', 'EI','CI') # options: EI, KGI, CI
 
 # --------------- Step 1: Format/Add Antarctic Oscillation Index ----------------
-AAO <- read.csv("/Users/trisha/R/antarctic-odontocete-habitat/Environmental Data/Daily_AAO.csv")
+AAO <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Daily_AAO.csv")
 
 # Make date column
 # Add zero in front of single digit dates
@@ -66,10 +66,15 @@ allData <- rename(allData, AAO = aao_index_cdas)
 # -------------------- Step 2: Add Copernicus Data--------
 # sst, salinity, depth variables, eke, ssh, etc.
 # ice variables, chlorophyll, oxygen
-copernicus <- read.csv("/Users/trisha/R/antarctic-odontocete-habitat/Environmental Data/Copernicus/copernicus_40km.csv")
+copernicus <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Copernicus/copernicus_40km.csv")
 allData <- merge(allData, copernicus, by=intersect(names(allData), names(copernicus)))
-allData <- allData %>% rename(SSH=ssh) %>% rename(temperature=temp) %>%
-  rename(ice_conc=sice_conc) %>% rename(ice_thickness=sice_thick)
+allData <- allData %>% subset(select=-c(n_velocity_mean,e_velocity_mean,sice_e_veloc_mean,
+                                        sice_n_veloc_mean,n_velocity_mad,e_velocity_mad))
+allData <- allData %>% rename(SSH=ssh_mean, temperature=temp_mean, ice_conc=sice_conc_mean, 
+                              ice_thickness=sice_thick_mean, salinity=salinity_mean, 
+                              mixed_layer=mixed_layer_mean, chla=chla_mean, o2=o2_mean, productivity=productivity_mean,
+                              EKE = EKE_mean)
+
 # replacing NA in ice variables with 0
 allData[is.na(allData)] <- 0
 
@@ -83,9 +88,9 @@ allData <- allData %>%
 allData <- unique(allData)
 
 # -------------------- Step 3: Format/Add FSLEs------------
-EI_fsle <- read.csv("/Users/trisha/R/antarctic-odontocete-habitat/Environmental Data/AVISO/EI_fsle_40km")
-KGI_fsle <- read.csv("/Users/trisha/R/antarctic-odontocete-habitat/Environmental Data/AVISO/KGI_fsle_40km")
-CI_fsle <- read.csv("/Users/trisha/R/antarctic-odontocete-habitat/Environmental Data/AVISO/CI_fsle_40km")
+EI_fsle <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/AVISO/EI_fsle_40km")
+KGI_fsle <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/AVISO/KGI_fsle_40km")
+CI_fsle <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/AVISO/CI_fsle_40km")
 
 EI_fsle$Site <- "EI"
 KGI_fsle$Site <- "KGI"
@@ -95,12 +100,16 @@ all_fsle <- rbind(EI_fsle, KGI_fsle, CI_fsle)
 all_fsle$X <- NULL
 
 allData <- merge(allData, all_fsle, by=intersect(names(allData), names(all_fsle)))
-allData <- rename(allData, FSLE=fsle)
+allData <- rename(allData, FSLE=fsle_mean, fsle_orient = fsle_orientmean,
+                  fsle_orient_sd = fsle_orientsd)
 
 # -------------------- Step 4: Save Final Dataframe -------------------
 # Pivoting data to wide format, so there is one column for temperature, salinity, EKE at each depth
 # Removing unnecessary columns (might need north/east sea ice velocity later for convergence calculations?)
-allData <- allData %>% subset(select=-c(X,n_velocity,e_velocity,sice_e_veloc,sice_n_veloc))
+# adding ice regime and site depths
+
+# only run this line if there is a column called X (remnant title on .csv import)
+# allData <- allData %>% subset(select=-X)
 
 # Setting variable categories for current dataframe
 depth_varying <- c("temperature", "salinity", 'EKE','chla','productivity','o2')
@@ -123,7 +132,26 @@ allData_wide <- depth_wide %>% left_join(surf_wide, by = c("date", "Site")) %>%
   left_join(species_wide, by = c("date", "Site")) %>% distinct()
 allData_wide$julian_day <- yday(allData_wide$date)
 
-write.csv(allData_wide, "/Users/trisha/R/antarctic-odontocete-habitat/Data/allData.csv")
+# adding in different ice regimes and site depth
+allData_wide$ice_regime <- 'blank'
+allData_wide$bathymetry <- 0
+for (x in 1:nrow(allData_wide)) {
+  if(allData_wide[x,'ice_diff'] == 0) {
+    allData_wide[x,'ice_regime'] <- 'none'
+  } else if(allData_wide[x,'ice_diff'] <= -0.01) {
+    allData_wide[x,'ice_regime'] <- 'decreasing'
+  } else if(allData_wide[x,'ice_diff'] >= 0.01) {
+    allData_wide[x,'ice_regime'] <- 'increasing'
+  } else
+    allData_wide[x,'ice_regime'] <- 'stable'
+  
+  if(allData_wide[x,'Site'] == 'EI' | allData_wide[x,'Site'] == 'KGI'){
+    allData_wide[x,'bathymetry'] <- 760
+  } else
+    allData_wide[x,'bathymetry'] <- 1030
+}
+
+write.csv(allData_wide, "C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Data/allData.csv")
 
 
 

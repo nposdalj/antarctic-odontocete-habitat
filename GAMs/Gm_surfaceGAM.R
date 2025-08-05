@@ -319,7 +319,6 @@ plotGam1 <- function(gam) {
 #   ice concentration difference, EKE, salinity
 
 # not adding weights for EI because ratio of 0s to 1s is already close to 1:1 (13:17)
-
 # starting with FSLE
 EI_gam <- gam(Gm ~ s(FSLE,k=4,sp=0.1), family=binomial, data=EI_binned)
 # summary:

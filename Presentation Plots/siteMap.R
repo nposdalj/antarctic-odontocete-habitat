@@ -12,7 +12,7 @@ bathymetry <- raster("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habita
 
 # crop bathymetry grid to bounding box
 bbox <- extent(-59, -52, -62, -60)
-bathymetry <- crop(bathymetry, bbox_crop)
+bathymetry <- crop(bathymetry, bbox)
 
 # site coordinates
 sites <- data.frame(
@@ -37,25 +37,30 @@ ggplot() +
   # ocean bathymetry
   geom_tile(data = bathy_df, aes(x = x, y = y, fill = depth)) +
   # making land gray
-  geom_tile(data = filter(bathy_df, depth >= 0), aes(x = x, y = y), fill = "gray40") +
+  geom_tile(data = filter(bathy_df, depth >= 0), aes(x = x, y = y), fill = "#66616B") +
   # contour lines
-  geom_sf(data = contours_sf, color = "gray40", size = 0.3, linetype = "solid") +
+  geom_sf(data = contours_sf, color = "#66616B", size = 0.3, linetype = "solid") +
   # Sites
-  geom_sf(data = sites_sf, shape = 21, fill = "darkmagenta", size = 4, color = "black") +
+  geom_sf(data = sites_sf, shape = 21, fill = "darkmagenta", size = 5, color = "#22192d") +
   geom_text(data = sites, aes(x = lon, y = lat, label = name),
-            nudge_y = -0.17, nudge_x = 0.1, color = "black", size = 5) +
+            nudge_y = -0.12, nudge_x = 0.18, color = "#22192d", size = 8) +
   
   # Border around bathymetry extent
-  geom_sf(data = border_box, fill = NA, color = "black", size = 0.8) +
+  geom_sf(data = border_box, fill = NA, color = "#22192d", size = 1) +
   
   # Color scale for depth
   scale_fill_viridis_c(option = "mako", name = "Depth (m)", limits = c(-5500, 0)) +
   coord_sf(xlim = c(-59,-52),
            ylim = c(-62,-60), expand = FALSE) +
-  theme_minimal() +
-  theme(axis.title = element_blank())
+  theme_minimal() + 
+  annotation_scale(bar_cols = c('#F5FFF8','#22192d')) +
+  theme(axis.title = element_blank(), axis.text = element_text(size = 11,vjust = -0.2),
+        legend.title = element_text(size=11,color='#22192d'),
+        legend.text = element_text(size=10,color='#22192d'),
+        legend.key.height = unit(1.5,'cm'))
 
 # ------------- Method 2: Lambert Azimuthal Equal-Area Projection Map -------------
+# NOT USING THIS CODE/METHOD - IGNORE BELOW
 # LAEA projection to minimize polar size distortion
 
 # reproject bathymetry data

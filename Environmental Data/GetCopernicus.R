@@ -80,13 +80,20 @@ physFromNC <- function(data) {
   df <- df %>% mutate(depth = round(depth, 3))
   filtered <- df %>% filter(depth %in% round(c(0.494025, 15.810070, 453.937714, 1684.284058, 380.213013, 643.566772, 11.405000,
                       65.807266, 763.333130, 902.339294),3))
+  filtered <- filtered %>% mutate(date = as.Date(date))
 
   # Creating a dataframe with daily spatial averages
-  avg_df <- filtered %>% group_by(date, depth) %>% summarize(ssh = mean(ssh, na.rm=TRUE), n_velocity = mean(n_velocity, na.rm=TRUE),
-                                                e_velocity = mean(e_velocity, na.rm=TRUE), salinity = mean(salinity, na.rm=TRUE),
-                                                mixed_layer = mean(mixed_layer, na.rm=TRUE), sice_conc = mean(sice_conc, na.rm=TRUE),
-                                                sice_thick = mean(sice_thick, na.rm=TRUE), sice_e_veloc = mean(sice_e_veloc, na.rm=TRUE),
-                                                sice_n_veloc = mean(sice_n_veloc, na.rm=TRUE), temp=mean(temp, na.rm=TRUE))
+  # spatial standard deviations as well
+  # Mean absolute deviation for north & east velocity to make variability calculations easier for EKE later on
+  avg_df <- filtered %>% group_by(date, depth) %>% summarize(ssh_mean = mean(ssh, na.rm=TRUE), ssh_sd = sd(ssh, na.rm=TRUE),
+                                                             n_velocity_mean = mean(n_velocity, na.rm=TRUE), n_velocity_mad = mad(n_velocity, na.rm=TRUE),
+                                                             e_velocity_mean = mean(e_velocity, na.rm=TRUE), e_velocity_mad = mad(e_velocity,na.rm=TRUE),
+                                                             salinity_mean = mean(salinity, na.rm=TRUE), salinity_sd = sd(salinity,na.rm=TRUE),
+                                                             mixed_layer_mean = mean(mixed_layer, na.rm=TRUE), mixed_layer_sd = sd(mixed_layer, na.rm=TRUE),
+                                                             sice_conc_mean = mean(sice_conc, na.rm=TRUE), ice_conc_sd = sd(sice_conc, na.rm=TRUE),
+                                                             sice_thick_mean = mean(sice_thick, na.rm=TRUE), sice_e_veloc_mean = mean(sice_e_veloc, na.rm=TRUE),
+                                                             sice_n_veloc_mean = mean(sice_n_veloc, na.rm=TRUE), 
+                                                             temp_mean=mean(temp, na.rm=TRUE), temp_sd=sd(temp, na.rm=TRUE))
   avg_df <- ungroup(avg_df)
   return(avg_df)
 }
@@ -129,8 +136,9 @@ bioFromNC <- function(data) {
                                                69.022, 773.368, 947.448),3))
   
   # Creating a dataframe with daily spatial averages
-  avg_df <- filtered %>% group_by(date, depth) %>% summarize(chla = mean(chla, na.rm=TRUE), o2 = mean(o2, na.rm=TRUE),
-                                                             productivity = mean(productivity, na.rm=TRUE))
+  avg_df <- filtered %>% group_by(date, depth) %>% summarize(chla_mean = mean(chla, na.rm=TRUE), chla_sd = sd(chla,na.rm=TRUE),
+                                                             o2_mean = mean(o2, na.rm=TRUE), o2_sd = sd(o2, na.rm=TRUE),
+                                                             productivity_mean = mean(productivity, na.rm=TRUE), productivity_sd = sd(productivity,na.rm=TRUE))
   avg_df <- ungroup(avg_df)
   return(avg_df)
 }
@@ -162,14 +170,27 @@ CI_final <- left_join(depthMatch(CI_biodf),depthMatch(CI_phys), by = c('date', '
 # --------------------------Step 3: Compute EKE--------------------------
 getEKE <- function(data) {
   # get u' and v' for EKE equation
-  data <- data %>% group_by(depth) %>% mutate(u_mean = mean(e_velocity,na.rm=TRUE),
-                                                   v_mean = mean(n_velocity, na.rm=TRUE))
-  data <- data %>% group_by(depth) %>% mutate(u_prime = e_velocity-u_mean, 
-                                                 v_prime = n_velocity-v_mean)
+  data <- data %>% group_by(depth) %>% mutate(u_mean = mean(e_velocity_mean,na.rm=TRUE),
+                                                   v_mean = mean(n_velocity_mean, na.rm=TRUE))
+  data <- data %>% group_by(depth) %>% mutate(u_prime = e_velocity_mean-u_mean, 
+                                                 v_prime = n_velocity_mean-v_mean)
   
   # EKE = 1/2((u')^2 + (v')^2)
   # units: cm^2/s^2
-  data$EKE <- (0.5 * ((data$u_prime^2) + (data$v_prime^2))) * 10000
+  data$EKE_mean <- (0.5 * ((data$u_prime^2) + (data$v_prime^2))) * 10000
+  data <- subset(data, select = -c(u_mean, v_mean, u_prime,v_prime))
+  data <- data %>% ungroup()
+  
+  # similar process, but applied on velocity median absolute deviations to get daily MAD for EKE
+  # get u' and v' for EKE equation
+  data <- data %>% group_by(depth) %>% mutate(u_mean = mean(e_velocity_mad,na.rm=TRUE),
+                                              v_mean = mean(n_velocity_mad, na.rm=TRUE))
+  data <- data %>% group_by(depth) %>% mutate(u_prime = e_velocity_mad-u_mean, 
+                                              v_prime = n_velocity_mad-v_mean)
+  
+  # EKE = 1/2((u')^2 + (v')^2)
+  # units: cm^2/s^2
+  data$EKE_mad <- (0.5 * ((data$u_prime^2) + (data$v_prime^2))) * 10000
   data <- subset(data, select = -c(u_mean, v_mean, u_prime,v_prime))
   data <- data %>% ungroup()
   return(data)
@@ -184,40 +205,40 @@ CopTimeseries <- function(data, site) {
   data$date <- as.Date(data$date)
   data <- filter(data, depth == 0.5)
   # sea surface height
-  ssh <- ggplot(data = data, mapping = aes(x = date, y = ssh)) + geom_line(color = "tomato", linewidth = 1) + 
+  ssh <- ggplot(data = data, mapping = aes(x = date, y = ssh_mean)) + geom_line(color = "tomato", linewidth = 1) + 
     labs(x = "Sea Surface Height", y = "meters") + scale_x_date(date_labels = "%b %Y") + 
     theme(plot.margin = unit(c(.5, 0.5, .5, 0.5), units = "line"))
   # eddy kinetic energy
-    EKE <- ggplot(data = data, mapping = aes(x = date, y = EKE)) + 
+    EKE <- ggplot(data = data, mapping = aes(x = date, y = EKE_mean)) + 
     geom_line(color = "mediumpurple", linewidth = 1) + 
     labs(x = "Eddy Kinetic Energy", y = "cm^2/s^2") + scale_x_date(date_labels = "%b %Y") + 
     theme(plot.margin = unit(c(.5, 0.5, .5, 0.5), units = "line"))
   # salinity
-  salinity <- ggplot(data = data, mapping = aes(x = date, y = salinity)) + geom_line(color = "gold", linewidth = 1) + 
+  salinity <- ggplot(data = data, mapping = aes(x = date, y = salinity_mean)) + geom_line(color = "gold", linewidth = 1) + 
     labs(x = "Salinity", y = "psu") + scale_x_date(date_labels = "%b %Y") + 
     theme(plot.margin = unit(c(.5, 0.5, .5, 0.5), units = "line"))
   # mixed layer depth
-  mixed <- ggplot(data = data, mapping = aes(x = date, y = mixed_layer)) + 
+  mixed <- ggplot(data = data, mapping = aes(x = date, y = mixed_layer_mean)) + 
     geom_line(color = "mediumseagreen", linewidth = 1) + 
     labs(x = "Mixed Layer Thickness", y = "meters") + scale_x_date(date_labels = "%b %Y") +
     theme(plot.margin = unit(c(.5, 0.5, .5, 0.5), units = "line"))
   # temperature
-  temp <- ggplot(data = data, mapping = aes(x = date, y = temp)) + 
+  temp <- ggplot(data = data, mapping = aes(x = date, y = temp_mean)) + 
     geom_line(color = "darkred", linewidth = 1) + 
     labs(x = "Temperature", y = "C") + scale_x_date(date_labels = "%b %Y") +
     theme(plot.margin = unit(c(.5, 0.5, .5, 0.5), units = "line"))
   # chlorophyll
-  chl <- ggplot(data = data, mapping = aes(x = date, y = chla)) + 
+  chl <- ggplot(data = data, mapping = aes(x = date, y = chla_mean)) + 
     geom_line(color = "darkgreen", linewidth = 1) + 
     labs(x = "Chlorophyll-a", y = "mg/m3") + scale_x_date(date_labels = "%b %Y") +
     theme(plot.margin = unit(c(.5, 0.5, .5, 0.5), units = "line"))
   # oxygen
-  o2 <- ggplot(data = data, mapping = aes(x = date, y = o2)) + 
+  o2 <- ggplot(data = data, mapping = aes(x = date, y = o2_mean)) + 
     geom_line(color = "navy", linewidth = 1) + 
     labs(x = "Oxygen Concentration", y = "mmol/m3") + scale_x_date(date_labels = "%b %Y") +
     theme(plot.margin = unit(c(.5, 0.5, .5, 0.5), units = "line"))
   # productivity
-  prod <- ggplot(data = data, mapping = aes(x = date, y = productivity)) + 
+  prod <- ggplot(data = data, mapping = aes(x = date, y = productivity_mean)) + 
     geom_line(color = "deeppink", linewidth = 1) + 
     labs(x = "Primary Production", y = "mg/m3/day") + scale_x_date(date_labels = "%b %Y") +
     theme(plot.margin = unit(c(.5, 0.5, .5, 0.5), units = "line"))
@@ -235,11 +256,11 @@ CopTimeseries(CI_final, "Clarence Island")
 # -------------------------Step 5: Make Sea Ice Data Timeseries------------------------
 # Function to create timeseries by site
 IceTimeseries <- function(data, site) {
-  data$sice_conc <- data$sice_conc * 100
+  data$sice_conc <- data$sice_conc_mean * 100
   data$date <- as.Date(data$date)
-  data <- filter(data, depth == 0.494)
+  data <- filter(data, depth == 0.5)
   # sea ice thickness
-  thickness <- ggplot(data = data, mapping = aes(x = date, y = sice_thick)) + geom_line(color = "navy", linewidth = 1) + 
+  thickness <- ggplot(data = data, mapping = aes(x = date, y = sice_thick_mean)) + geom_line(color = "navy", linewidth = 1) + 
     labs(x = "Sea Ice Thickness", y = "meters") + scale_x_date(date_labels = "%b %Y") + 
     theme(plot.margin = unit(c(1, 0.5, 1, 0.5), units = "line"))
   # sea ice concentration
@@ -248,11 +269,11 @@ IceTimeseries <- function(data, site) {
     labs(x = "Sea Ice Concentration", y = "%") + scale_x_date(date_labels = "%b %Y") +
     theme(plot.margin = unit(c(1, 0.5, 1, 0.5), units = "line"))
   # northward velocity
-  nvelocity <- ggplot(data = data, mapping = aes(x = date, y = sice_n_veloc)) + geom_line(color = "mediumslateblue", linewidth = 1) + 
+  nvelocity <- ggplot(data = data, mapping = aes(x = date, y = sice_n_veloc_mean)) + geom_line(color = "mediumslateblue", linewidth = 1) + 
     labs(x = "Sea Ice North Velocity", y = "m/s") + scale_x_date(date_labels = "%b %Y") + 
     theme(plot.margin = unit(c(1, 0.5, 1, 0.5), units = "line"))
   # eastward velocity
-  evelocity <- ggplot(data = data, mapping = aes(x = date, y = sice_e_veloc)) + 
+  evelocity <- ggplot(data = data, mapping = aes(x = date, y = sice_e_veloc_mean)) + 
     geom_line(color = "dodgerblue", linewidth = 1) + 
     labs(x = "Sea Ice East Velocity", y = "m/s") + scale_x_date(date_labels = "%b %Y") +
     theme(plot.margin = unit(c(1, 0.5, 1, 0.5), units = "line"))
