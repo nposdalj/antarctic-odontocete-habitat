@@ -3,6 +3,9 @@ library(mgcv)
 library(car)
 library(rlang)
 library(gridExtra)
+library(gratia)
+library(patchwork)
+
 # ------------- Step 0: Choose Species ----------------
 # Modeling Pm for all sites it is present (EI & CI), 40 km radius environmental data
 species <- c('BW29') # options: BW29, BW37, Oo, Pm, Gm
@@ -1483,3 +1486,137 @@ CI_gam <- gam(BW29 ~ s(temperature_0,k=4,sp=0.1) + s(FSLE,k=4,sp=1) +
 CI_final <- gam(BW29 ~ s(temperature_0,k=4,sp=0.1) + s(FSLE,k=4,sp=0.1) +
                 s(salinity_0,k=4,sp=0.1) + s(o2_0,k=4,sp=0.1), 
               weights=weights, family=binomial, data=KGI_binned)
+
+
+# ------------------ Step 6: Visualize GAMs -------------------
+# Function to create a cleaner visualization of a GAM model
+visualizeGAM <- function(gam, predictors, siteName) {
+  # Accessing and preparing data
+  # extracting data to use for a ggplot of the GAM
+  plot_info <- smooth_estimates(gam)
+  
+  # adding confidence interval
+  plot_info <- plot_info %>% add_confint()
+  
+  # shifting by intercept and transforming to logistic (probability as y-axis)
+  dont_shift <- names(plot_info) %in% c('.smooth','.type','.by','.se',predictors)
+  plot_info <- plot_info %>%
+    gratia:::shift_values(i = dont_shift, h = coef(gam)[1], FUN = '+') %>%
+    transform_fun(fun = plogis)
+  
+  # Extracting deviance explained and p-values from the model
+  summary <- summary(gam)
+  deviance <- round(summary$dev.expl * 100, 3)
+  p_values <- setNames(summary$s.pv, rownames(summary$s.table))
+  
+  # Creating list to store plots in 
+  all_plots <- list()
+  
+  # Looping through all terms in GAM model
+  for(p in predictors) {
+    # Keeping only the current predictor
+    current_plot <- filter(plot_info, .smooth == paste0('s(',p,')'))
+    
+    # Extracting p-value
+    current_p_val <- p_values[[paste0("s(", p, ")")]]
+    current_plot$label <- paste0("p-value = ", round(current_p_val,5))
+    
+    # Setting position for p-value label
+    current_plot$label_x <- max(current_plot[,p],na.rm=TRUE) - 
+      (0.2*((max(current_plot[,p],na.rm=TRUE)) - (max(current_plot[,p],na.rm=TRUE))))
+    current_plot$label_y <- 0.98
+    
+    # Setting limits for x axis
+    x_vals <- pull(current_plot, p)
+    x_lim <- range(x_vals, na.rm = TRUE)
+    
+    # Creating plot
+    plot <- ggplot() +
+      # Confidence interval ribbon plot
+      geom_ribbon(data=current_plot,
+                  aes(ymin = .lower_ci, ymax = .upper_ci, y = .estimate, x = .data[[p]]), alpha = 0.2) +
+      
+      # Line plot for smooth function
+      geom_line(data=current_plot,aes(y = .estimate, x = .data[[p]]), linewidth = 1) +
+      
+      # Rug plot to show observed predictor values
+      geom_rug(data = gam$model, aes(x = .data[[p]]), sides = "b", length = grid::unit(0.03, "npc")) +
+      
+      # Adding p-value label
+      geom_label(data=current_plot,
+                 aes(x = label_x, y = label_y, label = label), stat = "unique",
+                 size = 3.5, alpha = 0.6, label.padding = unit(0.4, "lines"),hjust=1.2,vjust=1) +
+      
+      # Styling and cropping plot
+      labs(y = "Partial effect", x = nameVar(p)) + theme_bw() + ylim(0,1) + xlim(x_lim) + 
+      scale_x_continuous(expand = c(0, 0))
+    
+    # Adding plot object to list of plots
+    all_plots[[length(all_plots)+1]] <- plot
+  }
+  
+  # Setting rows and columns for final display
+  if(length(predictors) == 1) {
+    row <- 1
+    col <- 1
+  } else if(length(predictors) == 2) {
+    row <- 2
+    col <- 1
+  } else if(length(predictors) == 3 || length(predictors) == 4) {
+    row <- 2
+    col <- 2
+  } else if(length(predictors) == 5 || length(predictors) == 6) {
+    row <- 3
+    col <- 2
+  }
+  
+  # Aggregating all the plots into one figure
+  final_plot <- wrap_plots(all_plots, nrow = row, ncol = col, guides = "collect") &
+    plot_annotation(title = paste0("Long-Finned Pilot Whale at ", siteName,
+                                   " (",deviance,"% Deviance Explained)"))
+  
+  print(final_plot)
+  return(final_plot)
+}
+
+# Function to generate axis names from given variable names
+nameVar <- function(var) {
+  if(paste(var) == 'julian_day') {
+    return("Julian Day")
+  } else if(paste(var) == 'SSH') {
+    return('Sea Surface Height (m)')
+  } else if(paste(var) == 'FSLE') {
+    return('FSLE Magnitude')
+  } else if(paste(var) == 'mixed_layer') {
+    return('Mixed Layer Depth (m)')
+  } else if(paste(var) == 'ice_conc') {
+    return('Sea Ice Concentration')
+  } else if(paste(var) == 'ice_thickness') {
+    return('Sea Ice Thickness')
+  } else if(paste(var) == 'ice_diff') {
+    return('Difference in Sea Ice Concentration')
+  } else if(paste(var) == 'temperature_0') {
+    return('Sea Surface Temperature (°C)')
+  } else if(paste(var) == 'salinity_0') {
+    return('Sea Surface Salinity (psu)')
+  } else if(paste(var) == 'EKE_0') {
+    return('Eddy Kinetic Energy (cm^2/s^2)')
+  } else if(paste(var) == 'chla_0') {
+    return('Chlorophyll (mg/m^3)')
+  } else if(paste(var) == 'o2_0') {
+    return('Oxygen (mmol/m^3)')
+  } else if(paste(var) == 'productivity_0') {
+    return('Net Primary Production (mg/m^3/day carbon)')
+  } 
+}
+
+# Generating visualizations for each site's final model
+KGI_pred <- c('ice_conc','o2_0')
+KGI_plots <- visualizeGAM(KGI_final, KGI_pred, 'KGI')
+
+EI_pred <- c('mixed_layer')
+EI_plots <- visualizeGAM(EI_final, EI_pred, 'EI')
+
+
+CI_pred <- c('temperature_0','FSLE','salinity_0','o2_0')
+CI_plots <- visualizeGAM(CI_final, CI_pred, 'CI')

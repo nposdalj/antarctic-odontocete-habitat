@@ -112,8 +112,10 @@ allData <- rename(allData, FSLE=fsle_mean, fsle_orient = fsle_orientmean,
 # allData <- allData %>% subset(select=-X)
 
 # Setting variable categories for current dataframe
-depth_varying <- c("temperature", "salinity", 'EKE','chla','productivity','o2')
-surf_vars <- c("AAO",'SSH','mixed_layer','ice_conc','ice_thickness','FSLE','fsle_orient','ice_diff')
+depth_varying <- c("temperature", "salinity", 'EKE','chla','productivity','o2',
+                   'temp_sd','salinity_sd','EKE_mad','chla_sd','productivity_sd','o2_sd')
+surf_vars <- c("AAO",'SSH','mixed_layer','ice_conc','ice_thickness','FSLE','fsle_orient','ice_diff',
+               'ssh_sd','mixed_layer_sd','fsle_sd','fsle_orient_sd')
 species_vars <- c('BW29','BW37','BW58','Gm',"Pm", "Oo")
 grouping_vars <- c("date", "depth", "Site")
 
