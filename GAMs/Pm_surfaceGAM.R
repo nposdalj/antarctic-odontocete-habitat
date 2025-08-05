@@ -41,40 +41,51 @@ allData <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat
 allData <- allData %>% subset(select=-X)
 allData$date <- as.Date(allData$date, "%Y-%m-%d")
 # Filter by species relevant data
+# Only adding standard deviations of surface variables, feel free to change that if needed
 if(species =='BW29') {
   depths <- c(0, 768)
   sp_specific <- allData %>% subset(select=-c(BW37,BW58,Oo,Pm,Gm)) %>%
     subset(select=c(date,Site,julian_day,get(species),AAO,SSH,mixed_layer,ice_conc,ice_thickness,ice_diff,FSLE,
                     temperature_0,salinity_0,EKE_0,temperature_768,salinity_768,EKE_768,
-                    chla_0,o2_0,productivity_0,chla_768,o2_768,productivity_768))
+                    chla_0,o2_0,productivity_0,chla_768,o2_768,productivity_768,
+                    ssh_sd, mixed_layer_sd, fsle_sd, temp_sd_0, salinity_sd_0, EKE_mad_0, 
+                    chla_sd_0,o2_sd_0,productivity_sd_0,ice_regime))
 } else if(species =='BW37') {
   depths <- c(0, 67, 920) 
   sp_specific <- allData %>% subset(select=-c(BW29,BW58,Oo,Pm,Gm)) %>%
     subset(select=c(date,Site,julian_day,get(species),AAO,SSH,mixed_layer,ice_conc,ice_thickness,ice_diff,FSLE,
                     temperature_0,salinity_0,EKE_0,temperature_67,salinity_67,EKE_67,
                     temperature_920,salinity_920,EKE_920, chla_0,o2_0,productivity_0,chla_67,
-                    o2_67,productivity_67, chla_920,o2_920,productivity_920))
+                    o2_67,productivity_67, chla_920,o2_920,productivity_920,
+                    ssh_sd, mixed_layer_sd, fsle_sd, temp_sd_0, salinity_sd_0, EKE_mad_0, 
+                    chla_sd_0,o2_sd_0,productivity_sd_0,ice_regime))
 } else if(species =='Oo') {
   depths <- c(0, 11, 455) 
   sp_specific <- allData  %>% subset(select=-c(BW29,BW37,BW58,Pm,Gm)) %>%
     subset(select=c(date,Site,julian_day,get(species),AAO,SSH,mixed_layer,ice_conc,ice_thickness,ice_diff,FSLE,
                     temperature_0,salinity_0,EKE_0,temperature_11,salinity_11,EKE_11,
                     temperature_455,salinity_455,EKE_455, chla_0,o2_0,productivity_0,chla_11,
-                    o2_11,productivity_11, chla_455,o2_455,productivity_455))
+                    o2_11,productivity_11, chla_455,o2_455,productivity_455,
+                    ssh_sd, mixed_layer_sd, fsle_sd, temp_sd_0, salinity_sd_0, EKE_mad_0, 
+                    chla_sd_0,o2_sd_0,productivity_sd_0,ice_regime))
 } else if(species =='Pm') {
   depths <- c(0, 375, 1665)
   sp_specific <- allData  %>% subset(select=-c(BW29,BW37,BW58,Oo,Gm)) %>%
     subset(select=c(date,julian_day,Site,get(species),AAO,SSH,mixed_layer,ice_conc,ice_thickness,ice_diff,FSLE,
                     temperature_0,salinity_0,EKE_0,temperature_375,salinity_375,EKE_375,
                     temperature_1665,salinity_1665,EKE_1665, chla_0,o2_0,productivity_0,chla_375,
-                    o2_375,productivity_375, chla_1665,o2_1665,productivity_1665))
+                    o2_375,productivity_375, chla_1665,o2_1665,productivity_1665,
+                    ssh_sd, mixed_layer_sd, fsle_sd, temp_sd_0, salinity_sd_0, EKE_mad_0, 
+                    chla_sd_0,o2_sd_0,productivity_sd_0,ice_regime))
 } else if(species =='Gm') {
   depths <- c(0, 16, 635) 
   sp_specific <- allData  %>% subset(select=-c(BW29,BW37,BW58,Oo,Pm)) %>%
     subset(select=c(date,Site,julian_day,get(species),AAO,SSH,mixed_layer,ice_conc,ice_thickness,ice_diff,FSLE,
                     temperature_0,salinity_0,EKE_0,temperature_16,salinity_16,EKE_16,
                     temperature_635,salinity_635,EKE_635, chla_0,o2_0,productivity_0,chla_16,
-                    o2_16,productivity_16, chla_635,o2_635,productivity_635))
+                    o2_16,productivity_16, chla_635,o2_635,productivity_635,
+                    ssh_sd, mixed_layer_sd, fsle_sd, temp_sd_0, salinity_sd_0, EKE_mad_0, 
+                    chla_sd_0,o2_sd_0,productivity_sd_0,ice_regime))
 } else
   print('Species code not valid. Check inputs.')
 
@@ -104,9 +115,15 @@ binByACF <- function(site, bin) {
                          ice_diff = mean_col("ice_diff"),
                          temperature_0 = mean_col("temperature_0"), salinity_0 = mean_col("salinity_0"),
                          EKE_0 = mean_col("EKE_0"), chla_0 = mean_col('chla_0'),
-                         o2_0 = mean_col('o2_0'), productivity_0 = mean_col('productivity_0'))
+                         o2_0 = mean_col('o2_0'), productivity_0 = mean_col('productivity_0'),
+                         SSH_sd = mean_col('ssh_sd'), FSLE_sd = mean_col('fsle_sd'), 
+                         mixed_layer_sd = mean_col('mixed_layer_sd'), temp_0_sd = mean_col('temp_sd_0'),
+                         chla_0_sd = mean_col('chla_sd_0'), productivity_0_sd = mean_col('productivity_sd_0'),
+                         EKE_0_mad = mean_col('EKE_mad_0'), o2_0_sd = mean_col('o2_sd_0'),
+                         salinity_0_sd = mean_col('salinity_sd_0'))
   
   # Adding shallow dive depth for applicable variables
+  # Customize this list to add standard deviations of variables at depth (if needed)
   summarize_cols[[paste0("temperature_", depths[2])]] <- mean_col(paste0("temperature_", depths[2]))
   summarize_cols[[paste0("salinity_", depths[2])]] <- mean_col(paste0("salinity_", depths[2]))
   summarize_cols[[paste0("EKE_", depths[2])]] <- mean_col(paste0("EKE_", depths[2]))
