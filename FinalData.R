@@ -10,15 +10,15 @@ allData <- dailyDetection
 allData$date <- allData$Day
 allData <- allData %>% subset(select = -Day)
 # Choose variables + sites + species to plot
-environmental_vars <- c('AAO','FSLE','SSH','EKE','temperature','salinity', 'chla','o2','productivity',
-                        'mixed_layer','ice_conc','ice_thickness','ice_diff','fsle_orient') 
+environmental_vars <- as.vector(c('AAO','FSLE','SSH','EKE','temperature','salinity', 'chla','o2',
+                                  'productivity','mixed_layer','ice_conc','ice_thickness')) 
 # options: AAO, FSLE, SSH, EKE, temperature, salinity, mixed_layer, chla (chlorophyll), o2 (oxygen),
 #   productivity (primary production), ice_conc (sea ice concentration), ice_thickness (sea ice thickness),
 #   ice_diff (daily difference in ice concentration), fsle_orient (orientation of fsle vector)
-species <- c('Oo') # options: BW29, BW37, BW58, Oo, Pm, Gm
+species <- as.vector(c('none')) # options: BW29, BW37, BW58, Oo, Pm, Gm, none (for surface variables)
 # BW29 = Southern bottlenose whale, BW37 & BW58 = Gray's and strap-toothed whales
 # Oo = Killer whale, Pm = Sperm Whale, Gm = Long-finned pilot whale
-sites <- c('KGI', 'EI','CI') # options: EI, KGI, CI
+sites <- as.vector(c('KGI')) # options: EI, KGI, CI
 
 # --------------- Step 1: Format/Add Antarctic Oscillation Index ----------------
 AAO <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Daily_AAO.csv")
@@ -160,8 +160,13 @@ write.csv(allData_wide, "C:/Users/HARP/Documents/GitHub/antarctic-odontocete-hab
 # -------------------- Step 5: Make Requested Plots -------------------
 timeseriesPlots <- function(sites, species, vars) {
   # Keeping only requested variables, species, and sites
-  filtered <- allData %>% select(any_of(c('date','Site','depth',species, vars))) %>%
-    subset(Site %in% sites)
+  if(species == 'none') {
+    filtered <- allData %>% select(any_of(c('date','Site','depth', vars))) %>%
+      subset(Site %in% sites)
+  } else {
+    filtered <- allData %>% select(any_of(c('date','Site','depth',species, vars))) %>%
+      subset(Site %in% sites)
+  }
   filtered$date <- as.Date(filtered$date,'%Y-%m-%d')
 
   # Run through all sites
@@ -179,6 +184,8 @@ timeseriesPlots <- function(sites, species, vars) {
         depths <- c(0.5, 375.0, 1665.0)}
       else if(sp=='Gm') {
         depths <- c(0.5, 16.0, 635.0) }
+      else if(sp=='none') {
+        depths <- c(0.5) }
       else {
         print("Species code not valid. Check inputs.") }
       species_specific <- filtered %>% select(any_of(c('date','Site','depth',sp, vars))) %>%
@@ -201,21 +208,27 @@ aggregatePlot <- function(data, vars, plot_species, depths,site) {
   # Making plots and adding to list of plots
   for(v in vars) {
     v_idx <- match(v,vars)
-    plot <- makePlot(data, v, depths)
+    plot <- makePlot(data, v, depths, plot_species)
     all_plots[[length(all_plots)+1]] <- plot
   }
   
-  # Adding timeseries for species presence to list of plots
-  species_ts <- ggplot(data = data, mapping = aes(x = date, y = get(plot_species))) + 
-    geom_col(width = 1, color = "purple") + scale_x_date(date_labels = "%b %Y") +
-    labs(y = NULL, x = paste(plot_species,' Presence')) +
-    theme(plot.margin = unit(c(0, 0.5, 0, 0.5),units = "line"), 
-          axis.title = element_text(size=10))
-  all_plots[[length(all_plots)+1]] <- species_ts
+  if(plot_species == 'none') 
+    title <- paste0('Environmental Variables at ',name(site))
+  else {
+    # Adding timeseries for species presence to list of plots
+    species_ts <- ggplot(data = data, mapping = aes(x = date, y = .data[[plot_species]])) + 
+      geom_col(width = 1, color = "purple") + scale_x_date(date_labels = "%b %Y") +
+      labs(y = NULL, x = paste(plot_species,' Presence')) +
+      theme(plot.margin = unit(c(0, 0.5, 0, 0.5),units = "line"), 
+            axis.title = element_text(size=10))  
+    all_plots[[length(all_plots)+1]] <- species_ts
+    
+    title <- paste0(name(plot_species)," at ", name(site))
+  }
   
   # Arranging the final figure
   final_plot <- wrap_plots(all_plots, ncol = 1, guides = "collect") &
-    plot_annotation(title = paste(name(plot_species)," at ", name(site))) &
+    plot_annotation(title = title) &
     # Making margins small to fit plots with many variables
     theme(legend.position = "bottom", legend.margin = margin(t=0, b=2, unit="pt"),
           legend.box.margin = margin(0, 0, 0, 0, unit = "pt"),
@@ -227,68 +240,98 @@ aggregatePlot <- function(data, vars, plot_species, depths,site) {
 }
 
 # Function to make an individual timeseries plot for one environmental variable
-makePlot <- function(data, var, depths) {
-  # Setting units for chosen variable
+makePlot <- function(data, var, depths, species) {
+  # Setting labels for chosen variable
   if(var=='SSH'){
-    label <- 'SSH (m)'
-    color <- 'darkred'
+    label <- 'Sea Surface Height (m)'
+    col <- 'darkred'
   } else if(var=='mixed_layer'){
     label <- 'Mixed Layer Depth (m)'
-    color <- 'darkcyan'
+    col <- 'darkcyan'
   } else if(var=='ice_thickness'){
     label <- 'Sea Ice Thickness (m)'
-    color <- 'navy'
+    col <- 'navy'
   } else if(var=='temperature') {
-    label <- 'Temperature (C)'
+    label <- 'Temperature (°C)'
   } else if(var=='salinity') {
     label <- 'Salinity (psu)'
   } else if(var=='ice_conc') {
     label <- 'Sea Ice Concentration'
-    color <- 'mediumslateblue'
+    col <- 'mediumslateblue'
   } else if(var=='EKE') {
-    label <- "EKE (cm^2/s^2)"
+    label <- "Eddy Kinetic Energy (cm^2/s^2)"
   } else if(var=='AAO') {
-    label <- 'AAO'
-    color <- 'mediumvioletred'
+    label <- 'Antarctic Oscillation Index'
+    col <- 'mediumvioletred'
   } else if(var == 'FSLE') {
-      label <- 'FSLE'
-      color <- 'orange'
+    label <- 'FSLE'
+    col <- 'orange'
   } else if(var == 'o2') {
     label <- 'Oxygen Concentration (mmol/m3)'
-    #color <- 'saddlebrown'
   } else if(var == 'chla') {
     label <- 'Chlorophyll (mg/m3)'
-    #color <- 'darkolivegreen'
   } else if(var == 'productivity') {
     label <- "Net Primary Production (mg/m3/day carbon)"
-    #color <- 'dimgray'
   } else if(var == 'ice_diff') {
     label <- "Daily Change in Sea Ice concentration"
-    color <- 'saddlebrown'
+    col <- 'saddlebrown'
   } else if(var == 'fsle_orient') {
     label <- "Orientation of FSLE Vector"
-    color <- 'dimgray'
+    col <- 'dimgray'
   }
   
-  # Plotting across depths for relevant variables
-  if (var=='temperature' | var == 'EKE' | var == 'salinity' | var=='o2' | var=='productivity' | 
-      var == 'chla') {
-    # Renaming the surface depth
-    data <- data %>% mutate(depth = ifelse(depth == 0.5, 'surface', as.character(depth)))
-    # Returning plot colored by depth
-    return(ggplot(data = data, aes(x=date, y=get(var), color=factor(depth))) + 
-             geom_line() + 
-             labs(y = NULL, color = "Depth (m)", x = label) +  scale_x_date(labels = NULL) +
-             theme(plot.margin = unit(c(0, 0.5, 0, 0.5),units = "line"), 
-                   axis.title = element_text(size=10)))
-  } else { # Plotting surface values for variables without depth
+  
+  # Making surface plots for all variables if species is not specified
+  if(species == 'none') {
+    # setting colors for surface variables if not plotting across depths
+    if(var == 'o2') {
+      label <- 'Oxygen Concentration (mmol/m^3'
+      col <- 'darkviolet'
+    } else if(var == 'EKE') {
+      label <- 'Eddy Kinetic Energy (cm^2/s^2)'
+      col <- 'darkorange'
+    } else if(var == 'temperature') {
+      label <- 'Sea Surface Temperature (°C)'
+      col <- 'maroon'
+    } else if(var == 'salinity') {
+      label <- 'Sea Surface Salinity (psu)'
+      col <- 'darkgoldenrod'
+    } else if(var == 'productivity') {
+      label <- 'Net Primary Production (mg/m^3/day carbon)'
+      col <- 'seagreen'
+    } else if(var == 'chla') {
+      label <- 'Chlorophyll-a (mg/m^3)'
+      col <- 'darkolivegreen'
+    }
     return(
-      ggplot(data = data, mapping = aes(x = date, y = get(var))) + geom_line(color = color) +
+      ggplot(data = data, mapping = aes(x = date, y = .data[[var]])) + geom_line(color = col) +
         xlab(label) + ylab(NULL) +  scale_x_date(labels = NULL) +
         theme(plot.margin = unit(c(0, 0.5, 0, 0.5),units = "line"), 
-              axis.title = element_text(size=10))
+              axis.title = element_text(size=10))  
     )
+  } else {
+    # Plotting across depths for relevant variables
+    # Only if species is specified
+    if (var=='temperature' | var == 'EKE' | var == 'salinity' | var=='o2' | var=='productivity' | 
+        var == 'chla') {
+      # Renaming the surface depth
+      data <- data %>% mutate(depth = ifelse(depth == 0.5, 'surface', as.character(depth)))
+      # Returning plot colored by depth
+      return(ggplot(data = data, aes(x=date, y=.data[[var]], color=factor(depth))) + 
+               geom_line() + 
+               labs(y = NULL, color = "Depth (m)", x = label) +  scale_x_date(labels = NULL) +
+               theme(plot.margin = unit(c(0, 0.5, 0, 0.5),units = "line"), 
+                     axis.title = element_text(size=10)))  
+    } else { # Plotting surface values for variables without depth
+      return(
+        ggplot(data = data, mapping = aes(x = date, y = .data[[var]])) + geom_line(color = col) +
+          xlab(label) + ylab(NULL) +  scale_x_date(labels = NULL) +
+          theme(plot.margin = unit(c(0, 0.5, 0, 0.5),units = "line"), 
+                axis.title = element_text(size=10)) 
+      )
+    }
   }
+  
 }
 
 # Function to write out full name of a species/site code
