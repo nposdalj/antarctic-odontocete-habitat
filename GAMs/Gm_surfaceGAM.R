@@ -39,7 +39,7 @@ name <- function(abbrev) {
   return(fullname)
 }
 # ------------- Step 1: Load Data -----------------
-allData <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Data/allData_40km.csv")
+allData <- read.csv("/Users/trisha/R/antarctic-odontocete-habitat/Data/allData_40km.csv")
 allData <- allData %>% subset(select=-X)
 allData$date <- as.Date(allData$date, "%Y-%m-%d")
 # Filter by species relevant data
@@ -51,7 +51,7 @@ if(species =='BW29') {
                     temperature_0,salinity_0,EKE_0,temperature_768,salinity_768,EKE_768,
                     chla_0,o2_0,productivity_0,chla_768,o2_768,productivity_768,
                     ssh_sd, mixed_layer_sd, fsle_sd, temp_sd_0, salinity_sd_0, EKE_mad_0, 
-                    chla_sd_0,o2_sd_0,productivity_sd_0,ice_regime))
+                    chla_sd_0,o2_sd_0,productivity_sd_0,ice_regime,fsle_orient))
 } else if(species =='BW37') {
   depths <- c(0, 67, 920) 
   sp_specific <- allData %>% subset(select=-c(BW29,BW58,Oo,Pm,Gm)) %>%
@@ -60,7 +60,7 @@ if(species =='BW29') {
                     temperature_920,salinity_920,EKE_920, chla_0,o2_0,productivity_0,chla_67,
                     o2_67,productivity_67, chla_920,o2_920,productivity_920,
                     ssh_sd, mixed_layer_sd, fsle_sd, temp_sd_0, salinity_sd_0, EKE_mad_0, 
-                    chla_sd_0,o2_sd_0,productivity_sd_0,ice_regime))
+                    chla_sd_0,o2_sd_0,productivity_sd_0,ice_regime,fsle_orient))
 } else if(species =='Oo') {
   depths <- c(0, 11, 455) 
   sp_specific <- allData  %>% subset(select=-c(BW29,BW37,BW58,Pm,Gm)) %>%
@@ -69,7 +69,7 @@ if(species =='BW29') {
                     temperature_455,salinity_455,EKE_455, chla_0,o2_0,productivity_0,chla_11,
                     o2_11,productivity_11, chla_455,o2_455,productivity_455,
                     ssh_sd, mixed_layer_sd, fsle_sd, temp_sd_0, salinity_sd_0, EKE_mad_0, 
-                    chla_sd_0,o2_sd_0,productivity_sd_0,ice_regime))
+                    chla_sd_0,o2_sd_0,productivity_sd_0,ice_regime,fsle_orient))
 } else if(species =='Pm') {
   depths <- c(0, 375, 1665)
   sp_specific <- allData  %>% subset(select=-c(BW29,BW37,BW58,Oo,Gm)) %>%
@@ -78,7 +78,7 @@ if(species =='BW29') {
                     temperature_1665,salinity_1665,EKE_1665, chla_0,o2_0,productivity_0,chla_375,
                     o2_375,productivity_375, chla_1665,o2_1665,productivity_1665,
                     ssh_sd, mixed_layer_sd, fsle_sd, temp_sd_0, salinity_sd_0, EKE_mad_0, 
-                    chla_sd_0,o2_sd_0,productivity_sd_0,ice_regime))
+                    chla_sd_0,o2_sd_0,productivity_sd_0,ice_regime,fsle_orient))
 } else if(species =='Gm') {
   depths <- c(0, 16, 635) 
   sp_specific <- allData  %>% subset(select=-c(BW29,BW37,BW58,Oo,Pm)) %>%
@@ -87,13 +87,13 @@ if(species =='BW29') {
                     temperature_635,salinity_635,EKE_635, chla_0,o2_0,productivity_0,chla_16,
                     o2_16,productivity_16, chla_635,o2_635,productivity_635,
                     ssh_sd, mixed_layer_sd, fsle_sd, temp_sd_0, salinity_sd_0, EKE_mad_0, 
-                    chla_sd_0,o2_sd_0,productivity_sd_0,ice_regime))
+                    chla_sd_0,o2_sd_0,productivity_sd_0,ice_regime,fsle_orient))
 } else
   print('Species code not valid. Check inputs.')
 
 
 # ------------- Step 2: Average by ACF ------------
-acf_table <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Autocorrelation/acf_table.csv")
+acf_table <- read.csv("/Users/trisha/R/antarctic-odontocete-habitat/Autocorrelation/acf_table.csv")
 acfVal <- function(site) {
   row_idx <- which(acf_table$site == site) # Row index for the site
   acf_val <- acf_table[row_idx,species][[1]]
@@ -122,7 +122,7 @@ binByACF <- function(site, bin) {
                          mixed_layer_sd = mean_col('mixed_layer_sd'), temp_0_sd = mean_col('temp_sd_0'),
                          chla_0_sd = mean_col('chla_sd_0'), productivity_0_sd = mean_col('productivity_sd_0'),
                          EKE_0_mad = mean_col('EKE_mad_0'), o2_0_sd = mean_col('o2_sd_0'),
-                         salinity_0_sd = mean_col('salinity_sd_0'))
+                         salinity_0_sd = mean_col('salinity_sd_0'), fsle_orient = mean_col('fsle_orient'))
   
   # Adding shallow dive depth for applicable variables
   # Customize this list to add standard deviations of variables at depth (if needed)
@@ -147,6 +147,18 @@ binByACF <- function(site, bin) {
   sp_binned <- sp_filtered %>%
     group_by(bin_start, Site) %>%
     summarise(!!!all_summaries, .groups = "drop")
+  
+  # Adding ice_regime column
+  for (x in 1:nrow(sp_binned)) {
+    if(sp_binned[x,'ice_diff'] == 0) {
+      sp_binned[x,'ice_regime'] <- 'none'
+    } else if(sp_binned[x,'ice_diff'] <= -0.01) {
+      sp_binned[x,'ice_regime'] <- 'decreasing'
+    } else if(sp_binned[x,'ice_diff'] >= 0.01) {
+      sp_binned[x,'ice_regime'] <- 'increasing'
+    } else
+      sp_binned[x,'ice_regime'] <- 'stable'
+  }
   
   return(sp_binned)
 }
@@ -186,141 +198,130 @@ binned_plot <- grid.arrange(binnedTimeseries(EI_binned,'EI',EI_acf), binnedTimes
 # Only including julian day for KGI, since it has almost 1 year of data
 
 # ELEPHANT ISLAND
-intl_predictors <- c("FSLE", "SSH", "mixed_layer", "ice_conc", 'ice_diff', "salinity_0", 
+EI_pred <- c("FSLE", "SSH", "mixed_layer", "ice_conc", 'fsle_orient', "salinity_0", 
                      "temperature_0", "EKE_0",'o2_0','chla_0','productivity_0')
-mod_formula <- paste(species, "~", paste(intl_predictors, collapse = " + "))
+mod_formula <- paste(species, "~", paste(EI_pred, collapse = " + "))
 # EI vif model is not converging when run as a logistic regression, so running as a linear regression instead
 EI_vif <- glm(as.formula(mod_formula), data = EI_binned)
 vif(EI_vif)
-# FSLE            SSH    mixed_layer       ice_conc       ice_diff     salinity_0  temperature_0          EKE_0 
-# 3.382882       3.502149      10.615710       4.851180       1.662875       6.492951      62.931785       2.065895 
+# FSLE            SSH    mixed_layer       ice_conc    fsle_orient     salinity_0  temperature_0          EKE_0 
+# 3.917328       2.796444       7.806685       5.448504       3.456836       7.245168      65.689317       2.110835 
 # o2_0         chla_0 productivity_0 
-# 45.191425      18.595415      31.252547 
+# 45.948050      23.479121      32.495525 
 
 # dropping surface temperature
-EI_pred <- c("FSLE", "SSH", "mixed_layer", "ice_conc", 'ice_diff', "salinity_0", 
+EI_pred <- c("FSLE", "SSH", "mixed_layer", "ice_conc", 'fsle_orient', "salinity_0", 
                      "EKE_0",'o2_0','chla_0','productivity_0')
 mod_formula <- paste(species, "~", paste(EI_pred, collapse = " + "))
 EI_vif <- glm(as.formula(mod_formula), data = EI_binned)
 vif(EI_vif)
-# FSLE            SSH    mixed_layer       ice_conc       ice_diff     salinity_0          EKE_0           o2_0 
-# 3.282633       2.517868      10.230747       3.218531       1.576815       6.092952       1.926940      29.632412 
+# FSLE            SSH    mixed_layer       ice_conc    fsle_orient     salinity_0          EKE_0           o2_0 
+# 3.635886       2.146968       7.606461       3.349641       3.140330       6.595141       1.882706      26.562145 
 # chla_0 productivity_0 
-# 17.952308      29.381096 
+# 20.869381      32.205804 
 
-# dropping oxygen concentration
-EI_pred <- c("FSLE", "SSH", "mixed_layer", "ice_conc", 'ice_diff', "salinity_0", 
-             "EKE_0",'chla_0','productivity_0')
+# dropping primary production
+EI_pred <- c("FSLE", "SSH", "mixed_layer", "ice_conc", 'fsle_orient', "salinity_0", 
+             "EKE_0",'chla_0')
 mod_formula <- paste(species, "~", paste(EI_pred, collapse = " + "))
 EI_vif <- glm(as.formula(mod_formula), data = EI_binned)
 vif(EI_vif)
-# FSLE            SSH    mixed_layer       ice_conc       ice_diff     salinity_0          EKE_0         chla_0 
-# 2.344244       2.312049       6.504563       2.909992       1.412285       5.643441       1.562109      17.376457 
-# productivity_0 
-# 13.381785
+# FSLE         SSH mixed_layer    ice_conc fsle_orient  salinity_0       EKE_0      chla_0 
+# 1.702349    1.803669    4.519144    2.940721    2.375007    4.464684    1.501540   11.582560 
 
 # dropping chlorophyll
-EI_pred <- c("FSLE", "SSH", "mixed_layer", "ice_conc", 'ice_diff', "salinity_0", 
-             "EKE_0",'productivity_0')
-mod_formula <- paste(species, "~", paste(EI_pred, collapse = " + "))
-EI_vif <- glm(as.formula(mod_formula), data = EI_binned)
-vif(EI_vif)
-# FSLE            SSH    mixed_layer       ice_conc       ice_diff     salinity_0          EKE_0 productivity_0 
-# 2.323856       1.322337       4.990213       2.516687       1.309875       4.470306       1.560237      10.007252
-
-# dropping net primay production
-EI_pred <- c("FSLE", "SSH", "mixed_layer", "ice_conc", 'ice_diff', "salinity_0", 
+EI_pred <- c("FSLE", "SSH", "mixed_layer", "ice_conc", 'fsle_orient', "salinity_0", 
              "EKE_0")
 mod_formula <- paste(species, "~", paste(EI_pred, collapse = " + "))
 EI_vif <- glm(as.formula(mod_formula), data = EI_binned)
 vif(EI_vif)
-# FSLE         SSH mixed_layer    ice_conc    ice_diff  salinity_0       EKE_0 
-# 1.318511    1.319653    2.164988    2.195313    1.218722    1.496380    1.471647 
+# FSLE         SSH mixed_layer    ice_conc fsle_orient  salinity_0       EKE_0 
+# 1.381906    1.296292    2.166030    2.286215    2.315872    1.817996    1.450946 
 
 # Final predictors for Elephant Island: FSLE, SSH, mixed layer depth, sea ice concentraiton,
-#   difference in ice concentration, salinity, EKE
+#   fsle orientation, salinity, EKE
 
 # KING GEORGE ISLAND
 # adding julian day into initial formula
-intl_predictors <- c("FSLE", "SSH", "mixed_layer", "ice_conc", 'ice_diff', "salinity_0", 
+KGI_pred <- c("FSLE", "SSH", "mixed_layer", "ice_conc", 'fsle_orient', "salinity_0", 
                      "temperature_0", "EKE_0",'o2_0','chla_0','productivity_0', 'julian_day')
-mod_formula <- paste(species, "~", paste(intl_predictors, collapse = " + "))
+mod_formula <- paste(species, "~", paste(KGI_pred, collapse = " + "))
 KGI_vif <- glm(as.formula(mod_formula), family = binomial, data = KGI_binned)
 vif(KGI_vif)
-# FSLE            SSH    mixed_layer       ice_conc       ice_diff     salinity_0  temperature_0 
-# 1.501086       2.069468       7.185479       3.138806       1.568101       4.337320      35.906240 
-# EKE_0           o2_0         chla_0 productivity_0     julian_day 
-# 1.074483      13.137926       7.994408      14.278968       3.180173
+# FSLE            SSH    mixed_layer       ice_conc    fsle_orient     salinity_0  temperature_0          EKE_0 
+# 1.406687       2.433127       7.188120       2.958964       1.598854       4.607197      40.902517       1.140619 
+# o2_0         chla_0 productivity_0     julian_day 
+# 14.993033       9.906773      19.276807       3.296272 
 
 # removing temp_0
-KGI_pred <- c("FSLE", "SSH", "mixed_layer", "ice_conc", 'ice_diff', "salinity_0", 
+KGI_pred <- c("FSLE", "SSH", "mixed_layer", "ice_conc", 'fsle_orient', "salinity_0", 
                     "EKE_0",'o2_0','chla_0','productivity_0', 'julian_day')
 mod_formula <- paste(species, "~", paste(KGI_pred, collapse = " + "))
 KGI_vif <- glm(as.formula(mod_formula), family = binomial, data = KGI_binned)
 vif(KGI_vif)
-# FSLE            SSH    mixed_layer       ice_conc       ice_diff     salinity_0          EKE_0 
-# 1.454792       2.028160       4.876820       2.908102       1.357751       4.092606       1.072813 
-# o2_0         chla_0 productivity_0     julian_day 
-# 2.755725       7.688033       6.222557       3.105939 
+# FSLE            SSH    mixed_layer       ice_conc       ice_diff     salinity_0          EKE_0
+# 1.454792       2.028160       4.876820       2.908102       1.357751       4.092606       1.072813
+# o2_0         chla_0 productivity_0     julian_day
+# 2.755725       7.688033       6.222557       3.105939
 
 # removing chlorophyll
-KGI_pred <- c("FSLE", "SSH", "mixed_layer", "ice_conc", 'ice_diff', "salinity_0", 
+KGI_pred <- c("FSLE", "SSH", "mixed_layer", "ice_conc", 'fsle_orient', "salinity_0", 
               "EKE_0",'o2_0','productivity_0', 'julian_day')
 mod_formula <- paste(species, "~", paste(KGI_pred, collapse = " + "))
 KGI_vif <- glm(as.formula(mod_formula), family = binomial, data = KGI_binned)
 vif(KGI_vif)
-# FSLE            SSH    mixed_layer       ice_conc       ice_diff     salinity_0          EKE_0 
-# 1.434252       1.877656       4.388842       2.821834       1.358126       3.954242       1.064858 
-# o2_0 productivity_0     julian_day 
-# 2.577644       2.466533       2.559630 
+# FSLE            SSH    mixed_layer       ice_conc    fsle_orient     salinity_0          EKE_0           o2_0 
+# 1.336210       2.189414       4.166698       2.339382       1.278746       4.122134       1.094359       2.521988 
+# productivity_0     julian_day 
+# 2.461906       2.533958 
 
-# Final predictors for KGI: FSLE, SSH, mixed layer depth, sea ice concentration, difference
-# in ice concentration, salinity, EKE, oxygen, net primary production, julian day
+# Final predictors for KGI: FSLE, SSH, mixed layer depth, sea ice concentration, fsle orientation
+#  salinity, EKE, oxygen, net primary production, julian day
 
 # CLARENCE ISLAND
-intl_predictors <- c("FSLE", "SSH", "mixed_layer", "ice_conc", 'ice_diff', "salinity_0", 
+CI_pred <- c("FSLE", "SSH", "mixed_layer", "ice_conc", 'fsle_orient', "salinity_0", 
                      "temperature_0", "EKE_0",'o2_0','chla_0','productivity_0')
-mod_formula <- paste(species, "~", paste(intl_predictors, collapse = " + "))
+mod_formula <- paste(species, "~", paste(CI_pred, collapse = " + "))
 CI_vif <- glm(as.formula(mod_formula), family = binomial, data = CI_binned)
 vif(CI_vif)
-# FSLE            SSH    mixed_layer       ice_conc       ice_diff     salinity_0  temperature_0          EKE_0 
-# 2.074398       4.868523       5.451428       2.252767       1.733800       5.569607      26.476691       1.185552 
+# FSLE            SSH    mixed_layer       ice_conc    fsle_orient     salinity_0  temperature_0          EKE_0 
+# 3.230957       4.679299       5.518346       2.507298       2.592362       6.577279      35.927516       1.218665 
 # o2_0         chla_0 productivity_0 
-# 6.712699       7.278121      15.015548 
+# 8.671019       9.999118      17.138546 
 
 # removing SST
-CI_pred <- c("FSLE", "SSH", "mixed_layer", "ice_conc", 'ice_diff', "salinity_0", 
+CI_pred <- c("FSLE", "SSH", "mixed_layer", "ice_conc", 'fsle_orient', "salinity_0", 
                      "EKE_0",'o2_0','chla_0','productivity_0')
 mod_formula <- paste(species, "~", paste(CI_pred, collapse = " + "))
 CI_vif <- glm(as.formula(mod_formula), family = binomial, data = CI_binned)
 vif(CI_vif)
-# FSLE            SSH    mixed_layer       ice_conc       ice_diff     salinity_0          EKE_0           o2_0 
-# 2.065587       4.476783       5.408579       1.651700       1.675378       5.277622       1.191292       2.727239 
+# FSLE            SSH    mixed_layer       ice_conc    fsle_orient     salinity_0          EKE_0           o2_0 
+# 2.854443       4.480542       4.886772       2.079931       2.131094       5.373712       1.223697       3.629583 
 # chla_0 productivity_0 
-# 7.083603       6.214762 
+# 9.912654       6.711304 
 
 # removing chlorophyll
-CI_pred <- c("FSLE", "SSH", "mixed_layer", "ice_conc", 'ice_diff', "salinity_0", 
+CI_pred <- c("FSLE", "SSH", "mixed_layer", "ice_conc", 'fsle_orient', "salinity_0", 
              "EKE_0",'o2_0','productivity_0')
 mod_formula <- paste(species, "~", paste(CI_pred, collapse = " + "))
 CI_vif <- glm(as.formula(mod_formula), family = binomial, data = CI_binned)
 vif(CI_vif)
-# FSLE            SSH    mixed_layer       ice_conc       ice_diff     salinity_0          EKE_0           o2_0 
-# 1.974961       4.161409       5.036607       1.725923       1.707362       5.221869       1.227570       2.554227 
+# FSLE            SSH    mixed_layer       ice_conc    fsle_orient     salinity_0          EKE_0           o2_0 
+# 2.341808       4.021865       4.152134       1.743984       1.572182       5.131123       1.220780       2.714238 
 # productivity_0 
-# 2.335373
+# 2.544638 
 
 # removing salinity
-CI_pred <- c("FSLE", "SSH", "mixed_layer", "ice_conc", 'ice_diff',  
+CI_pred <- c("FSLE", "SSH", "mixed_layer", "ice_conc", 'fsle_orient',  
              "EKE_0",'o2_0','productivity_0')
 mod_formula <- paste(species, "~", paste(CI_pred, collapse = " + "))
 CI_vif <- glm(as.formula(mod_formula), family = binomial, data = CI_binned)
 vif(CI_vif)
-# FSLE            SSH    mixed_layer       ice_conc       ice_diff          EKE_0           o2_0 productivity_0 
-# 1.971877       2.347452       2.614383       1.658311       1.642630       1.187306       1.931834       2.141908 
+# FSLE            SSH    mixed_layer       ice_conc    fsle_orient          EKE_0           o2_0 productivity_0 
+# 2.321529       2.181409       2.092698       1.760676       1.530792       1.169407       2.203508       2.361326 
 
 # Final Clarence Island predictors: FSLE, SSH, mixed layer thickness, sea ice concentration,
-#   ice concentration difference, EKE, oxygen concentration, net primary production
+#   FSLE orientation, EKE, oxygen concentration, net primary production
 
 # -------------- Step 5: Build GAMs ------------------------
 # Function to visualize GAMs on a probability scale with the proper confidence interval
@@ -340,8 +341,9 @@ plotGam1 <- function(gam) {
 #   ice concentration difference, EKE, salinity
 
 # not adding weights for EI because ratio of 0s to 1s is already close to 1:1 (13:17)
-# starting with FSLE
-EI_gam <- gam(Gm ~ s(FSLE,k=4,sp=0.1), family=binomial, data=EI_binned)
+# starting with FSLE magnitude and orientation
+# COME BACK TO THIS TO WORK OUT INTERACTION
+EI_gam <- gam(Gm ~ s(FSLE:fsle_orient,k=4,sp=0.1), family=binomial, data=EI_binned)
 # summary:
 # Formula:
 #   Gm ~ s(FSLE, k = 4, sp = 0.1)
@@ -373,6 +375,9 @@ EI_gam <- gam(Gm ~ s(SSH,k=4,sp=0.1), family=binomial, data=EI_binned)
 # 
 # R-sq.(adj) =  -0.0357   Deviance explained = 1.27%
 # UBRE = 0.51703  Scale est. = 1         n = 30
+# ................................................
+# trying log scale
+EI_gam <- gam(Gm ~ s(SSH,k=4,sp=0.1), family=binomial, data=EI_binned)
 
 # mixed layer depth
 EI_gam <- gam(Gm ~ s(mixed_layer,k=4,sp=0.1), family=binomial, data=EI_binned)
@@ -410,24 +415,7 @@ EI_gam <- gam(Gm ~ s(ice_conc,k=4,sp=0.1), family=binomial, data=EI_binned)
 # R-sq.(adj) =  0.144   Deviance explained = 14.8%
 # UBRE = 0.31068  Scale est. = 1         n = 30
 
-# ice concentration difference
-EI_gam <- gam(Gm ~ s(ice_diff,k=4,sp=0.1), family=binomial, data=EI_binned)
-# summary:
-# Formula:
-#   Gm ~ s(ice_diff, k = 4, sp = 0.1)
-# 
-# Parametric coefficients:
-#   Estimate Std. Error z value Pr(>|z|)
-# (Intercept)   0.2866     0.3752   0.764    0.445
-# 
-# Approximate significance of smooth terms:
-#   edf Ref.df Chi.sq p-value
-# s(ice_diff) 1.52  1.832  1.187   0.489
-# 
-# R-sq.(adj) =  0.026   Deviance explained = 6.28%
-# UBRE = 0.45053  Scale est. = 1         n = 30
-
-# salinity
+# salinity (LOG TRANSFORM)
 EI_gam <- gam(Gm ~ s(salinity_0,k=4,sp=0.1), family=binomial, data=EI_binned)
 # summary
 # Formula:
