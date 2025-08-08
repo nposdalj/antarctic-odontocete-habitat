@@ -1189,7 +1189,7 @@ visualizeGAM <- function(gam, predictors, siteName) {
   
   # Aggregating all the plots into one figure
   final_plot <- wrap_plots(all_plots, nrow = row, ncol = col, guides = "collect") &
-    plot_annotation(title = paste0("Long-Finned Pilot Whale at ", siteName,
+    plot_annotation(title = paste0(name(species)," at ", siteName,
                                    " (",deviance,"% Deviance Explained)"))
   
   print(final_plot)
