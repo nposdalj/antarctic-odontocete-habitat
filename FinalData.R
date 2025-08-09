@@ -218,9 +218,11 @@ aggregatePlot <- function(data, vars, plot_species, depths,site) {
     # Adding timeseries for species presence to list of plots
     species_ts <- ggplot(data = data, mapping = aes(x = date, y = .data[[plot_species]])) + 
       geom_col(width = 1, color = "purple") + scale_x_date(date_labels = "%b %Y") +
-      labs(y = NULL, x = paste(plot_species,' Presence')) +
+      labs(y = NULL, x = NULL, title = paste(plot_species,' Presence')) +
       theme(plot.margin = unit(c(0, 0.5, 0, 0.5),units = "line"), 
-            axis.title = element_text(size=10))  
+            plot.title = element_text(size=10, margin = margin(t = 0, b = 0), face = 'bold'),
+            panel.background = element_rect(fill = 'white', color='black'),
+            panel.grid.major = element_line(color = 'gray'))  
     all_plots[[length(all_plots)+1]] <- species_ts
     
     title <- paste0(name(plot_species)," at ", name(site))
@@ -303,12 +305,27 @@ makePlot <- function(data, var, depths, species) {
       label <- 'Chlorophyll-a (mg/m^3)'
       col <- 'darkolivegreen'
     }
-    return(
-      ggplot(data = data, mapping = aes(x = date, y = .data[[var]])) + geom_line(color = col) +
-        xlab(label) + ylab(NULL) +  scale_x_date(labels = NULL) +
-        theme(plot.margin = unit(c(0, 0.5, 0, 0.5),units = "line"), 
-              axis.title = element_text(size=10))  
-    )
+    
+    if(var == tail(environmental_vars,1)) { # adding depth labels for the bottom plot
+      return(ggplot(data = data, mapping = aes(x = date, y = .data[[var]])) + 
+               geom_line(color = col, linewidth = 1) +
+               xlab(NULL) + ylab(NULL) + labs(title = label) +
+               scale_x_date(date_labels = "%b %Y") +
+               theme(plot.margin = unit(c(0, 0.5, 0, 0.5),units = "line"), 
+                     plot.title = element_text(size=10, margin = margin(t = 0, b = 0), face = 'bold'),
+                     panel.background = element_rect(fill = 'white', color='black'),
+                     panel.grid.major = element_line(color = 'gray')))
+    } else {
+      return(ggplot(data = data, mapping = aes(x = date, y = .data[[var]])) + 
+               geom_line(color = col, linewidth = 1) +
+               xlab(NULL) + ylab(NULL) + labs(title = label) + 
+               scale_x_date(labels = NULL) +
+               theme(plot.margin = unit(c(0, 0.5, 0.3, 0.5),units = "line"), 
+                     plot.title = element_text(size=10, margin = margin(t = 0, b = 0), face = 'bold'),
+                     panel.background = element_rect(fill = 'white',color = 'black'),
+                     panel.grid.major = element_line(color = 'gray')))
+    }
+    
   } else {
     # Plotting across depths for relevant variables
     # Only if species is specified
@@ -319,16 +336,21 @@ makePlot <- function(data, var, depths, species) {
       # Returning plot colored by depth
       return(ggplot(data = data, aes(x=date, y=.data[[var]], color=factor(depth))) + 
                geom_line() + 
-               labs(y = NULL, color = "Depth (m)", x = label) +  scale_x_date(labels = NULL) +
-               theme(plot.margin = unit(c(0, 0.5, 0, 0.5),units = "line"), 
-                     axis.title = element_text(size=10)))  
+               labs(y = NULL, color = "Depth (m)", x = NULL, title = label) + 
+               scale_x_date(labels = NULL) +
+               theme(plot.margin = unit(c(0, 0.5, 0.3, 0.5),units = "line"), 
+                     plot.title = element_text(size=10, margin = margin(t = 0, b = 0), face = 'bold'),
+                     panel.background = element_rect(fill = 'white',color = 'black'),
+                     panel.grid.major = element_line(color = 'gray'))) 
     } else { # Plotting surface values for variables without depth
-      return(
-        ggplot(data = data, mapping = aes(x = date, y = .data[[var]])) + geom_line(color = col) +
-          xlab(label) + ylab(NULL) +  scale_x_date(labels = NULL) +
-          theme(plot.margin = unit(c(0, 0.5, 0, 0.5),units = "line"), 
-                axis.title = element_text(size=10)) 
-      )
+      return(ggplot(data = data, mapping = aes(x = date, y = .data[[var]])) + 
+               geom_line(color = col, linewidth = 1) +
+               xlab(NULL) + ylab(NULL) + labs(title = label) + 
+               scale_x_date(labels = NULL) +
+               theme(plot.margin = unit(c(0, 0.5, 0.3, 0.5),units = "line"), 
+                     plot.title = element_text(size=10, margin = margin(t = 0, b = 0), face = 'bold'),
+                     panel.background = element_rect(fill = 'white',color = 'black'),
+                     panel.grid.major = element_line(color = 'gray')))
     }
   }
   

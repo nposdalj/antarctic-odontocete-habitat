@@ -2491,14 +2491,14 @@ visualizeGAM <- function(gam, predictors, sp) {
     row <- 1
     col <- 1
   } else if(length(predictors) == 2) {
-    row <- 2
-    col <- 1
+    row <- 1
+    col <- 2
   } else if(length(predictors) == 3 || length(predictors) == 4) {
     row <- 2
     col <- 2
   } else if(length(predictors) == 5 || length(predictors) == 6) {
-    row <- 3
-    col <- 2
+    row <- 2
+    col <- 3
   } else {
     row <- 3
     col <- 3
