@@ -2006,7 +2006,7 @@ CI_final <- gam(Gm ~ s(ice_conc,k=4) + s(FSLE,fsle_orient,k=4) + s(SSH,k=4) + s(
 
 # ------------------ Step 6: Visualize GAMs -------------------
 # Function to create a cleaner visualization of a GAM model
-visualizeGAM <- function(gam, predictors, siteName) {
+visualizeGAM <- function(gam, predictors, sp) {
   # Accessing and preparing data
   # extracting data to use for a ggplot of the GAM
   plot_info <- smooth_estimates(gam)
@@ -2035,7 +2035,10 @@ visualizeGAM <- function(gam, predictors, siteName) {
     
     # Extracting p-value
     current_p_val <- p_values[[paste0("s(", p, ")")]]
-    current_plot$label <- paste0("p-value = ", round(current_p_val,5))
+    if(current_p_val == 0) {
+      current_p_val <- 1 * 10^-6
+    }
+    current_plot$label <- paste0("p-value = ", round(current_p_val,6))
     
     # Setting position for p-value label
     current_plot$label_x <- max(current_plot[,p],na.rm=TRUE) - 
@@ -2076,20 +2079,23 @@ visualizeGAM <- function(gam, predictors, siteName) {
     row <- 1
     col <- 1
   } else if(length(predictors) == 2) {
-    row <- 2
-    col <- 1
+    row <- 1
+    col <- 2
   } else if(length(predictors) == 3 || length(predictors) == 4) {
     row <- 2
     col <- 2
   } else if(length(predictors) == 5 || length(predictors) == 6) {
+    row <- 2
+    col <- 3
+  } else {
     row <- 3
-    col <- 2
+    col <- 3
   }
   
   # Aggregating all the plots into one figure
   final_plot <- wrap_plots(all_plots, nrow = row, ncol = col, guides = "collect") &
-    plot_annotation(title = paste0("Long-Finned Pilot Whale at ", siteName,
-                                  " (",deviance,"% Deviance Explained)"))
+    plot_annotation(title = paste0("Long-finned Pilot Whale at ",
+                                   sp," Presence (",deviance,"% Deviance Explained)"))
   
   print(final_plot)
   return(final_plot)

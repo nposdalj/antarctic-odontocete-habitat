@@ -8,7 +8,7 @@ library(graticule)
 
 # ----------------------- Method 1: WGS84 Projection Map  --------------------------------
 # site map with default map projection
-bathymetry <- raster("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/GMRTbathymetry_lowerres.grd")
+bathymetry <- raster("/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/GMRTbathymetry_lowerres.grd")
 
 # crop bathymetry grid to bounding box
 bbox <- extent(-59, -52, -62, -60)

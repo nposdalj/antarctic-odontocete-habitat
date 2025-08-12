@@ -38,7 +38,7 @@ name <- function(abbrev) {
   return(fullname)
 }
 # ------------- Step 1: Load Data -----------------
-allData <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Data/allData_40km.csv")
+allData <- read.csv("/Users/trisha/scripps/antarctic-odontocete-habitat/Data/allData_40km.csv")
 allData <- allData %>% subset(select=-X)
 allData$date <- as.Date(allData$date, "%Y-%m-%d")
 # Filter by species relevant data
@@ -92,7 +92,7 @@ if(species =='BW29') {
 
 
 # ------------- Step 2: Average by ACF ------------
-acf_table <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Autocorrelation/acf_table.csv")
+acf_table <- read.csv("/Users/trisha/scripps/antarctic-odontocete-habitat/Autocorrelation/acf_table.csv")
 acfVal <- function(site) {
   row_idx <- which(acf_table$site == site) # Row index for the site
   acf_val <- acf_table[row_idx,species][[1]]
@@ -1507,7 +1507,7 @@ CI_final <- gam(BW29 ~ s(temperature_0,k=4,sp=0.1) + s(FSLE,k=4,sp=0.1) +
 
 # ------------------ Step 6: Visualize GAMs -------------------
 # Function to create a cleaner visualization of a GAM model
-visualizeGAM <- function(gam, predictors, siteName) {
+visualizeGAM <- function(gam, predictors, sp) {
   # Accessing and preparing data
   # extracting data to use for a ggplot of the GAM
   plot_info <- smooth_estimates(gam)
@@ -1536,7 +1536,10 @@ visualizeGAM <- function(gam, predictors, siteName) {
     
     # Extracting p-value
     current_p_val <- p_values[[paste0("s(", p, ")")]]
-    current_plot$label <- paste0("p-value = ", round(current_p_val,5))
+    if(current_p_val == 0) {
+      current_p_val <- 1 * 10^-6
+    }
+    current_plot$label <- paste0("p-value = ", round(current_p_val,6))
     
     # Setting position for p-value label
     current_plot$label_x <- max(current_plot[,p],na.rm=TRUE) - 
@@ -1577,20 +1580,23 @@ visualizeGAM <- function(gam, predictors, siteName) {
     row <- 1
     col <- 1
   } else if(length(predictors) == 2) {
-    row <- 2
-    col <- 1
+    row <- 1
+    col <- 2
   } else if(length(predictors) == 3 || length(predictors) == 4) {
     row <- 2
     col <- 2
   } else if(length(predictors) == 5 || length(predictors) == 6) {
+    row <- 2
+    col <- 3
+  } else {
     row <- 3
-    col <- 2
+    col <- 3
   }
   
   # Aggregating all the plots into one figure
   final_plot <- wrap_plots(all_plots, nrow = row, ncol = col, guides = "collect") &
-    plot_annotation(title = paste0(name(species), " at ", siteName,
-                                   " (",deviance,"% Deviance Explained)"))
+    plot_annotation(title = paste0("Southern Botttlenose Whale at ",
+                                   sp," Presence (",deviance,"% Deviance Explained)"))
   
   print(final_plot)
   return(final_plot)

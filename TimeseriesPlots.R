@@ -4,13 +4,13 @@ library(lubridate)
 
 # -----------------Step 1: Prepping data---------------------
 # Load data from EIE/CI site
-CI <- read.csv("/Users/trisha/R/antarctic-odontocete-habitat/Data/Antarc_EIE_01_Odontocetes.csv")
+CI <- read.csv("/Users/trisha/scripps/antarctic-odontocete-habitat/Data/Antarc_EIE_01_Odontocetes.csv")
 CI <- CI[-c(1:2,7)]
 # Load data from SSI/KGI site
-KGI <- read.csv("/Users/trisha/R/antarctic-odontocete-habitat/Data/Antarc_SSI_01_Odontocetes.csv")
+KGI <- read.csv("/Users/trisha/scripps/antarctic-odontocete-habitat/Data/Antarc_SSI_01_Odontocetes.csv")
 KGI <- KGI[-c(1:2,7)]
 # Load data from EI site
-EI <- read.csv("/Users/trisha/R/antarctic-odontocete-habitat/Data/Antarc_EI_01_Odontocetes.csv")
+EI <- read.csv("/Users/trisha/scripps/antarctic-odontocete-habitat/Data/Antarc_EI_01_Odontocetes.csv")
 EI <- EI[-c(1:2,7:12)]
 # Join all data into one dataframe and save it
 CI$Site <- "CI"
@@ -50,7 +50,7 @@ odontocete <- odontocete %>% # Reformat dataframe
     # New column that has length of call in seconds
   )
 odontocete$Call.time[odontocete$Call.time == 0] <- 1 # If a call is 0 seconds, correct to 1
-write.csv(odontocete,"/Users/trisha/R/antarctic-odontocete-habitat/Data/Antarc_Odontocetes.csv")
+write.csv(odontocete,"/Users/trisha/scripps/antarctic-odontocete-habitat/Data/Antarc_Odontocetes.csv")
 
 
 
@@ -92,7 +92,7 @@ hrTimeseries <- function(site, species) { # Function to create a timeseries plot
 
 hrSite_ts <- function(site) { # Function to aggregate all plots from a particular site
   # Joining all species-specific timeseries into one figure
-  windows(width = 20, height = 30)
+  #windows(width = 20, height = 30)
   final_plot <- grid.arrange(hrTimeseries(site, "BW29"), hrTimeseries(site, "BW37"), 
                              hrTimeseries(site, "BW58"), hrTimeseries(site, "Gm"), 
                              hrTimeseries(site, "Oo"), hrTimeseries(site, "Pm"),
@@ -107,7 +107,7 @@ CI_ts <- hrSite_ts("CI")
 
 
 # ----------------Step 3: Daily Binned Timeseries (By Site) ------------
-dailyDetections <- read.csv("/Users/trisha/R/antarctic-odontocete-habitat/Data/dailyDetections.csv")
+dailyDetections <- read.csv("/Users/trisha/scripps/antarctic-odontocete-habitat/Data/dailyDetections.csv")
 
 dayTimeseries <- function(site, species) { # Function to create a timeseries plot
   # Filtering dataframe by the relevant site
@@ -158,8 +158,9 @@ combined_ts <- function(species) { # Function to create & aggregate all plots fr
   dailyDetections$week_start <- floor_date(dailyDetections$Day, unit = "week")
   
   # Creating dataframe that stores the total call days for each week, only for the relevant species
-  week <- dailyDetections %>% group_by(week_start) %>%
-    summarise(total_days = sum(.data[[species]], na.rm = TRUE), .groups = "drop")
+  week <- dailyDetections %>% group_by(week_start) %>% 
+    reframe(total_days = sum(.data[[species]],na.rm=TRUE),Site = Site,week_start = week_start) %>% unique()
+  
   
   # Dataframe of weeks with partial recording effort
   # Use in a geom_point layer that indicates weeks with partial effort
@@ -176,7 +177,7 @@ combined_ts <- function(species) { # Function to create & aggregate all plots fr
   # timeseries across all site
   ggplot(data = week, mapping = aes(x = week_start, y = total_days)) + 
     # adding species presence
-    geom_col(width = 2, color = "darkslateblue", fill = 'darkslateblue') +
+    geom_col(width = 3, mapping = aes(fill = Site)) +
     
     # adding weeks with partial recording effort
     geom_point(data=partialEffort, aes(x=partialWeeks,y=daysRecorded), color ='slateblue', alpha = 0.7) +
@@ -191,8 +192,16 @@ combined_ts <- function(species) { # Function to create & aggregate all plots fr
     labs(title = paste0(name(species),' Acoustic Presence'), y = 'Number of Days Detected', 
          x = 'Week') + 
     scale_y_continuous(limits=c(0, 7.5), expand = c(0, 0)) +
-    theme(plot.subtitle = element_text(size = 9, face = "bold"),
-          plot.margin = unit(c(0.5, 2, 0.5, 1), units='line')) + theme_bw()
+    scale_fill_manual(values = c("EI" = "deeppink", 
+                                 "KGI" = "darkmagenta", "CI" = "royalblue")) +
+    theme_bw() + theme(plot.subtitle = element_text(size = 9, face = "bold"),
+                       plot.margin = unit(c(0.5, 2, 0.5, 1), units='line'),
+                       legend.position = 'right', 
+                       legend.margin = margin(t = 0, unit='cm'),
+                       legend.title = element_text(size=9,face='bold'),
+                       legend.text = element_text(size=8),
+                       legend.key.size = unit(.8,'line'),
+                       plot.title =element_text(face='bold'))
 }
 
 Gm_week <- combined_ts('Gm')

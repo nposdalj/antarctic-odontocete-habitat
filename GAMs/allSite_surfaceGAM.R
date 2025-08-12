@@ -38,7 +38,7 @@ name <- function(abbrev) {
 }
 
 # ------------- Step 1: Load Data -----------------
-allData <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Data/allData_40km.csv")
+allData <- read.csv("/Users/trisha/scripps/antarctic-odontocete-habitat/Data/allData_40km.csv")
 allData <- allData %>% subset(select=-X)
 allData$date <- as.Date(allData$date, "%Y-%m-%d")
 # Filter by species relevant data
@@ -55,7 +55,7 @@ surface <- allData %>%
 
 # ------------- Step 2: Average by ACF ------------
 # Binning each site by its ACF value, then joining the three sites into one dataframe
-acf_table <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Autocorrelation/acf_table.csv")
+acf_table <- read.csv("/Users/trisha/scripps/antarctic-odontocete-habitat/Autocorrelation/acf_table.csv")
 acfVal <- function(site,sp) {
   row_idx <- which(acf_table$site == site) # Row index for the site
   acf_val <- acf_table[row_idx,sp][[1]]
@@ -2320,7 +2320,34 @@ Gm_gam <- gam(Gm ~ s(ice_conc,k=4) + s(productivity_0,k=4) + s(EKE_0_mad,k=4) +
 # .................................................
 # Ice regime not significant, not keeping it in the model
 
-
+# try dropping EKE because it has large error, almost not significant
+Gm_gam <- gam(Gm ~ s(ice_conc,k=4) + s(productivity_0,k=4) + s(EKE_0_mad,k=4) +
+                s(mixed_layer,k=4) + s(o2_0,k=4), 
+              family=binomial, method='REML', weights=weights, data=Gm_binned)
+# AIC: 474.8803
+# summary:
+# Formula:
+#   Gm ~ s(ice_conc, k = 4) + s(productivity_0, k = 4) + s(EKE_0_mad, 
+#                                                          k = 4) + s(mixed_layer, k = 4) + s(o2_0, k = 4)
+# 
+# Parametric coefficients:
+#   Estimate Std. Error z value Pr(>|z|)    
+# (Intercept)  -1.8143     0.2652  -6.841 7.89e-12 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# Approximate significance of smooth terms:
+#   edf Ref.df Chi.sq  p-value    
+# s(ice_conc)       1.000  1.000  50.19  < 2e-16 ***
+#   s(productivity_0) 2.732  2.941  40.07  < 2e-16 ***
+#   s(EKE_0_mad)      2.724  2.942  35.17 1.28e-06 ***
+#   s(mixed_layer)    2.844  2.979  12.90 0.003757 ** 
+#   s(o2_0)           2.567  2.864  23.43 0.000489 ***
+#   ---
+#   Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+# 
+# R-sq.(adj) =  0.463   Deviance explained =   46%
+# -REML =    242  Scale est. = 1         n = 366
 
 # REFINING FINAL MODEL
 # final significant variables: sea ice concentration, primary production,
@@ -2394,7 +2421,7 @@ Gm_final <- gam(Gm ~ s(ice_conc,k=4) + s(productivity_0,k=4) + s(EKE_0_mad,k=4) 
                 s(mixed_layer,k=4) + s(EKE_0,k=4) + s(o2_0,k=4), 
               family=binomial, method='REML', weights=weights, data=Gm_binned)
 # final predictors:
-Gm_pred <- c('ice_conc','productivity_0','EKE_0','mixed_layer','EKE_0_mad','o2_0')
+Gm_pred <- c('ice_conc','productivity_0','mixed_layer','EKE_0_mad','o2_0')
 # Formula:
 #   Gm ~ s(ice_conc, k = 4) + s(productivity_0, k = 4) + s(EKE_0_mad, 
 #                                                          k = 4) + s(mixed_layer, k = 4) + s(EKE_0, k = 4) + s(o2_0, 
@@ -2450,7 +2477,10 @@ visualizeGAM <- function(gam, predictors, sp) {
     
     # Extracting p-value
     current_p_val <- p_values[[paste0("s(", p, ")")]]
-    current_plot$label <- paste0("p-value = ", round(current_p_val,5))
+    if(current_p_val == 0) {
+      current_p_val <- 1 * 10^-6
+    }
+    current_plot$label <- paste0("p-value = ", round(current_p_val,6))
     
     # Setting position for p-value label
     current_plot$label_x <- max(current_plot[,p],na.rm=TRUE) - 
@@ -2556,3 +2586,4 @@ Gm_plots <- visualizeGAM(Gm_final, Gm_pred, 'Long-finned Pilot Whale')
 BW37_plots <- visualizeGAM(BW37_final, BW37_pred, "Gray's and Strap-toothed Whale")
 # note: effect of ice regime not visualized for BW37 because it's not a smooth term
 BW29_plots <- visualizeGAM(BW29_final, BW29_pred, 'Southern Bottlenose Whale')
+
