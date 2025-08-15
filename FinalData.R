@@ -5,7 +5,7 @@ library(gridExtra)
 library(patchwork)
 
 # ---------------- Step 0: Create base final dataframe-------------
-dailyDetection <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Data/dailyDetections.csv")
+dailyDetection <- read.csv("/Users/trisha/scripps/antarctic-odontocete-habitat/Data/dailyDetections.csv")
 allData <- dailyDetection
 allData$date <- allData$Day
 allData <- allData %>% subset(select = -Day)
@@ -21,7 +21,7 @@ species <- as.vector(c('none')) # options: BW29, BW37, BW58, Oo, Pm, Gm, none (f
 sites <- as.vector(c('KGI')) # options: EI, KGI, CI
 
 # --------------- Step 1: Format/Add Antarctic Oscillation Index ----------------
-AAO <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Daily_AAO.csv")
+AAO <- read.csv("/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/Daily_AAO.csv")
 
 # Make date column
 # Add zero in front of single digit dates
@@ -66,7 +66,10 @@ allData <- rename(allData, AAO = aao_index_cdas)
 # -------------------- Step 2: Add Copernicus Data--------
 # sst, salinity, depth variables, eke, ssh, etc.
 # ice variables, chlorophyll, oxygen
-copernicus <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Copernicus/copernicus_40km.csv")
+copernicus <- read.csv("/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/Copernicus/copernicus_40km.csv")
+laggedCopernicus <- read.csv("/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/Copernicus/lagged/copernicusLagged.csv")
+laggedCopernicus <- laggedCopernicus %>% rename(Site = site)
+
 allData <- merge(allData, copernicus, by=intersect(names(allData), names(copernicus)))
 allData <- allData %>% subset(select=-c(n_velocity_mean,e_velocity_mean,sice_e_veloc_mean,
                                         sice_n_veloc_mean,n_velocity_mad,e_velocity_mad))
@@ -88,9 +91,9 @@ allData <- allData %>%
 allData <- unique(allData)
 
 # -------------------- Step 3: Format/Add FSLEs------------
-EI_fsle <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/AVISO/EI_fsle_40km")
-KGI_fsle <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/AVISO/KGI_fsle_40km")
-CI_fsle <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/AVISO/CI_fsle_40km")
+EI_fsle <- read.csv("/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/AVISO/EI_fsle_40km")
+KGI_fsle <- read.csv("/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/AVISO/KGI_fsle_40km")
+CI_fsle <- read.csv("/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/AVISO/CI_fsle_40km")
 
 EI_fsle$Site <- "EI"
 KGI_fsle$Site <- "KGI"
@@ -153,7 +156,12 @@ for (x in 1:nrow(allData_wide)) {
     allData_wide[x,'bathymetry'] <- 1030
 }
 
-write.csv(allData_wide, "C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Data/allData.csv")
+# adding lagged data
+allData_wide <- merge(allData_wide, laggedCopernicus, 
+                      by=intersect(names(allData_wide), names(laggedCopernicus)))
+
+
+write.csv(allData_wide, "/Users/trisha/scripps/antarctic-odontocete-habitat/Data/allData.csv")
 
 
 

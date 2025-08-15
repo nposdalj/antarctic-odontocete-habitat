@@ -153,8 +153,12 @@ density_df <- density_df %>% mutate(pressure = ((1023.6*9.80665*depth)/10000))
 density_df <- density_df %>% mutate(density = swRho(salinity_mean, temperature=temp_mean, 
                                                     pressure=pressure, eos = 'unesco'))
 
+# adding density difference column (absolute deviation from average at that depth level)
+density_df <- density_df %>% group_by(depth) %>% mutate(avg_density = mean(density,na.rm=TRUE)) %>% ungroup()
+density_df <- density_df %>% mutate(dens_diff = density - avg_density) %>% subset(select = -avg_density)
+
 # function for density profile
-densityProfile <- function(site,data) {
+densityProfile <- function(site,data,indicator) {
   # setting date bounds
   if(site == 'EI') {
     start <- as.Date('2014-03-05') 
@@ -170,27 +174,44 @@ densityProfile <- function(site,data) {
   # filtering for site dates
   filtered <- data %>% filter(date >= start & date <= end)
   
-  
-  profile <- ggplot(data = filtered, aes(x=date,y=-depth,fill=density)) + 
-    # colored rectangle for each depth range
-    geom_rect(aes(ymin = -depth_min, ymax = -depth_max,
-                  xmin=date-0.5, xmax=date+0.5)) +
-    scale_fill_viridis_c(option = "plasma", name ='Density (kg/m3)',direction = -1) +
-    
-    # axis labels, plot scales, and theme
-    labs(y = 'Depth Below Sea Surface (m)', x = 'Date', title = paste0('Density Profile at ',site)) +
-    scale_y_continuous(expand = c(0, 0)) + 
-    scale_x_date(breaks = seq(start,end, by = '2 month'),
-                 date_labels = "%b %Y", expand = c(0, 0)) + theme_bw()
+  if(indicator == 'abs') {
+    profile <- ggplot(data = filtered, aes(x=date,y=-depth,fill=density)) + 
+      # colored rectangle for each depth range
+      geom_rect(aes(ymin = -depth_min, ymax = -depth_max,
+                    xmin=date-0.5, xmax=date+0.5)) +
+      scale_fill_viridis_c(option = "plasma", name ='Density (kg/m3)',direction = -1) +
+      
+      # axis labels, plot scales, and theme
+      labs(y = 'Depth Below Sea Surface (m)', x = 'Date', title = paste0('Density Profile at ',site)) +
+      scale_y_continuous(expand = c(0, 0)) + 
+      scale_x_date(breaks = seq(start,end, by = '2 month'),
+                   date_labels = "%b %Y", expand = c(0, 0)) + theme_bw()
+  } else if(indicator == 'rel') {
+    profile <- ggplot(data = filtered, aes(x=date,y=-depth,fill=dens_diff)) + 
+      # colored rectangle for each depth range
+      geom_rect(aes(ymin = -depth_min, ymax = -depth_max,
+                    xmin=date-0.5, xmax=date+0.5)) +
+      scale_fill_viridis_c(option = "plasma", name ='Density Difference (kg/m3)',direction = -1) +
+      
+      # axis labels, plot scales, and theme
+      labs(y = 'Depth Below Sea Surface (m)', x = 'Date', title = paste0('Density Mean Deviations at ',site)) +
+      scale_y_continuous(expand = c(0, 0)) + 
+      scale_x_date(breaks = seq(start,end, by = '2 month'),
+                   date_labels = "%b %Y", expand = c(0, 0)) + theme_bw()
+  }
   
   return(profile)
 }
 
-EI_density <- densityProfile('EI',density_df)
-KGI_density <- densityProfile('KGI',density_df)
-CI_density <- densityProfile('CI',density_df)
+EI_density <- densityProfile('EI',density_df,'abs')
+KGI_density <- densityProfile('KGI',density_df,'abs')
+CI_density <- densityProfile('CI',density_df,'abs')
 
 shallow <- density_df %>% filter(depth < 150)
-EI_shallow <- densityProfile('EI',shallow)
-KGI_shallow <- densityProfile('KGI',shallow)
-CI_shallow <- densityProfile('CI',shallow)
+EI_shallow <- densityProfile('EI',shallow,'abs')
+KGI_shallow <- densityProfile('KGI',shallow,'abs')
+CI_shallow <- densityProfile('CI',shallow,'abs')
+
+EI_diff <- densityProfile('EI',density_df,'rel')
+KGI_diff <- densityProfile('KGI',density_df,'rel')
+CI_diff <- densityProfile('CI',density_df,'rel')
