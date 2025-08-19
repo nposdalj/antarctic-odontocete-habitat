@@ -8,23 +8,25 @@ library(gridExtra) # for grid.arrange
 # -----------------Step 2: Extract Oceanographic Data-------------------
 # Load Copernicus data
 # surface data, all vars
-# EI_cop <- nc_open("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Copernicus/EI_ALLsurf_cmems_mod_glo_phy_my_0.083deg_P1D-m_1751990714294.nc")
-# KGI_cop <- nc_open("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Copernicus/KGI_ALLsurf_cmems_mod_glo_phy_my_0.083deg_P1D-m_1751990804735.nc")
-# CI_cop <- nc_open("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Copernicus/CI_ALLsurf_cmems_mod_glo_phy_my_0.083deg_P1D-m_1751990301834.nc")
+# EI_cop <- nc_open("/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/Copernicus/EI_ALLsurf_cmems_mod_glo_phy_my_0.083deg_P1D-m_1751990714294.nc")
+# KGI_cop <- nc_open("/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/Copernicus/KGI_ALLsurf_cmems_mod_glo_phy_my_0.083deg_P1D-m_1751990804735.nc")
+# CI_cop <- nc_open("/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/Copernicus/CI_ALLsurf_cmems_mod_glo_phy_my_0.083deg_P1D-m_1751990301834.nc")
 # 0.5 degree, all vars
-# EI_cop <- nc_open("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Copernicus/EIhfdeg_cmems_mod_glo_phy_my_0.083deg_P1D-m_1752518931575.nc")
-# KGI_cop <- nc_open("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Copernicus/KGIhfdeg_cmems_mod_glo_phy_my_0.083deg_P1D-m_1752529248292.nc")
-# CI_cop <- nc_open("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Copernicus/CIhfdeg_cmems_mod_glo_phy_my_0.083deg_P1D-m_1752529427864.nc")
+# EI_cop <- nc_open("/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/Copernicus/EIhfdeg_cmems_mod_glo_phy_my_0.083deg_P1D-m_1752518931575.nc")
+# KGI_cop <- nc_open("/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/Copernicus/KGIhfdeg_cmems_mod_glo_phy_my_0.083deg_P1D-m_1752529248292.nc")
+# CI_cop <- nc_open("/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/Copernicus/CIhfdeg_cmems_mod_glo_phy_my_0.083deg_P1D-m_1752529427864.nc")
 
 # all physical vars 
-EI_cop <- nc_open("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Copernicus/EI40km_cmems_mod_glo_phy_my_0.083deg_P1D-m_1753134290538.nc")
-KGI_cop <- nc_open("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Copernicus/KGI40km_cmems_mod_glo_phy_my_0.083deg_P1D-m_1753134447092.nc")
-CI_cop <- nc_open("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Copernicus/CI40km_cmems_mod_glo_phy_my_0.083deg_P1D-m_1753134569824.nc")
+# downloaded from: https://data.marine.copernicus.eu/product/GLOBAL_MULTIYEAR_PHY_001_030/download
+EI_cop <- nc_open("/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/Copernicus/EI40km_cmems_mod_glo_phy_my_0.083deg_P1D-m_1753134290538.nc")
+KGI_cop <- nc_open("/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/Copernicus/KGI40km_cmems_mod_glo_phy_my_0.083deg_P1D-m_1753134447092.nc")
+CI_cop <- nc_open("/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/Copernicus/CI40km_cmems_mod_glo_phy_my_0.083deg_P1D-m_1753134569824.nc")
 
 # biogeochem vars (oxygen and chlorophyll)
-EI_bio <- nc_open("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Copernicus/EI40km_cmems_mod_glo_bgc_my_0.25deg_P1D-m_1753133719978.nc")
-KGI_bio <- nc_open("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Copernicus/KGI40km_cmems_mod_glo_bgc_my_0.25deg_P1D-m_1753133880987.nc")
-CI_bio <- nc_open("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Copernicus/CI40km_cmems_mod_glo_bgc_my_0.25deg_P1D-m_1753134029874.nc")
+# downloaded from: https://data.marine.copernicus.eu/product/GLOBAL_MULTIYEAR_BGC_001_029/download 
+EI_bio <- nc_open("/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/Copernicus/EI40km_cmems_mod_glo_bgc_my_0.25deg_P1D-m_1753133719978.nc")
+KGI_bio <- nc_open("/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/Copernicus/KGI40km_cmems_mod_glo_bgc_my_0.25deg_P1D-m_1753133880987.nc")
+CI_bio <- nc_open("/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/Copernicus/CI40km_cmems_mod_glo_bgc_my_0.25deg_P1D-m_1753134029874.nc")
 
 # Ensuring that variable dimensions index correctly
 fix_grid <- function(var, four_dim = FALSE) {
@@ -76,17 +78,25 @@ physFromNC <- function(data) {
                    mixed_layer = as.vector(mixed_layer), sice_conc = as.vector(sice_conc), sice_thick = as.vector(sice_thick),
                    sice_e_veloc = as.vector(sice_e_veloc), sice_n_veloc = as.vector(sice_n_veloc), temp=as.vector(temp))
   
-  # Filtering by different depths & correcting for rounding errors
+  # Correcting for rounding errors in depth
   df <- df %>% mutate(depth = round(depth, 3))
-  filtered <- df %>% filter(depth %in% round(c(0.494025, 15.810070, 453.937714, 1684.284058, 380.213013, 643.566772, 11.405000,
-                      65.807266, 763.333130, 902.339294),3))
+  # ignore below lines, just if you want to filter for chosen dive depths
+  # filtered <- df %>% filter(depth %in% round(c(0.494025, 15.810070, 453.937714, 1684.284058, 380.213013, 643.566772, 11.405000,
+  #                     65.807266, 763.333130, 902.339294),3))
+  # filtered <- filtered %>% mutate(date = as.Date(date))
 
   # Creating a dataframe with daily spatial averages
-  avg_df <- filtered %>% group_by(date, depth) %>% summarize(ssh = mean(ssh, na.rm=TRUE), n_velocity = mean(n_velocity, na.rm=TRUE),
-                                                e_velocity = mean(e_velocity, na.rm=TRUE), salinity = mean(salinity, na.rm=TRUE),
-                                                mixed_layer = mean(mixed_layer, na.rm=TRUE), sice_conc = mean(sice_conc, na.rm=TRUE),
-                                                sice_thick = mean(sice_thick, na.rm=TRUE), sice_e_veloc = mean(sice_e_veloc, na.rm=TRUE),
-                                                sice_n_veloc = mean(sice_n_veloc, na.rm=TRUE), temp=mean(temp, na.rm=TRUE))
+  # spatial standard deviations as well
+  # Mean absolute deviation for north & east velocity to make variability calculations easier for EKE later on
+  avg_df <- df %>% group_by(date, depth) %>% summarize(ssh_mean = mean(ssh, na.rm=TRUE), ssh_sd = sd(ssh, na.rm=TRUE),
+                                                             n_velocity_mean = mean(n_velocity, na.rm=TRUE), n_velocity_mad = mad(n_velocity, na.rm=TRUE),
+                                                             e_velocity_mean = mean(e_velocity, na.rm=TRUE), e_velocity_mad = mad(e_velocity,na.rm=TRUE),
+                                                             salinity_mean = mean(salinity, na.rm=TRUE), salinity_sd = sd(salinity,na.rm=TRUE),
+                                                             mixed_layer_mean = mean(mixed_layer, na.rm=TRUE), mixed_layer_sd = sd(mixed_layer, na.rm=TRUE),
+                                                             sice_conc_mean = mean(sice_conc, na.rm=TRUE), ice_conc_sd = sd(sice_conc, na.rm=TRUE),
+                                                             sice_thick_mean = mean(sice_thick, na.rm=TRUE), sice_e_veloc_mean = mean(sice_e_veloc, na.rm=TRUE),
+                                                             sice_n_veloc_mean = mean(sice_n_veloc, na.rm=TRUE), 
+                                                             temp_mean=mean(temp, na.rm=TRUE), temp_sd=sd(temp, na.rm=TRUE))
   avg_df <- ungroup(avg_df)
   return(avg_df)
 }
@@ -125,12 +135,14 @@ bioFromNC <- function(data) {
   
   # Filtering by different depths & correcting for rounding errors
   df <- df %>% mutate(depth = round(depth, 3))
-  filtered <- df %>% filter(depth %in% round(c(0.506, 16.525, 457.626, 1652.568, 370.689, 628.026, 11.774,
-                                               69.022, 773.368, 947.448),3))
+  # ignore below lines, just if you want to filter for chosen dive depths
+  # filtered <- df %>% filter(depth %in% round(c(0.506, 16.525, 457.626, 1652.568, 370.689, 628.026, 11.774,
+  #                                              69.022, 773.368, 947.448),3))
   
   # Creating a dataframe with daily spatial averages
-  avg_df <- filtered %>% group_by(date, depth) %>% summarize(chla = mean(chla, na.rm=TRUE), o2 = mean(o2, na.rm=TRUE),
-                                                             productivity = mean(productivity, na.rm=TRUE))
+  avg_df <- df %>% group_by(date, depth) %>% summarize(chla_mean = mean(chla, na.rm=TRUE), chla_sd = sd(chla,na.rm=TRUE),
+                                                             o2_mean = mean(o2, na.rm=TRUE), o2_sd = sd(o2, na.rm=TRUE),
+                                                             productivity_mean = mean(productivity, na.rm=TRUE), productivity_sd = sd(productivity,na.rm=TRUE))
   avg_df <- ungroup(avg_df)
   return(avg_df)
 }
@@ -152,24 +164,89 @@ depthMatch <- function(data) {
   data$depth[data$depth %in% c(773.368, 763.333)] <- 768
   data$depth[data$depth %in% c(947.448, 902.339)] <- 920
   data$depth[data$depth %in% c(1652.568, 1684.284)] <- 1665
-  return(data)
+  filtered <- data %>% filter(depth %in% c(0.5, 11, 16, 67, 375, 455, 635,
+                                               768, 920, 1665))
+  return(filtered)
 }
 EI_final <- left_join(depthMatch(EI_biodf),depthMatch(EI_phys), by = c('date', 'depth'))
 KGI_final <- left_join(depthMatch(KGI_biodf),depthMatch(KGI_phys), by = c('date', 'depth'))
 CI_final <- left_join(depthMatch(CI_biodf),depthMatch(CI_phys), by = c('date', 'depth'))
 
 
+# -------------------- Step 3: Make all depth dataframe --------------
+depthMatchALL <- function(data, type) {
+  # matching depths from biogeochem and ocean physics data
+  data$depth[data$depth %in% c(0.506, 0.494)] <- 0.5
+  data$depth[data$depth %in% c(1.556, 1.541)] <- 1.5
+  data$depth[data$depth %in% c(2.668, 2.646)] <- 2.6
+  data$depth[data$depth %in% c(3.856, 3.819)] <- 3.8
+  data$depth[data$depth %in% c(5.140, 5.078)] <- 5
+  data$depth[data$depth %in% c(6.543, 6.441)] <- 6.5
+  data$depth[data$depth %in% c(8.093, 7.930)] <- 8
+  data$depth[data$depth %in% c(9.823, 9.573)] <- 10
+  data$depth[data$depth %in% c(11.774, 11.405)] <- 11
+  data$depth[data$depth %in% c(13.991, 13.467)] <- 14
+  data$depth[data$depth %in% c(16.525, 15.810)] <- 16
+  data$depth[data$depth %in% c(19.430, 18.496)] <- 19
+  data$depth[data$depth %in% c(22.758, 21.599)] <- 22
+  data$depth[data$depth %in% c(26.558, 25.211)] <- 26
+  data$depth[data$depth %in% c(30.875, 29.445)] <- 30
+  data$depth[data$depth %in% c(35.740, 34.434)] <- 35
+  data$depth[data$depth %in% c(41.180, 40.344)] <- 41
+  data$depth[data$depth %in% c(47.212, 47.374)] <- 47
+  data$depth[data$depth %in% c(53.851, 55.764)] <- 54
+  data$depth[data$depth %in% c(69.022, 65.807)] <- 67 
+  data$depth[data$depth %in% c(77.611, 77.854)] <- 77
+  data$depth[data$depth %in% c(97.041, 92.326)] <- 95 
+  data$depth[data$depth %in% c(108.030, 109.729)] <- 109
+  data$depth[data$depth %in% c(133.076, 130.666)] <- 130
+  data$depth[data$depth %in% c(180.550, 186.126)] <- 183
+  data$depth[data$depth %in% c(221.141, 222.475)] <- 222
+  data$depth[data$depth %in% c(271.356, 266.040)] <- 270
+  data$depth[data$depth %in% c(333.863, 318.127)] <- 325
+  data$depth[data$depth %in% c(370.689, 380.213)] <- 375
+  data$depth[data$depth %in% c(457.626, 453.938)] <- 455
+  data$depth[data$depth %in% c(565.292, 541.089)] <- 555
+  data$depth[data$depth %in% c(628.026, 643.567)] <- 635
+  data$depth[data$depth %in% c(773.368, 763.333)] <- 768
+  data$depth[data$depth %in% c(947.448, 902.339)] <- 920
+  data$depth[data$depth %in% c(1045.854, 1062.440)] <- 1055
+  data$depth[data$depth %in% c(1265.861, 1245.291)] <- 1255
+  data$depth[data$depth %in% c(1516.364, 1452.251)] <- 1585
+  data$depth[data$depth %in% c(1652.568, 1684.284)] <- 1665
+  # Depths in biogeochem that are not in physics:
+  #    61.113, 86.929 120.000 147.406 163.165 199.790 244.891 300.888 
+  #    411.794 508.640 697.259 856.679 1151.991 1387.377
+  return(data)
+}
+EI_depths <- left_join(depthMatchALL(EI_biodf),depthMatchALL(EI_phys), by = c('date', 'depth'))
+KGI_depths <- left_join(depthMatchALL(KGI_biodf),depthMatchALL(KGI_phys), by = c('date', 'depth'))
+CI_depths <- left_join(depthMatchALL(CI_biodf),depthMatchALL(CI_phys), by = c('date', 'depth'))
+
 # --------------------------Step 3: Compute EKE--------------------------
 getEKE <- function(data) {
   # get u' and v' for EKE equation
-  data <- data %>% group_by(depth) %>% mutate(u_mean = mean(e_velocity,na.rm=TRUE),
-                                                   v_mean = mean(n_velocity, na.rm=TRUE))
-  data <- data %>% group_by(depth) %>% mutate(u_prime = e_velocity-u_mean, 
-                                                 v_prime = n_velocity-v_mean)
+  data <- data %>% group_by(depth) %>% mutate(u_mean = mean(e_velocity_mean,na.rm=TRUE),
+                                                   v_mean = mean(n_velocity_mean, na.rm=TRUE))
+  data <- data %>% group_by(depth) %>% mutate(u_prime = e_velocity_mean-u_mean, 
+                                                 v_prime = n_velocity_mean-v_mean)
   
   # EKE = 1/2((u')^2 + (v')^2)
   # units: cm^2/s^2
-  data$EKE <- (0.5 * ((data$u_prime^2) + (data$v_prime^2))) * 10000
+  data$EKE_mean <- (0.5 * ((data$u_prime^2) + (data$v_prime^2))) * 10000
+  data <- subset(data, select = -c(u_mean, v_mean, u_prime,v_prime))
+  data <- data %>% ungroup()
+  
+  # similar process, but applied on velocity median absolute deviations to get daily MAD for EKE
+  # get u' and v' for EKE equation
+  data <- data %>% group_by(depth) %>% mutate(u_mean = mean(e_velocity_mad,na.rm=TRUE),
+                                              v_mean = mean(n_velocity_mad, na.rm=TRUE))
+  data <- data %>% group_by(depth) %>% mutate(u_prime = e_velocity_mad-u_mean, 
+                                              v_prime = n_velocity_mad-v_mean)
+  
+  # EKE = 1/2((u')^2 + (v')^2)
+  # units: cm^2/s^2
+  data$EKE_mad <- (0.5 * ((data$u_prime^2) + (data$v_prime^2))) * 10000
   data <- subset(data, select = -c(u_mean, v_mean, u_prime,v_prime))
   data <- data %>% ungroup()
   return(data)
@@ -177,6 +254,9 @@ getEKE <- function(data) {
 EI_final <- getEKE(EI_final)
 KGI_final <- getEKE(KGI_final)
 CI_final <- getEKE(CI_final)
+EI_depths <- getEKE(EI_depths)
+KGI_depths <- getEKE(KGI_depths)
+CI_depths <- getEKE(CI_depths)
 
 # -------------------------Step 4: Make Oceanographic Data Timeseries------------------------
 # Function to create timeseries by site (for surface only)
@@ -184,40 +264,40 @@ CopTimeseries <- function(data, site) {
   data$date <- as.Date(data$date)
   data <- filter(data, depth == 0.5)
   # sea surface height
-  ssh <- ggplot(data = data, mapping = aes(x = date, y = ssh)) + geom_line(color = "tomato", linewidth = 1) + 
+  ssh <- ggplot(data = data, mapping = aes(x = date, y = ssh_mean)) + geom_line(color = "tomato", linewidth = 1) + 
     labs(x = "Sea Surface Height", y = "meters") + scale_x_date(date_labels = "%b %Y") + 
     theme(plot.margin = unit(c(.5, 0.5, .5, 0.5), units = "line"))
   # eddy kinetic energy
-    EKE <- ggplot(data = data, mapping = aes(x = date, y = EKE)) + 
+    EKE <- ggplot(data = data, mapping = aes(x = date, y = EKE_mean)) + 
     geom_line(color = "mediumpurple", linewidth = 1) + 
     labs(x = "Eddy Kinetic Energy", y = "cm^2/s^2") + scale_x_date(date_labels = "%b %Y") + 
     theme(plot.margin = unit(c(.5, 0.5, .5, 0.5), units = "line"))
   # salinity
-  salinity <- ggplot(data = data, mapping = aes(x = date, y = salinity)) + geom_line(color = "gold", linewidth = 1) + 
+  salinity <- ggplot(data = data, mapping = aes(x = date, y = salinity_mean)) + geom_line(color = "gold", linewidth = 1) + 
     labs(x = "Salinity", y = "psu") + scale_x_date(date_labels = "%b %Y") + 
     theme(plot.margin = unit(c(.5, 0.5, .5, 0.5), units = "line"))
   # mixed layer depth
-  mixed <- ggplot(data = data, mapping = aes(x = date, y = mixed_layer)) + 
+  mixed <- ggplot(data = data, mapping = aes(x = date, y = mixed_layer_mean)) + 
     geom_line(color = "mediumseagreen", linewidth = 1) + 
     labs(x = "Mixed Layer Thickness", y = "meters") + scale_x_date(date_labels = "%b %Y") +
     theme(plot.margin = unit(c(.5, 0.5, .5, 0.5), units = "line"))
   # temperature
-  temp <- ggplot(data = data, mapping = aes(x = date, y = temp)) + 
+  temp <- ggplot(data = data, mapping = aes(x = date, y = temp_mean)) + 
     geom_line(color = "darkred", linewidth = 1) + 
     labs(x = "Temperature", y = "C") + scale_x_date(date_labels = "%b %Y") +
     theme(plot.margin = unit(c(.5, 0.5, .5, 0.5), units = "line"))
   # chlorophyll
-  chl <- ggplot(data = data, mapping = aes(x = date, y = chla)) + 
+  chl <- ggplot(data = data, mapping = aes(x = date, y = chla_mean)) + 
     geom_line(color = "darkgreen", linewidth = 1) + 
     labs(x = "Chlorophyll-a", y = "mg/m3") + scale_x_date(date_labels = "%b %Y") +
     theme(plot.margin = unit(c(.5, 0.5, .5, 0.5), units = "line"))
   # oxygen
-  o2 <- ggplot(data = data, mapping = aes(x = date, y = o2)) + 
+  o2 <- ggplot(data = data, mapping = aes(x = date, y = o2_mean)) + 
     geom_line(color = "navy", linewidth = 1) + 
     labs(x = "Oxygen Concentration", y = "mmol/m3") + scale_x_date(date_labels = "%b %Y") +
     theme(plot.margin = unit(c(.5, 0.5, .5, 0.5), units = "line"))
   # productivity
-  prod <- ggplot(data = data, mapping = aes(x = date, y = productivity)) + 
+  prod <- ggplot(data = data, mapping = aes(x = date, y = productivity_mean)) + 
     geom_line(color = "deeppink", linewidth = 1) + 
     labs(x = "Primary Production", y = "mg/m3/day") + scale_x_date(date_labels = "%b %Y") +
     theme(plot.margin = unit(c(.5, 0.5, .5, 0.5), units = "line"))
@@ -235,11 +315,11 @@ CopTimeseries(CI_final, "Clarence Island")
 # -------------------------Step 5: Make Sea Ice Data Timeseries------------------------
 # Function to create timeseries by site
 IceTimeseries <- function(data, site) {
-  data$sice_conc <- data$sice_conc * 100
+  data$sice_conc <- data$sice_conc_mean * 100
   data$date <- as.Date(data$date)
-  data <- filter(data, depth == 0.494)
+  data <- filter(data, depth == 0.5)
   # sea ice thickness
-  thickness <- ggplot(data = data, mapping = aes(x = date, y = sice_thick)) + geom_line(color = "navy", linewidth = 1) + 
+  thickness <- ggplot(data = data, mapping = aes(x = date, y = sice_thick_mean)) + geom_line(color = "navy", linewidth = 1) + 
     labs(x = "Sea Ice Thickness", y = "meters") + scale_x_date(date_labels = "%b %Y") + 
     theme(plot.margin = unit(c(1, 0.5, 1, 0.5), units = "line"))
   # sea ice concentration
@@ -248,11 +328,11 @@ IceTimeseries <- function(data, site) {
     labs(x = "Sea Ice Concentration", y = "%") + scale_x_date(date_labels = "%b %Y") +
     theme(plot.margin = unit(c(1, 0.5, 1, 0.5), units = "line"))
   # northward velocity
-  nvelocity <- ggplot(data = data, mapping = aes(x = date, y = sice_n_veloc)) + geom_line(color = "mediumslateblue", linewidth = 1) + 
+  nvelocity <- ggplot(data = data, mapping = aes(x = date, y = sice_n_veloc_mean)) + geom_line(color = "mediumslateblue", linewidth = 1) + 
     labs(x = "Sea Ice North Velocity", y = "m/s") + scale_x_date(date_labels = "%b %Y") + 
     theme(plot.margin = unit(c(1, 0.5, 1, 0.5), units = "line"))
   # eastward velocity
-  evelocity <- ggplot(data = data, mapping = aes(x = date, y = sice_e_veloc)) + 
+  evelocity <- ggplot(data = data, mapping = aes(x = date, y = sice_e_veloc_mean)) + 
     geom_line(color = "dodgerblue", linewidth = 1) + 
     labs(x = "Sea Ice East Velocity", y = "m/s") + scale_x_date(date_labels = "%b %Y") +
     theme(plot.margin = unit(c(1, 0.5, 1, 0.5), units = "line"))
@@ -271,6 +351,11 @@ IceTimeseries(CI_final, "Clarence Island")
 EI_final$Site <- 'EI'
 KGI_final$Site <- 'KGI'
 CI_final$Site <- 'CI'
+EI_depths$Site <- 'EI'
+KGI_depths$Site <- 'KGI'
+CI_depths$Site <- 'CI'
 
 final <- rbind(EI_final,KGI_final,CI_final)
-write.csv(final, "C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Copernicus/copernicus.csv") # write destination
+final_depths <- rbind(EI_depths,KGI_depths,CI_depths)
+write.csv(final, "/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/Copernicus/copernicus.csv") # write destination
+write.csv(final_depths, "/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/Copernicus/copernicus_depths.csv") # write destination

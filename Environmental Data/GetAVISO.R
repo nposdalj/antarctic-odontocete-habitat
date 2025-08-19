@@ -76,7 +76,8 @@ subsetAVISO <- function(site) {
     # Average over space for each depth
     daily_avg <- grid %>%
       group_by(date) %>%
-      summarise(fsle = mean(fsle, na.rm = TRUE), fsle_orient = mean(fsle_orient,na.rm=TRUE),
+      summarise(fsle_mean = mean(fsle, na.rm = TRUE), fsle_sd = sd(fsle, na.rm=TRUE),
+                fsle_orientmean = mean(fsle_orient,na.rm=TRUE), fsle_orientsd = sd(fsle, na.rm=TRUE),
                 .groups = "drop")
     
     df <- bind_rows(df, daily_avg)
@@ -92,28 +93,28 @@ CI_fsle <- subsetAVISO('CI')
 write.csv(CI_fsle, "C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/AVISO/CI_fsle")
 
 # ------------------ Step 2: FSLE Timeseries -------------------------
-EI_fsleplot <- ggplot(data = EI_fsle, mapping = aes(x = date, y = fsle)) + 
+EI_fsleplot <- ggplot(data = EI_fsle, mapping = aes(x = date, y = fsle_mean)) + 
   geom_line(color = "mediumvioletred", linewidth = 0.7) + 
   labs(x = NULL, y = "FSLE Magnitude", title="Elephant Island") +
   scale_x_date(date_labels = "%b %Y")
-KGI_fsleplot <- ggplot(data = KGI_fsle, mapping = aes(x = date, y = fsle)) + 
+KGI_fsleplot <- ggplot(data = KGI_fsle, mapping = aes(x = date, y = fsle_mean)) + 
   geom_line(color = "mediumvioletred", linewidth = 0.7) + 
   labs(x = NULL, y = "FSLE Magnitude", title="King George Island") +
   scale_x_date(date_labels = "%b %Y")
-CI_fsleplot <- ggplot(data = CI_fsle, mapping = aes(x = date, y = fsle)) + 
+CI_fsleplot <- ggplot(data = CI_fsle, mapping = aes(x = date, y = fsle_mean)) + 
   geom_line(color = "mediumvioletred", linewidth = 0.7) + 
   labs(x = NULL, y = "FSLE Magnitude", title="Clarence Island") +
   scale_x_date(date_labels = "%b %Y")
 
-EI_fslv <- ggplot(data = EI_fsle, mapping = aes(x = date, y = fsle_orient)) + 
+EI_fslv <- ggplot(data = EI_fsle, mapping = aes(x = date, y = fsle_orientmean)) + 
   geom_line(color = "cornflowerblue", linewidth = 0.7) + 
   labs(x = NULL, y = "FSLE Orientation", title="Elephant Island") +
   scale_x_date(date_labels = "%b %Y")
-KGI_fslv <- ggplot(data = KGI_fsle, mapping = aes(x = date, y = fsle_orient)) + 
+KGI_fslv <- ggplot(data = KGI_fsle, mapping = aes(x = date, y = fsle_orientmean)) + 
   geom_line(color = "cornflowerblue", linewidth = 0.7) + 
   labs(x = NULL, y = "FSLE Orientation", title="King George Island") +
   scale_x_date(date_labels = "%b %Y")
-CI_fslv <- ggplot(data = CI_fsle, mapping = aes(x = date, y = fsle_orient)) + 
+CI_fslv <- ggplot(data = CI_fsle, mapping = aes(x = date, y = fsle_orientmean)) + 
   geom_line(color = "cornflowerblue", linewidth = 0.7) + 
   labs(x = NULL, y = "FSLE Orientation", title="Clarence Island") +
   scale_x_date(date_labels = "%b %Y")
