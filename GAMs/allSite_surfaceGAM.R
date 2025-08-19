@@ -130,6 +130,9 @@ for(s in species) {
   assign(x = paste0(s, "_binned"), value = combineSites(s), envir = .GlobalEnv)
 }
 
+# making deiced version of data, excluding days where ice concentration is > 0.5
+#  because we know whales will not be present
+Gm_deiced <- Gm_binned %>% filter(ice_conc < 0.2)
 
 
 # ------------- Step 3: Plot Presence Timeseries --------------

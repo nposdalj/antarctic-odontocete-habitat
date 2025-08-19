@@ -8,11 +8,9 @@ library(patchwork)
 
 # ------------- Step 0: Choose Species ----------------
 # Modeling Pm for all sites it is present (EI & CI), 40 km radius environmental data
-species <- c('BW29') # options: BW29, BW37, Oo, Pm, Gm
-# BW29 = Southern bottlenose whale, BW37 = Gray's and strap-toothed whales
-# Oo = Killer whale, Pm = Sperm Whale, Gm = Long-finned pilot whale
+species <- c('BW29')
 # Note: not enough data to model BW58 at any site
-sites <- c('EI','KGI','CI')
+sites <- c('EI','KGI','CI') # sites where BW29 can be modeled
 
 # Function to write out full name of a species/site code
 name <- function(abbrev) {
@@ -41,54 +39,21 @@ name <- function(abbrev) {
 allData <- read.csv("/Users/trisha/scripps/antarctic-odontocete-habitat/Data/allData_40km.csv")
 allData <- allData %>% subset(select=-X)
 allData$date <- as.Date(allData$date, "%Y-%m-%d")
+
+depths <- c(0, 768) # depths for BW29
 # Filter by species relevant data
 # Only adding standard deviations of surface variables, feel free to change that if needed
-if(species =='BW29') {
-  depths <- c(0, 768)
-  sp_specific <- allData %>% subset(select=-c(BW37,BW58,Oo,Pm,Gm)) %>%
-    subset(select=c(date,Site,julian_day,get(species),AAO,SSH,mixed_layer,ice_conc,ice_thickness,ice_diff,FSLE,
-                    temperature_0,salinity_0,EKE_0,temperature_768,salinity_768,EKE_768,EKE_mad_768,
-                    chla_0,o2_0,productivity_0,chla_768,o2_768,productivity_768,
-                    ssh_sd, mixed_layer_sd, fsle_sd, temp_sd_0, salinity_sd_0, EKE_mad_0, 
-                    chla_sd_0,o2_sd_0,productivity_sd_0,ice_regime,fsle_orient))
-} else if(species =='BW37') {
-  depths <- c(0, 67, 920) 
-  sp_specific <- allData %>% subset(select=-c(BW29,BW58,Oo,Pm,Gm)) %>%
-    subset(select=c(date,Site,julian_day,get(species),AAO,SSH,mixed_layer,ice_conc,ice_thickness,ice_diff,FSLE,
-                    temperature_0,salinity_0,EKE_0,temperature_67,salinity_67,EKE_67,
-                    temperature_920,salinity_920,EKE_920, chla_0,o2_0,productivity_0,chla_67,
-                    o2_67,productivity_67, chla_920,o2_920,productivity_920,
-                    ssh_sd, mixed_layer_sd, fsle_sd, temp_sd_0, salinity_sd_0, EKE_mad_0, 
-                    chla_sd_0,o2_sd_0,productivity_sd_0,ice_regime))
-} else if(species =='Oo') {
-  depths <- c(0, 11, 455) 
-  sp_specific <- allData  %>% subset(select=-c(BW29,BW37,BW58,Pm,Gm)) %>%
-    subset(select=c(date,Site,julian_day,get(species),AAO,SSH,mixed_layer,ice_conc,ice_thickness,ice_diff,FSLE,
-                    temperature_0,salinity_0,EKE_0,temperature_11,salinity_11,EKE_11,
-                    temperature_455,salinity_455,EKE_455, chla_0,o2_0,productivity_0,chla_11,
-                    o2_11,productivity_11, chla_455,o2_455,productivity_455,
-                    ssh_sd, mixed_layer_sd, fsle_sd, temp_sd_0, salinity_sd_0, EKE_mad_0, 
-                    chla_sd_0,o2_sd_0,productivity_sd_0,ice_regime))
-} else if(species =='Pm') {
-  depths <- c(0, 375, 1665)
-  sp_specific <- allData  %>% subset(select=-c(BW29,BW37,BW58,Oo,Gm)) %>%
-    subset(select=c(date,julian_day,Site,get(species),AAO,SSH,mixed_layer,ice_conc,ice_thickness,ice_diff,FSLE,
-                    temperature_0,salinity_0,EKE_0,temperature_375,salinity_375,EKE_375,
-                    temperature_1665,salinity_1665,EKE_1665, chla_0,o2_0,productivity_0,chla_375,
-                    o2_375,productivity_375, chla_1665,o2_1665,productivity_1665,
-                    ssh_sd, mixed_layer_sd, fsle_sd, temp_sd_0, salinity_sd_0, EKE_mad_0, 
-                    chla_sd_0,o2_sd_0,productivity_sd_0,ice_regime))
-} else if(species =='Gm') {
-  depths <- c(0, 16, 635) 
-  sp_specific <- allData  %>% subset(select=-c(BW29,BW37,BW58,Oo,Pm)) %>%
-    subset(select=c(date,Site,julian_day,get(species),AAO,SSH,mixed_layer,ice_conc,ice_thickness,ice_diff,FSLE,
-                    temperature_0,salinity_0,EKE_0,temperature_16,salinity_16,EKE_16,
-                    temperature_635,salinity_635,EKE_635, chla_0,o2_0,productivity_0,chla_16,
-                    o2_16,productivity_16, chla_635,o2_635,productivity_635,
-                    ssh_sd, mixed_layer_sd, fsle_sd, temp_sd_0, salinity_sd_0, EKE_mad_0, 
-                    chla_sd_0,o2_sd_0,productivity_sd_0,ice_regime))
-} else
-  print('Species code not valid. Check inputs.')
+# only adding lags for chlorophyll and primary production, change that later if needed
+#   other variables with lags available: temperature, salinity, EKE
+sp_specific <- allData %>% subset(select=-c(BW37,BW58,Oo,Pm,Gm)) %>%
+  subset(select=c(date,Site,julian_day,get(species),AAO,SSH,mixed_layer,ice_conc,ice_thickness,ice_diff,FSLE,
+                  temperature_0,salinity_0,EKE_0,temperature_768,salinity_768,EKE_768,EKE_mad_768,
+                  chla_0,o2_0,productivity_0,chla_768,o2_768,productivity_768,
+                  ssh_sd, mixed_layer_sd, fsle_sd, temp_sd_0, salinity_sd_0, EKE_mad_0, 
+                  chla_sd_0,o2_sd_0,productivity_sd_0,ice_regime,fsle_orient, chla_1mon,
+                  chla_2mon, chla_3mon, chla_4mon, chla_5mon, chla_6mon, productivity_1mon,
+                  productivity_2mon, productivity_3mon, productivity_4mon, 
+                  productivity_5mon, productivity_6mon))
 
 
 # ------------- Step 2: Average by ACF ------------
@@ -185,7 +150,279 @@ binned_plot <- grid.arrange(binnedTimeseries(EI_binned,'EI',EI_acf), binnedTimes
                             top = paste('ACF Binned Species Presence for ', name(species), sep=''))
 
 
-# -------------- Step 4: VIF for Correlation -------------------
+# ------------- Step 4: Find Relevant Lags ---------------------
+# first: ACF bin lagged data
+binLagged <- function(site, bin) {
+  # Filtering by site and adding bin_start date
+  sp_filtered <- sp_specific %>% filter(Site==site) %>%
+    mutate(bin_start = floor_date(date, unit = paste(bin, 'days')))
+  
+  # Function for taking mean with correct syntax for a column
+  mean_col <- function(col) expr(mean(!!sym(col), na.rm = TRUE))
+  
+  # Expression to summarize species presence
+  species_expr <- set_names(list(expr(as.integer(any(!!sym(species) == 1)))), species)
+  
+  # Taking the average of lagged variables at surface
+  summarize_cols <- list(chla = mean_col('chla_0'), productivity = mean_col('productivity_0'),
+                         chla_1mon = mean_col('chla_1mon'), chla_2mon  = mean_col('chla_2mon'), 
+                         chla_3mon = mean_col('chla_3mon'), chla_4mon = mean_col('chla_4mon'), 
+                         chla_5mon = mean_col('chla_5mon'), chla_6mon = mean_col('chla_6mon'), 
+                         productivity_1mon = mean_col('productivity_1mon'),
+                         productivity_2mon = mean_col('productivity_2mon'), 
+                         productivity_3mon = mean_col('productivity_3mon'), 
+                         productivity_4mon = mean_col('productivity_4mon'), 
+                         productivity_5mon = mean_col('productivity_5mon'), 
+                         productivity_6mon = mean_col('productivity_6mon'))
+  
+  # Joining together dataframes and grouping to make final binned data
+  all_summaries <- c(species_expr, summarize_cols)
+  sp_binned <- sp_filtered %>%
+    group_by(bin_start, Site) %>%
+    summarise(!!!all_summaries, .groups = "drop")
+  
+  return(sp_binned)
+}
+EI_lagged <- binLagged('EI',EI_acf)
+KGI_lagged <- binLagged('KGI',KGI_acf)
+CI_lagged <- binLagged('CI',CI_acf)
+
+# find significant lags for each site
+# not adding weights yet
+# ELEPHANT ISLAND
+# ...PRIMARY PRODUCTION...
+# no lag
+EI_lag <- gam(BW29 ~ s(productivity,k=4), 
+              family = binomial, method = 'REML', data = EI_lagged)
+# p-value: 0.0874, deviance explained: 6.62%, AIC: 93.305
+
+# 1 month lag
+EI_lag <- gam(BW29 ~ s(productivity_1mon,k=4), 
+              family = binomial, method = 'REML', data = EI_lagged)
+# p-value: 0.0366, deviance explained: 10.9%, AIC: 89.82101
+
+# 2 month lag
+EI_lag <- gam(BW29 ~ s(productivity_2mon,k=4), 
+              family = binomial, method = 'REML', data = EI_lagged)
+# p-value: 0.0162, deviance explained: 16.2%, AIC: 84.98562
+
+# 3 month lag
+EI_lag <- gam(BW29 ~ s(productivity_3mon,k=4), 
+              family = binomial, method = 'REML', data = EI_lagged)
+# p-value: 0.0244, deviance explained: 14%, AIC: 87.24374
+
+# 4 month lag
+EI_lag <- gam(BW29 ~ s(productivity_4mon,k=4), 
+              family = binomial, method = 'REML', data = EI_lagged)
+# p-value: 0.0295, deviance explained: 5.45%, AIC: 92.11758
+
+# 5 month lag
+EI_lag <- gam(BW29 ~ s(productivity_5mon,k=4), 
+              family = binomial, method = 'REML', data = EI_lagged)
+# p-value: 0.0191, deviance explained: 6.44%, AIC: 91.18533
+
+# 6 month lag
+EI_lag <- gam(BW29 ~ s(productivity_6mon,k=4), 
+              family = binomial, method = 'REML', data = EI_lagged)
+# p-value: 0.273, deviance explained: 3.64%, AIC: 95.86187
+
+# potential lag: 2 months or 3 months, unclear if this differs enough from no lag
+
+
+# ...CHLOROPHYLL...
+# no lag
+EI_lag <- gam(BW29 ~ s(chla,k=4), 
+              family = binomial, method = 'REML', data = EI_lagged)
+# p-value: 0.0363, deviance explained: 10.2%, AIC: 90.25291
+
+# 1 month lag
+EI_lag <- gam(BW29 ~ s(chla_1mon,k=4), 
+              family = binomial, method = 'REML', data = EI_lagged)
+# p-value: 0.0443, deviance explained: 15.3%, AIC: 86.5193
+
+# 2 month lag
+EI_lag <- gam(BW29 ~ s(chla_2mon,k=4), 
+              family = binomial, method = 'REML', data = EI_lagged)
+# p-value: 0.0323, deviance explained: 5.24%, AIC: 92.30685
+
+# 3 month lag
+EI_lag <- gam(BW29 ~ s(chla_3mon,k=4), 
+              family = binomial, method = 'REML', data = EI_lagged)
+# p-value: 0.942, deviance explained: 0.00646%, AIC: 97.18528
+
+# 4 month lag
+EI_lag <- gam(BW29 ~ s(chla_4mon,k=4), 
+              family = binomial, method = 'REML', data = EI_lagged)
+# p-value: 0.3, deviance explained: 1.16%, AIC: 96.10516
+
+# 5 month lag
+EI_lag <- gam(BW29 ~ s(chla_5mon,k=4), 
+              family = binomial, method = 'REML', data = EI_lagged)
+# p-value: 0.0311, deviance explained: 9.21%, AIC: 90.80349
+
+# 6 month lag
+EI_lag <- gam(BW29 ~ s(chla_6mon,k=4), 
+              family = binomial, method = 'REML', data = EI_lagged)
+# p-value: 0.202, deviance explained: 7.03%, AIC: 94.39475
+
+# could lag by 1 month but unclear if this differs enough
+
+
+# KING GEORGE ISLAND
+# ...PRIMARY PRODUCTION...
+# no lag
+KGI_lag <- gam(BW29 ~ s(productivity,k=4), 
+               family = binomial, method = 'REML', data = KGI_lagged)
+# p-value: 0.0365, deviance explained: 13.9%, AIC: 128.6554
+
+# 1 month lag
+KGI_lag <- gam(BW29 ~ s(productivity_1mon,k=4), 
+              family = binomial, method = 'REML', data = KGI_lagged)
+# p-value: 0.00328, deviance explained: 12.3%, AIC: 131.8257
+
+# 2 month lag
+KGI_lag <- gam(BW29 ~ s(productivity_2mon,k=4), 
+              family = binomial, method = 'REML', data = KGI_lagged)
+# p-value: 0.00193, deviance explained: 15.5%, AIC: 127.2153
+
+# 3 month lag
+KGI_lag <- gam(BW29 ~ s(productivity_3mon,k=4), 
+               family = binomial, method = 'REML', data = KGI_lagged)
+# p-value: 0.00262, deviance explained: 23.5%, AIC: 116.1971
+
+# 4 month lag
+KGI_lag <- gam(BW29 ~ s(productivity_4mon,k=4), 
+               family = binomial, method = 'REML', data = KGI_lagged)
+# p-value: 0.0045, deviance explained: 31.1%, AIC: 105.0422
+
+# 5 month lag
+KGI_lag <- gam(BW29 ~ s(productivity_5mon,k=4), 
+               family = binomial, method = 'REML', data = KGI_lagged)
+# p-value: 0.00371, deviance explained: 15.6%, AIC: 126.9314
+
+# 6 month lag
+KGI_lag <- gam(BW29 ~ s(productivity_6mon,k=4), 
+               family = binomial, method = 'REML', data = KGI_lagged)
+# p-value: 0.12, deviance explained: 4.37%, AIC: 142.3762
+
+# potential for 3 month lag
+
+# ...CHLOROPHYLL...
+# no lag
+KGI_lag <- gam(BW29 ~ s(chla,k=4), 
+               family = binomial, method = 'REML', data = KGI_lagged)
+# p-value: 0.0425, deviance explained: 21.6%, AIC: 117.22
+
+# 1 month lag
+KGI_lag <- gam(BW29 ~ s(chla_1mon,k=4), 
+               family = binomial, method = 'REML', data = KGI_lagged)
+# p-value: 0.0453, deviance explained: 24.7%, AIC: 113.1892
+
+# 2 month lag
+KGI_lag <- gam(BW29 ~ s(chla_2mon,k=4), 
+               family = binomial, method = 'REML', data = KGI_lagged)
+# p-value: 0.0225, deviance explained: 27.2%, AIC: 110.3339
+
+# 3 month lag
+KGI_lag <- gam(BW29 ~ s(chla_3mon,k=4), 
+               family = binomial, method = 'REML', data = KGI_lagged)
+# p-value: 0.0078, deviance explained: 21.1%, AIC: 119.1394
+
+# 4 month lag
+KGI_lag <- gam(BW29 ~ s(chla_4mon,k=4), 
+               family = binomial, method = 'REML', data = KGI_lagged)
+# p-value: 0.0131, deviance explained: 25.9%, AIC: 112.2954
+
+# 5 month lag
+KGI_lag <- gam(BW29 ~ s(chla_5mon,k=4), 
+               family = binomial, method = 'REML', data = KGI_lagged)
+# p-value: 0.0226, deviance explained: 23.1%, AIC: 116.0213
+
+# 6 month lag
+KGI_lag <- gam(BW29 ~ s(chla_6mon,k=4), 
+               family = binomial, method = 'REML', data = KGI_lagged)
+# p-value: 0.000536, deviance explained: 9.16%, AIC: 132.6771
+
+
+
+
+# CLARENCE ISLAND
+# ...PRIMARY PRODUCTION...
+# no lag
+CI_lag <- gam(BW29 ~ s(productivity,k=4), 
+              family = binomial, method = 'REML', data = CI_lagged)
+# p-value: 0.00199, deviance explained: 43%, AIC: 46.24906
+
+# 1 month lag
+CI_lag <- gam(BW29 ~ s(productivity_1mon,k=4), 
+               family = binomial, method = 'REML', data = CI_lagged)
+# p-value: 0.00163, deviance explained: 33.9%, AIC: 52.25304
+
+# 2 month lag
+CI_lag <- gam(BW29 ~ s(productivity_2mon,k=4), 
+              family = binomial, method = 'REML', data = CI_lagged)
+# p-value: 0.015, deviance explained: 10.4%, AIC: 64.34987
+
+# 3 month lag
+CI_lag <- gam(BW29 ~ s(productivity_3mon,k=4), 
+              family = binomial, method = 'REML', data = CI_lagged)
+# p-value: 0.138, deviance explained: 10.9%, AIC: 67.04191
+
+# 4 month lag
+CI_lag <- gam(BW29 ~ s(productivity_4mon,k=4), 
+              family = binomial, method = 'REML', data = CI_lagged)
+# p-value: 0.0891, deviance explained: 14.4%, AIC: 65.5318
+
+# 5 month lag
+CI_lag <- gam(BW29 ~ s(productivity_5mon,k=4), 
+              family = binomial, method = 'REML', data = CI_lagged)
+# p-value: 0.18, deviance explained: 7.34%, AIC: 69.00531
+
+# 6 month lag
+CI_lag <- gam(BW29 ~ s(productivity_6mon,k=4), 
+              family = binomial, method = 'REML', data = CI_lagged)
+# p-value: 0.000865, deviance explained: 26.3%, AIC: 53.66725
+
+
+# ...CHLOROPHYLL...
+# no lag
+CI_lag <- gam(BW29 ~ s(chla,k=4), 
+              family = binomial, method = 'REML', data = CI_lagged)
+# p-value: 0.00257, deviance explained: 41.5%, AIC: 46.74913
+
+# 1 month lag
+CI_lag <- gam(BW29 ~ s(chla_1mon,k=4), 
+               family = binomial, method = 'REML', data = CI_lagged)
+# p-value: 0.00638, deviance explained: 15.6%, AIC: 60.83212
+
+# 2 month lag
+CI_lag <- gam(BW29 ~ s(chla_2mon,k=4), 
+              family = binomial, method = 'REML', data = CI_lagged)
+# p-value: 0.0273, deviance explained: 7.99%, AIC: 65.96869
+
+# 3 month lag
+CI_lag <- gam(BW29 ~ s(chla_3mon,k=4), 
+              family = binomial, method = 'REML', data = CI_lagged)
+# p-value: 0.00499, deviance explained: 34%, AIC: 52.38674
+
+# 4 month lag
+CI_lag <- gam(BW29 ~ s(chla_4mon,k=4), 
+              family = binomial, method = 'REML', data = CI_lagged)
+# p-value: 0.00351, deviance explained: 30.8%, AIC: 54.55504
+
+# 5 month lag
+CI_lag <- gam(BW29 ~ s(chla_5mon,k=4), 
+              family = binomial, method = 'REML', data = CI_lagged)
+# p-value: 0.0132, deviance explained: 34.8%, AIC: 51.60235
+
+# 6 month lag
+CI_lag <- gam(BW29 ~ s(chla_6mon,k=4), 
+              family = binomial, method = 'REML', data = CI_lagged)
+# p-value: 0.00577, deviance explained: 16.8%, AIC: 60.06051
+
+
+
+# -------------- Step 5: VIF for Correlation -------------------
 # Including variables at depth
 # Also, not modeling AAO (varies on yearly timescales) and ice thickness
 # Including julian day only for KGI because it covers almost a whole year
@@ -195,7 +432,7 @@ binned_plot <- grid.arrange(binnedTimeseries(EI_binned,'EI',EI_acf), binnedTimes
 # ELEPHANT ISLAND
 EI_pred <- c("FSLE", "SSH", "mixed_layer", "ice_conc", "salinity_0", 
              "temperature_0", 'EKE_mad_0' ,'o2_0','chla_0','productivity_0',
-             'salinity_768','temperature_768','EKE_mad_768','o2_768')
+             'salinity_768','temperature_768','EKE_768','o2_768')
 mod_formula <- paste(species, "~", paste(EI_pred, collapse = " + "))
 EI_vif <- glm(as.formula(mod_formula),family=binomial, data = EI_binned)
 vif(EI_vif)
@@ -404,7 +641,7 @@ vif(CI_vif)
 #   768m salinity, 768m EKE, 768m oxygen
 
 
-# -------------- Step 5: Build GAMs ------------------------
+# -------------- Step 6: Build GAMs ------------------------
 # Function to visualize GAMs on a probability scale with the proper confidence interval
 # Run this for each iteration of the model to plot smooth terms
 plotGam <- function(gam) {
@@ -412,7 +649,7 @@ plotGam <- function(gam) {
 }
 
 
-# -------------------- Step 5a: Elephant Island GAM ------------------------------
+# -------------------- Step 6a: Elephant Island GAM ------------------------------
 # starting by building GAMs one predictor at a time to find significant variables
 # Similar process: weighing to reach roughly 1:1 1s to 0s and setting initial knots at 4, smoothing at 0.1
 # List of predictors are stored in EI_pred include FSLE, SSH, mixed layer, ice concentration, 
@@ -638,7 +875,7 @@ EI_final <- gam(BW29 ~ s(mixed_layer,k=4),
 # -REML = 41.001  Scale est. = 1         n = 69
 
 
-# -------------------- Step 5b: King George Island GAM ------------------------------
+# -------------------- Step 6b: King George Island GAM ------------------------------
 # starting by building GAMs one predictor at a time to find significant variables
 # Similar process: weighing to reach roughly 1:1 1s to 0s and setting initial knots at 4, smoothing at 0.1
 # List of predictors are stored in KGI_pred include FSLE, SSH, mixed layer, ice concentration, 
