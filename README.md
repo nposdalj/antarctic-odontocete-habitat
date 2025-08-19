@@ -80,7 +80,7 @@ In order to build the final GAMs, a single-variable GAM is first made with each 
 ## Additional Visualizations
 Located in "Data Visualizations" folder.
 - **FSLE_GIF.R:** Makes a GIF of monthly FSLE across CI and KGI (Feb 2015 to Dec 2016) and GIF of FSLEs on a daily resolution for a chosen month. Images for the GIFs are created and stored in "FSLE" within "GIF Images". However, new dates can be chosen for GIFs (in the script) and new images generated for visualizations over any range (though this may take time to run).
-- **SeaIceGIF.R:** Makes a GIF of monthly sea ice across all sites (with gaps for months without HARP data). Images were manually downloaded from [Bremen](https://data.seaice.uni-bremen.de/databrowser/#p=sic).
+- **SeaIceGIF.R:** Makes a GIF of monthly sea ice across all sites (with gaps for months without HARP data). Images were manually downloaded from [Universität Bremen](https://data.seaice.uni-bremen.de/databrowser/#p=sic).
 - **siteMap.R:** Uses GMRT bathymetry data (stored in "GMRT" folder of "Environmental Data") to create a map of the South Shetland Islands region with all sites indicated.
 - **DepthProfiles_Copernicus.R:** Uses Copernicus data to generate timeseries of salinity, temperature, oxygen concentration, and density (both value and deviation from mean) across depths. The depth profiles for density were derived using temperature, salinity, and a very rough estimate for pressure across depths (P = ρgh where ρ = 1023.6 kg/m3, g = 9.80665 m/s2, h = depth) that did not take into account the actual densities of the seawater above a depth bin).
 
