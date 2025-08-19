@@ -10,15 +10,16 @@ allData <- dailyDetection
 allData$date <- allData$Day
 allData <- allData %>% subset(select = -Day)
 # Choose variables + sites + species to plot
-environmental_vars <- as.vector(c('AAO','FSLE','SSH','EKE','temperature','salinity', 'chla','o2',
-                                  'productivity','mixed_layer','ice_conc','ice_thickness')) 
-# options: AAO, FSLE, SSH, EKE, temperature, salinity, mixed_layer, chla (chlorophyll), o2 (oxygen),
+environmental_vars <- as.vector(c('AAO','FSLE','SSH','EKE','EKE_mad','temperature','salinity', 'chla','o2',
+                                  'productivity','mixed_layer','ice_conc','ice_thickness','ice_diff','fsle_orient')) 
+# options: AAO, FSLE, SSH, EKE, EKE_mad, temperature, salinity, mixed_layer, chla (chlorophyll), o2 (oxygen),
 #   productivity (primary production), ice_conc (sea ice concentration), ice_thickness (sea ice thickness),
 #   ice_diff (daily difference in ice concentration), fsle_orient (orientation of fsle vector)
-species <- as.vector(c('none')) # options: BW29, BW37, BW58, Oo, Pm, Gm, none (for surface variables)
+species <- as.vector(c('BW29', 'BW37', 'BW58','Oo','Pm','Gm','none')) 
+# options: BW29, BW37, BW58, Oo, Pm, Gm, none (for surface variables)
 # BW29 = Southern bottlenose whale, BW37 & BW58 = Gray's and strap-toothed whales
 # Oo = Killer whale, Pm = Sperm Whale, Gm = Long-finned pilot whale
-sites <- as.vector(c('KGI')) # options: EI, KGI, CI
+sites <- as.vector(c('KGI','CI','EI')) # options: EI, KGI, CI
 
 # --------------- Step 1: Format/Add Antarctic Oscillation Index ----------------
 AAO <- read.csv("/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/Daily_AAO.csv")
@@ -67,7 +68,7 @@ allData <- rename(allData, AAO = aao_index_cdas)
 # sst, salinity, depth variables, eke, ssh, etc.
 # ice variables, chlorophyll, oxygen
 copernicus <- read.csv("/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/Copernicus/copernicus_40km.csv")
-laggedCopernicus <- read.csv("/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/Copernicus/lagged/copernicusLagged.csv")
+laggedCopernicus <- read.csv("/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/Copernicus/copernicusLagged.csv")
 laggedCopernicus <- laggedCopernicus %>% rename(Site = site)
 
 allData <- merge(allData, copernicus, by=intersect(names(allData), names(copernicus)))
@@ -168,8 +169,8 @@ write.csv(allData_wide, "/Users/trisha/scripps/antarctic-odontocete-habitat/Data
 # -------------------- Step 5: Make Requested Plots -------------------
 timeseriesPlots <- function(sites, species, vars) {
   # Keeping only requested variables, species, and sites
-  if(species == 'none') {
-    filtered <- allData %>% select(any_of(c('date','Site','depth', vars))) %>%
+  if('none' %in% species) {
+    filtered <- allData %>% select(any_of(c('date','Site','depth', species, vars))) %>%
       subset(Site %in% sites)
   } else {
     filtered <- allData %>% select(any_of(c('date','Site','depth',species, vars))) %>%
@@ -225,8 +226,8 @@ aggregatePlot <- function(data, vars, plot_species, depths,site) {
   else {
     # Adding timeseries for species presence to list of plots
     species_ts <- ggplot(data = data, mapping = aes(x = date, y = .data[[plot_species]])) + 
-      geom_col(width = 1, color = "purple") + scale_x_date(date_labels = "%b %Y") +
-      labs(y = NULL, x = NULL, title = paste(plot_species,' Presence')) +
+      geom_col(width = 1, color = "darkmagenta", fill = 'mediumorchid') + scale_x_date(date_labels = "%b %Y") +
+      labs(y = NULL, x = NULL, title = paste(plot_species,' Presence')) + ylim(0,1) +
       theme(plot.margin = unit(c(0, 0.5, 0, 0.5),units = "line"), 
             plot.title = element_text(size=10, margin = margin(t = 0, b = 0), face = 'bold'),
             panel.background = element_rect(fill = 'white', color='black'),
@@ -269,7 +270,10 @@ makePlot <- function(data, var, depths, species) {
     label <- 'Sea Ice Concentration'
     col <- 'mediumslateblue'
   } else if(var=='EKE') {
-    label <- "Eddy Kinetic Energy (cm^2/s^2)"
+    label <- "Eddy Kinetic Energy Value (cm^2/s^2)"
+  } else if(var=='EKE_mad') {
+    label <- "Eddy Kinetic Energy Median Absolute Deviation (cm^2/s^2)"
+    col <- 'gold'
   } else if(var=='AAO') {
     label <- 'Antarctic Oscillation Index'
     col <- 'mediumvioletred'
@@ -292,13 +296,13 @@ makePlot <- function(data, var, depths, species) {
   
   
   # Making surface plots for all variables if species is not specified
-  if(species == 'none') {
+  if('none' %in% species) {
     # setting colors for surface variables if not plotting across depths
     if(var == 'o2') {
       label <- 'Oxygen Concentration (mmol/m^3'
       col <- 'darkviolet'
     } else if(var == 'EKE') {
-      label <- 'Eddy Kinetic Energy (cm^2/s^2)'
+      label <- 'Eddy Kinetic Energy Value (cm^2/s^2)'
       col <- 'darkorange'
     } else if(var == 'temperature') {
       label <- 'Sea Surface Temperature (°C)'
@@ -343,7 +347,7 @@ makePlot <- function(data, var, depths, species) {
       data <- data %>% mutate(depth = ifelse(depth == 0.5, 'surface', as.character(depth)))
       # Returning plot colored by depth
       return(ggplot(data = data, aes(x=date, y=.data[[var]], color=factor(depth))) + 
-               geom_line() + 
+               geom_line(linewidth = 1, alpha = 0.7) + 
                labs(y = NULL, color = "Depth (m)", x = NULL, title = label) + 
                scale_x_date(labels = NULL) +
                theme(plot.margin = unit(c(0, 0.5, 0.3, 0.5),units = "line"), 
