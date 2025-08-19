@@ -1,6 +1,8 @@
 ## Overview
 Habitat modeling code for odontocete detections at three HARP sites off the Antarctic Peninsula (near the South Shetland Islands) from 2014 to 2016. Detected odontocetes include sperm whales, killer whales, 
-long-finned pilot whales, southern bottlenose whales (BW29), and Gray's and strap-toothed whales (BW37 and BW58). Detected baleen whales will be habitat modeled separately. Models used are generalized additive models (GAMs).
+long-finned pilot whales, southern bottlenose whales (BW29), and Gray's and strap-toothed whales (BW37 and BW58). Detected baleen whales will be habitat modeled separately. Models used are generalized additive models (GAMs). Use [this sheet](https://docs.google.com/spreadsheets/d/1OHM6oqbrj5t5F1CpTyd1P_VlXrbCY_-TRTlotMVn46c/edit?gid=887723042#gid=887723042) to keep track of the progress made on each model, methodologies tried, modeling results, and the environmental variables used.
+
+#### DISCLAIMER: Repository was recently reorganized, so make sure to double-check the filepath of all data loaded into a script.
 
 ## Procedure
 ### Step 1: Create timeseries of species detections.
@@ -35,8 +37,10 @@ bounding box (40 km square) and time range for each site to the specified folder
 [daily AAO index](https://www.cpc.ncep.noaa.gov/products/precip/CWlink/daily_ao_index/aao/aao.shtml)
 
 #### Next, use the script for each data source.
-Scripts are titled GetSOURCE.R. Run this to read the specified variable/s from the netCDF files, make a stacked timeseries of each variable at each site, and save the daily bounding-box averaged values of each variable
-to a .csv format.
+Scripts are titled GetSOURCE.R. Run this to read the specified variable/s from the netCDF files, make a stacked timeseries of each variable at each site, and save the daily bounding-box averaged values of each variable to a .csv format.
+
+#### Finally, determine the data sources to use for modeling.
+Only Copernicus, AVISO, and AAO data was used for creating the GAMs. Remotely sensed data (Aqua MODIS, SMOS, ERDDAP sources) were found to have too many gaps in either the 40 km bounding box or daily timeseries to be used in the modeling code, but could be useful for additional ground-truthing Copernicus models. HYCOM was not used because Copernicus performed better and had more variables (analysis found in Cop_vs_HYCOM.R and [here](https://docs.google.com/document/d/11GEedOBmrZNMdO0CqTZY6Ltp4wF0kYFU6sATxuj63Ag/edit?tab=t.0)). OCNET did not have data for our sites. University of Bremen sea ice data is probably preferable to Copernicus, however the code to access this is not currently working, so Copernicus was used for convenience (but Bremen code and QGIS bounding box files can be found in the "Sea Ice Bremen" folder witihin "Environmental Data".
 
 ### Step 3: Determine ACF values.
 *Input:* Sheet with all species/site encounters (Antarc_Odontocetes.csv)
@@ -64,15 +68,18 @@ will be used to create the GAMs. User can also specify species, sites, and varia
 
 *Output:* GAMs for chosen species
 
-*Scripts Used:* Gm_surfaceGAM.R, Pm_surfaceGAM.R, BW29_surfaceGAM.R, BW37_surfaceGAM.R, Oo_surfaceGAM.R
+*Scripts Used:* Gm_surfaceGAM.R, Pm_surfaceGAM.R, BW29_surfaceGAM.R, BW37_surfaceGAM.R, Oo_surfaceGAM.R, allSite_surfaceGAM.R, Gm_depthsGAM.R, Pm_depthsGAM.R, BW29_depthsGAM.R, BW37_depthsGAM.R, Oo_depthsGAM.R
 
-In the "GAMs" folder, there is one modeling script for each species that creates site-specific models for presence. The code automatically bins the final dataframe by ACF value (instead of daily bins) and filters for the relevant species (and depth levels). Then, it plots a timeseries for that species presence across all sites using the binned data. After that, a VIF analysis is conducted on all potential environmental variables to remove highly correlated variables. 
+In the "GAMs" folder, there are modeling scripts for each species that create site-specific models for presence (as well as all site models). The code automatically bins the final dataframe by ACF value (instead of daily bins) and filters for the relevant species (and depth levels). Then, it plots a timeseries for that species presence across all sites using the binned data. After that, a VIF analysis is conducted on all potential environmental variables to remove highly correlated variables. 
 
-In order to build the final GAMs, a single regression is first made with each of the remaining environmental predictors after the VIF analysis. Then, variables are added to the model one at a time until a final model is determined with only significant predictors. Components of the model such as number of knots, smoothing parameter, weights, etc. are also changed as needed to settle on the best model. Initial GAMs have been made just for 
-surface variables at each site (depth predictors have yet to be added).
+In order to build the final GAMs, a single-variable GAM is first made with each of the remaining environmental predictors after the VIF analysis. Then, variables are added to the model one at a time until a final model is determined with only significant predictors. Components of the model such as number of knots and the smoothing parameters are also changed as needed to settle on the best model. Initial GAMs have been made for surface variables at for each site and a combined all site model. Depth predictors have yet to be added in most cases, and each model varies slightly in terms of methodology and variables used. The status of all models and the variables they use can be found at: [Model and Environmental Variable Status Sheet](https://docs.google.com/spreadsheets/d/1OHM6oqbrj5t5F1CpTyd1P_VlXrbCY_-TRTlotMVn46c/edit?gid=887723042#gid=887723042)
+
+*Note:* Framework for the depthsGAM scripts is written out (data loaded, timeseries created, VIF analysis, etc.), but the models themselves have not been created yet.
 
 
 ### Step 6: Visualize GAMs
+
+## Additional Visualizations and Data
 
 ## Notes
 - **Cop_vs_HYCOM.R:** This script (located in the "Environmental Data" folder) was used to determine whether Copernicus or HYCOM provided a better model for remotely sensed environmental data that had too many gaps (such as SST). Copernicus was determined to be better and was used as a primary data source for the GAMs.
