@@ -18,15 +18,15 @@ library(gridExtra) # for grid.arrange
 
 # all physical vars 
 # downloaded from: https://data.marine.copernicus.eu/product/GLOBAL_MULTIYEAR_PHY_001_030/download
-EI_cop <- nc_open("/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/Copernicus/EI40km_cmems_mod_glo_phy_my_0.083deg_P1D-m_1753134290538.nc")
-KGI_cop <- nc_open("/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/Copernicus/KGI40km_cmems_mod_glo_phy_my_0.083deg_P1D-m_1753134447092.nc")
-CI_cop <- nc_open("/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/Copernicus/CI40km_cmems_mod_glo_phy_my_0.083deg_P1D-m_1753134569824.nc")
+EI_cop <- nc_open("/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/Copernicus/Physics Reanalysis/EI40km_cmems_mod_glo_phy_my_0.083deg_P1D-m_1753134290538.nc")
+KGI_cop <- nc_open("/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/Copernicus/Physics Reanalysis/KGI40km_cmems_mod_glo_phy_my_0.083deg_P1D-m_1753134447092.nc")
+CI_cop <- nc_open("/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/Copernicus/Physics Reanalysis/CI40km_cmems_mod_glo_phy_my_0.083deg_P1D-m_1753134569824.nc")
 
 # biogeochem vars (oxygen and chlorophyll)
 # downloaded from: https://data.marine.copernicus.eu/product/GLOBAL_MULTIYEAR_BGC_001_029/download 
-EI_bio <- nc_open("/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/Copernicus/EI40km_cmems_mod_glo_bgc_my_0.25deg_P1D-m_1753133719978.nc")
-KGI_bio <- nc_open("/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/Copernicus/KGI40km_cmems_mod_glo_bgc_my_0.25deg_P1D-m_1753133880987.nc")
-CI_bio <- nc_open("/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/Copernicus/CI40km_cmems_mod_glo_bgc_my_0.25deg_P1D-m_1753134029874.nc")
+EI_bio <- nc_open("/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/Copernicus/Biogeochemistry Hindcast/EI40km_cmems_mod_glo_bgc_my_0.25deg_P1D-m_1753133719978.nc")
+KGI_bio <- nc_open("/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/Copernicus/Biogeochemistry Hindcast/KGI40km_cmems_mod_glo_bgc_my_0.25deg_P1D-m_1753133880987.nc")
+CI_bio <- nc_open("/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/Copernicus/Biogeochemistry Hindcast/CI40km_cmems_mod_glo_bgc_my_0.25deg_P1D-m_1753134029874.nc")
 
 # Ensuring that variable dimensions index correctly
 fix_grid <- function(var, four_dim = FALSE) {
@@ -303,7 +303,6 @@ CopTimeseries <- function(data, site) {
     theme(plot.margin = unit(c(.5, 0.5, .5, 0.5), units = "line"))
   
   # Arrange plots to one figure
-  windows()
   final_plot <- grid.arrange(ssh, EKE, salinity, mixed, temp, chl, o2, prod, nrow = 8, top = site)
   
 }
