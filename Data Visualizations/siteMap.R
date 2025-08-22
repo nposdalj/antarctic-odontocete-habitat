@@ -5,10 +5,10 @@ library(sf)
 library(terra)
 library(ggspatial)
 library(graticule)
-
+# add a 40 kmsquare around sites
 # ----------------------- Method 1: WGS84 Projection Map  --------------------------------
 # site map with default map projection
-bathymetry <- raster("/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/GMRTbathymetry_lowerres.grd")
+bathymetry <- raster('/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/GMRT/GMRTbathymetry_lowerres.grd')
 
 # crop bathymetry grid to bounding box
 bbox <- extent(-59, -52, -62, -60)
@@ -50,8 +50,23 @@ ggplot() +
   
   # Color scale for depth
   scale_fill_viridis_c(option = "mako", name = "Depth (m)", limits = c(-5500, 0)) +
+  
+  # Site points
   coord_sf(xlim = c(-59,-52),
            ylim = c(-62,-60), expand = FALSE) +
+  
+  # Oceanographic data bounding boxes
+  # EI
+  annotate('rect', xmin = -56.69255, xmax = -55.21545, ymin = -61.24778, ymax = -60.52602, 
+                color = 'darkmagenta', linewidth = 1, fill = 'darkmagenta', alpha = 0) +
+  # KGI
+  annotate('rect', xmin = -58.69396, xmax = -57.18988, ymin = -61.8187, ymax = -61.09694, 
+                color = 'darkmagenta', linewidth = 1, fill = 'darkmagenta', alpha = 0) +
+  # CI
+  annotate('rect', xmin = -54.23054, xmax = -52.73632, ymin = -61.61275, ymax = -60.89099, 
+                color = 'darkmagenta', linewidth = 1, fill = 'darkmagenta', alpha = 0) +
+  
+  # Theming
   theme_minimal() + 
   annotation_scale(bar_cols = c('#F5FFF8','#22192d')) +
   theme(axis.title = element_blank(), axis.text = element_text(size = 11,vjust = -0.2),
