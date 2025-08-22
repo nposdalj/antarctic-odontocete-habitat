@@ -15,11 +15,11 @@ environmental_vars <- as.vector(c('AAO','FSLE','SSH','EKE','EKE_mad','temperatur
 # options: AAO, FSLE, SSH, EKE, EKE_mad, temperature, salinity, mixed_layer, chla (chlorophyll), o2 (oxygen),
 #   productivity (primary production), ice_conc (sea ice concentration), ice_thickness (sea ice thickness),
 #   ice_diff (daily difference in ice concentration), fsle_orient (orientation of fsle vector)
-species <- as.vector(c('BW29', 'BW37', 'BW58','Oo','Pm','Gm','none')) 
+species <- as.vector(c('Oo')) 
 # options: BW29, BW37, BW58, Oo, Pm, Gm, none (for surface variables)
 # BW29 = Southern bottlenose whale, BW37 & BW58 = Gray's and strap-toothed whales
-# Oo = Killer whale, Pm = Sperm Whale, Gm = Long-finned pilot whale
-sites <- as.vector(c('KGI','CI','EI')) # options: EI, KGI, CI
+# Oo = Killer whale, Pm = Sperm Whale, Gm = Long-finned pilot whale, none = to show just surface environmental data
+sites <- as.vector(c('KGI')) # options: EI, KGI, CI
 
 # --------------- Step 1: Format/Add Antarctic Oscillation Index ----------------
 AAO <- read.csv("/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/Daily_AAO.csv")
@@ -91,6 +91,30 @@ allData <- allData %>%
   left_join(ice_diffData %>% select(date, ice_diff), by = "date")
 allData <- unique(allData)
 
+# Adding deseasoned Copernicus data
+EI_deseasoned <- read.csv('/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/Copernicus/Deseasoning/EI_deseasoned.csv')
+KGI_deseasoned <- read.csv('/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/Copernicus/Deseasoning/KGI_deseasoned.csv')
+CI_deseasoned <- read.csv('/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/Copernicus/Deseasoning/CI_deseasoned.csv')
+
+# Cropping to correct date ranges, keeping only relevant columns
+EI_deseasoned <- EI_deseasoned %>% subset(select = c(date, chla_stl, npp_stl, sst_stl, sss_stl, 
+                                                     mlayer_stl, chla_anomaly, npp_anomaly, 
+                                                     sst_anomaly, sss_anomaly, mlayer_anomaly)) %>%
+  filter(date >= as.Date('03-05-2014', format = '%m-%d-%Y'), 
+         date <= as.Date('07-17-2014', format = '%m-%d-%Y')) %>% mutate(Site = 'EI')
+KGI_deseasoned <- KGI_deseasoned %>% subset(select = c(date, chla_stl, npp_stl, sst_stl, sss_stl, 
+                                                     mlayer_stl, chla_anomaly, npp_anomaly, 
+                                                     sst_anomaly, sss_anomaly, mlayer_anomaly)) %>%
+  filter(date >= as.Date('02-10-2015', format = '%m-%d-%Y'), 
+         date <= as.Date('01-29-2016', format = '%m-%d-%Y')) %>% mutate(Site = 'KGI')
+CI_deseasoned <- CI_deseasoned %>% subset(select = c(date, chla_stl, npp_stl, sst_stl, sss_stl, 
+                                                     mlayer_stl, chla_anomaly, npp_anomaly, 
+                                                     sst_anomaly, sss_anomaly, mlayer_anomaly)) %>%
+  filter(date >= as.Date('02-04-2016', format = '%m-%d-%Y'), 
+         date <= as.Date('12-02-2016', format = '%m-%d-%Y')) %>% mutate(Site = 'CI')
+all_deseasoned <- rbind(EI_deseasoned, KGI_deseasoned, CI_deseasoned)
+allData <- merge(allData, all_deseasoned, by=intersect(names(allData), names(all_deseasoned)))
+
 # -------------------- Step 3: Format/Add FSLEs------------
 EI_fsle <- read.csv("/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/AVISO/EI_fsle_40km")
 KGI_fsle <- read.csv("/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/AVISO/KGI_fsle_40km")
@@ -119,7 +143,9 @@ allData <- rename(allData, FSLE=fsle_mean, fsle_orient = fsle_orientmean,
 depth_varying <- c("temperature", "salinity", 'EKE','chla','productivity','o2',
                    'temp_sd','salinity_sd','EKE_mad','chla_sd','productivity_sd','o2_sd')
 surf_vars <- c("AAO",'SSH','mixed_layer','ice_conc','ice_thickness','FSLE','fsle_orient','ice_diff',
-               'ssh_sd','mixed_layer_sd','fsle_sd','fsle_orient_sd')
+               'ssh_sd','mixed_layer_sd','fsle_sd','fsle_orient_sd', 'chla_stl', 'npp_stl', 'sst_stl', 
+               'sss_stl', 'mlayer_stl', 'chla_anomaly', 'npp_anomaly', 
+               'sst_anomaly', 'sss_anomaly', 'mlayer_anomaly')
 species_vars <- c('BW29','BW37','BW58','Gm',"Pm", "Oo")
 grouping_vars <- c("date", "depth", "Site")
 
@@ -273,7 +299,6 @@ makePlot <- function(data, var, depths, species) {
     label <- "Eddy Kinetic Energy Value (cm^2/s^2)"
   } else if(var=='EKE_mad') {
     label <- "Eddy Kinetic Energy Median Absolute Deviation (cm^2/s^2)"
-    col <- 'gold'
   } else if(var=='AAO') {
     label <- 'Antarctic Oscillation Index'
     col <- 'mediumvioletred'
@@ -316,7 +341,10 @@ makePlot <- function(data, var, depths, species) {
     } else if(var == 'chla') {
       label <- 'Chlorophyll-a (mg/m^3)'
       col <- 'darkolivegreen'
-    }
+    } else if(var=='EKE_mad') {
+      label <- "Eddy Kinetic Energy Median Absolute Deviation (cm^2/s^2)"
+      col <- 'gold'
+    } 
     
     if(var == tail(environmental_vars,1)) { # adding depth labels for the bottom plot
       return(ggplot(data = data, mapping = aes(x = date, y = .data[[var]])) + 
@@ -341,7 +369,7 @@ makePlot <- function(data, var, depths, species) {
   } else {
     # Plotting across depths for relevant variables
     # Only if species is specified
-    if (var=='temperature' | var == 'EKE' | var == 'salinity' | var=='o2' | var=='productivity' | 
+    if (var=='temperature' | var == 'EKE' | var == 'EKE_mad' | var == 'salinity' | var=='o2' | var=='productivity' | 
         var == 'chla') {
       # Renaming the surface depth
       data <- data %>% mutate(depth = ifelse(depth == 0.5, 'surface', as.character(depth)))
