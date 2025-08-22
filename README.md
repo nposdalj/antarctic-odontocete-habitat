@@ -86,3 +86,4 @@ Located in "Data Visualizations" folder.
 
 ## Notes
 - **Cop_vs_HYCOM.R:** This script (located in the "Environmental Data" folder) was used to determine whether Copernicus or HYCOM provided a better model for remotely sensed environmental data that had too many gaps (such as SST). Copernicus was determined to be better and was used as a primary data source for the GAMs (analysis found in script and [here](https://docs.google.com/document/d/11GEedOBmrZNMdO0CqTZY6Ltp4wF0kYFU6sATxuj63Ag/edit?tab=t.0)).
+- **OLDGm_GAM.R:** This script (located in the "GAMs" folder) was the first model constructed, trying to use data across all relevant depth bins. But, issues with the model output's confidence intervals led to this initial iteration being scrapped (and the surface only models being used as first steps for GAMs).
