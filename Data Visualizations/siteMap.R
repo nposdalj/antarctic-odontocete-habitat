@@ -8,10 +8,11 @@ library(graticule)
 # add a 40 kmsquare around sites
 # ----------------------- Method 1: WGS84 Projection Map  --------------------------------
 # site map with default map projection
-bathymetry <- raster('/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/GMRT/GMRTbathymetry_lowerres.grd')
+bathymetry <- raster('/Users/nposd/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/GMRT/GMRTbathymetry_lowerres_wideView.grd')
 
 # crop bathymetry grid to bounding box
-bbox <- extent(-59, -52, -62, -60)
+#bbox <- extent(-59, -52, -62, -60) #original
+bbox <- extent(-61, -51, -63.5, -60)
 bathymetry <- crop(bathymetry, bbox)
 
 # site coordinates
@@ -30,7 +31,9 @@ contours_sf <- st_as_sf(contours)
 # dataframe for bathymetry data
 bathy_df <- as.data.frame(bathymetry, xy = TRUE, na.rm = TRUE)
 colnames(bathy_df) <- c("x", "y", "depth")
-border_box <- st_as_sfc(st_bbox(c(xmin = -59, xmax = -52, ymin = -62, ymax = -60), crs = 4326))
+#border_box <- st_as_sfc(st_bbox(c(xmin = -59, xmax = -52, ymin = -62, ymax = -60), crs = 4326)) #original
+border_box <- st_as_sfc(st_bbox(c(xmin = -61, xmax = -51, ymin = -63.5, ymax = -60), crs = 4326))
+
 
 # create map
 ggplot() +
@@ -51,28 +54,31 @@ ggplot() +
   # Color scale for depth
   scale_fill_viridis_c(option = "mako", name = "Depth (m)", limits = c(-5500, 0)) +
   
-  # Site points
-  coord_sf(xlim = c(-59,-52),
-           ylim = c(-62,-60), expand = FALSE) +
+  # # Site points - original
+  # coord_sf(xlim = c(-59,-52),
+  #          ylim = c(-62,-60), expand = FALSE) 
+# Site points
+coord_sf(xlim = c(-61,-51),
+         ylim = c(-63.5,-60), expand = FALSE) 
   
-  # Oceanographic data bounding boxes
-  # EI
-  annotate('rect', xmin = -56.69255, xmax = -55.21545, ymin = -61.24778, ymax = -60.52602, 
-                color = 'darkmagenta', linewidth = 1, fill = 'darkmagenta', alpha = 0) +
-  # KGI
-  annotate('rect', xmin = -58.69396, xmax = -57.18988, ymin = -61.8187, ymax = -61.09694, 
-                color = 'darkmagenta', linewidth = 1, fill = 'darkmagenta', alpha = 0) +
-  # CI
-  annotate('rect', xmin = -54.23054, xmax = -52.73632, ymin = -61.61275, ymax = -60.89099, 
-                color = 'darkmagenta', linewidth = 1, fill = 'darkmagenta', alpha = 0) +
-  
-  # Theming
-  theme_minimal() + 
-  annotation_scale(bar_cols = c('#F5FFF8','#22192d')) +
-  theme(axis.title = element_blank(), axis.text = element_text(size = 11,vjust = -0.2),
-        legend.title = element_text(size=11,color='#22192d'),
-        legend.text = element_text(size=10,color='#22192d'),
-        legend.key.height = unit(1.5,'cm'))
+  # # Oceanographic data bounding boxes
+  # # EI
+  # annotate('rect', xmin = -56.69255, xmax = -55.21545, ymin = -61.24778, ymax = -60.52602, 
+  #               color = 'darkmagenta', linewidth = 1, fill = 'darkmagenta', alpha = 0) +
+  # # KGI
+  # annotate('rect', xmin = -58.69396, xmax = -57.18988, ymin = -61.8187, ymax = -61.09694, 
+  #               color = 'darkmagenta', linewidth = 1, fill = 'darkmagenta', alpha = 0) +
+  # # CI
+  # annotate('rect', xmin = -54.23054, xmax = -52.73632, ymin = -61.61275, ymax = -60.89099, 
+  #               color = 'darkmagenta', linewidth = 1, fill = 'darkmagenta', alpha = 0) +
+  # 
+  # # Theming
+  # theme_minimal() + 
+  # annotation_scale(bar_cols = c('#F5FFF8','#22192d')) +
+  # theme(axis.title = element_blank(), axis.text = element_text(size = 11,vjust = -0.2),
+  #       legend.title = element_text(size=11,color='#22192d'),
+  #       legend.text = element_text(size=10,color='#22192d'),
+  #       legend.key.height = unit(1.5,'cm'))
 
 # ------------- Method 2: Lambert Azimuthal Equal-Area Projection Map -------------
 # NOT USING THIS CODE/METHOD - IGNORE BELOW
