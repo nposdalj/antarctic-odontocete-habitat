@@ -1,16 +1,17 @@
 library(tidyverse)
 library(gridExtra)
 library(lubridate)
+library(purrr)
 
 # -----------------Step 1: Prepping data---------------------
 # Load data from EIE/CI site
-CI <- read.csv("/Users/trisha/scripps/antarctic-odontocete-habitat/Data/Antarc_EIE_01_Odontocetes.csv")
+CI <- read.csv("/Users/nposd/Documents/GitHub/antarctic-odontocete-habitat/data/Antarc_EIE_01_Odontocetes.csv")
 CI <- CI[-c(1:2,7)]
 # Load data from SSI/KGI site
-KGI <- read.csv("/Users/trisha/scripps/antarctic-odontocete-habitat/Data/Antarc_SSI_01_Odontocetes.csv")
+KGI <- read.csv("/Users/nposd/Documents/GitHub/antarctic-odontocete-habitat/data/Antarc_SSI_01_Odontocetes.csv")
 KGI <- KGI[-c(1:2,7)]
 # Load data from EI site
-EI <- read.csv("/Users/trisha/scripps/antarctic-odontocete-habitat/Data/Antarc_EI_01_Odontocetes.csv")
+EI <- read.csv("/Users/nposd/Documents/GitHub/antarctic-odontocete-habitat/data/Antarc_EI_01_Odontocetes.csv")
 EI <- EI[-c(1:2,7:12)]
 # Join all data into one dataframe and save it
 CI$Site <- "CI"
@@ -50,7 +51,7 @@ odontocete <- odontocete %>% # Reformat dataframe
     # New column that has length of call in seconds
   )
 odontocete$Call.time[odontocete$Call.time == 0] <- 1 # If a call is 0 seconds, correct to 1
-write.csv(odontocete,"/Users/trisha/scripps/antarctic-odontocete-habitat/Data/Antarc_Odontocetes.csv")
+write.csv(odontocete,"/Users/nposd/Documents/GitHub/antarctic-odontocete-habitat/data/Antarc_Odontocetes.csv")
 
 
 
@@ -107,7 +108,7 @@ CI_ts <- hrSite_ts("CI")
 
 
 # ----------------Step 3: Daily Binned Timeseries (By Site) ------------
-dailyDetections <- read.csv("/Users/trisha/scripps/antarctic-odontocete-habitat/Data/dailyDetections.csv")
+dailyDetections <- read.csv("/Users/nposd/Documents/GitHub/antarctic-odontocete-habitat/data/dailyDetections.csv")
 
 dayTimeseries <- function(site, species) { # Function to create a timeseries plot
   # Filtering dataframe by the relevant site
@@ -210,3 +211,102 @@ Pm_week <- combined_ts('Pm')
 BW37_week <- combined_ts('BW37')
 BW29_week <- combined_ts('BW29')
 BW58_week <- combined_ts('BW58')
+
+# ----------------- Step 4: 5-min binary presence (dailyDetections-like) -----------------
+# Site bounds (use the same windows you used for plotting)
+# Site bounds (use the same windows you used for plotting)
+site_bounds <- function(site) {
+  if (site == "EI") {
+    b1 <- as.Date("2014-03-05"); b2 <- as.Date("2014-07-17")
+  } else if (site == "KGI") {
+    b1 <- as.Date("2015-02-10"); b2 <- as.Date("2016-01-29")
+  } else if (site == "CI") {
+    b1 <- as.Date("2016-02-04"); b2 <- as.Date("2016-12-02")
+  } else {
+    b1 <- min(odontocete$Date, na.rm = TRUE)
+    b2 <- max(odontocete$Date, na.rm = TRUE)
+  }
+  # Cover entire days: start at 00:00 of b1, end at 23:55 of b2
+  start_dt <- as.POSIXct(b1, tz = "UTC")
+  end_dt   <- as.POSIXct(b2 + 1, tz = "UTC") - minutes(5)  # <-- changed
+  list(start = start_dt, end = end_dt)
+}
+
+
+# Build full 5-min grid for a site
+make_site_bins <- function(site) {
+  rng <- site_bounds(site)
+  tibble(
+    Bin  = seq(from = rng$start, to = rng$end, by = "5 min"),
+    Site = site
+  )
+}
+
+# For a given site+species, return just the bins that are present (1’s)
+present_bins_for <- function(site, species) {
+  df <- odontocete %>%
+    filter(Site == site, Species.Code == species) %>%
+    transmute(Start = Start.time, End = End.time) %>%
+    drop_na(Start, End)
+  
+  if (nrow(df) == 0) {
+    return(tibble(Bin = as.POSIXct(character()), present = integer()))
+  }
+  
+  # Snap each detection to 5-min bin sequence it touches
+  df %>%
+    mutate(
+      start_bin = floor_date(Start, "5 minutes"),
+      end_bin   = floor_date(End - seconds(1), "5 minutes")
+    ) %>%
+    rowwise() %>%
+    mutate(Bin = list(seq(from = start_bin, to = end_bin, by = "5 min"))) %>%
+    unnest(Bin) %>%
+    distinct(Bin) %>%
+    mutate(present = 1L) %>%
+    select(Bin, present)
+}
+
+# Build the wide 5-min table that mirrors dailyDetections layout
+build_5minDetections <- function(
+    sites = c("EI","KGI","CI"),
+    species_order = c("Pm","BW29","Oo","Gm","BW37","BW58")
+) {
+  # Start with a full bin grid per site
+  all_bins <- map_df(sites, make_site_bins)
+  
+  # Add each species as a column of 0/1
+  out <- all_bins
+  for (sp in species_order) {
+    sp_bins <- map_df(sites, ~present_bins_for(.x, sp) %>% mutate(Site = .x))
+    out <- out %>%
+      left_join(sp_bins, by = c("Bin", "Site")) %>%
+      mutate(present = replace_na(present, 0L)) %>%
+      rename(!!sp := present)
+  }
+  
+  # Order & select columns to match your daily file (first col = time bin instead of Day)
+  out %>%
+    arrange(Site, Bin) %>%
+    select(Bin, all_of(species_order), Site)
+}
+
+# ---- run & save ----
+fiveMinDetections <- build_5minDetections()
+# set the species columns in the order you use elsewhere
+species_order <- c("Pm","BW29","Oo","Gm","BW37","BW58")
+
+daily_minutes <- fiveMinDetections %>%
+  mutate(Day = as.Date(Bin)) %>%
+  group_by(Site, Day) %>%
+  summarise(
+    across(all_of(species_order), ~ sum(.x, na.rm = TRUE) * 5),  # 5 min per bin
+    .groups = "drop"
+  ) %>%
+  select(Day, all_of(species_order), Site) %>%   # match your daily layout
+  arrange(Site, Day)
+write.csv(
+  daily_minutes,
+  "/Users/nposd/Documents/GitHub/antarctic-odontocete-habitat/data/Antarc_Odontocetes_daily_minutes.csv",
+  row.names = FALSE
+)
