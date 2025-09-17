@@ -310,3 +310,18 @@ write.csv(
   "/Users/nposd/Documents/GitHub/antarctic-odontocete-habitat/data/Antarc_Odontocetes_daily_minutes.csv",
   row.names = FALSE
 )
+
+daily_5min_bins <- fiveMinDetections %>%
+  mutate(Day = as.Date(Bin)) %>%
+  group_by(Site, Day) %>%
+  summarise(
+    across(all_of(species_order), ~ sum(.x, na.rm = TRUE)),  # 5 min per bin
+    .groups = "drop"
+  ) %>%
+  select(Day, all_of(species_order), Site) %>%   # match your daily layout
+  arrange(Site, Day)
+write.csv(
+  daily_minutes,
+  "/Users/nposd/Documents/GitHub/antarctic-odontocete-habitat/data/Antarc_Odontocetes_daily_5min_bins.csv",
+  row.names = FALSE
+)

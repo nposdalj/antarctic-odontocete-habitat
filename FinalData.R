@@ -5,7 +5,7 @@ library(gridExtra)
 library(patchwork)
 
 # ---------------- Step 0: Create base final dataframe-------------
-dailyDetection <- read.csv("/Users/nposd/Documents/GitHub/antarctic-odontocete-habitat/data/Antarc_Odontocetes_daily_minutes.csv")
+dailyDetection <- read.csv("/Users/nposd/Documents/GitHub/antarctic-odontocete-habitat/data/Antarc_Odontocetes_daily_5min_bins.csv")
 allData <- dailyDetection
 allData$date <- allData$Day
 allData <- allData %>% subset(select = -Day)

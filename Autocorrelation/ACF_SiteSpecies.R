@@ -4,7 +4,7 @@ library(splines) # For creating model to calculate acf
 library(photobiology) # For extracting day/night information
 
 # Loading data and correctly formatting date/time 
-odontocete <- read.csv("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Data/Antarc_Odontocetes.csv")
+odontocete <- read.csv("C:/Users/nposd/Documents/GitHub/antarctic-odontocete-habitat/Data/Antarc_Odontocetes.csv")
 odontocete$Start.time <- as.POSIXct(odontocete$Start.time, 
                                     format ="%Y-%m-%d %H:%M:%S", tz = "GMT")
 odontocete$End.time <- as.POSIXct(odontocete$End.time, 
@@ -13,10 +13,6 @@ odontocete$End.time <- as.POSIXct(odontocete$End.time,
 odontocete[1174,4] <- mdy_hms("2/28/2015 0:00:00") 
 odontocete[1374,4] <- mdy_hms("1/15/2016 0:00:00")
 latlong <- tibble::tibble(lon = -56, lat = -61.5)
-
-
-
-
 
 
 # ---------- Step 1a: Making hourly presence dataframe ----------
