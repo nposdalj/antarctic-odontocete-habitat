@@ -9,7 +9,7 @@ library(itsadug)
 
 # ------------- Step 0: Choose Species ----------------
 # Modeling Gm for all sites, 40 km radius environmental data
-species <- c('Gm') # options: BW29, BW37, Oo, Pm, Gm
+species <- c('BW29') # options: BW29, BW37, Oo, Pm, Gm
 # BW29 = Southern bottlenose whale, BW37 = Gray's and strap-toothed whales
 # Oo = Killer whale, Pm = Sperm Whale, Gm = Long-finned pilot whale
 # Note: not enough data to model BW58 at any site
@@ -45,7 +45,7 @@ allData$date <- as.Date(allData$date, "%Y-%m-%d")
 # Filter by species relevant data
 # Only adding standard deviations of surface variables, feel free to change that if needed
 depths <- c(0, 16, 635) # Gm depths
-sp_specific <- allData  %>% subset(select=-c(BW29,BW37,BW58,Oo,Pm)) %>%
+sp_specific <- allData  %>% subset(select=-c(Gm,BW37,BW58,Oo,Pm)) %>%
   subset(select=c(date,Site,julian_day,get(species),AAO,SSH,mixed_layer,ice_conc,ice_thickness,ice_diff,FSLE,
                   temperature_0,salinity_0,EKE_0,temperature_16,salinity_16,EKE_16,
                   temperature_635,salinity_635,EKE_635, chla_0,o2_0,productivity_0,chla_16,
@@ -60,7 +60,7 @@ sp_specific <- allData  %>% subset(select=-c(BW29,BW37,BW58,Oo,Pm)) %>%
 allData_EI <- allData %>% 
   filter(Site == "EI")
 allData_EI$Binary <- ifelse(allData_EI$Gm > 0, 1, 0)
-BlockMod_EI <- gam(Gm ~ s(ice_conc,k=4),
+BlockMod_EI <- gam(BW29 ~ s(ice_conc,k=4),
                    family = tw(link = "log", a = 1.1, b = 1.9), data = allData_EI, method = "REML")
 ACF = acf(residuals(BlockMod_EI), lag.max = 1500) 
 CI = ggfortify:::confint.acf(ACF)
@@ -70,7 +70,7 @@ ACFval_EI = ACFidx[1]
 allData_KGI <- allData %>% 
   filter(Site == "KGI")
 allData_KGI$Binary <- ifelse(allData_KGI$Gm > 0, 1, 0)
-BlockMod_KGI <- gam(Gm ~ s(ice_conc,k=4),
+BlockMod_KGI <- gam(BW29 ~ s(ice_conc,k=4),
                     family = tw(link = "log", a = 1.1, b = 1.9), data = allData_KGI, method = "REML")
 ACF = acf(residuals(BlockMod_KGI), lag.max = 1500) 
 CI = ggfortify:::confint.acf(ACF)
@@ -80,7 +80,7 @@ ACFval_KGI = ACFidx[1]
 allData_CI <- allData %>% 
   filter(Site == "CI")
 allData_CI$Binary <- ifelse(allData_CI$Gm > 0, 1, 0)
-BlockMod_CI <- gam(Gm ~ s(ice_conc,k=4),
+BlockMod_CI <- gam(BW29 ~ s(ice_conc,k=4),
                    family = tw(link = "log", a = 1.1, b = 1.9), data = allData_CI, method = "REML")
 ACF = acf(residuals(BlockMod_CI), lag.max = 1500) 
 CI = ggfortify:::confint.acf(ACF)
@@ -251,41 +251,41 @@ plotGam1 <- function(gam) {
 
 # -------------------- Step 5a: Elephant Island GAM ------------------------------
 #Full model
-EI_gam <- gam(Gm ~ s(ice_conc,k=3,sp=0.1) + s(ice_diff,k=4,sp=0.1),
+EI_gam <- gam(BW29 ~ s(ice_conc,k=3,sp=0.1) + s(ice_diff,k=4,sp=0.1),
               family = tw(link = "log", a = 1.1, b = 1.9), data = EI_binned, method = "REML")
 
 # Remove ice_diff
-EI_final <- gam(Gm ~ s(ice_conc,k=4,sp=0.1),
+EI_final <- gam(BW29 ~ s(ice_conc,k=4,sp=0.1),
                 family = tw(link = "log", a = 1.1, b = 1.9), data = EI_binned, method = "REML")
 
 
 # -------------------- Step 5b: King George Island GAM -------------------------
 # Full GAM
-KGI_gam <- gam(Gm ~ s(ice_conc,k=4,sp=0.1) + s(ice_diff,k=4,sp=0.1),
+KGI_gam <- gam(BW29 ~ s(ice_conc,k=4,sp=0.1) + s(ice_diff,k=4,sp=0.1),
                family = tw(link = "log", a = 1.1, b = 1.9), data = KGI_binned, method = "REML")
 
 # Remove ice_diff
-KGI_final <- gam(Gm ~ s(ice_conc,k=4,sp=0.1),
+KGI_final <- gam(BW29 ~ s(ice_conc,k=3),
                  family = tw(link = "log", a = 1.1, b = 1.9), data = KGI_binned, method = "REML")
 
 
 # --------------------- Step 5c: Clarence Island GAM ------------------------------------
 # Final model
-CI_gam <- gam(Gm ~ s(ice_conc,k=3,sp=0.1) + s(ice_diff,k=4,sp=0.1) + s(ice_thickness,k=4,sp=0.1),
+CI_gam <- gam(BW29 ~ s(ice_conc,k=3,sp=0.1) + s(ice_diff,k=4,sp=0.1) + s(ice_thickness,k=4,sp=0.1),
               family = tw(link = "log", a = 1.1, b = 1.9),  data = CI_binned, method = "REML")
 
 # Remove ice_diff
-CI_gam <- gam(Gm ~ s(ice_conc,k=4) + s(ice_thickness,k=4),
+CI_gam <- gam(BW29 ~ s(ice_conc,k=3,sp=0.1) + s(ice_thickness,k=3,sp=0.1),
               family = tw(link = "log", a = 1.1, b = 1.9),  data = CI_binned, method = "REML")
 
 # Remove ice_conc
-CI_final3 <- gam(Gm ~ s(ice_thickness,k=3),
+CI_final3 <- gam(BW29 ~ s(ice_thickness,k=3),
               family = tw(link = "log", a = 1.1, b = 1.9),  data = CI_binned, method = "REML")
 
-CI_final4 <- gam(Gm ~ s(ice_thickness,k=4),
+CI_final4 <- gam(BW29 ~ s(ice_thickness,k=4),
                  family = tw(link = "log", a = 1.1, b = 1.9),  data = CI_binned, method = "REML")
 
-CI_ice_conc <- gam(Gm ~ s(ice_conc,k=3,sp=0.1),
+CI_ice_conc <- gam(BW29 ~ s(ice_conc,k=3,sp=0.1),
                 family = tw(link = "log", a = 1.1, b = 1.9),  data = CI_binned, method = "REML")
 
 
@@ -379,7 +379,7 @@ visualizeGAM <- function(gam, predictors, sp) {
   
   # Aggregating all the plots into one figure
   final_plot <- wrap_plots(all_plots, nrow = row, ncol = col, guides = "collect") &
-    plot_annotation(title = paste0("Long-finned Pilot Whale at ",
+    plot_annotation(title = paste0("BW29 at ",
                                    sp," Presence (",deviance,"% Deviance Explained)"))
   
   print(final_plot)
