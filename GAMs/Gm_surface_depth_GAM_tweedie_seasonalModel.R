@@ -278,7 +278,7 @@ KGI_gam <- gam(Gm ~ s(julian_day,k=4) + s(ice_conc,k=4,sp=0.1) + s(AAO,k=4,sp=0.
               family = tw(link = "log", a = 1.1, b = 1.9), data = KGI_binned, method = "REML")
 
 # Remove ice_diff
-KGI_final <- gam(Gm ~ s(julian_day, bs = "cc",k=4) + s(ice_conc,k=4,sp=0.1) + s(AAO,k=4,sp=0.1),
+KGI_final <- gam(Gm ~ s(julian_day, bs = "cc",k=4) + s(ice_conc,k=4,sp=0.1),
                family = tw(link = "log", a = 1.1, b = 1.9), data = KGI_binned, method = "REML")
 
 
@@ -436,7 +436,7 @@ nameVar <- function(var) {
 }
 
 # Generating visualizations for each site's final model
-KGI_pred <- c('julian_day','AAO','ice_conc')
+KGI_pred <- c('julian_day','ice_conc')
 KGI_plots <- visualizeGAM(KGI_final, KGI_pred, 'KGI')
 
 EI_pred <- c('julian_day')

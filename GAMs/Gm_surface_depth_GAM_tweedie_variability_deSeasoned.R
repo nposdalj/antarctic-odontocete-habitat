@@ -7,6 +7,7 @@ library(gratia)
 library(patchwork)
 library(purrr)
 library(dplyr)
+library(lubridate)
 # MODELS THAT HAVE BEEN IMPROVED: CI
 # MODELS IN INITIAL PASSTHROUGH: EI, KGI
 
@@ -208,6 +209,55 @@ KGI_binned <- KGI_binned %>%
 CI_binned <- CI_binned %>%
   filter(ice_conc < ice_threshold)
 
+# Deseason data
+vars_to_anom <- c("FSLE","SSH","mixed_layer","salinity_0","temperature_0","o2_0","chla_0",
+                  "productivity_0","temperature_16","salinity_16","o2_16","chla_16","productivity_16",
+                  "temperature_635","salinity_635","o2_635","EKE_0","EKE_16","EKE_635",
+                  "EKE_mad_0","fsle_orient")
+
+make_monthly_anoms_binned <- function(
+    df,
+    vars,
+    date_col = "bin_start",
+    site_col = "Site",
+    standardize = FALSE   # TRUE also adds *_z (z-score within Site×Month)
+) {
+  # check date col
+  stopifnot(date_col %in% names(df), site_col %in% names(df))
+  # coerce to Date if needed
+  if (!inherits(df[[date_col]], c("Date","POSIXt","POSIXct"))) {
+    df[[date_col]] <- as.Date(df[[date_col]])
+    if (any(is.na(df[[date_col]]))) {
+      stop(sprintf("Column '%s' could not be coerced to Date.", date_col))
+    }
+  }
+  # only keep vars that actually exist
+  vars <- intersect(vars, names(df))
+  if (length(vars) == 0) stop("None of the requested vars are present in the data.")
+  
+  df %>%
+    mutate(.month = month(.data[[date_col]])) %>%
+    group_by(.data[[site_col]], .month, .add = FALSE) %>%
+    # anomalies: x - monthly mean (per Site×Month)
+    mutate(across(all_of(vars),
+                  ~ .x - mean(.x, na.rm = TRUE),
+                  .names = "{.col}_anom")) %>%
+    { 
+      if (standardize) {
+        # z-score within Site×Month
+        mutate(., across(all_of(vars),
+                         ~ if (isTRUE(all(is.na(.x))) || isTRUE(sd(.x, na.rm = TRUE) == 0)) 0
+                         else (.x - mean(.x, na.rm = TRUE)) / sd(.x, na.rm = TRUE),
+                         .names = "{.col}_z"))
+      } else .
+    } %>%
+    ungroup() %>%
+    select(-.month)
+}
+
+EI_binned <- make_monthly_anoms_binned(EI_binned, vars_to_anom, date_col = "bin_start", standardize = FALSE)
+KGI_binned <- make_monthly_anoms_binned(KGI_binned, vars_to_anom, date_col = "bin_start", standardize = FALSE)
+CI_binned  <- make_monthly_anoms_binned(CI_binned,  vars_to_anom, date_col = "bin_start", standardize = FALSE)
 
 # -------------- Step 4: VIF for Correlation -------------------
 # Not including any variables at depth for initial predictors.
@@ -217,60 +267,77 @@ CI_binned <- CI_binned %>%
 #VIF FUNCTION
 
 # ELEPHANT ISLAND
-EI_pred <- c("FSLE", "SSH", "mixed_layer", 'fsle_orient', "salinity_0", 
-                     "temperature_0", "EKE_mad_0",'o2_0','chla_0','productivity_0','temperature_635','temperature_16',
-             'salinity_635','salinity_16','EKE_635','EKE_16','o2_635','o2_16','chla_16','productivity_16')
+EI_pred <- c("FSLE_anom", "SSH_anom", "mixed_layer_anom", 'fsle_orient_anom', "salinity_0_anom", 
+                     "temperature_0_anom", "EKE_mad_0_anom",'o2_0_anom','chla_0_anom','productivity_0_anom',
+             'temperature_635_anom','temperature_16_anom','salinity_635_anom','salinity_16_anom',
+             'EKE_635_anom','EKE_16_anom','o2_635_anom','o2_16_anom','chla_16_anom','productivity_16_anom')
 mod_formula <- paste(species, "~", paste(EI_pred, collapse = " + "))
 # EI vif model is not converging when run as a logistic regression, so running as a linear regression instead
 EI_vif <- glm(as.formula(mod_formula), data = EI_binned)
 vif(EI_vif)
 
 #....several steps later
-EI_pred <- c("FSLE", "SSH", "mixed_layer", 'fsle_orient',  "EKE_mad_0",
-             +              'salinity_16','EKE_635','EKE_16','o2_635')
-mod_formula <- paste(species, "~", paste(EI_pred, collapse = " + "))
-# EI vif model is not converging when run as a logistic regression, so running as a linear regression instead
-EI_vif <- glm(as.formula(mod_formula), data = EI_binned)
-vif(EI_vif)
-# FSLE         SSH mixed_layer fsle_orient   EKE_mad_0 salinity_16     EKE_635      EKE_16      o2_635 
-# 2.119033    1.328679    1.513741    2.138912    1.139296    2.752147    2.762831    2.053253    2.941753 
+# EI_pred <- c("FSLE_anom", "SSH_anom", "mixed_layer_anom", 'fsle_orient_anom',
+#              +              "temperature_0_anom", "EKE_mad_0_anom",'productivity_0_anom',
+#              +              'salinity_635_anom','salinity_16_anom',
+#              +              'EKE_635_anom','EKE_16_anom','o2_635_anom','o2_16_anom')
+# > mod_formula <- paste(species, "~", paste(EI_pred, collapse = " + "))
+# > # EI vif model is not converging when run as a logistic regression, so running as a linear regression instead
+#   > EI_vif <- glm(as.formula(mod_formula), data = EI_binned)
+# > vif(EI_vif)
+# FSLE_anom            SSH_anom    mixed_layer_anom    fsle_orient_anom  temperature_0_anom      EKE_mad_0_anom 
+# 2.574846            1.477603            1.846260            1.979118            3.819563            1.227501 
+# productivity_0_anom   salinity_635_anom    salinity_16_anom        EKE_635_anom         EKE_16_anom         o2_635_anom 
+# 2.272908            3.015832            4.184875            2.835712            2.121757            1.796647 
+# o2_16_anom 
+# 2.798717
 
 # KING GEORGE ISLAND
-KGI_pred <- c("FSLE", "SSH", "mixed_layer", 'fsle_orient', "salinity_0", 
-             "temperature_0", "EKE_mad_0",'o2_0','chla_0','productivity_0','temperature_635','temperature_16',
-             'salinity_635','salinity_16','EKE_635','EKE_16','o2_635','o2_16','chla_16','productivity_16')
+KGI_pred <- c("FSLE_anom", "SSH_anom", "mixed_layer_anom", 'fsle_orient_anom', "salinity_0_anom", 
+              "temperature_0_anom", "EKE_mad_0_anom",'o2_0_anom','chla_0_anom','productivity_0_anom',
+              'temperature_635_anom','temperature_16_anom','salinity_635_anom','salinity_16_anom',
+              'EKE_635_anom','EKE_16_anom','o2_635_anom','o2_16_anom','chla_16_anom','productivity_16_anom')
 mod_formula <- reformulate(KGI_pred, response = species)
 KGI_vif <- lm(mod_formula, data = KGI_binned)
 vif(KGI_vif)
 #...several steps later
-KGI_pred <- c("FSLE", "SSH", "mixed_layer", 'fsle_orient', "salinity_0", 
-              +               "temperature_0", "EKE_mad_0",
-              +               'salinity_635','EKE_635','EKE_16','o2_635','productivity_16')
-mod_formula <- reformulate(KGI_pred, response = species)
-KGI_vif <- lm(mod_formula, data = KGI_binned)
-vif(KGI_vif)
-# FSLE             SSH     mixed_layer     fsle_orient      salinity_0   temperature_0       EKE_mad_0    salinity_635         EKE_635 
-# 1.490003        3.805529        2.894767        1.362219        4.605488        4.130870        1.725894        1.668337        1.662453 
-# EKE_16          o2_635 productivity_16 
-# 1.431013        1.393889        3.380748 
+# KGI_pred <- c("FSLE_anom", "SSH_anom", "mixed_layer_anom", 'fsle_orient_anom', "salinity_0_anom", 
+#               +               "EKE_mad_0_anom",'productivity_0_anom',
+#               +               'temperature_635_anom','temperature_16_anom','salinity_635_anom',
+#               +               'EKE_635_anom','EKE_16_anom','o2_635_anom','o2_16_anom','productivity_16_anom')
+# > mod_formula <- reformulate(KGI_pred, response = species)
+# > KGI_vif <- lm(mod_formula, data = KGI_binned)
+# > vif(KGI_vif)
+# FSLE_anom             SSH_anom     mixed_layer_anom     fsle_orient_anom      salinity_0_anom       EKE_mad_0_anom 
+# 1.442538             1.983052             3.935052             1.503552             2.010805             1.569729 
+# productivity_0_anom temperature_635_anom  temperature_16_anom    salinity_635_anom         EKE_635_anom          EKE_16_anom 
+# 2.883041             2.569088             4.981332             1.696504             1.944587             1.609626 
+# o2_635_anom           o2_16_anom productivity_16_anom 
+# 2.296668             3.655062             1.979022 
 
 # CLARENCE ISLAND
-CI_pred <- c("FSLE", "SSH", "mixed_layer",'fsle_orient', "salinity_0", 
-             "temperature_0", "EKE_mad_0",'o2_0','chla_0','productivity_0','temperature_635','temperature_16',
-             'salinity_635','salinity_16','EKE_635','EKE_16','o2_635','o2_16','chla_16','productivity_16')
+CI_pred <- c("FSLE_anom", "SSH_anom", "mixed_layer_anom", 'fsle_orient_anom', "salinity_0_anom", 
+            "temperature_0_anom", "EKE_mad_0_anom",'o2_0_anom','chla_0_anom','productivity_0_anom',
+            'temperature_635_anom','temperature_16_anom','salinity_635_anom','salinity_16_anom',
+            'EKE_635_anom','EKE_16_anom','o2_635_anom','o2_16_anom','chla_16_anom','productivity_16_anom')
 mod_formula <- reformulate(CI_pred, response = species)
 CI_vif <- lm(mod_formula, data = CI_binned)
 vif(CI_vif)
 
 #...several steps later
-CI_pred <- c("FSLE",  "mixed_layer",'fsle_orient', 
-             +              "EKE_mad_0",'o2_0','chla_0',
-             +              'salinity_635','salinity_16','EKE_635','EKE_16','o2_635')
-mod_formula <- reformulate(CI_pred, response = species)
-CI_vif <- lm(mod_formula, data = CI_binned)
-vif(CI_vif)
-# FSLE  mixed_layer  fsle_orient    EKE_mad_0         o2_0       chla_0 salinity_635  salinity_16      EKE_635       EKE_16       o2_635 
-# 4.323650     3.827744     1.292184     3.749940     6.322506     3.200123     3.697395     2.863489     1.792204     1.692583     3.627261 
+# CI_pred <- c("FSLE_anom", "SSH_anom", "mixed_layer_anom", 'fsle_orient_anom', 
+#              +              "EKE_mad_0_anom",'o2_0_anom','chla_0_anom',
+#              +              'temperature_16_anom','salinity_635_anom','salinity_16_anom',
+#              +              'EKE_635_anom','EKE_16_anom','o2_635_anom','productivity_16_anom')
+# > mod_formula <- reformulate(CI_pred, response = species)
+# > CI_vif <- lm(mod_formula, data = CI_binned)
+# > vif(CI_vif)
+# FSLE_anom             SSH_anom     mixed_layer_anom     fsle_orient_anom       EKE_mad_0_anom            o2_0_anom 
+# 2.188830             1.927728             2.020192             1.953959             5.070698             3.723026 
+# chla_0_anom  temperature_16_anom    salinity_635_anom     salinity_16_anom         EKE_635_anom          EKE_16_anom 
+# 3.263084             2.939195             3.385895             2.302461             2.937594             1.975363 
+# o2_635_anom productivity_16_anom 
+# 2.680227             2.500594 
 
 # -------------- Step 5: Build GAMs ------------------------
 # Function to visualize GAMs on a probability scale with the proper confidence interval
@@ -284,161 +351,259 @@ plotGam1 <- function(gam) {
 }
 
 # -------------------- Step 5a: Elephant Island GAM ------------------------------
-# FSLE         SSH mixed_layer fsle_orient   EKE_mad_0 salinity_16     EKE_635      EKE_16      o2_635 
-# 2.119033    1.328679    1.513741    2.138912    1.139296    2.752147    2.762831    2.053253    2.941753 
+# FSLE_anom            SSH_anom    mixed_layer_anom    fsle_orient_anom  temperature_0_anom      EKE_mad_0_anom 
+# 2.574846            1.477603            1.846260            1.979118            3.819563            1.227501 
+# productivity_0_anom   salinity_635_anom    salinity_16_anom        EKE_635_anom         EKE_16_anom         o2_635_anom 
+# 2.272908            3.015832            4.184875            2.835712            2.121757            1.796647 
+# o2_16_anom 
+# 2.798717
+
 #Full model
-EI_gam <- gam(Gm ~ s(FSLE,k=4) + s(fsle_orient,k=4)  + s(mixed_layer,k=4,sp=0.1) + s(SSH,k=4,sp=0.1) +
-                s(EKE_mad_0,k=4,sp=0.1) + s(salinity_16,k=4,sp=0.1) + s(EKE_635,k=4,sp=0.1) +
-                s(EKE_16,k=4,sp=0.1) + s(o2_635,k=4,sp=0.1),
+EI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4)  + s(mixed_layer_anom,k=4,sp=0.1) + s(fsle_orient_anom,k=4,sp=0.1) +
+                s(temperature_0_anom,k=4,sp=0.1) + s(EKE_mad_0_anom,k=4,sp=0.1) + s(productivity_0_anom,k=4,sp=0.1) + 
+                s(salinity_635_anom,k=4,sp=0.1) + s(salinity_16_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1) +
+                s(EKE_16_anom,k=4,sp=0.1) + s(o2_635_anom,k=4,sp=0.1) + s(o2_16_anom,k=4,sp=0.1),
               family = tw(link = "log", a = 1.1, b = 1.9), data = EI_binned, method = "REML")
 
-# Remove EKE_mad_0
-EI_gam <- gam(Gm ~ s(FSLE,k=4) + s(fsle_orient,k=4)  + s(mixed_layer,k=4,sp=0.1) + s(SSH,k=4,sp=0.1) +
-                s(salinity_16,k=4,sp=0.1) + s(EKE_635,k=4,sp=0.1) +
-                s(EKE_16,k=4,sp=0.1) + s(o2_635,k=4,sp=0.1),
+# Remove salinity_635
+EI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4)  + s(mixed_layer_anom,k=4,sp=0.1) + s(fsle_orient_anom,k=4,sp=0.1) +
+                s(temperature_0_anom,k=4,sp=0.1) + s(EKE_mad_0_anom,k=4,sp=0.1) + s(productivity_0_anom,k=4,sp=0.1) + 
+                s(salinity_16_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1) +
+                s(EKE_16_anom,k=4,sp=0.1) + s(o2_635_anom,k=4,sp=0.1) + s(o2_16_anom,k=4,sp=0.1),
               family = tw(link = "log", a = 1.1, b = 1.9), data = EI_binned, method = "REML")
 
-# Remove fsle_orient
-EI_gam <- gam(Gm ~ s(FSLE,k=4) + s(mixed_layer,k=4,sp=0.1) + s(SSH,k=4,sp=0.1) +
-                s(salinity_16,k=4,sp=0.1) + s(EKE_635,k=4,sp=0.1) +
-                s(EKE_16,k=4,sp=0.1) + s(o2_635,k=4,sp=0.1),
+# Remove salinity_16
+EI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4)  + s(mixed_layer_anom,k=4,sp=0.1) + s(fsle_orient_anom,k=4,sp=0.1) +
+                s(temperature_0_anom,k=4,sp=0.1) + s(EKE_mad_0_anom,k=4,sp=0.1) + s(productivity_0_anom,k=4,sp=0.1) + 
+                s(EKE_635_anom,k=4,sp=0.1) +
+                s(EKE_16_anom,k=4,sp=0.1) + s(o2_635_anom,k=4,sp=0.1) + s(o2_16_anom,k=4,sp=0.1),
               family = tw(link = "log", a = 1.1, b = 1.9), data = EI_binned, method = "REML")
 
 # Remove o2_635
-EI_gam <- gam(Gm ~ s(FSLE,k=4) + s(mixed_layer,k=4,sp=0.1) + s(SSH,k=4,sp=0.1) +
-                s(salinity_16,k=4,sp=0.1) + s(EKE_635,k=4,sp=0.1) +
-                s(EKE_16,k=4,sp=0.1),
+EI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4)  + s(mixed_layer_anom,k=4,sp=0.1) + s(fsle_orient_anom,k=4,sp=0.1) +
+                s(temperature_0_anom,k=4,sp=0.1) + s(EKE_mad_0_anom,k=4,sp=0.1) + s(productivity_0_anom,k=4,sp=0.1) + 
+                s(EKE_635_anom,k=4,sp=0.1) +
+                s(EKE_16_anom,k=4,sp=0.1) + s(o2_16_anom,k=4,sp=0.1),
               family = tw(link = "log", a = 1.1, b = 1.9), data = EI_binned, method = "REML")
 
-# Remove fsle
-EI_gam <- gam(Gm ~ s(mixed_layer,k=4,sp=0.1) + s(SSH,k=4,sp=0.1) +
-                s(salinity_16,k=4,sp=0.1) + s(EKE_635,k=4,sp=0.1) +
-                s(EKE_16,k=4,sp=0.1),
+# Remove mixed_lay7er
+EI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4)  + s(fsle_orient_anom,k=4,sp=0.1) +
+                s(temperature_0_anom,k=4,sp=0.1) + s(EKE_mad_0_anom,k=4,sp=0.1) + s(productivity_0_anom,k=4,sp=0.1) + 
+                s(EKE_635_anom,k=4,sp=0.1) +
+                s(EKE_16_anom,k=4,sp=0.1) + s(o2_16_anom,k=4,sp=0.1),
               family = tw(link = "log", a = 1.1, b = 1.9), data = EI_binned, method = "REML")
 
-#Remove EKE_635
-EI_gam <- gam(Gm ~ s(mixed_layer,k=4,sp=0.1) + s(SSH,k=4,sp=0.1) +
-                s(salinity_16,k=4,sp=0.1) +
-                s(EKE_16,k=4,sp=0.1),
+#Remove fsle_orient
+EI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4)  + 
+                s(temperature_0_anom,k=4,sp=0.1) + s(EKE_mad_0_anom,k=4,sp=0.1) + s(productivity_0_anom,k=4,sp=0.1) + 
+                s(EKE_635_anom,k=4,sp=0.1) +
+                s(EKE_16_anom,k=4,sp=0.1) + s(o2_16_anom,k=4,sp=0.1),
               family = tw(link = "log", a = 1.1, b = 1.9), data = EI_binned, method = "REML")
 
-#Remove EKE_16
-EI_final <- gam(Gm ~ s(mixed_layer,k=4,sp=0.1) + s(SSH,k=4,sp=0.1) +
-                s(salinity_16,k=4,sp=0.1),
+#Remove salinity_635
+EI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4)  + 
+                s(temperature_0_anom,k=4,sp=0.1) + s(EKE_mad_0_anom,k=4,sp=0.1) + s(productivity_0_anom,k=4,sp=0.1) + 
+                s(EKE_16_anom,k=4,sp=0.1) + s(o2_16_anom,k=4,sp=0.1),
+              family = tw(link = "log", a = 1.1, b = 1.9), data = EI_binned, method = "REML")
+
+#Remove salinity_635
+EI_gam <- gam(Gm ~ s(SSH_anom ,k=4)  + 
+                s(temperature_0_anom,k=4,sp=0.1) + s(EKE_mad_0_anom,k=4,sp=0.1) + s(productivity_0_anom,k=4,sp=0.1) + 
+                s(EKE_16_anom,k=4,sp=0.1) + s(o2_16_anom,k=4,sp=0.1),
+              family = tw(link = "log", a = 1.1, b = 1.9), data = EI_binned, method = "REML")
+
+#Remove EKE_mad
+EI_gam <- gam(Gm ~ s(SSH_anom ,k=4)  + 
+                s(temperature_0_anom,k=4,sp=0.1) + s(productivity_0_anom,k=4,sp=0.1) + 
+                s(EKE_16_anom,k=4,sp=0.1) + s(o2_16_anom,k=4,sp=0.1),
+              family = tw(link = "log", a = 1.1, b = 1.9), data = EI_binned, method = "REML")
+
+#Remove SSH_anom
+EI_gam <- gam(Gm ~ s(temperature_0_anom,k=4,sp=0.1) + s(productivity_0_anom,k=4,sp=0.1) + 
+                s(EKE_16_anom,k=4,sp=0.1) + s(o2_16_anom,k=4,sp=0.1),
+              family = tw(link = "log", a = 1.1, b = 1.9), data = EI_binned, method = "REML")
+
+#Remove temp_0
+EI_final <- gam(Gm ~ s(productivity_0_anom,k=4,sp=0.1) + 
+                s(EKE_16_anom,k=4,sp=0.1) + s(o2_16_anom,k=4,sp=0.1),
               family = tw(link = "log", a = 1.1, b = 1.9), data = EI_binned, method = "REML")
 
 
 # -------------------- Step 5b: King George Island GAM -------------------------
-# FSLE             SSH     mixed_layer     fsle_orient      salinity_0   temperature_0       EKE_mad_0    salinity_635         EKE_635 
-# 1.490003        3.805529        2.894767        1.362219        4.605488        4.130870        1.725894        1.668337        1.662453 
-# EKE_16          o2_635 productivity_16 
-# 1.431013        1.393889        3.380748 
-KGI_gam <- gam(Gm ~ s(FSLE,k=4) + s(SSH,k=4) + s(mixed_layer,k=4) + s(fsle_orient,k=4) + s(salinity_0,k=4) + s(temperature_0,k=4) + 
-                  s(EKE_mad_0,k=4) + s(salinity_635,k=4) + s(EKE_635,k=4) + s(EKE_16,k=4) + 
-                 s(o2_635,k=4) + s(productivity_16, k = 4), 
-               family = tw(link = "log", a = 1.1, b = 1.9), data = KGI_binned, method = "REML")
-
-# Remove SSH
-KGI_gam <- gam(Gm ~ s(FSLE,k=4) + s(mixed_layer,k=4) + s(fsle_orient,k=4) + s(salinity_0,k=4) + s(temperature_0,k=4) + 
-                 s(EKE_mad_0,k=4) + s(salinity_635,k=4) + s(EKE_635,k=4) + s(EKE_16,k=4) + 
-                 s(o2_635,k=4) + s(productivity_16, k = 4), 
-               family = tw(link = "log", a = 1.1, b = 1.9), data = KGI_binned, method = "REML")
-
-# Remove temperature_0
-KGI_gam <- gam(Gm ~ s(FSLE,k=4) + s(mixed_layer,k=4) + s(fsle_orient,k=4) + s(salinity_0,k=4) +
-                 s(EKE_mad_0,k=4) + s(salinity_635,k=4) + s(EKE_635,k=4) + s(EKE_16,k=4) + 
-                 s(o2_635,k=4) + s(productivity_16, k = 4), 
-               family = tw(link = "log", a = 1.1, b = 1.9), data = KGI_binned, method = "REML")
+# FSLE_anom             SSH_anom     mixed_layer_anom     fsle_orient_anom      salinity_0_anom       EKE_mad_0_anom 
+# 1.442538             1.983052             3.935052             1.503552             2.010805             1.569729 
+# productivity_0_anom temperature_635_anom  temperature_16_anom    salinity_635_anom         EKE_635_anom          EKE_16_anom 
+# 2.883041             2.569088             4.981332             1.696504             1.944587             1.609626 
+# o2_635_anom           o2_16_anom productivity_16_anom 
+# 2.296668             3.655062             1.979022 
+#Full model
+KGI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4)  + s(mixed_layer_anom,k=4,sp=0.1) + s(fsle_orient_anom,k=4,sp=0.1) +
+                s(salinity_0_anom,k=4,sp=0.1) + s(EKE_mad_0_anom,k=4,sp=0.1) + s(productivity_0_anom,k=4,sp=0.1) + 
+                s(salinity_635_anom,k=4,sp=0.1) + s(temperature_16_anom,k=4,sp=0.1) + s(temperature_635_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1) +
+                s(EKE_16_anom,k=4,sp=0.1) + s(o2_635_anom,k=4,sp=0.1) + s(o2_16_anom,k=4,sp=0.1) + s(productivity_16_anom,k=4,sp=0.1),
+              family = tw(link = "log", a = 1.1, b = 1.9), data = KGI_binned, method = "REML")
 
 # Remove EKE_16
-KGI_gam <- gam(Gm ~ s(FSLE,k=4) + s(mixed_layer,k=4) + s(fsle_orient,k=4) + s(salinity_0,k=4) +
-                 s(EKE_mad_0,k=4) + s(salinity_635,k=4) + s(EKE_635,k=4) +
-                 s(o2_635,k=4) + s(productivity_16, k = 4), 
+KGI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4)  + s(mixed_layer_anom,k=4,sp=0.1) + s(fsle_orient_anom,k=4,sp=0.1) +
+                 s(salinity_0_anom,k=4,sp=0.1) + s(EKE_mad_0_anom,k=4,sp=0.1) + s(productivity_0_anom,k=4,sp=0.1) + 
+                 s(salinity_635_anom,k=4,sp=0.1) + s(temperature_16_anom,k=4,sp=0.1) + s(temperature_635_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1) +
+                 s(o2_635_anom,k=4,sp=0.1) + s(o2_16_anom,k=4,sp=0.1) + s(productivity_16_anom,k=4,sp=0.1),
                family = tw(link = "log", a = 1.1, b = 1.9), data = KGI_binned, method = "REML")
 
-# Remove flse_orient
-KGI_gam <- gam(Gm ~ s(FSLE,k=4) + s(mixed_layer,k=4) + s(salinity_0,k=4) +
-                 s(EKE_mad_0,k=4) + s(salinity_635,k=4) + s(EKE_635,k=4) +
-                 s(o2_635,k=4) + s(productivity_16, k = 4), 
+# Remove 02_635
+KGI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4)  + s(mixed_layer_anom,k=4,sp=0.1) + s(fsle_orient_anom,k=4,sp=0.1) +
+                 s(salinity_0_anom,k=4,sp=0.1) + s(EKE_mad_0_anom,k=4,sp=0.1) + s(productivity_0_anom,k=4,sp=0.1) + 
+                 s(salinity_635_anom,k=4,sp=0.1) + s(temperature_16_anom,k=4,sp=0.1) + s(temperature_635_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1) +
+                 s(o2_16_anom,k=4,sp=0.1) + s(productivity_16_anom,k=4,sp=0.1),
                family = tw(link = "log", a = 1.1, b = 1.9), data = KGI_binned, method = "REML")
 
-# Remove EKE_mad_0
-KGI_gam <- gam(Gm ~ s(FSLE,k=4) + s(mixed_layer,k=4) + s(salinity_0,k=4) +
-                 s(salinity_635,k=4) + s(EKE_635,k=4) +
-                 s(o2_635,k=4) + s(productivity_16, k = 4), 
+# Remove fsle_orient
+KGI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4)  + s(mixed_layer_anom,k=4,sp=0.1) + 
+                 s(salinity_0_anom,k=4,sp=0.1) + s(EKE_mad_0_anom,k=4,sp=0.1) + s(productivity_0_anom,k=4,sp=0.1) + 
+                 s(salinity_635_anom,k=4,sp=0.1) + s(temperature_16_anom,k=4,sp=0.1) + s(temperature_635_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1) +
+                 s(o2_16_anom,k=4,sp=0.1) + s(productivity_16_anom,k=4,sp=0.1),
                family = tw(link = "log", a = 1.1, b = 1.9), data = KGI_binned, method = "REML")
 
 # Remove salinity_635
-KGI_gam <- gam(Gm ~ s(FSLE,k=4) + s(mixed_layer,k=4) + s(salinity_0,k=4) +
-                 s(EKE_635,k=4) +
-                 s(o2_635,k=4) + s(productivity_16, k = 4), 
+KGI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4)  + s(mixed_layer_anom,k=4,sp=0.1) + 
+                 s(salinity_0_anom,k=4,sp=0.1) + s(EKE_mad_0_anom,k=4,sp=0.1) + s(productivity_0_anom,k=4,sp=0.1) + 
+                 s(temperature_16_anom,k=4,sp=0.1) + s(temperature_635_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1) +
+                 s(o2_16_anom,k=4,sp=0.1) + s(productivity_16_anom,k=4,sp=0.1),
+               family = tw(link = "log", a = 1.1, b = 1.9), data = KGI_binned, method = "REML")
+
+# Remove EKE_mad_0
+KGI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4)  + s(mixed_layer_anom,k=4,sp=0.1) + 
+                 s(salinity_0_anom,k=4,sp=0.1) + s(productivity_0_anom,k=4,sp=0.1) + 
+                 s(temperature_16_anom,k=4,sp=0.1) + s(temperature_635_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1) +
+                 s(o2_16_anom,k=4,sp=0.1) + s(productivity_16_anom,k=4,sp=0.1),
+               family = tw(link = "log", a = 1.1, b = 1.9), data = KGI_binned, method = "REML")
+
+# Remove prod_16
+KGI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4)  + s(mixed_layer_anom,k=4,sp=0.1) + 
+                 s(salinity_0_anom,k=4,sp=0.1) + s(productivity_0_anom,k=4,sp=0.1) + 
+                 s(temperature_16_anom,k=4,sp=0.1) + s(temperature_635_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1) +
+                 s(o2_16_anom,k=4,sp=0.1),
+               family = tw(link = "log", a = 1.1, b = 1.9), data = KGI_binned, method = "REML")
+
+# Remove SSH_anom
+KGI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(mixed_layer_anom,k=4,sp=0.1) + 
+                 s(salinity_0_anom,k=4,sp=0.1) + s(productivity_0_anom,k=4,sp=0.1) + 
+                 s(temperature_16_anom,k=4,sp=0.1) + s(temperature_635_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1) +
+                 s(o2_16_anom,k=4,sp=0.1),
+               family = tw(link = "log", a = 1.1, b = 1.9), data = KGI_binned, method = "REML")
+
+# Remove 02_16
+KGI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(mixed_layer_anom,k=4,sp=0.1) + 
+                 s(salinity_0_anom,k=4,sp=0.1) + s(productivity_0_anom,k=4,sp=0.1) + 
+                 s(temperature_16_anom,k=4,sp=0.1) + s(temperature_635_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1),
+               family = tw(link = "log", a = 1.1, b = 1.9), data = KGI_binned, method = "REML")
+
+# Remove prod_0
+KGI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(mixed_layer_anom,k=4,sp=0.1) + 
+                 s(salinity_0_anom,k=4,sp=0.1) +
+                 s(temperature_16_anom,k=4,sp=0.1) + s(temperature_635_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1),
                family = tw(link = "log", a = 1.1, b = 1.9), data = KGI_binned, method = "REML")
 
 # Remove FSLE
-KGI_final <- gam(Gm ~ s(mixed_layer,k=4) + s(salinity_0,k=4) +
-                 s(EKE_635,k=4) +
-                 s(o2_635,k=4) + s(productivity_16, k = 4), 
+KGI_gam <- gam(Gm ~ s(mixed_layer_anom,k=4,sp=0.1) + 
+                 s(salinity_0_anom,k=4,sp=0.1) +
+                 s(temperature_16_anom,k=4,sp=0.1) + s(temperature_635_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1),
+               family = tw(link = "log", a = 1.1, b = 1.9), data = KGI_binned, method = "REML")
+
+# Remove SSH
+KGI_gam <- gam(Gm ~ s(salinity_0_anom,k=4,sp=0.1) +
+                 s(temperature_16_anom,k=4,sp=0.1) + s(temperature_635_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1),
+               family = tw(link = "log", a = 1.1, b = 1.9), data = KGI_binned, method = "REML")
+
+# Remove temp_635
+KGI_final <- gam(Gm ~ s(salinity_0_anom,k=4,sp=0.1) +
+                 s(temperature_16_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1),
                family = tw(link = "log", a = 1.1, b = 1.9), data = KGI_binned, method = "REML")
 
 
 # --------------------- Step 5c: Clarence Island GAM ------------------------------------
-# FSLE  mixed_layer  fsle_orient    EKE_mad_0         o2_0       chla_0 salinity_635  salinity_16      EKE_635       EKE_16       o2_635 
-# 4.323650     3.827744     1.292184     3.749940     6.322506     3.200123     3.697395     2.863489     1.792204     1.692583     3.627261 
+# FSLE_anom             SSH_anom     mixed_layer_anom     fsle_orient_anom       EKE_mad_0_anom            o2_0_anom 
+# 2.188830             1.927728             2.020192             1.953959             5.070698             3.723026 
+# chla_0_anom  temperature_16_anom    salinity_635_anom     salinity_16_anom         EKE_635_anom          EKE_16_anom 
+# 3.263084             2.939195             3.385895             2.302461             2.937594             1.975363 
+# o2_635_anom productivity_16_anom 
+# 2.680227             2.500594
 
-CI_gam <- gam(Gm ~ s(FSLE,k=4) + s(fsle_orient,k=4) + s(mixed_layer,k=4) +
-                s(EKE_mad_0,k=4) + s(o2_0,k=4) + s(chla_0,k=4) +
-                s(salinity_635,k=4) + s(salinity_16,k=4) + s(EKE_16,k=4) + s(o2_635,k=4)+
-                s(EKE_635,k=4),
-              family = tw(link = "log", a = 1.1, b = 1.9), data = KGI_binned, method = "REML")
-
-# Remove salinity_16
-CI_gam <- gam(Gm ~ s(FSLE,k=4) + s(fsle_orient,k=4) + s(mixed_layer,k=4) +
-                s(EKE_mad_0,k=4) + s(o2_0,k=4) + s(chla_0,k=4) +
-                s(salinity_635,k=4) + s(EKE_16,k=4) + s(o2_635,k=4)+
-                s(EKE_635,k=4),
-              family = tw(link = "log", a = 1.1, b = 1.9), data = KGI_binned, method = "REML")
+CI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4)  + s(mixed_layer_anom,k=4,sp=0.1) +
+                s(EKE_mad_0_anom,k=4,sp=0.1) + s(o2_0_anom,k=4,sp=0.1) + s(chla_0_anom,k=4,sp=0.1) + 
+                s(salinity_635_anom,k=4,sp=0.1) + s(salinity_16_anom,k=4,sp=0.1) + s(temperature_16_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1) +
+                s(EKE_16_anom,k=4,sp=0.1) + s(o2_635_anom,k=4,sp=0.1) + s(productivity_16_anom,k=4,sp=0.1),
+              family = tw(link = "log", a = 1.1, b = 1.9), data = CI_binned, method = "REML")
 
 # Remove EKE_16
-CI_gam <- gam(Gm ~ s(FSLE,k=4) + s(fsle_orient,k=4) + s(mixed_layer,k=4) +
-                s(EKE_mad_0,k=4) + s(o2_0,k=4) + s(chla_0,k=4) +
-                s(salinity_635,k=4) + s(o2_635,k=4)+
-                s(EKE_635,k=4),
-              family = tw(link = "log", a = 1.1, b = 1.9), data = KGI_binned, method = "REML")
+CI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4)  + s(mixed_layer_anom,k=4,sp=0.1) +
+                s(EKE_mad_0_anom,k=4,sp=0.1) + s(o2_0_anom,k=4,sp=0.1) + s(chla_0_anom,k=4,sp=0.1) + 
+                s(salinity_635_anom,k=4,sp=0.1) + s(salinity_16_anom,k=4,sp=0.1) + s(temperature_16_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1) +
+               s(o2_635_anom,k=4,sp=0.1) + s(productivity_16_anom,k=4,sp=0.1),
+              family = tw(link = "log", a = 1.1, b = 1.9), data = CI_binned, method = "REML")
 
-# Remove fsle_orient
-CI_gam <- gam(Gm ~ s(FSLE,k=4) + s(mixed_layer,k=4) +
-                s(EKE_mad_0,k=4) + s(o2_0,k=4) + s(chla_0,k=4) +
-                s(salinity_635,k=4) + s(o2_635,k=4)+
-                s(EKE_635,k=4),
-              family = tw(link = "log", a = 1.1, b = 1.9), data = KGI_binned, method = "REML")
-
-# Remove o2_0
-CI_gam <- gam(Gm ~ s(FSLE,k=4) + s(mixed_layer,k=4) +
-                s(EKE_mad_0,k=4) + s(chla_0,k=4) +
-                s(salinity_635,k=4) + s(o2_635,k=4)+
-                s(EKE_635,k=4),
-              family = tw(link = "log", a = 1.1, b = 1.9), data = KGI_binned, method = "REML")
+# Remove mixed_layer
+CI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4) +
+                s(EKE_mad_0_anom,k=4,sp=0.1) + s(o2_0_anom,k=4,sp=0.1) + s(chla_0_anom,k=4,sp=0.1) + 
+                s(salinity_635_anom,k=4,sp=0.1) + s(salinity_16_anom,k=4,sp=0.1) + s(temperature_16_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1) +
+                s(o2_635_anom,k=4,sp=0.1) + s(productivity_16_anom,k=4,sp=0.1),
+              family = tw(link = "log", a = 1.1, b = 1.9), data = CI_binned, method = "REML")
 
 # Remove salinity_635
-CI_gam <- gam(Gm ~ s(FSLE,k=4) + s(mixed_layer,k=4) +
-                s(EKE_mad_0,k=4) + s(chla_0,k=4) +
-               s(o2_635,k=4)+
-                s(EKE_635,k=4),
-              family = tw(link = "log", a = 1.1, b = 1.9), data = KGI_binned, method = "REML")
+CI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4) +
+                s(EKE_mad_0_anom,k=4,sp=0.1) + s(o2_0_anom,k=4,sp=0.1) + s(chla_0_anom,k=4,sp=0.1) + 
+                s(salinity_635_anom,k=4,sp=0.1) + s(temperature_16_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1) +
+                s(o2_635_anom,k=4,sp=0.1) + s(productivity_16_anom,k=4,sp=0.1),
+              family = tw(link = "log", a = 1.1, b = 1.9), data = CI_binned, method = "REML")
 
-# Remove FSLE
-CI_gam <- gam(Gm ~ s(mixed_layer,k=4) + s(EKE_mad_0,k=4) + s(chla_0,k=4) +
-                s(o2_635,k=4)+ s(EKE_635,k=4),
-              family = tw(link = "log", a = 1.1, b = 1.9), data = KGI_binned, method = "REML")
+# Remove o2_0
+CI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4) +
+                s(EKE_mad_0_anom,k=4,sp=0.1) + s(chla_0_anom,k=4,sp=0.1) + 
+                s(salinity_635_anom,k=4,sp=0.1) + s(temperature_16_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1) +
+                s(o2_635_anom,k=4,sp=0.1) + s(productivity_16_anom,k=4,sp=0.1),
+              family = tw(link = "log", a = 1.1, b = 1.9), data = CI_binned, method = "REML")
 
-# Remove EKE_mad_0
-CI_gam <- gam(Gm ~ s(mixed_layer,k=4) + s(chla_0,k=4) +
-                s(o2_635,k=4)+ s(EKE_635,k=4),
-              family = tw(link = "log", a = 1.1, b = 1.9), data = KGI_binned, method = "REML")
+# Remove salinity_635
+CI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4) +
+                s(EKE_mad_0_anom,k=4,sp=0.1) + s(chla_0_anom,k=4,sp=0.1) + 
+                s(temperature_16_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1) +
+                s(o2_635_anom,k=4,sp=0.1) + s(productivity_16_anom,k=4,sp=0.1),
+              family = tw(link = "log", a = 1.1, b = 1.9), data = CI_binned, method = "REML")
 
-# Remove mixed layer
-CI_final <- gam(Gm ~ s(chla_0,k=4) + s(o2_635,k=4)+ s(EKE_635,k=4),
-              family = tw(link = "log", a = 1.1, b = 1.9), data = KGI_binned, method = "REML")
+# Remove prod_16
+CI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4) +
+                s(EKE_mad_0_anom,k=4,sp=0.1) + s(chla_0_anom,k=4,sp=0.1) + 
+                s(temperature_16_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1) +
+                s(o2_635_anom,k=4,sp=0.1),
+              family = tw(link = "log", a = 1.1, b = 1.9), data = CI_binned, method = "REML")
+
+# Remove 02_635
+CI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4) +
+                s(EKE_mad_0_anom,k=4,sp=0.1) + s(chla_0_anom,k=4,sp=0.1) + 
+                s(temperature_16_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1),
+              family = tw(link = "log", a = 1.1, b = 1.9), data = CI_binned, method = "REML")
+
+# Remove EKE_mad
+CI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4) + s(chla_0_anom,k=4,sp=0.1) + 
+                s(temperature_16_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1),
+              family = tw(link = "log", a = 1.1, b = 1.9), data = CI_binned, method = "REML")
+
+# Remove chla_0
+CI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4) +
+                s(temperature_16_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1),
+              family = tw(link = "log", a = 1.1, b = 1.9), data = CI_binned, method = "REML")
+
+# Remove EKE_635
+CI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4) +
+                s(temperature_16_anom,k=4,sp=0.1),
+              family = tw(link = "log", a = 1.1, b = 1.9), data = CI_binned, method = "REML")
+
+# Remove EKE_635
+CI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4),
+              family = tw(link = "log", a = 1.1, b = 1.9), data = CI_binned, method = "REML")
+
+CI_final <- gam(Gm ~ s(SSH_anom ,k=4),
+              family = tw(link = "log", a = 1.1, b = 1.9), data = CI_binned, method = "REML")
 
 # ------------------ Step 6: Visualize GAMs -------------------
 # Function to create a cleaner visualization of a GAM model
@@ -543,6 +708,8 @@ nameVar <- function(var) {
     return("Julian Day")
   } else if(paste(var) == 'SSH') {
     return('Sea Surface Height (m)')
+  } else if(paste(var) == 'SSH_anom') {
+    return('De-seasoned Sea Surface Height (m)')
   } else if(paste(var) == 'FSLE,fsle_orient') {
     return('FSLE Magnitude')
   } else if(paste(var) == 'mixed_layer') {
@@ -555,6 +722,8 @@ nameVar <- function(var) {
     return('Difference in Sea Ice Concentration')
   } else if(paste(var) == 'temperature_0') {
     return('Sea Surface Temperature (°C)')
+  } else if(paste(var) == 'temperature_16_anom') {
+    return('De-seasoned Temperature @ 16m (°C)')
   } else if(paste(var) == 'salinity_0') {
     return('Sea Surface Salinity (psu)')
   } else if(paste(var) == 'salinity_16') {
@@ -563,6 +732,10 @@ nameVar <- function(var) {
     return('Eddy Kinetic Energy (cm^2/s^2)')
   } else if(paste(var) == 'EKE_16') {
     return('Eddy Kinetic Energy @ 16m (cm^2/s^2)')
+  } else if(paste(var) == 'EKE_16_anom') {
+    return('De-seasoned Eddy Kinetic Energy @ 16m (cm^2/s^2)')
+  } else if(paste(var) == 'EKE_635_anom') {
+    return('De-seasoned Eddy Kinetic Energy @ 635m (cm^2/s^2)')
   } else if(paste(var) == 'EKE_635') {
     return('Eddy Kinetic Energy @ 635m (cm^2/s^2)')
   } else if(paste(var) == 'chla_0') {
@@ -571,22 +744,28 @@ nameVar <- function(var) {
     return('Chlorophyll @ 16m (mg/m^3)')
   } else if(paste(var) == 'o2_0') {
     return('Oxygen (mmol/m^3)')
+  } else if(paste(var) == 'o2_16_anom') {
+    return('De-seasoned Oxygen (mmol/m^3)')
   } else if(paste(var) == 'o2_635') {
     return('Oxygen @ 635m (mmol/m^3)')
   } else if(paste(var) == 'productivity_0') {
     return('Net Primary Production (mg/m^3/day carbon)')
   } else if(paste(var) == 'productivity_16') {
     return('Net Primary Production @ 16m (mg/m^3/day carbon)')
+  } else if(paste(var) == 'productivity_0_anom') {
+    return('De-seasoned Net Primary Production (mg/m^3/day carbon)')
+  } else if(paste(var) == 'salinity_0_anom') {
+    return('De-seasoned Sea Surface Salinity (psu)')
   } 
 }
 
 # Generating visualizations for each site's final model
-KGI_pred <- c('mixed_layer','salinity_0','EKE_635','o2_635','productivity_16')
+KGI_pred <- c('salinity_0_anom','temperature_16_anom','EKE_635_anom')
 KGI_plots <- visualizeGAM(KGI_final, KGI_pred, 'KGI')
 
-EI_pred <- c('mixed_layer','salinity_16','SSH')
+EI_pred <- c('productivity_0_anom','EKE_16_anom','o2_16_anom')
 EI_plots <- visualizeGAM(EI_final, EI_pred, 'EI')
 
 
-CI_pred <- c('chla_0','o2_635','EKE_635')
+CI_pred <- c('SSH_anom')
 CI_plots <- visualizeGAM(CI_final, CI_pred, 'CI')
