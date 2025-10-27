@@ -15,15 +15,22 @@ library(MASS)            # LDA
 library(viridis)         # color scale
 library(oce)             # sigma-theta
 library(reshape2)
+library(tidyr)
+library(stringr)
+library(akima)      # for 2D interpolation (time x depth)
+library(patchwork)  # to stack the 3 panels
 
 # =======================================================
 # ---- USER TOGGLES ----
 # =======================================================
 PLOT_INTERACTIVE_3D <- FALSE     # HTML interactive 3D plots
-PLOT_STATIC_3D      <- TRUE     # Static 3D PNG (O2-SST-SSS)
-PLOT_SEPARATION_3D  <- TRUE     # LDA/PCA 3D with convex hulls
-PLOT_TS_BASIC       <- TRUE     # T–S plot (O2 as color)
-PLOT_TS_SIGMA       <- TRUE     # T–S plot with σθ contours
+PLOT_STATIC_3D      <- FALSE     # Static 3D PNG (O2-SST-SSS)
+PLOT_SEPARATION_3D  <- FALSE     # LDA/PCA 3D with convex hulls
+PLOT_TS_BASIC       <- FALSE     # T–S plot (O2 as color)
+PLOT_TS_SIGMA       <- FALSE     # T–S plot with σθ contours
+PLOT_DEPTH_PROFILES_PER_SITE <- FALSE
+PLOT_DEPTH_PROFILES_OVERLAY  <- FALSE   # overlay all sites per variable (optional)
+MAKE_TIME_DEPTH_SECTIONS <- TRUE
 
 # =======================================================
 # ---- SETTINGS ----
@@ -304,5 +311,244 @@ for (sp in species_vec) {
     if (PLOT_TS_SIGMA)       save_TS_png(df, sp, col_SST, col_SSS, col_O2, dkey, with_sigma = TRUE)
   }
 }
+
+if (PLOT_DEPTH_PROFILES_PER_SITE || PLOT_DEPTH_PROFILES_OVERLAY) {
+  profile_dir <- file.path(output_dir, "Depth_Profiles")
+  dir.create(profile_dir, showWarnings = FALSE, recursive = TRUE)
+  
+  # Helper: make long tidy table of temperature/salinity/o2 with numeric depth suffixes
+  make_long_env <- function(df) {
+    # find only columns like temperature_0, salinity_11, o2_635 (numeric suffix only)
+    keep_cols <- grep("^(temperature|salinity|o2)_\\d+$", names(df), value = TRUE)
+    if (length(keep_cols) == 0) return(data.frame(var = character(), depth = numeric(), value = numeric()))
+    
+    # subset safely using base R, then pivot_longer
+    df_sub <- df[, keep_cols, drop = FALSE]
+    long <- df_sub %>%
+      pivot_longer(cols = everything(), names_to = "var_depth", values_to = "value") %>%
+      separate(var_depth, into = c("var","depth"), sep = "_", remove = TRUE) %>%
+      mutate(depth = suppressWarnings(as.numeric(depth))) %>%
+      filter(!is.na(depth), var %in% c("temperature","salinity","o2"))
+    return(long)
+  }
+  
+  # colors and labels
+  var_cols  <- c(temperature = "#E64B35", salinity = "#4DBBD5", o2 = "#00A087")
+  var_labs  <- c(temperature = "Temperature (°C)", salinity = "Salinity", o2 = "Oxygen (mL/L)")
+  
+  # ---------- (A) Per-site profiles ----------
+  if (PLOT_DEPTH_PROFILES_PER_SITE) {
+    for (site in sites_keep) {
+      df_site <- allData[allData$Site == site, ]
+      long    <- make_long_env(df_site)
+      if (nrow(long) == 0) {
+        message("No depth columns for site ", site, " — skipping.")
+        next
+      }
+      
+      means <- aggregate(value ~ var + depth, data = long, FUN = mean, na.rm = TRUE)
+      means <- means[order(means$var, means$depth), ]
+      
+      interp_list <- lapply(split(means, means$var), function(d) {
+        d <- d[!is.na(d$value) & !is.na(d$depth), ]
+        if (nrow(d) < 2) return(NULL)
+        depth_grid <- seq(min(d$depth), max(d$depth), length.out = 300)
+        data.frame(
+          var   = unique(d$var),
+          depth = depth_grid,
+          value = approx(d$depth, d$value, xout = depth_grid, rule = 2)$y
+        )
+      })
+      interp <- do.call(rbind, interp_list)
+      if (is.null(interp) || nrow(interp) == 0) {
+        message("Not enough depth points for site ", site, " — skipping.")
+        next
+      }
+      
+      p <- ggplot(interp, aes(x = value, y = depth, color = var)) +
+        geom_path(size = 1.1) +
+        scale_y_reverse(expand = c(0.02, 0)) +
+        scale_color_manual(values = var_cols, labels = var_labs, name = NULL) +
+        facet_wrap(~ var, ncol = 3, scales = "free_x",
+                   labeller = as_labeller(var_labs)) +
+        labs(
+          title = paste("Depth Profiles —", name(site)),
+          x = NULL, y = "Depth (m)"
+        ) +
+        theme_bw(base_size = 12) +
+        theme(legend.position = "none",
+              strip.text = element_text(face = "bold"),
+              plot.title = element_text(face = "bold"))
+      
+      fpath <- file.path(profile_dir, paste0("DepthProfile_", site, ".png"))
+      ggsave(fpath, p, width = 10, height = 4, dpi = 300)
+      message("Saved depth profile: ", fpath)
+    }
+  }
+  
+  # ---------- (B) Overlay all sites per variable (optional) ----------
+  if (PLOT_DEPTH_PROFILES_OVERLAY) {
+    all_rows <- list()
+    for (site in sites_keep) {
+      df_site <- allData[allData$Site == site, ]
+      long <- make_long_env(df_site)
+      if (nrow(long) > 0) long$Site <- site
+      all_rows[[site]] <- long
+    }
+    long_all <- do.call(rbind, all_rows)
+    if (nrow(long_all) == 0) {
+      message("No depth columns found for overlay — skipping.")
+    } else {
+      means_all <- aggregate(value ~ var + Site + depth, data = long_all, FUN = mean, na.rm = TRUE)
+      means_all <- means_all[order(means_all$var, means_all$Site, means_all$depth), ]
+      
+      interp_all <- do.call(rbind, by(means_all, means_all[, c("var","Site")], function(d) {
+        d <- d[!is.na(d$value) & !is.na(d$depth), ]
+        if (nrow(d) < 2) return(NULL)
+        depth_grid <- seq(min(d$depth), max(d$depth), length.out = 300)
+        data.frame(
+          var   = unique(d$var),
+          Site  = unique(d$Site),
+          depth = depth_grid,
+          value = approx(d$depth, d$value, xout = depth_grid, rule = 2)$y
+        )
+      }))
+      
+      for (v in c("temperature","salinity","o2")) {
+        sub <- interp_all[interp_all$var == v, ]
+        if (nrow(sub) == 0) next
+        
+        p <- ggplot(sub, aes(x = value, y = depth, color = Site)) +
+          geom_path(size = 1.1) +
+          scale_y_reverse(expand = c(0.02, 0)) +
+          scale_color_manual(values = site_cols, name = "Site") +
+          labs(
+            title = paste0("Depth Profile — ", var_labs[[v]]),
+            x = NULL, y = "Depth (m)"
+          ) +
+          theme_bw(base_size = 12) +
+          theme(legend.position = "right",
+                plot.title = element_text(face = "bold"))
+        
+        fpath <- file.path(profile_dir, paste0("DepthProfile_ALLSITES_", v, ".png"))
+        ggsave(fpath, p, width = 6.5, height = 5.5, dpi = 300)
+        message("Saved overlay depth profile: ", fpath)
+      }
+    }
+  }
+}
+
+if (MAKE_TIME_DEPTH_SECTIONS) {
+  
+  hov_dir <- file.path(output_dir, "TimeDepth_Sections")
+  dir.create(hov_dir, showWarnings = FALSE, recursive = TRUE)
+  
+  # Helper: build long tidy (date, Site, var, depth, value) from *_<depth> columns
+  make_long_env_all <- function(df) {
+    keep_cols <- grep("^(temperature|salinity|o2)_\\d+$", names(df), value = TRUE)
+    if (length(keep_cols) == 0) {
+      return(data.frame(date = as.Date(character()),
+                        Site = character(), var = character(),
+                        depth = numeric(), value = numeric()))
+    }
+    df_sub <- df[, c("date", "Site", keep_cols), drop = FALSE]
+    long <- df_sub |>
+      pivot_longer(cols = all_of(keep_cols), names_to = "var_depth", values_to = "value") |>
+      separate(var_depth, into = c("var","depth"), sep = "_", remove = TRUE) |>
+      mutate(depth = suppressWarnings(as.numeric(depth))) |>
+      filter(!is.na(depth), var %in% c("temperature","salinity","o2"))
+    long
+  }
+  
+  var_labels <- c(temperature = "Temperature (°C)",
+                  salinity    = "Salinity",
+                  o2          = "Oxygen (mL/L)")
+  
+  # ---- Interpolate one variable at one site over a regular (time, depth) grid ----
+  interp_time_depth <- function(df_var, extrapolate = FALSE) {
+    df2 <- df_var[!is.na(df_var$value) & !is.na(df_var$depth) & !is.na(df_var$date), ]
+    if (nrow(df2) < 5) return(NULL)
+    
+    tx <- as.numeric(df2$date)
+    z  <- df2$value
+    y  <- df2$depth
+    
+    xo <- seq(min(tx), max(tx), by = 1)                 # daily grid
+    yo <- seq(min(y),  max(y),  length.out = 300)
+    
+    ii <- akima::interp(x = tx, y = y, z = z,
+                        xo = xo, yo = yo,
+                        duplicate = "mean",
+                        linear = TRUE,
+                        extrap = extrapolate)            # FALSE = no extrapolation
+    
+    out <- expand.grid(date_num = ii$x, depth = ii$y)
+    out$value <- as.vector(ii$z)
+    out$date  <- as.Date(out$date_num, origin = "1970-01-01")
+    out
+  }
+  
+  # ---- Pretty heatmap with explicit per-site limits ----
+  hov_plot <- function(grid_df, title, fill_lab, lims) {
+    ggplot(grid_df, aes(x = date, y = depth, fill = value)) +
+      geom_raster(interpolate = TRUE, na.rm = TRUE) +
+      scale_y_reverse(expand = c(0.001, 0)) +
+      scale_fill_viridis(option = "C", name = fill_lab,
+                         limits = lims, oob = scales::squish) +
+      labs(x = NULL, y = "Depth (m)", title = title) +
+      theme_bw(base_size = 11) +
+      theme(
+        plot.title = element_text(face = "bold", hjust = 0),
+        axis.title.x = element_blank(),
+        panel.grid = element_blank()
+      )
+  }
+  
+  # ---- Build once: long tidy data frame ----
+  long_all <- make_long_env_all(allData[allData$Site %in% sites_keep &
+                                          !is.na(allData$ice_conc) &
+                                          allData$ice_conc <= 15, ])
+  
+  # ---- One figure per site (stacked T/S/O) ----
+  for (site in sites_keep) {
+    site_long <- subset(long_all, Site == site)
+    if (nrow(site_long) == 0) next
+    
+    plots <- list()
+    for (v in c("temperature", "salinity", "o2")) {
+      sub <- subset(site_long, var == v)
+      if (nrow(sub) < 5) next
+      
+      # Per-site, per-variable color limits from observed data
+      v_minmax <- range(sub$value, na.rm = TRUE)
+      
+      # Interpolate over time and depth (set extrapolate = FALSE to avoid artifacts)
+      grid <- interp_time_depth(sub, extrapolate = FALSE)
+      if (is.null(grid)) next
+      
+      plots[[v]] <- hov_plot(
+        grid,
+        paste0(name(site), " — ", var_labels[[v]]),
+        var_labels[[v]],
+        lims = v_minmax
+      )
+    }
+    
+    if (length(plots) == 0) {
+      message("No data to plot for site ", site)
+      next
+    }
+    
+    # Stack vertically (shared x-axis visually)
+    fig <- wrap_plots(plots, ncol = 1, guides = "collect") &
+      theme(legend.position = "right")
+    
+    # Save as wide PNG
+    fn <- file.path(hov_dir, paste0("TimeDepth_TSO_", site, ".png"))
+    ggsave(fn, fig, width = 15, height = 5, dpi = 300)
+    message("Saved time–depth section: ", fn)
+  }
+}
+
 
 message("✅ All selected plots complete.")
