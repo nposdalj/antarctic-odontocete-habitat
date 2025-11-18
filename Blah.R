@@ -22,7 +22,7 @@ library(tidyr)
 # ---- USER TOGGLES ----
 # =======================================================
 # Master switch for *all* species plots
-RUN_SPECIES_PLOTS          <- TRUE     # FALSE skips the species loop entirely
+RUN_SPECIES_PLOTS          <- FALSE     # FALSE skips the species loop entirely
 
 # Species plots (original families)
 PLOT_INTERACTIVE_3D        <- FALSE
