@@ -9,7 +9,7 @@ library(lubridate)
 
 ## ------------------ 1. Paths & file names -------------------
 
-data_dir <- "L:/Shared drives/Antarctic Marine Mammals/Krill Data/CCAMLR Statistical Bulleting"
+data_dir <- "L:/Shared drives/Antarctic Marine Mammals/Krill Data/CCAMLR Statistical Bulletin"
 
 krill_file     <- file.path(data_dir, "AggregatedKrillCatch.csv")
 fishery_file   <- file.path(data_dir, "AggregatedFisheryCatch.csv")
