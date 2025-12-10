@@ -41,9 +41,10 @@ name <- function(abbrev) {
   return(fullname)
 }
 # ------------- Step 1: Load Data -----------------
-allData <- read.csv("Downloads/allData_humpback.csv")
+allData <- read.csv("I:/allData_humpback.csv")
 allData <- allData %>% subset(select=-X)
 allData$date <- as.Date(allData$date, "%Y-%m-%d")
+allData = allData[!duplicated(allData$date),] #remove duplicates
 # Filter by species relevant data
 # Only adding standard deviations of surface variables, feel free to change that if needed
 depths <- c(0) # Mn depths
@@ -57,10 +58,11 @@ sp_specific <- allData  %>% subset(select=-c(Bm)) %>%
                   productivity_5mon, productivity_6mon))
 
 # Intermediate step to find ACF for seasonal model only, need to go back and adjust Trisha's ACF function
+#EI
 allData_EI <- allData %>% 
   filter(Site == "EI")
-allData_EI$Binary <- ifelse(allData_EI$Gm > 0, 1, 0)
-BlockMod_EI <- gam(BW37 ~ s(ice_conc,k=4),
+allData_EI$Binary <- ifelse(allData_EI$Mn > 0, 1, 0)
+BlockMod_EI <- gam(Mn ~ s(julian_day,k=4),
                    family = tw(link = "log", a = 1.1, b = 1.9), data = allData_EI, method = "REML")
 ACF = acf(residuals(BlockMod_EI), lag.max = 1500) 
 CI = ggfortify:::confint.acf(ACF)
@@ -69,8 +71,8 @@ ACFval_EI = ACFidx[1]
 
 allData_KGI <- allData %>% 
   filter(Site == "KGI")
-allData_KGI$Binary <- ifelse(allData_KGI$Gm > 0, 1, 0)
-BlockMod_KGI <- gam(BW37 ~ s(ice_conc,k=4),
+allData_KGI$Binary <- ifelse(allData_KGI$Mn > 0, 1, 0)
+BlockMod_KGI <- gam(Mn ~ s(julian_day,k=4),
                     family = tw(link = "log", a = 1.1, b = 1.9), data = allData_KGI, method = "REML")
 ACF = acf(residuals(BlockMod_KGI), lag.max = 1500) 
 CI = ggfortify:::confint.acf(ACF)
