@@ -12,7 +12,8 @@ allData <- allData %>% subset(select = -Day)
 allData$date <- as.Date(allData$date)   # <-- add this line
 # Choose variables + sites + species to plot
 environmental_vars <- as.vector(c('AAO','FSLE','SSH','EKE','EKE_mad','temperature','salinity', 'chla','o2',
-                                  'productivity','mixed_layer','ice_conc','ice_thickness','ice_diff','fsle_orient')) 
+                                  'productivity','mixed_layer','ice_conc','ice_thickness','ice_diff','fsle_orient',
+                                  'fsle_sd','chla_sd','ssh_sd','mixed_layer_sd','temp_sd','salinity_sd','o2_sd','productivity_sd')) 
 # options: AAO, FSLE, SSH, EKE, EKE_mad, temperature, salinity, mixed_layer, chla (chlorophyll), o2 (oxygen),
 #   productivity (primary production), ice_conc (sea ice concentration), ice_thickness (sea ice thickness),
 #   ice_diff (daily difference in ice concentration), fsle_orient (orientation of fsle vector)
@@ -318,6 +319,30 @@ makePlot <- function(data, var, depths, species) {
   } else if(var == 'fsle_orient') {
     label <- "Orientation of FSLE Vector"
     col <- 'dimgray'
+  } else if(var == 'fsle_sd') {
+    label <- "Standard Deviation of FSLE"
+    col <- 'chartreuse3'
+  } else if(var == 'chla_sd') {
+    label <- "Standard Deviation of Chlorophyll (mg/m3)"
+    col <- 'chartreuse3'
+  } else if(var == 'ssh_sd') {
+    label <- "Standard Deviation of Sea Surface Height (m)"
+    col <- 'chartreuse3'
+  } else if(var == 'mixed_layer_sd') {
+    label <- "Standard Deviation of Mixed Layer Depth (m)"
+    col <- 'chartreuse3'
+  } else if(var == 'temp_sd') {
+    label <- "Standard Deviation of Temperature (°C)"
+    col <- 'chartreuse3'
+  } else if(var == 'salinity_sd') {
+    label <- "Standard Deviation of Salinity (psu)"
+    col <- 'chartreuse3'
+  } else if(var == 'o2_sd') {
+    label <- "Standard Deviation of Oxygen Concentration (mmol/m3)"
+    col <- 'chartreuse3'
+  } else if(var == 'productivity_sd') {
+    label <- "Standard Deviation of Net Primary Production (mg/m3/day carbon)"
+    col <- 'chartreuse3'
   }
   
   
