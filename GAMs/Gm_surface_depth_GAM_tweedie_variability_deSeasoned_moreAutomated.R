@@ -20,6 +20,15 @@ species <- c('Gm') # options: BW29, BW37, Oo, Pm, Gm
 sites <- c('EI','KGI','CI')
 ice_threshold <- 0.15
 
+themes_keywords <- list(
+  mesoscale = c("FSLE","fsle","SSH","ssh","EKE"),
+  productivity = c("productivity","chla"),
+  oxygen = c("o2"),
+  salinity = c("salinity"),
+  stratification = c("mixed_layer"),
+  temperature = c("temp","temperature")
+)
+
 # Function to write out full name of a species/site code
 name <- function(abbrev) {
   if (abbrev == "CI") {
@@ -330,86 +339,6 @@ KGI_binned_deseasoned <- make_monthly_anoms_binned(KGI_binned, vars_to_anom, dat
 CI_binned_deseasoned  <- make_monthly_anoms_binned(CI_binned,  vars_to_anom, date_col = "bin_start", standardize = FALSE)
 
 # -------------- Step 4: VIF for Correlation -------------------
-# Not including any variables at depth for initial predictors.
-# Also, not modeling AAO (varies on yearly timescales) and ice thickness
-# Only including julian day for KGI, since it has almost 1 year of data
-
-#VIF FUNCTION MANUAL
-
-# ELEPHANT ISLAND
-EI_pred <- c("FSLE_anom", "SSH_anom", "mixed_layer_anom", 'fsle_orient_anom', "salinity_0_anom", 
-                     "temperature_0_anom", "EKE_mad_0_anom",'o2_0_anom','chla_0_anom','productivity_0_anom',
-             'temperature_635_anom','temperature_16_anom','salinity_635_anom','salinity_16_anom',
-             'EKE_635_anom','EKE_16_anom','o2_635_anom','o2_16_anom','chla_16_anom','productivity_16_anom')
-mod_formula <- paste(species, "~", paste(EI_pred, collapse = " + "))
-# EI vif model is not converging when run as a logistic regression, so running as a linear regression instead
-EI_vif <- glm(as.formula(mod_formula), data = EI_binned)
-vif(EI_vif)
-
-#....several steps later
-# EI_pred <- c("FSLE_anom", "SSH_anom", "mixed_layer_anom", 'fsle_orient_anom',
-#              +              "temperature_0_anom", "EKE_mad_0_anom",'productivity_0_anom',
-#              +              'salinity_635_anom','salinity_16_anom',
-#              +              'EKE_635_anom','EKE_16_anom','o2_635_anom','o2_16_anom')
-# > mod_formula <- paste(species, "~", paste(EI_pred, collapse = " + "))
-# > # EI vif model is not converging when run as a logistic regression, so running as a linear regression instead
-#   > EI_vif <- glm(as.formula(mod_formula), data = EI_binned)
-# > vif(EI_vif)
-# FSLE_anom            SSH_anom    mixed_layer_anom    fsle_orient_anom  temperature_0_anom      EKE_mad_0_anom 
-# 2.574846            1.477603            1.846260            1.979118            3.819563            1.227501 
-# productivity_0_anom   salinity_635_anom    salinity_16_anom        EKE_635_anom         EKE_16_anom         o2_635_anom 
-# 2.272908            3.015832            4.184875            2.835712            2.121757            1.796647 
-# o2_16_anom 
-# 2.798717
-
-# KING GEORGE ISLAND
-KGI_pred <- c("FSLE_anom", "SSH_anom", "mixed_layer_anom", 'fsle_orient_anom', "salinity_0_anom", 
-              "temperature_0_anom", "EKE_mad_0_anom",'o2_0_anom','chla_0_anom','productivity_0_anom',
-              'temperature_635_anom','temperature_16_anom','salinity_635_anom','salinity_16_anom',
-              'EKE_635_anom','EKE_16_anom','o2_635_anom','o2_16_anom','chla_16_anom','productivity_16_anom')
-mod_formula <- reformulate(KGI_pred, response = species)
-KGI_vif <- lm(mod_formula, data = KGI_binned)
-vif(KGI_vif)
-#...several steps later
-# KGI_pred <- c("FSLE_anom", "SSH_anom", "mixed_layer_anom", 'fsle_orient_anom', "salinity_0_anom", 
-#               +               "EKE_mad_0_anom",'productivity_0_anom',
-#               +               'temperature_635_anom','temperature_16_anom','salinity_635_anom',
-#               +               'EKE_635_anom','EKE_16_anom','o2_635_anom','o2_16_anom','productivity_16_anom')
-# > mod_formula <- reformulate(KGI_pred, response = species)
-# > KGI_vif <- lm(mod_formula, data = KGI_binned)
-# > vif(KGI_vif)
-# FSLE_anom             SSH_anom     mixed_layer_anom     fsle_orient_anom      salinity_0_anom       EKE_mad_0_anom 
-# 1.442538             1.983052             3.935052             1.503552             2.010805             1.569729 
-# productivity_0_anom temperature_635_anom  temperature_16_anom    salinity_635_anom         EKE_635_anom          EKE_16_anom 
-# 2.883041             2.569088             4.981332             1.696504             1.944587             1.609626 
-# o2_635_anom           o2_16_anom productivity_16_anom 
-# 2.296668             3.655062             1.979022 
-
-# CLARENCE ISLAND
-CI_pred <- c("FSLE_anom", "SSH_anom", "mixed_layer_anom", 'fsle_orient_anom', "salinity_0_anom", 
-            "temperature_0_anom", "EKE_mad_0_anom",'o2_0_anom','chla_0_anom','productivity_0_anom',
-            'temperature_635_anom','temperature_16_anom','salinity_635_anom','salinity_16_anom',
-            'EKE_635_anom','EKE_16_anom','o2_635_anom','o2_16_anom','chla_16_anom','productivity_16_anom')
-mod_formula <- reformulate(CI_pred, response = species)
-CI_vif <- lm(mod_formula, data = CI_binned)
-vif(CI_vif)
-
-#...several steps later
-# CI_pred <- c("FSLE_anom", "SSH_anom", "mixed_layer_anom", 'fsle_orient_anom', 
-#              +              "EKE_mad_0_anom",'o2_0_anom','chla_0_anom',
-#              +              'temperature_16_anom','salinity_635_anom','salinity_16_anom',
-#              +              'EKE_635_anom','EKE_16_anom','o2_635_anom','productivity_16_anom')
-# > mod_formula <- reformulate(CI_pred, response = species)
-# > CI_vif <- lm(mod_formula, data = CI_binned)
-# > vif(CI_vif)
-# FSLE_anom             SSH_anom     mixed_layer_anom     fsle_orient_anom       EKE_mad_0_anom            o2_0_anom 
-# 2.188830             1.927728             2.020192             1.953959             5.070698             3.723026 
-# chla_0_anom  temperature_16_anom    salinity_635_anom     salinity_16_anom         EKE_635_anom          EKE_16_anom 
-# 3.263084             2.939195             3.385895             2.302461             2.937594             1.975363 
-# o2_635_anom productivity_16_anom 
-# 2.680227             2.500594 
-
-# VIF AUTOMATED
 vif_stepwise_drop <- function(data, response, predictors,
                               vif_thresh = 10,
                               family = gaussian(),
@@ -555,6 +484,10 @@ build_preds <- function(df,
   # ---- lags handling ----
   # keep only 3mon and 6mon lags (and drop other lags)
   lag_vars <- pred[grepl("_\\d+mon$", pred)]
+  
+  # keep only productivity_ and chla_ lags
+  lag_vars <- lag_vars[grepl("^(productivity|chla)_", lag_vars)]
+  
   lag_nums <- as.integer(sub(".*_(\\d+)mon$", "\\1", lag_vars))
   lag_keep_vars <- lag_vars[lag_nums %in% keep_lags]
   
@@ -591,6 +524,71 @@ build_preds <- function(df,
   final
 }
 
+assign_themes <- function(kept_predictors, themes_keywords) {
+  
+  theme_list <- list()
+  
+  for (theme in names(themes_keywords)) {
+    
+    keywords <- themes_keywords[[theme]]
+    
+    matched <- kept_predictors[
+      sapply(kept_predictors, function(var) {
+        any(sapply(keywords, function(k)
+          grepl(k, var, ignore.case = TRUE)))
+      })
+    ]
+    
+    if (length(matched) > 0) {
+      theme_list[[theme]] <- matched
+    }
+  }
+  
+  return(theme_list)
+}
+
+select_best_by_theme <- function(data, response, themes,
+                                 family = tw(link="log", a=1.1, b=1.9)) {
+  
+  winners <- c()
+  
+  for (theme in names(themes)) {
+    
+    vars <- themes[[theme]]
+    vars <- vars[vars %in% names(data)]  # keep only existing
+    
+    if (length(vars) == 0) next
+    
+    models <- list()
+    aics <- c()
+    devs <- c()
+    
+    for (v in vars) {
+      mod <- gam(
+        as.formula(paste(response, "~ s(", v, ", k=4)")),
+        data = data,
+        family = family,
+        method = "REML"
+      )
+      
+      models[[v]] <- mod
+      aics[v] <- AIC(mod)
+      devs[v] <- summary(mod)$dev.expl
+    }
+    
+    best <- names(which.min(aics))
+    
+    cat("\nTheme:", theme,
+        "\n  Winner:", best,
+        "\n  AIC:", round(aics[best],2),
+        "\n  DevExpl:", round(devs[best],3), "\n")
+    
+    winners <- c(winners, best)
+  }
+  
+  return(winners)
+}
+
 #EI
 EI_pred <- build_preds(EI_binned, species = species)
 
@@ -603,13 +601,20 @@ res_EI <- vif_stepwise_drop(
   data       = EI_binned,
   response   = species,          # e.g., "Gm"
   predictors = EI_pred,
-  vif_thresh = 10,
+  vif_thresh = 5,
   family     = gaussian(),       # like you were doing
   verbose    = TRUE
 )
 
 res_EI$kept_predictors
 car::vif(res_EI$final_fit)
+
+themes_EI <- assign_themes(res_EI$kept_predictors, themes_keywords)
+EI_winners <- select_best_by_theme(
+  data = EI_binned,
+  response = "Gm",
+  themes = themes_EI
+)
 
 #KGI
 KGI_pred <- build_preds(KGI_binned, species = species)
@@ -622,7 +627,7 @@ KGI_pred <- remove_zero_var(KGI_binned, KGI_pred)
 res_KGI <- vif_stepwise_drop(
   data       = KGI_binned,
   response   = species,          # e.g., "Gm"
-  predictors = EI_pred,
+  predictors = KGI_pred,
   vif_thresh = 10,
   family     = gaussian(),       # like you were doing
   verbose    = TRUE
@@ -642,7 +647,7 @@ CI_pred <- remove_zero_var(CI_binned, CI_pred)
 res_CI <- vif_stepwise_drop(
   data       = CI_binned,
   response   = species,          # e.g., "Gm"
-  predictors = EI_pred,
+  predictors = CI_pred,
   vif_thresh = 10,
   family     = gaussian(),       # like you were doing
   verbose    = TRUE
@@ -662,353 +667,143 @@ plotGam1 <- function(gam) {
   return(plot(gam,trans=plogis,shift=coef(gam)[1],seWithMean=TRUE,scheme=2,pages=1))
 }
 
-# -------------------- Step 5a: Elephant Island GAM ------------------------------
-# FSLE_anom            SSH_anom    mixed_layer_anom    fsle_orient_anom  temperature_0_anom      EKE_mad_0_anom 
-# 2.574846            1.477603            1.846260            1.979118            3.819563            1.227501 
-# productivity_0_anom   salinity_635_anom    salinity_16_anom        EKE_635_anom         EKE_16_anom         o2_635_anom 
-# 2.272908            3.015832            4.184875            2.835712            2.121757            1.796647 
-# o2_16_anom 
-# 2.798717
+#Auto-build GAMs
+build_gam_formula <- function(response, predictors, k = 4) {
+  smooth_terms <- paste0("s(", predictors, ", k=", k, ")")
+  as.formula(paste(response, "~", paste(smooth_terms, collapse = " + ")))
+}
 
-#Full model
-EI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4)  + s(mixed_layer_anom,k=4,sp=0.1) + s(fsle_orient_anom,k=4,sp=0.1) +
-                s(temperature_0_anom,k=4,sp=0.1) + s(EKE_mad_0_anom,k=4,sp=0.1) + s(productivity_0_anom,k=4,sp=0.1) + 
-                s(salinity_635_anom,k=4,sp=0.1) + s(salinity_16_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1) +
-                s(EKE_16_anom,k=4,sp=0.1) + s(o2_635_anom,k=4,sp=0.1) + s(o2_16_anom,k=4,sp=0.1),
-              family = tw(link = "log", a = 1.1, b = 1.9), data = EI_binned, method = "REML")
+#Backward elimination
+auto_gam <- function(data, response, predictors,
+                     family = tw(link="log", a=1.1, b=1.9),
+                     k = 4,
+                     p_thresh = 0.05,
+                     verbose = TRUE) {
+  
+  current_preds <- predictors
+  
+  repeat {
+    
+    form <- build_gam_formula(response, current_preds, k)
+    
+    mod <- gam(form, data = data, family = family, method = "REML")
+    
+    summ <- summary(mod)
+    pvals <- summ$s.pv
+    names(pvals) <- rownames(summ$s.table)
+    
+    worst_p <- max(pvals)
+    
+    if (verbose) {
+      message("Max p-value = ", round(worst_p, 4))
+    }
+    
+    if (worst_p <= p_thresh || length(current_preds) == 1) {
+      break
+    }
+    
+    worst_term <- names(which.max(pvals))
+    worst_var <- gsub("s\\(|\\)", "", worst_term)
+    
+    if (verbose) {
+      message("Dropping: ", worst_var)
+    }
+    
+    current_preds <- setdiff(current_preds, worst_var)
+  }
+  
+  return(mod)
+}
 
-# Remove salinity_635
-EI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4)  + s(mixed_layer_anom,k=4,sp=0.1) + s(fsle_orient_anom,k=4,sp=0.1) +
-                s(temperature_0_anom,k=4,sp=0.1) + s(EKE_mad_0_anom,k=4,sp=0.1) + s(productivity_0_anom,k=4,sp=0.1) + 
-                s(salinity_16_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1) +
-                s(EKE_16_anom,k=4,sp=0.1) + s(o2_635_anom,k=4,sp=0.1) + s(o2_16_anom,k=4,sp=0.1),
-              family = tw(link = "log", a = 1.1, b = 1.9), data = EI_binned, method = "REML")
-
-# Remove salinity_16
-EI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4)  + s(mixed_layer_anom,k=4,sp=0.1) + s(fsle_orient_anom,k=4,sp=0.1) +
-                s(temperature_0_anom,k=4,sp=0.1) + s(EKE_mad_0_anom,k=4,sp=0.1) + s(productivity_0_anom,k=4,sp=0.1) + 
-                s(EKE_635_anom,k=4,sp=0.1) +
-                s(EKE_16_anom,k=4,sp=0.1) + s(o2_635_anom,k=4,sp=0.1) + s(o2_16_anom,k=4,sp=0.1),
-              family = tw(link = "log", a = 1.1, b = 1.9), data = EI_binned, method = "REML")
-
-# Remove o2_635
-EI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4)  + s(mixed_layer_anom,k=4,sp=0.1) + s(fsle_orient_anom,k=4,sp=0.1) +
-                s(temperature_0_anom,k=4,sp=0.1) + s(EKE_mad_0_anom,k=4,sp=0.1) + s(productivity_0_anom,k=4,sp=0.1) + 
-                s(EKE_635_anom,k=4,sp=0.1) +
-                s(EKE_16_anom,k=4,sp=0.1) + s(o2_16_anom,k=4,sp=0.1),
-              family = tw(link = "log", a = 1.1, b = 1.9), data = EI_binned, method = "REML")
-
-# Remove mixed_lay7er
-EI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4)  + s(fsle_orient_anom,k=4,sp=0.1) +
-                s(temperature_0_anom,k=4,sp=0.1) + s(EKE_mad_0_anom,k=4,sp=0.1) + s(productivity_0_anom,k=4,sp=0.1) + 
-                s(EKE_635_anom,k=4,sp=0.1) +
-                s(EKE_16_anom,k=4,sp=0.1) + s(o2_16_anom,k=4,sp=0.1),
-              family = tw(link = "log", a = 1.1, b = 1.9), data = EI_binned, method = "REML")
-
-#Remove fsle_orient
-EI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4)  + 
-                s(temperature_0_anom,k=4,sp=0.1) + s(EKE_mad_0_anom,k=4,sp=0.1) + s(productivity_0_anom,k=4,sp=0.1) + 
-                s(EKE_635_anom,k=4,sp=0.1) +
-                s(EKE_16_anom,k=4,sp=0.1) + s(o2_16_anom,k=4,sp=0.1),
-              family = tw(link = "log", a = 1.1, b = 1.9), data = EI_binned, method = "REML")
-
-#Remove salinity_635
-EI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4)  + 
-                s(temperature_0_anom,k=4,sp=0.1) + s(EKE_mad_0_anom,k=4,sp=0.1) + s(productivity_0_anom,k=4,sp=0.1) + 
-                s(EKE_16_anom,k=4,sp=0.1) + s(o2_16_anom,k=4,sp=0.1),
-              family = tw(link = "log", a = 1.1, b = 1.9), data = EI_binned, method = "REML")
-
-#Remove salinity_635
-EI_gam <- gam(Gm ~ s(SSH_anom ,k=4)  + 
-                s(temperature_0_anom,k=4,sp=0.1) + s(EKE_mad_0_anom,k=4,sp=0.1) + s(productivity_0_anom,k=4,sp=0.1) + 
-                s(EKE_16_anom,k=4,sp=0.1) + s(o2_16_anom,k=4,sp=0.1),
-              family = tw(link = "log", a = 1.1, b = 1.9), data = EI_binned, method = "REML")
-
-#Remove EKE_mad
-EI_gam <- gam(Gm ~ s(SSH_anom ,k=4)  + 
-                s(temperature_0_anom,k=4,sp=0.1) + s(productivity_0_anom,k=4,sp=0.1) + 
-                s(EKE_16_anom,k=4,sp=0.1) + s(o2_16_anom,k=4,sp=0.1),
-              family = tw(link = "log", a = 1.1, b = 1.9), data = EI_binned, method = "REML")
-
-#Remove SSH_anom
-EI_gam <- gam(Gm ~ s(temperature_0_anom,k=4,sp=0.1) + s(productivity_0_anom,k=4,sp=0.1) + 
-                s(EKE_16_anom,k=4,sp=0.1) + s(o2_16_anom,k=4,sp=0.1),
-              family = tw(link = "log", a = 1.1, b = 1.9), data = EI_binned, method = "REML")
-
-#Remove temp_0
-EI_final <- gam(Gm ~ s(productivity_0_anom,k=4,sp=0.1) + 
-                s(EKE_16_anom,k=4,sp=0.1) + s(o2_16_anom,k=4,sp=0.1),
-              family = tw(link = "log", a = 1.1, b = 1.9), data = EI_binned, method = "REML")
+EI_final <- auto_gam(
+  data = EI_binned,
+  response = "Gm",
+  predictors = res_EI$kept_predictors
+)
 
 
-# -------------------- Step 5b: King George Island GAM -------------------------
-# FSLE_anom             SSH_anom     mixed_layer_anom     fsle_orient_anom      salinity_0_anom       EKE_mad_0_anom 
-# 1.442538             1.983052             3.935052             1.503552             2.010805             1.569729 
-# productivity_0_anom temperature_635_anom  temperature_16_anom    salinity_635_anom         EKE_635_anom          EKE_16_anom 
-# 2.883041             2.569088             4.981332             1.696504             1.944587             1.609626 
-# o2_635_anom           o2_16_anom productivity_16_anom 
-# 2.296668             3.655062             1.979022 
-#Full model
-KGI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4)  + s(mixed_layer_anom,k=4,sp=0.1) + s(fsle_orient_anom,k=4,sp=0.1) +
-                s(salinity_0_anom,k=4,sp=0.1) + s(EKE_mad_0_anom,k=4,sp=0.1) + s(productivity_0_anom,k=4,sp=0.1) + 
-                s(salinity_635_anom,k=4,sp=0.1) + s(temperature_16_anom,k=4,sp=0.1) + s(temperature_635_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1) +
-                s(EKE_16_anom,k=4,sp=0.1) + s(o2_635_anom,k=4,sp=0.1) + s(o2_16_anom,k=4,sp=0.1) + s(productivity_16_anom,k=4,sp=0.1),
-              family = tw(link = "log", a = 1.1, b = 1.9), data = KGI_binned, method = "REML")
+KGI_final <- auto_gam(
+  data = KGI_binned,
+  response = "Gm",
+  predictors = res_KGI$kept_predictors
+)
 
-# Remove EKE_16
-KGI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4)  + s(mixed_layer_anom,k=4,sp=0.1) + s(fsle_orient_anom,k=4,sp=0.1) +
-                 s(salinity_0_anom,k=4,sp=0.1) + s(EKE_mad_0_anom,k=4,sp=0.1) + s(productivity_0_anom,k=4,sp=0.1) + 
-                 s(salinity_635_anom,k=4,sp=0.1) + s(temperature_16_anom,k=4,sp=0.1) + s(temperature_635_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1) +
-                 s(o2_635_anom,k=4,sp=0.1) + s(o2_16_anom,k=4,sp=0.1) + s(productivity_16_anom,k=4,sp=0.1),
-               family = tw(link = "log", a = 1.1, b = 1.9), data = KGI_binned, method = "REML")
-
-# Remove 02_635
-KGI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4)  + s(mixed_layer_anom,k=4,sp=0.1) + s(fsle_orient_anom,k=4,sp=0.1) +
-                 s(salinity_0_anom,k=4,sp=0.1) + s(EKE_mad_0_anom,k=4,sp=0.1) + s(productivity_0_anom,k=4,sp=0.1) + 
-                 s(salinity_635_anom,k=4,sp=0.1) + s(temperature_16_anom,k=4,sp=0.1) + s(temperature_635_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1) +
-                 s(o2_16_anom,k=4,sp=0.1) + s(productivity_16_anom,k=4,sp=0.1),
-               family = tw(link = "log", a = 1.1, b = 1.9), data = KGI_binned, method = "REML")
-
-# Remove fsle_orient
-KGI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4)  + s(mixed_layer_anom,k=4,sp=0.1) + 
-                 s(salinity_0_anom,k=4,sp=0.1) + s(EKE_mad_0_anom,k=4,sp=0.1) + s(productivity_0_anom,k=4,sp=0.1) + 
-                 s(salinity_635_anom,k=4,sp=0.1) + s(temperature_16_anom,k=4,sp=0.1) + s(temperature_635_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1) +
-                 s(o2_16_anom,k=4,sp=0.1) + s(productivity_16_anom,k=4,sp=0.1),
-               family = tw(link = "log", a = 1.1, b = 1.9), data = KGI_binned, method = "REML")
-
-# Remove salinity_635
-KGI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4)  + s(mixed_layer_anom,k=4,sp=0.1) + 
-                 s(salinity_0_anom,k=4,sp=0.1) + s(EKE_mad_0_anom,k=4,sp=0.1) + s(productivity_0_anom,k=4,sp=0.1) + 
-                 s(temperature_16_anom,k=4,sp=0.1) + s(temperature_635_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1) +
-                 s(o2_16_anom,k=4,sp=0.1) + s(productivity_16_anom,k=4,sp=0.1),
-               family = tw(link = "log", a = 1.1, b = 1.9), data = KGI_binned, method = "REML")
-
-# Remove EKE_mad_0
-KGI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4)  + s(mixed_layer_anom,k=4,sp=0.1) + 
-                 s(salinity_0_anom,k=4,sp=0.1) + s(productivity_0_anom,k=4,sp=0.1) + 
-                 s(temperature_16_anom,k=4,sp=0.1) + s(temperature_635_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1) +
-                 s(o2_16_anom,k=4,sp=0.1) + s(productivity_16_anom,k=4,sp=0.1),
-               family = tw(link = "log", a = 1.1, b = 1.9), data = KGI_binned, method = "REML")
-
-# Remove prod_16
-KGI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4)  + s(mixed_layer_anom,k=4,sp=0.1) + 
-                 s(salinity_0_anom,k=4,sp=0.1) + s(productivity_0_anom,k=4,sp=0.1) + 
-                 s(temperature_16_anom,k=4,sp=0.1) + s(temperature_635_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1) +
-                 s(o2_16_anom,k=4,sp=0.1),
-               family = tw(link = "log", a = 1.1, b = 1.9), data = KGI_binned, method = "REML")
-
-# Remove SSH_anom
-KGI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(mixed_layer_anom,k=4,sp=0.1) + 
-                 s(salinity_0_anom,k=4,sp=0.1) + s(productivity_0_anom,k=4,sp=0.1) + 
-                 s(temperature_16_anom,k=4,sp=0.1) + s(temperature_635_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1) +
-                 s(o2_16_anom,k=4,sp=0.1),
-               family = tw(link = "log", a = 1.1, b = 1.9), data = KGI_binned, method = "REML")
-
-# Remove 02_16
-KGI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(mixed_layer_anom,k=4,sp=0.1) + 
-                 s(salinity_0_anom,k=4,sp=0.1) + s(productivity_0_anom,k=4,sp=0.1) + 
-                 s(temperature_16_anom,k=4,sp=0.1) + s(temperature_635_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1),
-               family = tw(link = "log", a = 1.1, b = 1.9), data = KGI_binned, method = "REML")
-
-# Remove prod_0
-KGI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(mixed_layer_anom,k=4,sp=0.1) + 
-                 s(salinity_0_anom,k=4,sp=0.1) +
-                 s(temperature_16_anom,k=4,sp=0.1) + s(temperature_635_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1),
-               family = tw(link = "log", a = 1.1, b = 1.9), data = KGI_binned, method = "REML")
-
-# Remove FSLE
-KGI_gam <- gam(Gm ~ s(mixed_layer_anom,k=4,sp=0.1) + 
-                 s(salinity_0_anom,k=4,sp=0.1) +
-                 s(temperature_16_anom,k=4,sp=0.1) + s(temperature_635_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1),
-               family = tw(link = "log", a = 1.1, b = 1.9), data = KGI_binned, method = "REML")
-
-# Remove SSH
-KGI_gam <- gam(Gm ~ s(salinity_0_anom,k=4,sp=0.1) +
-                 s(temperature_16_anom,k=4,sp=0.1) + s(temperature_635_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1),
-               family = tw(link = "log", a = 1.1, b = 1.9), data = KGI_binned, method = "REML")
-
-# Remove temp_635
-KGI_final <- gam(Gm ~ s(salinity_0_anom,k=4,sp=0.1) +
-                 s(temperature_16_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1),
-               family = tw(link = "log", a = 1.1, b = 1.9), data = KGI_binned, method = "REML")
-
-
-# --------------------- Step 5c: Clarence Island GAM ------------------------------------
-# FSLE_anom             SSH_anom     mixed_layer_anom     fsle_orient_anom       EKE_mad_0_anom            o2_0_anom 
-# 2.188830             1.927728             2.020192             1.953959             5.070698             3.723026 
-# chla_0_anom  temperature_16_anom    salinity_635_anom     salinity_16_anom         EKE_635_anom          EKE_16_anom 
-# 3.263084             2.939195             3.385895             2.302461             2.937594             1.975363 
-# o2_635_anom productivity_16_anom 
-# 2.680227             2.500594
-
-CI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4)  + s(mixed_layer_anom,k=4,sp=0.1) +
-                s(EKE_mad_0_anom,k=4,sp=0.1) + s(o2_0_anom,k=4,sp=0.1) + s(chla_0_anom,k=4,sp=0.1) + 
-                s(salinity_635_anom,k=4,sp=0.1) + s(salinity_16_anom,k=4,sp=0.1) + s(temperature_16_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1) +
-                s(EKE_16_anom,k=4,sp=0.1) + s(o2_635_anom,k=4,sp=0.1) + s(productivity_16_anom,k=4,sp=0.1),
-              family = tw(link = "log", a = 1.1, b = 1.9), data = CI_binned, method = "REML")
-
-# Remove EKE_16
-CI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4)  + s(mixed_layer_anom,k=4,sp=0.1) +
-                s(EKE_mad_0_anom,k=4,sp=0.1) + s(o2_0_anom,k=4,sp=0.1) + s(chla_0_anom,k=4,sp=0.1) + 
-                s(salinity_635_anom,k=4,sp=0.1) + s(salinity_16_anom,k=4,sp=0.1) + s(temperature_16_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1) +
-               s(o2_635_anom,k=4,sp=0.1) + s(productivity_16_anom,k=4,sp=0.1),
-              family = tw(link = "log", a = 1.1, b = 1.9), data = CI_binned, method = "REML")
-
-# Remove mixed_layer
-CI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4) +
-                s(EKE_mad_0_anom,k=4,sp=0.1) + s(o2_0_anom,k=4,sp=0.1) + s(chla_0_anom,k=4,sp=0.1) + 
-                s(salinity_635_anom,k=4,sp=0.1) + s(salinity_16_anom,k=4,sp=0.1) + s(temperature_16_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1) +
-                s(o2_635_anom,k=4,sp=0.1) + s(productivity_16_anom,k=4,sp=0.1),
-              family = tw(link = "log", a = 1.1, b = 1.9), data = CI_binned, method = "REML")
-
-# Remove salinity_635
-CI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4) +
-                s(EKE_mad_0_anom,k=4,sp=0.1) + s(o2_0_anom,k=4,sp=0.1) + s(chla_0_anom,k=4,sp=0.1) + 
-                s(salinity_635_anom,k=4,sp=0.1) + s(temperature_16_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1) +
-                s(o2_635_anom,k=4,sp=0.1) + s(productivity_16_anom,k=4,sp=0.1),
-              family = tw(link = "log", a = 1.1, b = 1.9), data = CI_binned, method = "REML")
-
-# Remove o2_0
-CI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4) +
-                s(EKE_mad_0_anom,k=4,sp=0.1) + s(chla_0_anom,k=4,sp=0.1) + 
-                s(salinity_635_anom,k=4,sp=0.1) + s(temperature_16_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1) +
-                s(o2_635_anom,k=4,sp=0.1) + s(productivity_16_anom,k=4,sp=0.1),
-              family = tw(link = "log", a = 1.1, b = 1.9), data = CI_binned, method = "REML")
-
-# Remove salinity_635
-CI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4) +
-                s(EKE_mad_0_anom,k=4,sp=0.1) + s(chla_0_anom,k=4,sp=0.1) + 
-                s(temperature_16_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1) +
-                s(o2_635_anom,k=4,sp=0.1) + s(productivity_16_anom,k=4,sp=0.1),
-              family = tw(link = "log", a = 1.1, b = 1.9), data = CI_binned, method = "REML")
-
-# Remove prod_16
-CI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4) +
-                s(EKE_mad_0_anom,k=4,sp=0.1) + s(chla_0_anom,k=4,sp=0.1) + 
-                s(temperature_16_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1) +
-                s(o2_635_anom,k=4,sp=0.1),
-              family = tw(link = "log", a = 1.1, b = 1.9), data = CI_binned, method = "REML")
-
-# Remove 02_635
-CI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4) +
-                s(EKE_mad_0_anom,k=4,sp=0.1) + s(chla_0_anom,k=4,sp=0.1) + 
-                s(temperature_16_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1),
-              family = tw(link = "log", a = 1.1, b = 1.9), data = CI_binned, method = "REML")
-
-# Remove EKE_mad
-CI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4) + s(chla_0_anom,k=4,sp=0.1) + 
-                s(temperature_16_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1),
-              family = tw(link = "log", a = 1.1, b = 1.9), data = CI_binned, method = "REML")
-
-# Remove chla_0
-CI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4) +
-                s(temperature_16_anom,k=4,sp=0.1) + s(EKE_635_anom,k=4,sp=0.1),
-              family = tw(link = "log", a = 1.1, b = 1.9), data = CI_binned, method = "REML")
-
-# Remove EKE_635
-CI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4) +
-                s(temperature_16_anom,k=4,sp=0.1),
-              family = tw(link = "log", a = 1.1, b = 1.9), data = CI_binned, method = "REML")
-
-# Remove EKE_635
-CI_gam <- gam(Gm ~ s(FSLE_anom ,k=4) + s(SSH_anom ,k=4),
-              family = tw(link = "log", a = 1.1, b = 1.9), data = CI_binned, method = "REML")
-
-CI_final <- gam(Gm ~ s(SSH_anom ,k=4),
-              family = tw(link = "log", a = 1.1, b = 1.9), data = CI_binned, method = "REML")
+CI_final <- auto_gam(
+  data = CI_binned,
+  response = "Gm",
+  predictors = res_CI$kept_predictors
+)
 
 # ------------------ Step 6: Visualize GAMs -------------------
 # Function to create a cleaner visualization of a GAM model
-visualizeGAM <- function(gam, predictors, sp) {
-  # Accessing and preparing data
-  # extracting data to use for a ggplot of the GAM
-  plot_info <- smooth_estimates(gam)
+visualizeGAM <- function(gam, sp) {
   
-  # adding confidence interval
-  plot_info <- plot_info %>% add_confint()
+  # Automatically extract smooth variable names
+  predictors <- gam$smooth |> 
+    sapply(function(x) x$term) |> 
+    unlist()
   
-  # shifting by intercept and transforming to logistic (probability as y-axis)
-  dont_shift <- names(plot_info) %in% c('.smooth','.type','.by','.se',predictors)
-  plot_info <- plot_info %>%
-    gratia:::shift_values(i = dont_shift, h = coef(gam)[1], FUN = '+') %>%
+  plot_info <- smooth_estimates(gam) |> add_confint()
+  
+  dont_shift <- names(plot_info) %in% 
+    c('.smooth','.type','.by','.se', predictors)
+  
+  plot_info <- plot_info |>
+    gratia:::shift_values(i = dont_shift,
+                          h = coef(gam)[1],
+                          FUN = '+') |>
     transform_fun(fun = plogis)
   
-  # Extracting deviance explained and p-values from the model
-  summary <- summary(gam)
-  deviance <- round(summary$dev.expl * 100, 3)
-  p_values <- setNames(summary$s.pv, rownames(summary$s.table))
+  summ <- summary(gam)
+  deviance <- round(summ$dev.expl * 100, 2)
+  p_values <- setNames(summ$s.pv, rownames(summ$s.table))
   
-  # Creating list to store plots in 
   all_plots <- list()
   
-  # Looping through all terms in GAM model
   for(p in predictors) {
-    # Keeping only the current predictor
-    current_plot <- filter(plot_info, .smooth == paste0('s(',p,')'))
     
-    # Extracting p-value
+    current_plot <- dplyr::filter(
+      plot_info,
+      .smooth == paste0("s(", p, ")")
+    )
+    
     current_p_val <- p_values[[paste0("s(", p, ")")]]
-    if(current_p_val == 0) {
-      current_p_val <- 1 * 10^-6
-    }
-    current_plot$label <- paste0("p-value = ", round(current_p_val,6))
+    current_p_val <- max(current_p_val, 1e-6)
     
-    # Setting position for p-value label
-    current_plot$label_x <- max(current_plot[,p],na.rm=TRUE) - 
-      (0.2*((max(current_plot[,p],na.rm=TRUE)) - (max(current_plot[,p],na.rm=TRUE))))
-    current_plot$label_y <- 0.98
+    current_plot$label <- paste0("p = ",
+                                 signif(current_p_val, 3))
     
-    # Setting limits for x axis
-    x_vals <- pull(current_plot, p)
+    x_vals <- current_plot[[p]]
     x_lim <- range(x_vals, na.rm = TRUE)
     
-    # Creating plot
-    plot <- ggplot() +
-      # Confidence interval ribbon plot
-      geom_ribbon(data=current_plot,
-                  aes(ymin = .lower_ci, ymax = .upper_ci, y = .estimate, x = .data[[p]]), alpha = 0.2) +
-      
-      # Line plot for smooth function
-      geom_line(data=current_plot,aes(y = .estimate, x = .data[[p]]), linewidth = 1) +
-      
-      # Rug plot to show observed predictor values
-      geom_rug(data = gam$model, aes(x = .data[[p]]), sides = "b", length = grid::unit(0.03, "npc")) +
-      
-      # Adding p-value label
-      geom_label(data=current_plot,
-                 aes(x = label_x, y = label_y, label = label), stat = "unique",
-                 size = 3.5, alpha = 0.6, label.padding = unit(0.4, "lines"),hjust=1.2,vjust=1) +
-      
-      # Styling and cropping plot
-      labs(y = "Partial effect", x = nameVar(p)) + theme_bw() + ylim(0,1) + xlim(x_lim) + 
-      scale_x_continuous(expand = c(0, 0))
+    plot <- ggplot(current_plot) +
+      geom_ribbon(aes(x = .data[[p]],
+                      ymin = .lower_ci,
+                      ymax = .upper_ci),
+                  alpha = 0.2) +
+      geom_line(aes(x = .data[[p]],
+                    y = .estimate),
+                linewidth = 1) +
+      geom_rug(data = gam$model,
+               aes(x = .data[[p]]),
+               sides = "b") +
+      labs(y = "Partial effect",
+           x = nameVar(p)) +
+      theme_bw() +
+      ylim(0,1) +
+      xlim(x_lim)
     
-    # Adding plot object to list of plots
     all_plots[[length(all_plots)+1]] <- plot
   }
   
-  # Setting rows and columns for final display
-  if(length(predictors) == 1) {
-    row <- 1
-    col <- 1
-  } else if(length(predictors) == 2) {
-    row <- 1
-    col <- 2
-  } else if(length(predictors) == 3 || length(predictors) == 4) {
-    row <- 2
-    col <- 2
-  } else if(length(predictors) == 5 || length(predictors) == 6) {
-    row <- 2
-    col <- 3
-  } else {
-    row <- 3
-    col <- 3
-  }
-  
-  # Aggregating all the plots into one figure
-  final_plot <- wrap_plots(all_plots, nrow = row, ncol = col, guides = "collect") &
-    plot_annotation(title = paste0("Long-finned Pilot Whale at ",
-                                   sp," Presence (",deviance,"% Deviance Explained)"))
+  final_plot <- patchwork::wrap_plots(all_plots) +
+    patchwork::plot_annotation(
+      title = paste0("Long-finned Pilot Whale at ",
+                     sp,
+                     " (",
+                     deviance,
+                     "% deviance explained)")
+    )
   
   print(final_plot)
   return(final_plot)
@@ -1016,68 +811,71 @@ visualizeGAM <- function(gam, predictors, sp) {
 
 # Function to generate axis names from given variable names
 nameVar <- function(var) {
-  if(paste(var) == 'julian_day') {
-    return("Julian Day")
-  } else if(paste(var) == 'SSH') {
-    return('Sea Surface Height (m)')
-  } else if(paste(var) == 'SSH_anom') {
-    return('De-seasoned Sea Surface Height (m)')
-  } else if(paste(var) == 'FSLE,fsle_orient') {
-    return('FSLE Magnitude')
-  } else if(paste(var) == 'mixed_layer') {
-    return('Mixed Layer Depth (m)')
-  } else if(paste(var) == 'ice_conc') {
-    return('Sea Ice Concentration')
-  } else if(paste(var) == 'ice_thickness') {
-    return('Sea Ice Thickness')
-  } else if(paste(var) == 'ice_diff') {
-    return('Difference in Sea Ice Concentration')
-  } else if(paste(var) == 'temperature_0') {
-    return('Sea Surface Temperature (°C)')
-  } else if(paste(var) == 'temperature_16_anom') {
-    return('De-seasoned Temperature @ 16m (°C)')
-  } else if(paste(var) == 'salinity_0') {
-    return('Sea Surface Salinity (psu)')
-  } else if(paste(var) == 'salinity_16') {
-    return('Sea Surface Salinity @ 16m (psu)')
-  } else if(paste(var) == 'EKE_0') {
-    return('Eddy Kinetic Energy (cm^2/s^2)')
-  } else if(paste(var) == 'EKE_16') {
-    return('Eddy Kinetic Energy @ 16m (cm^2/s^2)')
-  } else if(paste(var) == 'EKE_16_anom') {
-    return('De-seasoned Eddy Kinetic Energy @ 16m (cm^2/s^2)')
-  } else if(paste(var) == 'EKE_635_anom') {
-    return('De-seasoned Eddy Kinetic Energy @ 635m (cm^2/s^2)')
-  } else if(paste(var) == 'EKE_635') {
-    return('Eddy Kinetic Energy @ 635m (cm^2/s^2)')
-  } else if(paste(var) == 'chla_0') {
-    return('Chlorophyll (mg/m^3)')
-  } else if(paste(var) == 'chla_16') {
-    return('Chlorophyll @ 16m (mg/m^3)')
-  } else if(paste(var) == 'o2_0') {
-    return('Oxygen (mmol/m^3)')
-  } else if(paste(var) == 'o2_16_anom') {
-    return('De-seasoned Oxygen (mmol/m^3)')
-  } else if(paste(var) == 'o2_635') {
-    return('Oxygen @ 635m (mmol/m^3)')
-  } else if(paste(var) == 'productivity_0') {
-    return('Net Primary Production (mg/m^3/day carbon)')
-  } else if(paste(var) == 'productivity_16') {
-    return('Net Primary Production @ 16m (mg/m^3/day carbon)')
-  } else if(paste(var) == 'productivity_0_anom') {
-    return('De-seasoned Net Primary Production (mg/m^3/day carbon)')
-  } else if(paste(var) == 'salinity_0_anom') {
-    return('De-seasoned Sea Surface Salinity (psu)')
-  } 
+  
+  labels <- c(
+    julian_day = "Julian Day",
+    
+    SSH = "Sea Surface Height (m)",
+    SSH_anom = "De-seasoned Sea Surface Height (m)",
+    
+    FSLE = "FSLE Magnitude",
+    FSLE_anom = "De-seasoned FSLE Magnitude",
+    fsle_orient = "FSLE Orientation",
+    fsle_orient_anom = "De-seasoned FSLE Orientation",
+    
+    mixed_layer = "Mixed Layer Depth (m)",
+    mixed_layer_anom = "De-seasoned Mixed Layer Depth (m)",
+    
+    temperature_0 = "Sea Surface Temperature (°C)",
+    temperature_0_anom = "De-seasoned Sea Surface Temperature (°C)",
+    temperature_16 = "Temperature @ 16m (°C)",
+    temperature_16_anom = "De-seasoned Temperature @ 16m (°C)",
+    temperature_635 = "Temperature @ 635m (°C)",
+    temperature_635_anom = "De-seasoned Temperature @ 635m (°C)",
+    
+    salinity_0 = "Sea Surface Salinity (psu)",
+    salinity_0_anom = "De-seasoned Sea Surface Salinity (psu)",
+    salinity_16 = "Salinity @ 16m (psu)",
+    salinity_16_anom = "De-seasoned Salinity @ 16m (psu)",
+    salinity_635 = "Salinity @ 635m (psu)",
+    salinity_635_anom = "De-seasoned Salinity @ 635m (psu)",
+    
+    EKE_0 = "Eddy Kinetic Energy (0m)",
+    EKE_0_anom = "De-seasoned Eddy Kinetic Energy (0m)",
+    EKE_16 = "Eddy Kinetic Energy @ 16m",
+    EKE_16_anom = "De-seasoned Eddy Kinetic Energy @ 16m",
+    EKE_635 = "Eddy Kinetic Energy @ 635m",
+    EKE_635_anom = "De-seasoned Eddy Kinetic Energy @ 635m",
+    
+    EKE_mad_0 = "Eddy Kinetic Energy Variability (0m)",
+    EKE_mad_0_anom = "De-seasoned Eddy Kinetic Energy Variability (0m)",
+    
+    chla_0 = "Chlorophyll (mg/m³)",
+    chla_0_anom = "De-seasoned Chlorophyll (mg/m³)",
+    chla_16 = "Chlorophyll @ 16m (mg/m³)",
+    chla_16_anom = "De-seasoned Chlorophyll @ 16m (mg/m³)",
+    
+    o2_0 = "Oxygen (mmol/m³)",
+    o2_0_anom = "De-seasoned Oxygen (mmol/m³)",
+    o2_16 = "Oxygen @ 16m (mmol/m³)",
+    o2_16_anom = "De-seasoned Oxygen @ 16m (mmol/m³)",
+    o2_635 = "Oxygen @ 635m (mmol/m³)",
+    o2_635_anom = "De-seasoned Oxygen @ 635m (mmol/m³)",
+    
+    productivity_0 = "Net Primary Production (mg/m³/day C)",
+    productivity_0_anom = "De-seasoned Net Primary Production (mg/m³/day C)",
+    productivity_16 = "Net Primary Production @ 16m",
+    productivity_16_anom = "De-seasoned Net Primary Production @ 16m"
+  )
+  
+  if (var %in% names(labels)) {
+    return(labels[[var]])
+  } else {
+    return(var)  # fallback if not defined
+  }
 }
 
 # Generating visualizations for each site's final model
-KGI_pred <- c('salinity_0_anom','temperature_16_anom','EKE_635_anom')
-KGI_plots <- visualizeGAM(KGI_final, KGI_pred, 'KGI')
-
-EI_pred <- c('productivity_0_anom','EKE_16_anom','o2_16_anom')
-EI_plots <- visualizeGAM(EI_final, EI_pred, 'EI')
-
-
-CI_pred <- c('SSH_anom')
-CI_plots <- visualizeGAM(CI_final, CI_pred, 'CI')
+KGI_plots <- visualizeGAM(KGI_final,'KGI')
+EI_plots <- visualizeGAM(EI_final,'EI')
+CI_plots <- visualizeGAM(CI_final,'CI')
