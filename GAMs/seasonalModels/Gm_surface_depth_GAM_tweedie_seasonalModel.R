@@ -60,7 +60,7 @@ sp_specific <- allData  %>% subset(select=-c(BW29,BW37,BW58,Oo,Pm)) %>%
 allData_EI <- allData %>% 
   filter(Site == "EI")
 allData_EI$Binary <- ifelse(allData_EI$Gm > 0, 1, 0)
-BlockMod_EI <- gam(Gm ~ s(ice_conc,k=4),
+BlockMod_EI <- gam(Gm ~ s(ice_conc,k=4) + s(ice_thickness,k=4) + s(julian_day,k=4),
                    family = tw(link = "log", a = 1.1, b = 1.9), data = allData_EI, method = "REML")
 ACF = acf(residuals(BlockMod_EI), lag.max = 1500) 
 CI = ggfortify:::confint.acf(ACF)
@@ -70,7 +70,7 @@ ACFval_EI = ACFidx[1]
 allData_KGI <- allData %>% 
   filter(Site == "KGI")
 allData_KGI$Binary <- ifelse(allData_KGI$Gm > 0, 1, 0)
-BlockMod_KGI <- gam(Gm ~ s(ice_conc,k=4),
+BlockMod_KGI <- gam(Gm ~ s(ice_conc,k=4) + s(ice_thickness,k=4) + s(julian_day,k=4),
                     family = tw(link = "log", a = 1.1, b = 1.9), data = allData_KGI, method = "REML")
 ACF = acf(residuals(BlockMod_KGI), lag.max = 1500) 
 CI = ggfortify:::confint.acf(ACF)
@@ -80,7 +80,7 @@ ACFval_KGI = ACFidx[1]
 allData_CI <- allData %>% 
   filter(Site == "CI")
 allData_CI$Binary <- ifelse(allData_CI$Gm > 0, 1, 0)
-BlockMod_CI <- gam(Gm ~ s(ice_conc,k=4),
+BlockMod_CI <- gam(Gm ~ s(ice_conc,k=4) + s(ice_thickness,k=4) + s(julian_day,k=4),
                    family = tw(link = "log", a = 1.1, b = 1.9), data = allData_CI, method = "REML")
 ACF = acf(residuals(BlockMod_CI), lag.max = 1500) 
 CI = ggfortify:::confint.acf(ACF)

@@ -7,7 +7,7 @@ library(sf)
 library(units)
 
 #we're making this change to see what it looks like in GitHub
-
+#natalie made this change on her computer
 
 species <- 'Mn' # Bp, Bm, Mn
 

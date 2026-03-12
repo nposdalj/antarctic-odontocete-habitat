@@ -14,7 +14,7 @@ library(lubridate)
 # ------------- Step 0: Choose Species ----------------
 plot_save_dir <- "F:/Antarctica/GAMs"
 # Modeling Gm for all sites, 40 km radius environmental data
-species <- c('Gm') # options: BW29, BW37, Oo, Pm, Gm
+species <- c('Pm') # options: BW29, BW37, Oo, Pm, Gm
 # BW29 = Southern bottlenose whale, BW37 = Gray's and strap-toothed whales
 # Oo = Killer whale, Pm = Sperm Whale, Gm = Long-finned pilot whale
 # Note: not enough data to model BW58 at any site
@@ -60,14 +60,14 @@ allData <- allData %>% subset(select=-X)
 allData$date <- as.Date(allData$date, "%Y-%m-%d")
 # Filter by species relevant data
 # Only adding standard deviations of surface variables, feel free to change that if needed
-depths <- c(0, 16, 635) # Gm depths
+depths <- c(0, 375, 1665) # Gm depths
 
 # species is assumed to be a string like "Gm"
 # (same as in your code where you used get(species))
 all_species <- c("BW29","BW37","BW58","Gm","Pm","Oo")
 drop_species <- setdiff(all_species, species)
 
-# keep columns that end with _0, _16, or _635
+# keep columns that end with _0, _16, or _1655
 keep_depth_regex <- paste0("_(", paste(depths, collapse="|"), ")$")
 
 sp_specific <- allData %>%
@@ -81,26 +81,16 @@ sp_specific <- allData %>%
 # Intermediate step to find ACF for seasonal model only, need to go back and adjust Trisha's ACF function
 allData_EI <- allData %>% 
   filter(Site == "EI")
-BlockMod_EI <- gam(Gm ~ s(SSH,k=4,sp=0.1) + s(chla_0,k=4,sp=0.1) + s(salinity_16,k=4,sp=0.1) + s(o2_635,k=4,sp=0.1),
+BlockMod_EI <- gam(Pm ~ s(SSH,k=4,sp=0.1) + s(chla_0,k=4,sp=0.1) + s(salinity_0,k=4,sp=0.1) + s(o2_375,k=4,sp=0.1),
                    family = tw(link = "log", a = 1.1, b = 1.9), data = allData_EI, method = "REML")
 ACF = acf(residuals(BlockMod_EI), lag.max = 1500) 
 CI = ggfortify:::confint.acf(ACF)
 ACFidx = which(ACF[["acf"]] < CI, arr.ind=TRUE)
 ACFval_EI = ACFidx[1]
 
-allData_KGI <- allData %>% 
-  filter(Site == "KGI")
-BlockMod_KGI <- gam(Gm ~ s(SSH,k=4,sp=0.1) + s(chla_0,k=4,sp=0.1) + s(salinity_635,k=4) +
-                      s(o2_635,k=4) + s(productivity_16, k = 4), 
-                    family = tw(link = "log", a = 1.1, b = 1.9), data = allData_KGI, method = "REML")
-ACF = acf(residuals(BlockMod_KGI), lag.max = 1500) 
-CI = ggfortify:::confint.acf(ACF)
-ACFidx = which(ACF[["acf"]] < CI, arr.ind=TRUE)
-ACFval_KGI = ACFidx[1]
-
 allData_CI <- allData %>% 
   filter(Site == "CI")
-BlockMod_CI <- gam(Gm ~ s(SSH,k=4,sp=0.1) + s(chla_0,k=4,sp=0.1) + s(salinity_635,k=4) + s(o2_635,k=4) + s(chla_16,k=4),
+BlockMod_CI <- gam(Pm ~ s(SSH,k=4,sp=0.1) + s(chla_0,k=4,sp=0.1) + s(salinity_375,k=4) + s(o2_375,k=4) + s(chla_375,k=4),
                    family = tw(link = "log", a = 1.1, b = 1.9), data = allData_CI, method = "REML")
 ACF = acf(residuals(BlockMod_CI), lag.max = 1500) 
 CI = ggfortify:::confint.acf(ACF)
@@ -206,14 +196,6 @@ EI_binned <- binByACF(
   depths   = depths
 )
 
-KGI_binned <- binByACF(
-  data     = sp_specific,
-  site     = "KGI",
-  bin_days = ACFval_KGI,
-  species  = species,
-  depths   = depths
-)
-
 CI_binned <- binByACF(
   data     = sp_specific,
   site     = "CI",
@@ -233,12 +215,11 @@ binnedTimeseries <- function(data,site, bin) { # Function to create a timeseries
           plot.margin = unit(c(0.2, 0.5, 0.2, 0.5), units = "line"))
   
 }
-binned_plot <- grid.arrange(binnedTimeseries(EI_binned,'EI',EI_acf), binnedTimeseries(KGI_binned,'KGI',KGI_acf), 
-                            binnedTimeseries(CI_binned,'CI',CI_acf), nrow=3, 
+binned_plot <- grid.arrange(binnedTimeseries(EI_binned,'EI',EI_acf), binnedTimeseries(CI_binned,'CI',CI_acf), nrow=3, 
                             top = paste('ACF Binned Species Presence for ', name(species), sep=''))
 
 # Remove days with less than a certain percentage of sea ice concentration
-get_ice_thresholds <- function(df, response = "Gm",
+get_ice_thresholds <- function(df, response = "Pm",
                                site_col = "Site",
                                q = 0.95) {
   df %>%
@@ -252,17 +233,12 @@ get_ice_thresholds <- function(df, response = "Gm",
     )
 }
 
-thr_CI <- get_ice_thresholds(CI_binned, response = "Gm", q = 0.95)
-thr_KGI <- get_ice_thresholds(KGI_binned, response = "Gm", q = 0.95)
-thr_EI <- get_ice_thresholds(EI_binned, response = "Gm", q = 0.95)
+thr_CI <- get_ice_thresholds(CI_binned, response = "Pm", q = 0.95)
+thr_EI <- get_ice_thresholds(EI_binned, response = "Pm", q = 0.95)
 
 # apply to one dataframe
 EI_binned <- EI_binned %>%
   filter(ice_conc < thr_EI$thr)
-
-# do the same for other sites
-KGI_binned <- KGI_binned %>%
-  filter(ice_conc < thr_KGI$thr)
 
 CI_binned <- CI_binned %>%
   filter(ice_conc < thr_CI$thr)
@@ -283,21 +259,21 @@ vars_to_anom <- c(
   "productivity_0",
   "EKE_0",
   
-  # Shallow (16 m)
-  "temperature_16",
-  "salinity_16",
-  "o2_16",
-  "chla_16",
-  "productivity_16",
-  "EKE_16",
+  # Shallow (375 m)
+  "temperature_375",
+  "salinity_375",
+  "o2_375",
+  "chla_375",
+  "productivity_375",
+  "EKE_375",
   
-  # Deep (635 m)
-  "temperature_635",
-  "salinity_635",
-  "o2_635",
-  "chla_635",
-  "productivity_635",
-  "EKE_635"
+  # Deep (1655 m)
+  "temperature_1655",
+  "salinity_1655",
+  "o2_1655",
+  "chla_1655",
+  "productivity_1655",
+  "EKE_1655"
 )
 
 make_monthly_anoms_binned <- function(
@@ -352,7 +328,6 @@ make_monthly_anoms_binned <- function(
 }
 
 EI_binned_deseasoned <- make_monthly_anoms_binned(EI_binned, vars_to_anom, date_col = "bin_start", standardize = FALSE)
-KGI_binned_deseasoned <- make_monthly_anoms_binned(KGI_binned, vars_to_anom, date_col = "bin_start", standardize = FALSE)
 CI_binned_deseasoned  <- make_monthly_anoms_binned(CI_binned,  vars_to_anom, date_col = "bin_start", standardize = FALSE)
 
 # -------------- Step 4: VIF for Correlation -------------------
@@ -463,7 +438,7 @@ vif_stepwise_drop <- function(data, response, predictors,
 
 build_preds <- function(df,
                         species,
-                        drop_depths = c(16),
+                        drop_depths = c(375),
                         keep_lags = c(3, 6),
                         chla_prod_depth_max = 50,
                         
@@ -473,7 +448,7 @@ build_preds <- function(df,
                         # keep anoms ONLY for these (raw still included)
                         keep_anom_core = c("FSLE","SSH","mixed_layer"),
                         keep_anom_depth_bases = c("temperature","salinity","o2"),
-                        keep_anom_depths = c(0, 635),
+                        keep_anom_depths = c(0, 375, 1655),
                         
                         # keep EKE_mad_* (but still drop other *_mad_* if they exist)
                         keep_EKE_mad = TRUE
@@ -493,7 +468,7 @@ build_preds <- function(df,
   # --- Drop STL + "*_anomaly" products (but NOT our monthly *_anom) ---
   pred <- pred[!grepl("(_anomaly$|_stl$)", pred)]
   
-  # --- Drop ALL sd variables anywhere in the name (temp_sd_0, o2_sd_635, ssh_sd, etc.) ---
+  # --- Drop ALL sd variables anywhere in the name (temp_sd_0, o2_sd_1655, ssh_sd, etc.) ---
   pred <- pred[!grepl("_sd", pred, ignore.case = TRUE)]
   
   # --- MAD handling: keep only EKE_mad_* if requested; drop other *_mad_* families ---
@@ -517,7 +492,7 @@ build_preds <- function(df,
   
   depth_nums <- as.integer(sub(".*_(\\d+)$", "\\1", depth_vars_all))
   
-  # drop specified depths (e.g., 16 m)
+  # drop specified depths (e.g., 375 m)
   keep_depth <- !(depth_nums %in% drop_depths)
   
   # remove chla/productivity for depths > chla_prod_depth_max
@@ -537,7 +512,7 @@ build_preds <- function(df,
   # core anomalies like SSH_anom
   anom_keep <- c(anom_keep, paste0(keep_anom_core, "_anom"))
   
-  # depth anomalies like temperature_0_anom, salinity_635_anom, o2_0_anom
+  # depth anomalies like temperature_0_anom, salinity_1655_anom, o2_0_anom
   depth_anom_candidates <- as.vector(outer(keep_anom_depth_bases, keep_anom_depths, paste, sep = "_"))
   anom_keep <- c(anom_keep, paste0(depth_anom_candidates, "_anom"))
   
@@ -802,35 +777,8 @@ car::vif(res_EI$final_fit)
 themes_EI <- assign_themes(res_EI$kept_predictors, themes_keywords)
 EI_winners <- select_best_by_theme(
   data = EI_binned_deseasoned,
-  response = "Gm",
+  response = "Pm",
   themes = themes_EI
-)
-
-#KGI
-KGI_pred <- build_preds(KGI_binned_deseasoned, species = species)
-
-remove_zero_var <- function(df, vars) {
-  vars[sapply(df[vars], function(x) sd(x, na.rm = TRUE) > 0)]
-}
-KGI_pred <- remove_zero_var(KGI_binned_deseasoned, KGI_pred)
-
-res_KGI <- vif_stepwise_drop(
-  data       = KGI_binned_deseasoned,
-  response   = species,          # e.g., "Gm"
-  predictors = KGI_pred,
-  vif_thresh = 5,
-  family     = gaussian(),       # like you were doing
-  verbose    = TRUE
-)
-
-res_KGI$kept_predictors
-car::vif(res_KGI$final_fit)
-
-themes_KGI <- assign_themes(res_KGI$kept_predictors, themes_keywords)
-KGI_winners <- select_best_by_theme(
-  data = KGI_binned_deseasoned,
-  response = "Gm",
-  themes = themes_KGI
 )
 
 #CI
@@ -855,7 +803,7 @@ car::vif(res_CI$final_fit)
 themes_CI <- assign_themes(res_CI$kept_predictors, themes_keywords)
 CI_winners <- select_best_by_theme(
   data = CI_binned_deseasoned,
-  response = "Gm",
+  response = "Pm",
   themes = themes_CI
 )
 
@@ -920,20 +868,13 @@ auto_gam <- function(data, response, predictors,
 
 EI_final <- auto_gam(
   data = EI_binned_deseasoned,
-  response = "Gm",
+  response = "Pm",
   predictors = EI_winners$winners
-)
-
-
-KGI_final <- auto_gam(
-  data = KGI_binned_deseasoned,,
-  response = "Gm",
-  predictors = KGI_winners$winners
 )
 
 CI_final <- auto_gam(
   data = CI_binned_deseasoned,,
-  response = "Gm",
+  response = "Pm",
   predictors = CI_winners$winners
 )
 
@@ -952,13 +893,14 @@ fit_gam_inference <- function(data, response, predictors,
   )
 }
 
-EI_final2  <- fit_gam_inference(EI_binned_deseasoned,  "Gm", EI_winners$winners)
-KGI_final2 <- fit_gam_inference(KGI_binned_deseasoned, "Gm", KGI_winners$winners)
-CI_final2  <- fit_gam_inference(CI_binned_deseasoned,  "Gm", CI_winners$winners)
+EI_final2  <- fit_gam_inference(EI_binned_deseasoned,  "Pm", EI_winners$winners)
+CI_final2  <- fit_gam_inference(CI_binned_deseasoned,  "Pm", CI_winners$winners)
 
 # ------------------ Step 6: Visualize GAMs -------------------
 # Function to create a cleaner visualization of a GAM model
-visualizeGAM <- function(gam, sp, save_prompt = interactive(),
+visualizeGAM <- function(gam, sp,
+                         species_name = species,
+                         save_plot = TRUE,
                          save_dir = plot_save_dir,
                          width = 10, height = 8, dpi = 300) {
   
@@ -1033,40 +975,31 @@ visualizeGAM <- function(gam, sp, save_prompt = interactive(),
   final_plot <- patchwork::wrap_plots(all_plots) +
     patchwork::plot_annotation(
       title = paste0(
-        "Long-finned Pilot Whale at ",
-        sp,
-        " (",
-        deviance,
-        "% deviance explained)"
+        species_name, " at ", sp,
+        " (", deviance, "% deviance explained)"
       )
     )
   
   print(final_plot)
   
-  if (isTRUE(save_prompt)) {
-    save_ans <- readline(prompt = paste0("Save plot for ", sp, "? Type Yes or No: "))
+  if (isTRUE(save_plot)) {
     
-    if (tolower(trimws(save_ans)) == "yes") {
-      
-      if (!dir.exists(save_dir)) {
-        dir.create(save_dir, recursive = TRUE)
-      }
-      
-      file_name <- paste0("GAM_", sp, "_", format(Sys.Date(), "%Y%m%d"), ".png")
-      out_file <- file.path(save_dir, file_name)
-      
-      ggplot2::ggsave(
-        filename = out_file,
-        plot = final_plot,
-        width = width,
-        height = height,
-        dpi = dpi
-      )
-      
-      message("Plot saved to: ", out_file)
-    } else {
-      message("Plot not saved.")
+    if (!dir.exists(save_dir)) {
+      dir.create(save_dir, recursive = TRUE)
     }
+    
+    file_name <- paste0("GAM_", species_name, "_", sp, ".png")
+    out_file <- file.path(save_dir, file_name)
+    
+    ggplot2::ggsave(
+      filename = out_file,
+      plot = final_plot,
+      width = width,
+      height = height,
+      dpi = dpi
+    )
+    
+    message("Plot saved to: ", out_file)
   }
   
   return(final_plot)
@@ -1092,44 +1025,44 @@ nameVar <- function(var) {
     
     temperature_0 = "Sea Surface Temperature (°C)",
     temperature_0_anom = "De-seasoned Sea Surface Temperature (°C)",
-    temperature_16 = "Temperature @ 16m (°C)",
-    temperature_16_anom = "De-seasoned Temperature @ 16m (°C)",
-    temperature_635 = "Temperature @ 635m (°C)",
-    temperature_635_anom = "De-seasoned Temperature @ 635m (°C)",
+    temperature_375 = "Temperature @ 375m (°C)",
+    temperature_375_anom = "De-seasoned Temperature @ 375m (°C)",
+    temperature_1655 = "Temperature @ 1655m (°C)",
+    temperature_1655_anom = "De-seasoned Temperature @ 1655m (°C)",
     
     salinity_0 = "Sea Surface Salinity (psu)",
     salinity_0_anom = "De-seasoned Sea Surface Salinity (psu)",
-    salinity_16 = "Salinity @ 16m (psu)",
-    salinity_16_anom = "De-seasoned Salinity @ 16m (psu)",
-    salinity_635 = "Salinity @ 635m (psu)",
-    salinity_635_anom = "De-seasoned Salinity @ 635m (psu)",
+    salinity_375 = "Salinity @ 375m (psu)",
+    salinity_375_anom = "De-seasoned Salinity @ 375m (psu)",
+    salinity_1655 = "Salinity @ 1655m (psu)",
+    salinity_1655_anom = "De-seasoned Salinity @ 1655m (psu)",
     
     EKE_0 = "Eddy Kinetic Energy (0m)",
     EKE_0_anom = "De-seasoned Eddy Kinetic Energy (0m)",
-    EKE_16 = "Eddy Kinetic Energy @ 16m",
-    EKE_16_anom = "De-seasoned Eddy Kinetic Energy @ 16m",
-    EKE_635 = "Eddy Kinetic Energy @ 635m",
-    EKE_635_anom = "De-seasoned Eddy Kinetic Energy @ 635m",
+    EKE_375 = "Eddy Kinetic Energy @ 375m",
+    EKE_375_anom = "De-seasoned Eddy Kinetic Energy @ 375m",
+    EKE_1655 = "Eddy Kinetic Energy @ 1655m",
+    EKE_1655_anom = "De-seasoned Eddy Kinetic Energy @ 1655m",
     
     EKE_mad_0 = "Eddy Kinetic Energy Variability (0m)",
     EKE_mad_0_anom = "De-seasoned Eddy Kinetic Energy Variability (0m)",
     
     chla_0 = "Chlorophyll (mg/m³)",
     chla_0_anom = "De-seasoned Chlorophyll (mg/m³)",
-    chla_16 = "Chlorophyll @ 16m (mg/m³)",
-    chla_16_anom = "De-seasoned Chlorophyll @ 16m (mg/m³)",
+    chla_375 = "Chlorophyll @ 375m (mg/m³)",
+    chla_375_anom = "De-seasoned Chlorophyll @ 375m (mg/m³)",
     
     o2_0 = "Oxygen (mmol/m³)",
     o2_0_anom = "De-seasoned Oxygen (mmol/m³)",
-    o2_16 = "Oxygen @ 16m (mmol/m³)",
-    o2_16_anom = "De-seasoned Oxygen @ 16m (mmol/m³)",
-    o2_635 = "Oxygen @ 635m (mmol/m³)",
-    o2_635_anom = "De-seasoned Oxygen @ 635m (mmol/m³)",
+    o2_375 = "Oxygen @ 375m (mmol/m³)",
+    o2_375_anom = "De-seasoned Oxygen @ 375m (mmol/m³)",
+    o2_1655 = "Oxygen @ 1655m (mmol/m³)",
+    o2_1655_anom = "De-seasoned Oxygen @ 1655m (mmol/m³)",
     
     productivity_0 = "Net Primary Production (mg/m³/day C)",
     productivity_0_anom = "De-seasoned Net Primary Production (mg/m³/day C)",
-    productivity_16 = "Net Primary Production (mg/m³/day C) @ 16m",
-    productivity_16_anom = "De-seasoned Net Primary Production (mg/m³/day C) @ 16m"
+    productivity_375 = "Net Primary Production (mg/m³/day C) @ 375m",
+    productivity_375_anom = "De-seasoned Net Primary Production (mg/m³/day C) @ 375m"
   )
   
   if (var %in% names(labels)) return(labels[[var]])
@@ -1158,7 +1091,7 @@ nameVar <- function(var) {
     return(paste0(lagN, " Month Lag: ", base_label))
   }
   
-  # ---- 4) Handle *_sd and *_mad WITH depth (temp_sd_0, o2_sd_635, EKE_mad_16, etc.) ----
+  # ---- 4) Handle *_sd and *_mad WITH depth (temp_sd_0, o2_sd_1655, EKE_mad_375, etc.) ----
   if (grepl("^(temp|temperature|salinity|o2|chla|productivity|EKE|SSH|FSLE|mixed_layer|fsle_orient)_(sd|mad)_\\d+$", var)) {
     
     base <- sub("_(sd|mad)_\\d+$", "", var)
@@ -1205,10 +1138,10 @@ nameVar <- function(var) {
     return(paste0(stat_label, " of ", base_label))
   }
   
-  # ---- 6) Handle plain depth variables you didn't explicitly list (o2_635, chla_0, etc.) ----
-  if (grepl("_(0|16|635)$", var)) {
-    base <- sub("_(0|16|635)$", "", var)
-    depth <- sub("^.*_(0|16|635)$", "\\1", var)
+  # ---- 6) Handle plain depth variables you didn't explicitly list (o2_1655, chla_0, etc.) ----
+  if (grepl("_(0|375|1655)$", var)) {
+    base <- sub("_(0|375|1655)$", "", var)
+    depth <- sub("^.*_(0|375|1655)$", "\\1", var)
     
     base_label <- switch(
       base,
@@ -1236,13 +1169,8 @@ nameVar <- function(var) {
 }
 
 # Generating visualizations for each site's final model
-KGI_plots <- visualizeGAM(KGI_final,'KGI')
 EI_plots <- visualizeGAM(EI_final,'EI')
 CI_plots <- visualizeGAM(CI_final,'CI')
-
-KGI_plots <- visualizeGAM(KGI_final2,'KGI')
-EI_plots <- visualizeGAM(EI_final2,'EI')
-CI_plots <- visualizeGAM(CI_final2,'CI')
 
 # ------------------ Step 7: GAM Model Checking -------------------
 # Helper: quick ACF plot as ggplot
@@ -1346,6 +1274,5 @@ check_gam <- function(mod,
 
 # ---- Run checks for each site model ----
 # Use the *inference* fits (final2) since those are what you’ll interpret/report
-check_gam(EI_final,  model_name = "EI_final (Gm)",  date = EI_binned_deseasoned$bin_start,  lag.max = 200)
-check_gam(KGI_final2, model_name = "KGI_final (Gm)", date = KGI_binned_deseasoned$bin_start, lag.max = 200)
-check_gam(CI_final2,  model_name = "CI_final (Gm)",  date = CI_binned_deseasoned$bin_start,  lag.max = 200)
+check_gam(EI_final,  model_name = "EI_final (Pm)",  date = EI_binned_deseasoned$bin_start,  lag.max = 200)
+check_gam(CI_final,  model_name = "CI_final (Pm)",  date = CI_binned_deseasoned$bin_start,  lag.max = 200)
