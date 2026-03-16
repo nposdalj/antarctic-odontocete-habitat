@@ -4,11 +4,11 @@ library(lubridate)
 
 # -------------------- USER SETTINGS --------------------
 plot_dir <- "/Users/nposd/Documents/GitHub/antarctic-odontocete-habitat/plots/timeseries_3panel" #CHANGE THIS TO WHERE YOU WANT TO SAVE YOUR PLOTS
-input_file <- "L:/.shortcut-targets-by-id/16QptdYF6Cj57YnsWH6TVUR-l-QkP8voO/Baleen Whalesssss/mysticetes/allData_blueZ.csv" #CHANGE THIS TO YOUR DATA FOLDER
+input_file <- "L:/.shortcut-targets-by-id/16QptdYF6Cj57YnsWH6TVUR-l-QkP8voO/Baleen Whalesssss/mysticetes/allData_fin.csv" #CHANGE THIS TO YOUR DATA FOLDER
 dir.create(plot_dir, recursive = TRUE, showWarnings = FALSE)
 
 sites_to_plot   <- "ALL"   # or c("EI","KGI","CI")
-species_to_plot <- "Bp"    # or "ALL"
+species_to_plot <- "Bp"    # or "ALL" #CHANGE SPECIES
 save_plots <- TRUE
 dpi <- 300
 width_in <- 10
