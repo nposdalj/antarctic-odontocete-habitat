@@ -142,7 +142,6 @@ presence_to_minutes <- function(x) {
 # ============================================================
 
 # -------------------- USER SETTINGS --------------------
-plot_dir <- "/Users/nposd/Documents/GitHub/antarctic-odontocete-habitat/plots/timeseries_depth_profiles"
 dir.create(plot_dir, recursive = TRUE, showWarnings = FALSE)
 
 sites_to_plot   <- "ALL"  # c("EI","KGI","CI") or "ALL"
@@ -178,6 +177,7 @@ name <- function(abbrev) {
   if (abbrev == "Gm") return("Long-finned Pilot Whale")
   if (abbrev == "Oo") return("Killer Whale")
   if (abbrev == "Pm") return("Sperm Whale")
+  if (abbrev == "Mn") return("Humpback")
   return(abbrev)
 }
 
