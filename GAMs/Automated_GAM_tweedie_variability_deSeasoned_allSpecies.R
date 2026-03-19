@@ -13,13 +13,14 @@ library(lubridate)
 # CONFIG
 # =========================================================
 
-plot_save_dir <- "F:/Antarctica/GAMs"
+plot_save_dir <- "F:/Antarctica/GAMs/Mn"
+allData <- read.csv("F:/Antarctica/GAMs/allData_humpback.csv")
 
 # Choose species as a SINGLE string
-species <- "Pm"   # options: "BW29", "BW37", "BW58", "Gm", "Pm", "Oo", "Bp", "Ba", "Bm"
+species <- "Mn"   # options: "BW29", "BW37", "BW58", "Gm", "Pm", "Oo", "Bp", "Mn", "Bm"
 
 # Sites to run
-sites <- c("EI", "CI")
+sites <- c("EI", "CI", "KGI")
 
 # Define species-specific depths here ONLY
 species_depths <- list(
@@ -30,7 +31,7 @@ species_depths <- list(
   Pm   = c(0, 375, 1665),
   Oo   = c(0, 375, 1665),
   Bp   = c(0, 375, 1665),
-  Ba   = c(0, 375, 1665),
+  Mn   = c(0, 375, 1665),
   Bm   = c(0, 375, 1665)
 )
 
@@ -41,14 +42,21 @@ if (is.null(depths)) {
   stop(paste("No depth configuration found for species:", species))
 }
 
+odontocete_species <- c("BW29", "BW37", "BW58", "Gm", "Pm", "Oo")
+baleen_species    <- c("Bp", "Mn", "Bm")
+
+include_ice_predictors <- species %in% baleen_species
+apply_ice_filter <- species %in% odontocete_species
+
 # -------------------------
 # ACF block-model settings
 # Define the variables to use for the ACF binning GAM at each site.
 # Change ONLY here when you want different inputs.
 # -------------------------
 acf_terms <- list(
-  EI = c("SSH", "chla_0", "salinity_0", "o2_375"),
-  CI = c("SSH", "chla_0", "salinity_375", "o2_375", "chla_375")
+  EI = c("SSH", "chla_0", "salinity_0", "ice_conc", "temperature_0"),
+  CI = c("SSH", "chla_0", "salinity_0", "ice_conc", "temperature_0"),
+  KGI = c("SSH", "chla_0", "salinity_0", "ice_conc", "temperature_0")
 )
 
 # -------------------------
@@ -68,8 +76,9 @@ themes_keywords <- list(
   temperature = c("temp", "temperature")
 )
 
-# Toggle ice filtering on/off
-apply_ice_filter <- TRUE
+if (include_ice_predictors) {
+  themes_keywords$ice <- c("ice_conc", "ice_thickness")
+}
 
 # Ice threshold quantile
 ice_threshold_q <- 0.95
@@ -97,7 +106,7 @@ name <- function(abbrev) {
     fullname <- "Killer Whale"
   } else if (abbrev == "Pm") {
     fullname <- "Sperm Whale"
-  } else if (abbrev == "Ba") {
+  } else if (abbrev == "Mn") {
     fullname <- "Humpback Whale"
   } else if (abbrev == "Bm") {
     fullname <- "Blue Whale"
@@ -132,9 +141,6 @@ remove_zero_var <- function(df, vars) {
 # =========================================================
 # STEP 1: LOAD DATA
 # =========================================================
-
-allData <- read.csv("/Users/nposd/Documents/GitHub/antarctic-odontocete-habitat/data/allData.csv")
-
 # remove index-like columns if present
 drop_cols <- intersect(c("X", "X.1"), names(allData))
 if (length(drop_cols) > 0) {
@@ -162,6 +168,8 @@ sp_specific <- allData %>%
 # =========================================================
 # STEP 2: ACF BINNING
 # =========================================================
+precheck_save_dir <- file.path(plot_save_dir, "pre_model_checks")
+dir.create(precheck_save_dir, recursive = TRUE, showWarnings = FALSE)
 
 fit_acf_block_model <- function(data, site, species, predictors,
                                 k = 4,
@@ -171,8 +179,6 @@ fit_acf_block_model <- function(data, site, species, predictors,
   site_data <- data %>%
     filter(Site == site)
   
-  # Build formula like:
-  # Pm ~ s(SSH,k=4,sp=0.1) + s(chla_0,k=4,sp=0.1) + ...
   smooth_terms <- paste0("s(", predictors, ",k=", k, ",sp=", sp_val, ")")
   form <- as.formula(
     paste(species, "~", paste(smooth_terms, collapse = " + "))
@@ -309,6 +315,47 @@ for (site in sites) {
   )
 }
 
+save_acf_outputs <- function(acf_results, acf_table, species_name, save_dir) {
+  
+  dir.create(save_dir, recursive = TRUE, showWarnings = FALSE)
+  
+  # Main site summary table
+  write.csv(
+    acf_table,
+    file = file.path(save_dir, paste0("ACF_", species_name, "_site_summary.csv")),
+    row.names = FALSE
+  )
+  
+  # Per-site ACF values
+  acf_values_all <- list()
+  
+  for (site in names(acf_results)) {
+    current_acf <- acf_results[[site]]$acf
+    
+    acf_df_site <- tibble(
+      site = site,
+      lag = as.numeric(current_acf$lag),
+      acf = as.numeric(current_acf$acf)
+    )
+    
+    acf_values_all[[site]] <- acf_df_site
+    
+    write.csv(
+      acf_df_site,
+      file = file.path(save_dir, paste0("ACF_", species_name, "_", site, "_values.csv")),
+      row.names = FALSE
+    )
+  }
+  
+  acf_values_all <- bind_rows(acf_values_all)
+  
+  write.csv(
+    acf_values_all,
+    file = file.path(save_dir, paste0("ACF_", species_name, "_all_sites_values.csv")),
+    row.names = FALSE
+  )
+}
+
 # =========================================================
 # STEP 3: PLOT PRESENCE TIMESERIES
 # =========================================================
@@ -343,6 +390,59 @@ get_ice_thresholds <- function(df, response,
     )
 }
 
+save_ice_filter_outputs <- function(ice_thresholds,
+                                    binned_data_before,
+                                    binned_data_after,
+                                    species_name,
+                                    save_dir) {
+  
+  dir.create(save_dir, recursive = TRUE, showWarnings = FALSE)
+  
+  ice_tbl_all <- list()
+  
+  for (site in names(ice_thresholds)) {
+    thr_df <- ice_thresholds[[site]]
+    if (is.null(thr_df) || nrow(thr_df) == 0) next
+    
+    n_before <- if (site %in% names(binned_data_before)) nrow(binned_data_before[[site]]) else NA_integer_
+    n_after  <- if (site %in% names(binned_data_after))  nrow(binned_data_after[[site]])  else NA_integer_
+    
+    thr_df <- thr_df %>%
+      mutate(
+        species = species_name,
+        n_before = n_before,
+        n_after = n_after,
+        n_removed = n_before - n_after
+      ) %>%
+      dplyr::relocate(species, .before = 1)
+    
+    ice_tbl_all[[site]] <- thr_df
+  }
+  
+  if (length(ice_tbl_all) > 0) {
+    ice_tbl_all <- bind_rows(ice_tbl_all)
+    
+    write.csv(
+      ice_tbl_all,
+      file = file.path(save_dir, paste0("IceFilter_", species_name, "_summary.csv")),
+      row.names = FALSE
+    )
+    
+    # Optional txt summary
+    txt_lines <- c(
+      paste0("Ice filtering summary for species: ", species_name),
+      "",
+      capture.output(print(ice_tbl_all))
+    )
+    
+    writeLines(
+      txt_lines,
+      con = file.path(save_dir, paste0("IceFilter_", species_name, "_summary.txt"))
+    )
+  }
+}
+
+binned_data_pre_ice <- binned_data
 ice_thresholds <- list()
 
 if (apply_ice_filter) {
@@ -376,6 +476,15 @@ if (apply_ice_filter) {
   }
 }
 
+if (apply_ice_filter) {
+  save_ice_filter_outputs(
+    ice_thresholds = ice_thresholds,
+    binned_data_before = binned_data_pre_ice,
+    binned_data_after = binned_data,
+    species_name = species,
+    save_dir = precheck_save_dir
+  )
+}
 # =========================================================
 # STEP 5: DESEASON
 # =========================================================
@@ -441,6 +550,13 @@ for (site in names(binned_data)) {
     standardize = FALSE
   )
 }
+
+save_acf_outputs(
+  acf_results = acf_results,
+  acf_table = acf_table,
+  species_name = species,
+  save_dir = precheck_save_dir
+)
 
 # =========================================================
 # STEP 6: VIF SCREENING
@@ -560,17 +676,24 @@ build_preds <- function(df,
                         core_allow = c("FSLE", "SSH", "mixed_layer", "fsle_orient"),
                         keep_anom_core = c("FSLE", "SSH", "mixed_layer"),
                         keep_anom_depth_bases = c("temperature", "salinity", "o2"),
-                        keep_EKE_mad = TRUE) {
+                        keep_EKE_mad = TRUE,
+                        include_ice_predictors = FALSE) {
   
   nms <- names(df)
   
-  pred <- setdiff(
-    nms,
-    c("bin_start", "Site", species,
-      "julian_day", "AAO",
-      "ice_conc", "ice_thickness", "ice_diff", "ice_regime",
-      "bathymetry")
+  excluded_vars <- c(
+    "bin_start", "Site", species,
+    "julian_day", "AAO",
+    "ice_diff", "ice_regime",
+    "bathymetry"
   )
+  
+  # Only exclude ice_conc and ice_thickness when NOT including them
+  if (!isTRUE(include_ice_predictors)) {
+    excluded_vars <- c(excluded_vars, "ice_conc", "ice_thickness")
+  }
+  
+  pred <- setdiff(nms, excluded_vars)
   
   pred <- pred[!grepl("(_anomaly$|_stl$)", pred)]
   pred <- pred[!grepl("_sd", pred, ignore.case = TRUE)]
@@ -603,6 +726,12 @@ build_preds <- function(df,
   core_vars <- setdiff(pred, c(depth_vars_all, lag_vars_all, anom_vars_all))
   core_keep <- intersect(core_vars, core_allow)
   
+  # optionally keep raw ice vars
+  ice_keep <- character(0)
+  if (isTRUE(include_ice_predictors)) {
+    ice_keep <- intersect(c("ice_conc", "ice_thickness"), pred)
+  }
+  
   anom_keep <- character(0)
   anom_keep <- c(anom_keep, paste0(keep_anom_core, "_anom"))
   
@@ -610,7 +739,7 @@ build_preds <- function(df,
   anom_keep <- c(anom_keep, paste0(depth_anom_candidates, "_anom"))
   anom_keep <- intersect(anom_keep, pred)
   
-  final <- sort(unique(c(core_keep, depth_keep_vars, lag_keep_vars, anom_keep)))
+  final <- sort(unique(c(core_keep, depth_keep_vars, lag_keep_vars, anom_keep, ice_keep)))
   final
 }
 
@@ -833,7 +962,8 @@ for (site in names(binned_deseasoned)) {
     df = current_df,
     species = species,
     depths = depths,
-    drop_depths = drop_depths
+    drop_depths = drop_depths,
+    include_ice_predictors = include_ice_predictors
   )
   
   current_pred <- remove_zero_var(current_df, current_pred)
@@ -864,6 +994,179 @@ for (site in names(binned_deseasoned)) {
   winner_results[[site]] <- current_winners
 }
 
+save_vif_outputs <- function(predictor_results, species_name, save_dir) {
+  
+  dir.create(save_dir, recursive = TRUE, showWarnings = FALSE)
+  
+  vif_steps_all <- list()
+  vif_kept_all <- list()
+  vif_dropped_all <- list()
+  
+  for (site in names(predictor_results)) {
+    res <- predictor_results[[site]]
+    
+    # Kept predictors
+    kept_tbl <- tibble(
+      site = site,
+      species = species_name,
+      predictor = res$kept_predictors
+    )
+    vif_kept_all[[site]] <- kept_tbl
+    
+    # Dropped predictors
+    dropped_tbl <- tibble(
+      site = site,
+      species = species_name,
+      predictor = res$dropped_predictors
+    )
+    vif_dropped_all[[site]] <- dropped_tbl
+    
+    # Step log
+    step_tbl <- purrr::map_dfr(res$steps, function(x) {
+      tibble(
+        site = site,
+        species = species_name,
+        step = x$step,
+        action = x$action,
+        dropped = ifelse(is.null(x$dropped), NA_character_, x$dropped),
+        worst = ifelse(is.null(x$worst), NA_character_, x$worst),
+        max_vif = ifelse(is.null(x$max_vif), NA_real_, x$max_vif)
+      )
+    })
+    
+    vif_steps_all[[site]] <- step_tbl
+    
+    # Save per-site txt summary
+    txt_lines <- c(
+      paste0("Site: ", site),
+      paste0("Species: ", species_name),
+      "",
+      paste0("Kept predictors: ", paste(res$kept_predictors, collapse = ", ")),
+      paste0("Dropped predictors: ", paste(res$dropped_predictors, collapse = ", ")),
+      "",
+      paste0("Final formula: ", deparse(res$final_formula))
+    )
+    
+    writeLines(
+      txt_lines,
+      con = file.path(save_dir, paste0("VIF_", species_name, "_", site, "_summary.txt"))
+    )
+  }
+  
+  write.csv(bind_rows(vif_steps_all),
+            file = file.path(save_dir, paste0("VIF_", species_name, "_steps_all_sites.csv")),
+            row.names = FALSE)
+  
+  write.csv(bind_rows(vif_kept_all),
+            file = file.path(save_dir, paste0("VIF_", species_name, "_kept_predictors_all_sites.csv")),
+            row.names = FALSE)
+  
+  write.csv(bind_rows(vif_dropped_all),
+            file = file.path(save_dir, paste0("VIF_", species_name, "_dropped_predictors_all_sites.csv")),
+            row.names = FALSE)
+}
+
+save_vif_outputs(
+  predictor_results = predictor_results,
+  species_name = species,
+  save_dir = precheck_save_dir
+)
+
+save_theme_assignments <- function(theme_results, species_name, save_dir) {
+  
+  dir.create(save_dir, recursive = TRUE, showWarnings = FALSE)
+  
+  theme_tbl_all <- list()
+  
+  for (site in names(theme_results)) {
+    current_themes <- theme_results[[site]]
+    
+    if (length(current_themes) == 0) next
+    
+    current_tbl <- purrr::imap_dfr(current_themes, function(vars, theme_name) {
+      tibble(
+        site = site,
+        species = species_name,
+        theme = theme_name,
+        predictor = vars
+      )
+    })
+    
+    theme_tbl_all[[site]] <- current_tbl
+  }
+  
+  theme_tbl_all <- bind_rows(theme_tbl_all)
+  
+  write.csv(
+    theme_tbl_all,
+    file = file.path(save_dir, paste0("Themes_", species_name, "_assigned_predictors_all_sites.csv")),
+    row.names = FALSE
+  )
+}
+
+save_theme_assignments(
+  theme_results = theme_results,
+  species_name = species,
+  save_dir = precheck_save_dir
+)
+
+save_theme_selection_outputs <- function(winner_results, species_name, save_dir) {
+  
+  dir.create(save_dir, recursive = TRUE, showWarnings = FALSE)
+  
+  all_candidate_results <- list()
+  all_winners <- list()
+  
+  for (site in names(winner_results)) {
+    res <- winner_results[[site]]
+    
+    if (!is.null(res$results) && nrow(res$results) > 0) {
+      candidate_tbl <- res$results %>%
+        mutate(site = site, species = species_name) %>%
+        dplyr::relocate(site, species)
+      
+      all_candidate_results[[site]] <- candidate_tbl
+      
+      write.csv(
+        candidate_tbl,
+        file = file.path(save_dir, paste0("ThemeSelection_", species_name, "_", site, "_candidate_results.csv")),
+        row.names = FALSE
+      )
+    }
+    
+    if (length(res$winners) > 0) {
+      winner_tbl <- tibble(
+        site = site,
+        species = species_name,
+        winner = res$winners
+      )
+      
+      all_winners[[site]] <- winner_tbl
+    }
+  }
+  
+  if (length(all_candidate_results) > 0) {
+    write.csv(
+      bind_rows(all_candidate_results),
+      file = file.path(save_dir, paste0("ThemeSelection_", species_name, "_all_sites_candidate_results.csv")),
+      row.names = FALSE
+    )
+  }
+  
+  if (length(all_winners) > 0) {
+    write.csv(
+      bind_rows(all_winners),
+      file = file.path(save_dir, paste0("ThemeSelection_", species_name, "_all_sites_winners.csv")),
+      row.names = FALSE
+    )
+  }
+}
+
+save_theme_selection_outputs(
+  winner_results = winner_results,
+  species_name = species,
+  save_dir = precheck_save_dir
+)
 # =========================================================
 # STEP 7: BUILD GAMS
 # =========================================================
@@ -1120,7 +1423,11 @@ nameVar <- function(var) {
     fsle_orient = "FSLE Orientation",
     fsle_orient_anom = "De-seasoned FSLE Orientation",
     mixed_layer = "Mixed Layer Depth (m)",
-    mixed_layer_anom = "De-seasoned Mixed Layer Depth (m)"
+    mixed_layer_anom = "De-seasoned Mixed Layer Depth (m)",
+    ice_conc = "Sea Ice Concentration",
+    ice_conc_anom = "De-seasoned Sea Ice Concentration",
+    ice_thickness = "Sea Ice Thickness (m)",
+    ice_thickness_anom = "De-seasoned Sea Ice Thickness (m)"
   )
   
   if (var %in% names(labels)) return(labels[[var]])
@@ -1184,6 +1491,8 @@ nameVar <- function(var) {
       SSH = "Sea Surface Height (m)",
       mixed_layer = "Mixed Layer Depth (m)",
       fsle_orient = "FSLE Orientation",
+      ice_conc = "Sea Ice Concentration",
+      ice_thickness = "Sea Ice Thickness (m)",
       base
     )
     
@@ -1217,7 +1526,6 @@ nameVar <- function(var) {
   
   var
 }
-
 gam_plots_final <- list()
 
 for (site in names(final_models)) {
