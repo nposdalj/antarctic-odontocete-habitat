@@ -6,13 +6,14 @@ library(readxl)
 library(sf)
 library(units)
 
-# -----------------------------
-# CONFIGURATIONS
-# -----------------------------
-env_file   <- file.path("data", "environment", "KGI_deseasoned.csv")
+# -------------------------
+# CONFIGURATON
+# -------------------------
+env_file   <- file.path("data", "environment", "CI_deseasoned.csv")
 catch_file <- file.path("data", "catch", "756_USA.Rds")
 
-env_var    <- "mlayer_0" # temperature_0, salinity_0, chla_0, productivity_0, mlayer_0, SI_0
+env_vars <- c("temperature_0", "salinity_0", "chla_0", "productivity_0", "mlayer_0")
+
 taxon_code <- "KRI"
 
 start_date_env   <- as.Date("2011-01-05")
@@ -22,10 +23,14 @@ buffer_km     <- 100
 antarctic_crs <- 3031
 
 sites <- data.frame(
-  name = c("KGI"),
-  lon  = c(-57.941917),
-  lat  = c(-61.457817)
+  name = "KGI",
+  lon  = -57.941917,
+  lat  = -61.457817
 )
+
+#-------------------------------------------------------------------
+# temperature_0, salinity_0 , chla_0, productivity_0, mlayer_0, SI_0
+# ------------------------------------------------------------------
 
 env_labels <- c(
   temperature_0  = "Temperature",
@@ -35,8 +40,6 @@ env_labels <- c(
   mlayer_0       = "Mixed Layer"
 )
 
-y_label <- env_labels[env_var]
-
 
 data      <- read.csv(env_file)
 data_list <- readRDS(catch_file)
@@ -45,7 +48,7 @@ C1       <- data_list[["C1"]]
 C1_CATCH <- data_list[["C1_CATCH"]]
 
 
-buffer_m <- as.numeric(set_units(buffer_km, "km") |> set_units("m"))
+buffer_m <- set_units(buffer_km, "km") |> set_units("m")
 
 sites_sf <- st_as_sf(sites, coords = c("lon", "lat"), crs = 4326) %>%
   st_transform(crs = antarctic_crs)
@@ -64,9 +67,6 @@ haul_sites <- hauls_in_buffer %>%
   filter(!is.na(name)) %>%
   select(c1_id, Site = name)
 
-# -----------------------------
-# DAILY ENVIRONMENT DATA
-# -----------------------------
 daily_env_raw <- data %>%
   mutate(date = as.Date(date)) %>%
   filter(date >= start_date_env) %>%
@@ -83,12 +83,17 @@ daily_env_raw <- data %>%
 
 date_range <- seq(min(daily_env_raw$date), max(daily_env_raw$date), by = "day")
 
-daily_env_full <- expand.grid(date = date_range) %>%
+daily_env_full <- expand.grid(
+  date = date_range,
+  stringsAsFactors = FALSE
+) %>%
   mutate(date = as.Date(date)) %>%
   left_join(daily_env_raw, by = "date") %>%
-  mutate(recording_effort = ifelse(is.na(recording_effort), 0, recording_effort))
+  mutate(recording_effort = replace_na(recording_effort, 0))
 
-
+# -------------------------
+# KRILL DATA
+# -------------------------
 daily_krill <- C1_CATCH %>%
   filter(taxon_code == taxon_code) %>%
   left_join(haul_sites, by = "c1_id") %>%
@@ -101,48 +106,63 @@ daily_krill <- C1_CATCH %>%
 
 daily_combined <- merge(daily_env_full, daily_krill, by = "date", all.x = TRUE)
 
-model_data <- daily_combined %>%
-  filter(!is.na(value), !is.na(.data[[env_var]]))
 
-# ---------------------------------
-# MODEL
-# ---------------------------------
-model <- lm(as.formula(paste(env_var, "~ value")), data = model_data)
-summary_model <- summary(model)
+plot_data <- daily_combined %>%
+  pivot_longer(
+    cols = all_of(env_vars),
+    names_to = "env_var",
+    values_to = "env_value"
+  ) %>%
+  filter(!is.na(value), !is.na(env_value))
 
-r2   <- summary_model$r.squared
-pval <- summary_model$coefficients[2,4]
+plot_data$label <- env_labels[plot_data$env_var]
 
-model_line <- data.frame(
-  value = seq(0, max(model_data$value, na.rm = TRUE), length.out = 500)
-)
-model_line[[env_var]] <- predict(model, newdata = model_line)
 
-# -----------------------------
-# PLOT
-# -----------------------------
-ggplot(model_data, aes(x = value, y = .data[[env_var]])) +
-  geom_line(data = model_line, aes(x = value, y = .data[[env_var]]),
-            color = "black", linewidth = 1.2) +
-  geom_point(size = 2.2, color = "black", alpha = 1) +
-  geom_smooth(method = "lm", color = "black", linewidth = 1.2,
-              se = TRUE, fill = "grey", alpha = 0.2, fullrange = TRUE) +
-  scale_x_continuous(expand = c(0, 0), limits = c(0, NA)) +
-  labs(title = paste("Krill Catch versus", y_label, "at", sites$name),
-       x = "Krill Catch (kg)", y = y_label) +
-  annotate("label",
-           x = Inf, y = Inf,
-           label = paste0("R² = ", round(r2, 3), "\np = ", signif(pval, 3)),
-           hjust = 1.1, vjust = 1.3,
-           size = 5, label.size = 0.5, fill = "white", color = "black") +
+
+ggplot(plot_data, aes(x = value, y = env_value)) +
+  
+  geom_point(
+    size = 1.2,       
+    color = "black",
+    alpha = 0.7       
+  ) +
+  
+  geom_smooth(
+    method = "lm",
+    color = "black",
+    linewidth = 1.2,
+    se = TRUE,
+    fill = "grey80",
+    alpha = 0.3,
+    fullrange = TRUE
+  ) +
+  
+  scale_x_continuous(
+    expand = c(0, 0),
+    limits = c(0, NA),
+    breaks = scales::pretty_breaks(n = 5)  
+  ) +
+  
+  facet_wrap(~ label, scales = "free_y") +
+  
+  labs(
+    title = "Krill Catch versus Environmental Variables",
+    x = "Krill Catch (kg)",
+    y = NULL
+  ) +
+  
   theme_classic(base_size = 14) +
   theme(
     plot.title = element_text(face = "bold", hjust = 0.5),
-    axis.text  = element_text(color = "black"),
+    axis.text  = element_text(color = "black", size = 10, angle = 45, hjust = 1), 
     axis.title = element_text(face = "bold"),
+    
     panel.grid.major = element_line(color = "grey80", linewidth = 0.5),
     panel.grid.minor = element_line(color = "grey90", linewidth = 0.3),
+    
     axis.line  = element_line(linewidth = 0.8),
-    axis.ticks = element_line(linewidth = 0.8)
+    axis.ticks = element_line(linewidth = 0.8),
+    
+    strip.text = element_text(face = "bold", size = 12)  
   )
 
