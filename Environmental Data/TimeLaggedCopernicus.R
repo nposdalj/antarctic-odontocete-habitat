@@ -34,17 +34,28 @@ library(gridExtra) # for grid.arrange
 
 # temperature, salinity, velocities (to derive EKE)
 # downloaded from: https://data.marine.copernicus.eu/product/GLOBAL_MULTIYEAR_PHY_001_030/download
-EI_phys <- nc_open('/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/Copernicus/lagged/EI-lag_cmems_mod_glo_phy_my_0.083deg_P1D-m_1755194554475.nc')
-KGI_phys <- nc_open('/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/Copernicus/lagged/KGI-lag_cmems_mod_glo_phy_my_0.083deg_P1D-m_1755130224784.nc')
-CI_phys <- nc_open('/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/Copernicus/lagged/CI-lag_cmems_mod_glo_phy_my_0.083deg_P1D-m_1755130273890.nc')
+EI_phys <- nc_open('C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Copernicus/lagged/EI-lag_cmems_mod_glo_phy_my_0.083deg_P1D-m_1755194554475.nc')
+KGI_phys <- nc_open('C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Copernicus/lagged/KGI-lag_cmems_mod_glo_phy_my_0.083deg_P1D-m_1755130224784.nc')
+CI_phys <- nc_open('C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Copernicus/lagged/CI-lag_cmems_mod_glo_phy_my_0.083deg_P1D-m_1755130273890.nc')
 
 # primary production, chlorophyll
 # downloaded from: https://data.marine.copernicus.eu/product/GLOBAL_MULTIYEAR_BGC_001_029/download 
-EI_bio <- nc_open('/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/Copernicus/lagged/EI-lag_cmems_mod_glo_bgc_my_0.25deg_P1D-m_1755197529356.nc')
-KGI_bio <- nc_open('/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/Copernicus/lagged/KGI-lag_cmems_mod_glo_bgc_my_0.25deg_P1D-m_1755129104796.nc')
-CI_bio <- nc_open('/Users/trisha/scripps/antarctic-odontocete-habitat/Environmental Data/Copernicus/lagged/CI-lag_cmems_mod_glo_bgc_my_0.25deg_P1D-m_1755129164010.nc')
+EI_bio <- nc_open('C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Copernicus/lagged/EI-lag_cmems_mod_glo_bgc_my_0.25deg_P1D-m_1755197529356.nc')
+KGI_bio <- nc_open('C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Copernicus/lagged/KGI-lag_cmems_mod_glo_bgc_my_0.25deg_P1D-m_1755129104796.nc')
+CI_bio <- nc_open('C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Copernicus/lagged/CI-lag_cmems_mod_glo_bgc_my_0.25deg_P1D-m_1755129164010.nc')
 
 # ------------------- Step 1: Prepping Data ---------------
+fix_grid <- function(var, four_dim = FALSE) {
+  if (four_dim) {
+    # From [lon, lat, depth, time] → [lon, lat, time, depth]
+    var <- aperm(var, c(1, 2, 4, 3))  # moves depth to last
+  } else {
+    # 3D case [lon, lat, time] → [lon, lat, time], no change
+    var <- aperm(var, c(1, 2, 3))
+  }
+  return(as.vector(var))
+}
+
 physFromNC <- function(data) {
   # Extracting relevant data
   # Dimensions
@@ -58,22 +69,27 @@ physFromNC <- function(data) {
   n_velocity <- ncvar_get(data, 'vo')
   e_velocity <- ncvar_get(data,'uo')
   salinity <- ncvar_get(data,'so')
-
+  sice_conc <- fix_grid(ncvar_get(data,'siconc'))
+  sice_thick <- fix_grid(ncvar_get(data, 'sithick'))
+  
   # Creating a dataframe with all variables
   lonlattime <- expand.grid(lon = lon, lat = lat, time = time_obs)
   df <- data.frame(lon = lonlattime$lon, lat = lonlattime$lat, date = lonlattime$time,
                    n_velocity = as.vector(n_velocity),
                    e_velocity = as.vector(e_velocity), salinity = as.vector(salinity),
-                   temp=as.vector(temp))
+                   temp=as.vector(temp), sice_conc=as.vector(sice_conc), sice_thick=as.vector(sice_thick))
   
   # Creating a dataframe with daily spatial averages
   avg_df <- df %>% group_by(date) %>% summarize(n_velocity = mean(n_velocity, na.rm=TRUE),
                                                        e_velocity = mean(e_velocity, na.rm=TRUE), 
                                                        salinity = mean(salinity, na.rm=TRUE), 
-                                                       temp =mean(temp, na.rm=TRUE))
-  avg_df <- ungroup(avg_df)
+                                                       temp =mean(temp, na.rm=TRUE),
+                                                        sice_conc =mean(sice_conc, na.rm=TRUE),
+                                                      sice_thick =mean(sice_thick, na.rm=TRUE))
+avg_df <- ungroup(avg_df)
   return(avg_df)
 }
+
 # Constructing site dataframes
 EI_physdf <- physFromNC(EI_phys)
 KGI_physdf <- physFromNC(KGI_phys)
