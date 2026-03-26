@@ -9,7 +9,7 @@ library(units)
 # -----------------------------
 # CONFIGURATIONS
 # -----------------------------
-env_file   <- file.path("data", "environment", "KGI_deseasoned.csv")
+env_file   <- file.path("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Copernicus/Deseasoning", "KGI_deseasoned.csv")
 catch_file <- file.path("data", "catch", "756_USA.Rds")
 
 env_var    <- "mlayer_0" # temperature_0, salinity_0, chla_0, productivity_0, mlayer_0, SI_0
