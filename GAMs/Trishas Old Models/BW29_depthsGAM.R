@@ -847,7 +847,7 @@ EI_gam <- gam(BW29 ~ s(mixed_layer,k=4) + s(FSLE,fsle_orient,k=4),
 # .................................................
 # concurvity and plots not problematic, but removing FSLE because not significant
 
-EI_gam <- gam(BW29 ~ s(mixed_layer,k=4),
+EI_gam <- gam(BW29 ~ s(mixed_layer,k=4) ,
               family=binomial, method='REML', data=EI_binned)
 # running gam.check
 # model residuals look good, p-values good (not messing with k)
