@@ -20,7 +20,7 @@ library(car)
 env_file   <- file.path("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Copernicus/Deseasoning", "KGI_deseasoned.csv")
 catch_file <- file.path("D:/CCAMLR Data/756/R", "756_USA_2026-01-02.Rds")
 
-env_var    <- "mlayer_0"# temperature_0, salinity_0, chla_0, productivity_0, mlayer_0, SI_0
+env_var    <- "chla_0"# temperature_0, salinity_0, chla_0, productivity_0, mlayer_0, SI_0
 env_var2   <- "chla_0"
 taxon_code <- "KRI"
 
@@ -36,6 +36,9 @@ sites <- data.frame(
   lat  = c(-61.457817)
 )
 
+
+env_var <- "productivity_0"
+
 env_labels <- c(
   temperature_0  = "Temperature",
   salinity_0     = "Salinity",
@@ -43,6 +46,8 @@ env_labels <- c(
   productivity_0 = "Productivity",
   mlayer_0       = "Mixed Layer"
 )
+
+env_label <- env_labels[[env_var]]
 
 y_label <- env_labels[env_var]
 
@@ -223,20 +228,111 @@ gam_model <- gam(
 summary(gam_model)
 
 gam_model <- gam(
-  formula = value_sqrt ~ s(temperature_0, k = 4),
+  formula = value_sqrt ~ s(env_var, k = 4),
   data = model_data_binned,
   family = gaussian()
 )
 summary(gam_model)
 
 gam_model <- gam(
-  formula = value_sqrt ~ temperature_0,
+  formula = value_sqrt ~ env_var,
   data = model_data_binned,
   family = gaussian()
 )
 summary(gam_model)
 plot(gam_model,all.terms = TRUE)
 plot(gam_model, residuals = TRUE, pch = 1, all.terms = TRUE)
-#5 -- Visualize model --
-  # 
 
+#5 -- Visualize model -- 
+
+x_var <- env_var
+x_label <- env_labels[[x_var]]
+
+pred_vars <- all.vars(delete.response(terms(gam_model)))
+
+new_data <- model_data_binned %>%
+  summarise(across(all_of(pred_vars), ~ mean(.x, na.rm = TRUE)))
+
+new_data <- new_data[rep(1, 100), ]
+
+new_data[[x_var]] <- seq(
+  min(model_data_binned[[x_var]], na.rm = TRUE),
+  max(model_data_binned[[x_var]], na.rm = TRUE),
+  length.out = 100
+)
+
+pred <- predict(gam_model, newdata = new_data, se.fit = TRUE)
+
+new_data$fit <- pred$fit
+new_data$se  <- pred$se.fit
+
+new_data$upper <- new_data$fit + 1.96 * new_data$se
+new_data$lower <- new_data$fit - 1.96 * new_data$se
+
+gam_sum <- summary(gam_model)
+
+p_val <- if (!is.null(gam_sum$s.table)) {
+  gam_sum$s.table[1, "p-value"]
+} else {
+  gam_sum$p.table[2, "Pr(>|t|)"]
+}
+
+p_label <- if (p_val < 0.001) {
+  "p < 0.001"
+} else {
+  paste0("p = ", round(p_val, 3))
+}
+
+label_df <- data.frame(
+  x = Inf,
+  y = Inf,
+  label = p_label
+)
+
+label_df$x <- label_df$x * 0.98
+label_df$y <- label_df$y * 0.95
+
+
+ggplot() +
+  
+  geom_ribbon(data = new_data,
+              aes(x = .data[[x_var]], ymin = lower, ymax = upper),
+              fill = "black", alpha = 0.3) +
+  
+  geom_line(data = new_data,
+            aes(x = .data[[x_var]], y = fit),
+            color = "black", size = 1.2) +
+  
+  geom_rug(data = model_data_binned,
+           aes(x = .data[[x_var]]),
+           sides = "b",
+           color = "black",
+           alpha = 0.8) +
+  
+  geom_label(
+    data = label_df,
+    aes(x = x, y = y, label = label),
+    hjust = 1.1,
+    vjust = 1.2,
+    size = 5,
+    fill = "white",
+    color = "black",
+    label.size = 0.5
+  ) +
+  coord_cartesian(clip = "off") +
+  
+  labs(
+    title = paste("GAM: Krill (sqrt) vs", x_label),
+    x = x_label,
+    y = "Sqrt(Krill catch)"
+  ) +
+  
+  theme_classic() +
+  
+  theme(
+    panel.border = element_rect(color = "black", fill = NA, linewidth = 1),
+    axis.line = element_line(color = "black"),
+    axis.ticks = element_line(color = "black"),
+    axis.text = element_text(color = "black"),
+    axis.title = element_text(color = "black")
+  )
