@@ -35,12 +35,22 @@ bounding box (40 km square) and time range for each site to the specified folder
 *Downloaded/accessed data:* [Aqua MODIS ](https://cwcgom.aoml.noaa.gov/erddap/griddap/miamiModisAquaChlor.html)(chlrophyll-a), SMOS (salinity), [ERDDAP](https://coastwatch.noaa.gov/cwn/products/sea-surface-salinity-near-real-time-miras-smos.html) (SST, salinity), AVISO (FSLEs; data downloaded on working disk), [HYCOM](https://tds.hycom.org/thredds/catalogs/GLBv0.08/expt_53.X.html) (salinity, temperature at depths), OCNET (chlrophyll-a; did not use because out of bounding box),
 [University of Bremen](https://seaice.uni-bremen.de/sea-ice-concentration/amsre-amsr2/) (sea ice, code does not work), Copernicus (from [ocean physics](https://data.marine.copernicus.eu/product/GLOBAL_MULTIYEAR_PHY_001_030/download) and [biogeochemistry](https://data.marine.copernicus.eu/product/GLOBAL_MULTIYEAR_BGC_001_029/description): salinity, temperature, chlorophyll, net primary production, EKE, ice variables, mixed layer thickness, SSH; at depth when applicable),
 [daily AAO index](https://www.cpc.ncep.noaa.gov/products/precip/CWlink/daily_ao_index/aao/aao.shtml)
-
 #### Next, use the script for each data source.
 Scripts are titled GetSOURCE.R. Run this to read the specified variable/s from the netCDF files, make a stacked timeseries of each variable at each site, and save the daily bounding-box averaged values of each variable to a .csv format.
 
 #### Finally, determine the data sources to use for modeling.
 Only Copernicus, AVISO, and AAO data was used for creating the GAMs. Remotely sensed data (Aqua MODIS, SMOS, ERDDAP sources) were found to have too many gaps in either the 40 km bounding box or daily timeseries to be used in the modeling code, but could be useful for additional ground-truthing Copernicus models. HYCOM was not used because Copernicus performed better and had more variables (analysis found in Cop_vs_HYCOM.R and [here](https://docs.google.com/document/d/11GEedOBmrZNMdO0CqTZY6Ltp4wF0kYFU6sATxuj63Ag/edit?tab=t.0)). OCNET did not have data for our sites. University of Bremen sea ice data is probably preferable to Copernicus, however the code to access this is not currently working, so Copernicus was used for convenience (but Bremen code and QGIS bounding box files can be found in the "Sea Ice Bremen" folder witihin "Environmental Data".
+
+*Extended Environmental Time Series (KGI)*
+To support additional analyses beyond the original 40 km site-specific bounding boxes, the script Extending_Env_TimeSeries was developed to generate extended environmental time series centered on King George Island (KGI).
+Instead of downloading separate datasets for each site-specific bounding box, full spatial domains of Copernicus ocean physics reanalysis and biogeochemistry hindcast data were downloaded for a broader region encompassing all sites:
+Latitude range: -63.5 to -60.27
+Longitude range: -64 to -52.48
+Using these full-domain datasets, environmental variables were extracted and spatially subset using circular buffers centered on the KGI site coordinates (-61.457817, -57.941917). Three buffer radii were applied: 40, 60, 100km
+For each radius, all grid cells within the specified distance from KGI were selected, and daily spatial averages were computed for both physical and biogeochemical variables. Variables include temperature, salinity, mixed layer thickness, sea surface height (zos), sea ice concentration (siconc), sea ice thickness (sithick), chlorophyll-a, oxygen, and net primary production.
+Eddy Kinetic Energy (EKE) was calculated at the grid-cell level using zonal (u) and meridional (v) velocities, and both the daily mean and median absolute deviation (MAD) of EKE were computed within each spatial buffer.
+The resulting datasets (one per buffer size) are saved as .csv files and represent spatially averaged environmental conditions over increasing spatial scales surrounding KGI.
+These extended environmental time series are intended for use in krill habitat and distribution modeling, allowing exploration of how environmental variability at different spatial scales influences krill dynamics.
 
 ### Step 3: Determine ACF values.
 *Input:* Sheet with all species/site encounters (Antarc_Odontocetes.csv)
