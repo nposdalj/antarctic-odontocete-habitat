@@ -20,9 +20,10 @@ library(car)
 env_file   <- file.path("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Copernicus/Deseasoning", "KGI_deseasoned.csv")
 catch_file <- file.path("D:/CCAMLR Data/756/R", "756_USA_2026-01-02.Rds")
 
-env_var    <- "chla_0"# temperature_0, salinity_0, chla_0, productivity_0, mlayer_0, SI_0
+env_var    <- "productivity_0"# temperature_0, salinity_0, chla_0, productivity_0, mlayer_0, SI_0
 env_var2   <- "chla_0"
 taxon_code <- "KRI"
+
 
 start_date_env   <- as.Date("2011-01-05")
 start_date_catch <- as.Date("2011-01-01")
@@ -37,7 +38,7 @@ sites <- data.frame(
 )
 
 
-env_var <- "productivity_0"
+env_var <- "mlayer_0"
 
 env_labels <- c(
   temperature_0  = "Temperature",
@@ -146,15 +147,16 @@ par(mfrow = c(1,1))
 
 library(mgcv)
 
-# Build formula safely
-gam_formula <- as.formula(
-  paste0("value_sqrt ~ s(", env_var, ", k = 4) + s(", env_var2, ", k = 4)")
-  )
 
-# Fit GAM
 gam_model <- gam(
-  formula = gam_formula,
-  data = model_data,
+  formula = as.formula(paste0("value_sqrt ~ s(", env_var, ", k = 4)")),
+  data = model_data_binned,
+  family = gaussian()
+)
+
+gam_model <- gam(
+  formula = as.formula(paste("value_sqrt ~", env_var)),
+  data = model_data_binned,
   family = gaussian()
 )
 
@@ -206,12 +208,55 @@ vif(vif_krill)
   # side 1: dependent
   #side 2: independent
   # find p value: stepwise selection (take least significant and remove least significant variable until all variables are significant)
+
+gam_model <- gam(
+  value_sqrt ~ s(mlayer_0, k = 4) +
+    s(salinity_0, k = 4) +
+    s(temperature_0, k = 4) +
+    s(chla_0, k = 4),
+  data = model_data_binned,
+  family = gaussian()
+)
+
+
+summary(gam_model)
 gam_model <- gam(
   formula = value_sqrt ~ s(mlayer_0,k=4) + s(salinity_0,k = 4) + s(temperature_0, k = 4) + s(chla_0, k =4),
   data = model_data_binned,
   family = gaussian()
 )
 summary(gam_model)
+
+gam_model <- gam(
+  value_sqrt ~ s(salinity_0, k = 4) +
+    s(temperature_0, k = 4) +
+    s(chla_0, k = 4),
+  data = model_data_binned,
+  family = gaussian()
+)
+
+summary(gam_model)
+
+gam_model <- gam(
+  value_sqrt ~ s(salinity_0, k = 4) +
+    s(temperature_0, k = 4),
+  data = model_data_binned,
+  family = gaussian()
+)
+
+summary(gam_model)
+
+gam_model <- gam(
+  formula = as.formula(paste("value_sqrt ~", env_var)),
+  data = model_data_binned,
+  family = gaussian()
+)
+
+gam_model <- gam(
+  formula = as.formula(paste0("value_sqrt ~ s(", env_var, ", k = 4)")),
+  data = model_data_binned,
+  family = gaussian()
+)
 
 gam_model <- gam(
   formula = value_sqrt ~ s(mlayer_0,k=4) + s(salinity_0,k = 4) + s(temperature_0, k = 4),
@@ -228,17 +273,18 @@ gam_model <- gam(
 summary(gam_model)
 
 gam_model <- gam(
-  formula = value_sqrt ~ s(env_var, k = 4),
+  formula = as.formula(paste0("value_sqrt ~ s(", env_var, ", k = 4)")),
   data = model_data_binned,
   family = gaussian()
 )
 summary(gam_model)
 
 gam_model <- gam(
-  formula = value_sqrt ~ env_var,
+  formula = as.formula(paste("value_sqrt ~", env_var)),
   data = model_data_binned,
   family = gaussian()
 )
+
 summary(gam_model)
 plot(gam_model,all.terms = TRUE)
 plot(gam_model, residuals = TRUE, pch = 1, all.terms = TRUE)
@@ -270,6 +316,7 @@ new_data$upper <- new_data$fit + 1.96 * new_data$se
 new_data$lower <- new_data$fit - 1.96 * new_data$se
 
 gam_sum <- summary(gam_model)
+dev_expl <- round(gam_sum$dev.expl * 100, 1)
 
 p_val <- if (!is.null(gam_sum$s.table)) {
   gam_sum$s.table[1, "p-value"]
@@ -277,11 +324,7 @@ p_val <- if (!is.null(gam_sum$s.table)) {
   gam_sum$p.table[2, "Pr(>|t|)"]
 }
 
-p_label <- if (p_val < 0.001) {
-  "p < 0.001"
-} else {
-  paste0("p = ", round(p_val, 3))
-}
+p_label <- paste0("p = ", format.pval(p_val, digits = 3, eps = .Machine$double.eps))
 
 label_df <- data.frame(
   x = Inf,
@@ -322,9 +365,10 @@ ggplot() +
   coord_cartesian(clip = "off") +
   
   labs(
-    title = paste("GAM: Krill (sqrt) vs", x_label),
+    title = sprintf("Krill Catch (sqrt) vs %s\nDeviance explained: %.1f%%",
+                    x_label, dev_expl),,
     x = x_label,
-    y = "Sqrt(Krill catch)"
+    y = "Krill Catch"
   ) +
   
   theme_classic() +
@@ -336,3 +380,4 @@ ggplot() +
     axis.text = element_text(color = "black"),
     axis.title = element_text(color = "black")
   )
+
