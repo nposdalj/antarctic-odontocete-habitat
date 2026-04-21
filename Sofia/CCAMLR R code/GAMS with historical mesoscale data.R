@@ -25,6 +25,22 @@ catch_file <- file.path("D:/CCAMLR Data/756/R", "756_USA_2026-01-02.Rds")
 env_var    <- "productivity_mean"# chla_mean, o2_mean, productivity_mean, temp_mean, zos_mean, salinity_mean, mixed_layer_mean, siconc_mean, sithick_mean, u_mean, v_mean, EKE_mean
 env_var2   <- "chla_mean"
 taxon_code <- "KRI"
+buffer_km     <- 100
+antarctic_crs <- 3031
+
+sites <- data.frame(
+  name = c("KGI"),
+  lon  = c(-57.941917),
+  lat  = c(-61.457817)
+)
+
+env_labels <- c(
+  temperature_0  = "Temperature",
+  salinity_0     = "Salinity",
+  chla_0         = "Chlorophyll",
+  productivity_0 = "Productivity",
+  mlayer_0       = "Mixed Layer"
+)
 
 env_label <- env_labels[[env_var]]
 
