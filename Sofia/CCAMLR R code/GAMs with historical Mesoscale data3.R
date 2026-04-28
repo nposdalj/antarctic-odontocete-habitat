@@ -22,6 +22,7 @@ library(gratia)
 env_file   <- file.path("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Copernicus/Extended_PhysicsReanalysis_BiogeochemistryHindcast", "KGI_60km_mask_with_deseasoned.csv")
 catch_file <- file.path("D:/CCAMLR Data/756/R", "756_USA_2026-01-02.Rds")
 
+
 taxon_code <- "KRI"
 
 
@@ -308,7 +309,7 @@ summary(gam_model)
 par(mfrow = c(2, 3))  
 plot(gam_model, pages = 1, residuals = TRUE, pch = 1, shade = TRUE, all.terms = TRUE)
 
-#5 -- Visualize model -- 
+#5 -- Visualize model --
 
 my_unit <- paste(ACFval, "days")
 
@@ -390,8 +391,8 @@ ggplot(new_data, aes(x = env_index)) +
       "Krill Catch at King George Island\n",
       "Deviance explained = ", dev_expl, "%"
     ),
-    x = "Environmental Index",
-    y = "Krill Catch"
+    x = "Standarised Environmental Gradient",
+    y = "Effect on Krill (sqrt)"
   ) +
   
   theme_classic(base_size = 14) +
@@ -408,4 +409,8 @@ ggplot(new_data, aes(x = env_index)) +
     
     plot.margin = margin(t = 10, r = 10, b = 30, l = 10)
   )
+
+
+
+
 
