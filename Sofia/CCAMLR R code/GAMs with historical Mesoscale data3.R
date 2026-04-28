@@ -1,9 +1,9 @@
 #1 -- load environmental/krill data --
 
 # -- visualization of data--
-  #   shape
-  #   normal distribution
-  #   fit according model
+#   shape
+#   normal distribution
+#   fit according model
 
 library(dplyr)
 library(lubridate)
@@ -19,7 +19,7 @@ library(gratia)
 # -----------------------------
 # CONFIGURATIONS
 # -----------------------------
-env_file   <- file.path("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Copernicus/Extended_PhysicsReanalysis_BiogeochemistryHindcast", "KGI_60km_mask.csv")
+env_file   <- file.path("C:/Users/HARP/Documents/GitHub/antarctic-odontocete-habitat/Environmental Data/Copernicus/Extended_PhysicsReanalysis_BiogeochemistryHindcast", "KGI_60km_mask_with_deseasoned.csv")
 catch_file <- file.path("D:/CCAMLR Data/756/R", "756_USA_2026-01-02.Rds")
 
 taxon_code <- "KRI"
@@ -45,11 +45,18 @@ env_labels <- c(
   mlayer_0       = "Mixed Layer"
 )
 
-env_var <- "salinity_mean"
-env_var <- "chla_mean"
-env_var <- "productivity_mean"
-env_var <- "mixed_layer_mean"
-env_var <- "temp_mean"
+env_var <- "salinity_anom"
+env_var <- "chla_anom"
+env_var <- "productivity_anom"
+env_var <- "mixed_layer_anom"
+env_var <- "temp_anom"
+env_var <- "o2_anom"
+
+env_var <- "siconc_mean"
+env_var <- "sithick_mean"
+env_var <- "EKE_mean"
+env_var <- "EKE_mad"
+env_var <- "zos_mean"
 
 env_label <- env_labels[[env_var]]
 
@@ -90,19 +97,21 @@ daily_env_raw <- data %>%
   filter(date >= start_date_env) %>%
   group_by(date) %>%
   summarise(
-    chla_mean  = mean(chla_mean,  na.rm = TRUE),
-    o2_mean = mean(o2_mean,  na.rm = TRUE),
-    productivity_mean = mean(productivity_mean, na.rm = TRUE),
-    temp_mean = mean(temp_mean,  na.rm = TRUE),
+    chla_anom  = mean(chla_anom,  na.rm = TRUE),
+    o2_anom = mean(o2_anom,  na.rm = TRUE),
+    productivity_anom = mean(productivity_anom, na.rm = TRUE),
+    temp_anom = mean(temp_anom,  na.rm = TRUE),
     zos_mean = mean(zos_mean, na.rm = TRUE),
-    salinity_mean = mean(salinity_mean, na.rm = TRUE),
-    mixed_layer_mean = mean(mixed_layer_mean, na.rm = TRUE),
+    salinity_anom = mean(salinity_anom, na.rm = TRUE),
+    mixed_layer_anom = mean(mixed_layer_anom, na.rm = TRUE),
     siconc_mean = mean(siconc_mean, na.rm = TRUE),
     sithick_mean = mean(sithick_mean, na.rm = TRUE),
     EKE_mean = mean(EKE_mean, na.rm = TRUE),
     EKE_mad = mean(EKE_mad, na.rm = TRUE),
     .groups = "drop"
   )
+
+
 
 date_range <- seq(min(daily_env_raw$date), max(daily_env_raw$date), by = "day")
 
@@ -123,7 +132,7 @@ daily_combined <- merge(daily_env_raw, daily_krill, by = "date", all.x = TRUE)
 model_data = daily_combined
 
 # how to reshape poison into normal dsitribution (log transform and a square root transform) 
-      # -------- model_data$value_sqrt - sqrt(model_data$value) / hist(model_data$value_sqrt) --------
+# -------- model_data$value_sqrt - sqrt(model_data$value) / hist(model_data$value_sqrt) --------
 
 # -----------------------------
 # TRANSFORM KRILL DATA
@@ -145,11 +154,11 @@ par(mfrow = c(1,1))
 
 
 #2 -- Check/adjust for autocorrelation --
-  #   Find how much autocorrelation -> adjust
-  #   How many days is data autocorrelated (find avg in autocorrelation bins)
+#   Find how much autocorrelation -> adjust
+#   How many days is data autocorrelated (find avg in autocorrelation bins)
 
 gam_model <- gam(
-  value_sqrt ~ s(EKE_mad, k = 4) + s(temp_mean, k = 4) + s(salinity_mean, k = 4),
+  value_sqrt ~ s(EKE_mad, k = 4) + s(temp_anom, k = 4) + s(salinity_anom, k = 4),
   data = model_data,
   family = gaussian()
 )
@@ -185,56 +194,86 @@ acf_res <- acf(residuals_gam, lag.max = 100, plot = TRUE)
 
 
 #3  -- Look for covariants (env_data)
-  #    Independent variables
-  #   Find similar variables -> remove similar
+#    Independent variables
+#   Find similar variables -> remove similar
 
 model_data_binned$siconc_mean[is.na(model_data_binned$siconc_mean)] <- 0
 
 
-pred <- c("mixed_layer_mean", "salinity_mean", "zos_mean", 
-             "temp_mean", 'chla_mean', 'EKE_mad', 'siconc_mean', 'o2_mean')
+
+
+
+pred <- c("zos_mean", "mixed_layer_anom", "salinity_anom",  
+          "temp_anom", 'chla_anom', 'EKE_mad', 'siconc_mean', 'o2_anom')
 mod_formula <- paste('value_sqrt', "~", paste(pred, collapse = " + "))
 vif_krill <- glm(as.formula(mod_formula),family=gaussian, data = model_data_binned)
 vif(vif_krill)
 
 #-----------------------------------------------------------------
-# ----- Removed zos_mean, temp_mean, not significant -------------
+#------ Removed zos_mean ----------------------------------------
 #------ Removed sithick_mean and EKE_mean, unable to process -----
 # ---------------------------------------------------------------
 
 
-pred <- c("mixed_layer_mean", "salinity_mean", 
-       'chla_mean', 'EKE_mad', 'siconc_mean', 'o2_mean')
+pred <- c("mixed_layer_anom", "salinity_anom",  
+          "temp_anom", 'chla_anom', 'EKE_mad', 'siconc_mean', 'o2_anom')
 mod_formula <- paste('value_sqrt', "~", paste(pred, collapse = " + "))
 vif_krill <- glm(as.formula(mod_formula),family=gaussian, data = model_data_binned)
 vif(vif_krill)
 
 #4 -- Build GAM model ---
-  # side 1: dependent
-  #side 2: independent
-  # find p value: stepwise selection (take least significant and remove least significant variable until all variables are significant)
+# side 1: dependent
+#side 2: independent
+# find p value: stepwise selection (take least significant and remove least significant variable until all variables are significant)
 
 gam_model <- gam(
   value_sqrt ~ 
-    s(mixed_layer_mean, k = 4) + 
-    s(salinity_mean, k = 4) + 
-    s(chla_mean, k = 4) + 
+    s(mixed_layer_anom, k = 4) + 
+    s(salinity_anom, k = 4) + 
+    s(chla_anom, k = 4) + 
     s(EKE_mad, k = 4) + 
     s(siconc_mean, k = 4) + 
-    s(o2_mean, k = 4),
+    s(o2_anom, k = 4),
   data = model_data_binned,
   family = gaussian()
 )
 
 summary(gam_model)
 
-# -------- removed O2 --------
+# -------- removed mixed layer --------
 
 gam_model <- gam(
   value_sqrt ~ 
-    s(mixed_layer_mean, k = 4) + 
-    s(salinity_mean, k = 4) + 
-    s(chla_mean, k = 4) + 
+    s(salinity_anom, k = 4) + 
+    s(chla_anom, k = 4) + 
+    s(EKE_mad, k = 4) + 
+    s(siconc_mean, k = 4) + 
+    s(o2_anom, k = 4),
+  data = model_data_binned,
+  family = gaussian()
+)
+
+summary(gam_model)
+
+# -------- removed salinity --------
+
+gam_model <- gam(
+  value_sqrt ~ 
+    s(chla_anom, k = 4) + 
+    s(EKE_mad, k = 4) + 
+    s(siconc_mean, k = 4) + 
+    s(o2_anom, k = 4),
+  data = model_data_binned,
+  family = gaussian()
+)
+
+summary(gam_model)
+
+# --------- removed o2 --------
+
+gam_model <- gam(
+  value_sqrt ~ 
+    s(chla_anom, k = 4) + 
     s(EKE_mad, k = 4) + 
     s(siconc_mean, k = 4),
   data = model_data_binned,
@@ -243,39 +282,12 @@ gam_model <- gam(
 
 summary(gam_model)
 
-# -------- removed EKE --------
+# ---------- removed chla
 
 gam_model <- gam(
-  value_sqrt ~ 
-    s(mixed_layer_mean, k = 4) + 
-    s(salinity_mean, k = 4) + 
-    s(chla_mean, k = 4) +
+  value_sqrt ~  
+    s(EKE_mad, k = 4) + 
     s(siconc_mean, k = 4),
-  data = model_data_binned,
-  family = gaussian()
-)
-
-summary(gam_model)
-
-# --------- removed mixed layer --------
-
-gam_model <- gam(
-  value_sqrt ~ 
-    s(salinity_mean, k = 4) + 
-    s(chla_mean, k = 4) + 
-    s(siconc_mean, k = 4),
-  data = model_data_binned,
-  family = gaussian()
-)
-
-summary(gam_model)
-
-# ---------- removed SIC
-
-gam_model <- gam(
-  value_sqrt ~ 
-    s(salinity_mean, k = 4) + 
-    s(chla_mean, k = 4),
   data = model_data_binned,
   family = gaussian()
 )
@@ -286,7 +298,7 @@ summary(gam_model)
 # ---------------------------------------
 
 model_data_binned$env_combined <- rowMeans(
-  model_data_binned[, c("salinity_mean","EKE_mad")],
+  model_data_binned[, c("siconc_mean","EKE_mad")],
   na.rm = TRUE
 )
 
@@ -306,10 +318,9 @@ model_data_binned <- model_data %>%
   summarise(across(where(is.numeric), ~ mean(.x, na.rm = TRUE)),
             .groups = "drop")
 
-
 env_vars <- c(
-  "salinity_mean",
-  "chla_mean"
+  "siconc_mean",
+  "EKE_mad"
 )
 
 model_data_binned <- model_data_binned %>%
@@ -397,4 +408,4 @@ ggplot(new_data, aes(x = env_index)) +
     
     plot.margin = margin(t = 10, r = 10, b = 30, l = 10)
   )
- 
+
