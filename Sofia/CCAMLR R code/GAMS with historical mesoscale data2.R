@@ -281,12 +281,14 @@ gam_model <- gam(
 )
 
 summary(gam_model)
+
+
+
 # ---------------------------------------
 # ------------- FINAL GAM ---------------
 # ---------------------------------------
-
 model_data_binned$env_combined <- rowMeans(
-  model_data_binned[, c("salinity_mean","EKE_mad")],
+  model_data_binned[, c("siconc_mean","EKE_mad", "chla_anom")],
   na.rm = TRUE
 )
 
@@ -296,105 +298,88 @@ summary(gam_model)
 par(mfrow = c(2, 3))  
 plot(gam_model, pages = 1, residuals = TRUE, pch = 1, shade = TRUE, all.terms = TRUE)
 
-#5 -- Visualize model -- 
-
-my_unit <- paste(ACFval, "days")
-
-model_data_binned <- model_data %>%
-  mutate(date = as.Date(date)) %>%
-  group_by(bin = floor_date(date, unit = my_unit)) %>%
-  summarise(across(where(is.numeric), ~ mean(.x, na.rm = TRUE)),
-            .groups = "drop")
 
 
-env_vars <- c(
-  "salinity_mean",
-  "chla_mean"
-)
+# CHLOROPHYLL A
 
-model_data_binned <- model_data_binned %>%
-  mutate(
-    env_index = rowMeans(
-      scale(across(all_of(env_vars))),
-      na.rm = TRUE
-    )
-  )
+gam_chla <- gam(value_sqrt ~ s(chla_mean, k = 4),
+                data = model_data_binned)
 
-gam_model <- gam(
-  value_sqrt ~ s(env_index, k = 4),
-  data = model_data_binned,
-  family = gaussian(),
-  method = "REML"
-)
+chla_seq <- seq(min(model_data_binned$chla_mean, na.rm = TRUE),
+                max(model_data_binned$chla_mean, na.rm = TRUE),
+                length.out = 200)
 
-new_data <- data.frame(
-  env_index = seq(
-    min(model_data_binned$env_index, na.rm = TRUE),
-    max(model_data_binned$env_index, na.rm = TRUE),
-    length.out = 200
-  )
-)
+chla_df <- data.frame(chla_mean = chla_seq)
+chla_pred <- predict(gam_chla, newdata = chla_df, se.fit = TRUE)
 
-pred <- predict(gam_model, newdata = new_data, se.fit = TRUE)
+chla_df$fit   <- chla_pred$fit
+chla_df$upper <- chla_pred$fit + 2 * chla_pred$se.fit
+chla_df$lower <- chla_pred$fit - 2 * chla_pred$se.fit
 
-new_data <- new_data %>%
-  mutate(
-    fit = pred$fit,
-    se = pred$se.fit,
-    upper = fit + 1.96 * se,
-    lower = fit - 1.96 * se
-  )
+p2 <- ggplot() +
+  geom_ribbon(data = chla_df,
+              aes(x = chla_mean, ymin = lower, ymax = upper),
+              fill = "black", alpha = 0.2) +
+  geom_line(data = chla_df,
+            aes(x = chla_mean, y = fit),
+            color = "black", linewidth = 1.2) +
+  geom_rug(data = model_data_binned,
+           aes(x = chla_mean),
+           sides = "b", alpha = 0.4) +
+  labs(
+    x = "Chlorophyll (mg/m3)",
+    y = "Partial Effect"
+  ) +
+  theme_minimal() +
+  theme(panel.border = element_rect(color = "black", fill = NA))
+
+# SEA ICE CONCENTRATION
+
+gam_sal <- gam(value_sqrt ~ s(salinity_mean, k = 4),
+               data = model_data_binned)
+
+sal_seq <- seq(min(model_data_binned$salinity_mean, na.rm = TRUE),
+               max(model_data_binned$salinity_mean, na.rm = TRUE),
+               length.out = 200)
+
+sal_df <- data.frame(salinity_mean = sal_seq)
+sal_pred <- predict(gam_sal, newdata = sal_df, se.fit = TRUE)
+
+sal_df$fit   <- sal_pred$fit
+sal_df$upper <- sal_pred$fit + 2 * sal_pred$se.fit
+sal_df$lower <- sal_pred$fit - 2 * sal_pred$se.fit
+
+p3 <- ggplot() +
+  geom_ribbon(data = sal_df,
+              aes(x = salinity_mean, ymin = lower, ymax = upper),
+              fill = "black", alpha = 0.2) +
+  geom_line(data = sal_df,
+            aes(x = salinity_mean, y = fit),
+            color = "black", linewidth = 1.2) +
+  geom_rug(data = model_data_binned,
+           aes(x = salinity_mean),
+           sides = "b", alpha = 0.4) +
+  labs(
+    x = "Salinity (psu)",
+    y = "Partial Effect"
+  ) +
+  theme_minimal() +
+  theme(panel.border = element_rect(color = "black", fill = NA))
+
+
 
 gam_sum <- summary(gam_model)
-dev_expl <- round(gam_sum$dev.expl * 100, 1)
+dev_exp <- gam_sum$dev.expl * 100
 
-p_label <- paste0(
-  "p = ",
-  formatC(gam_sum$s.table[1, "p-value"], format = "f", digits = 7)
-)
-
-ggplot(new_data, aes(x = env_index)) +
-  
-  geom_ribbon(aes(ymin = lower, ymax = upper),
-              fill = "black", alpha = 0.25) +
-  
-  geom_line(aes(y = fit),
-            color = "black", linewidth = 1.2) +
-  
-  geom_rug(data = model_data_binned,
-           aes(x = env_index),
-           inherit.aes = FALSE,
-           sides = "b",
-           alpha = 0.3) +
-  
-  annotate("label",
-           x = Inf, y = Inf,
-           label = p_label,
-           hjust = 1.1, vjust = 1.2,
-           size = 4,
-           fill = "white") +
-  
-  labs(
+(p2 + p3) +
+  plot_annotation(
     title = paste0(
-      "Krill Catch at King George Island\n",
-      "Deviance explained = ", dev_expl, "%"
-    ),
-    x = "Environmental Index",
-    y = "Krill Catch"
-  ) +
-  
-  theme_classic(base_size = 14) +
-  
+      "Seasonal Krill Catch in King George Island (Deviance explained = ",
+      round(dev_exp, 1),
+      "%)"
+    )
+  ) &
   theme(
-    panel.grid.major = element_line(color = "grey85", linewidth = 0.5),
-    panel.grid.minor = element_line(color = "grey92", linewidth = 0.3),
-    
-    panel.border = element_rect(color = "black", fill = NA, linewidth = 1),
-    axis.line = element_line(color = "black"),
-    
-    axis.text = element_text(color = "black"),
-    axis.title = element_text(color = "black"),
-    
-    plot.margin = margin(t = 10, r = 10, b = 30, l = 10)
+    plot.title = element_text(hjust = 0.5, size = 14)
   )
- 
+
