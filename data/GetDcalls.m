@@ -1,90 +1,460 @@
-%% Batch extract Blue Whale D-call times from .mat -> CSV
-% Configure paths
+%% Compare Blue Whale D-call detections from MAT and XML files
+
+clear; clc;
+
+%% --------------------------------------------------------
+%% USER SETTINGS
+%% --------------------------------------------------------
+
 site = 'SSI';
-inDir  = ['\\snowman.ucsd.edu\Ally_Working_Disk\Analysis\Bm\Bm D call detector output\Antarc\',site,'\Data'];
+
+% MAT folder
+matDir = ['\\snowman.ucsd.edu\Ally_Working_Disk\Analysis\Bm\Bm D call detector output\Antarc\',site,'\Data'];
+
+% XML folder
+xmlDir = ['\\snowman.ucsd.edu\Ally_Working_Disk\Analysis\Bm\Bm D call detector output\Antarc\',site,'\submitted to tethys'];
+
+% Output folder
 outDir = 'L:\Shared drives\Antarctic Marine Mammals\Marine Mammal Data\Mysticetes';
-outCSV = fullfile(outDir, [site,'_BlueWhale_D_calls.csv']);
 
-% Scan files
-files = dir(fullfile(inDir, '*.mat'));
-allStart = datetime.empty(0,1);  allStart.TimeZone = 'UTC';
-allEnd   = datetime.empty(0,1);  allEnd.TimeZone   = 'UTC';
-allSrc   = strings(0,1);
-
-for k = 1:numel(files)
-    fpath = fullfile(files(k).folder, files(k).name);
-    load(fpath, '-mat');
-    calls = hyd.detection.calls;
-
-    [tStartRaw, tEndRaw] = getStartEnd(calls); % handles table/struct/struct-array
-    tStart = toDatetime(tStartRaw);
-    tEnd   = toDatetime(tEndRaw);
-
-    % Ensure column vectors and matching lengths
-    n = min(numel(tStart), numel(tEnd));
-    tStart = tStart(1:n);
-    tEnd   = tEnd(1:n);
-
-    allStart = [allStart; tStart]; %#ok<AGROW>
-    allEnd   = [allEnd;   tEnd];   %#ok<AGROW>
-    allSrc   = [allSrc;   repmat(string(files(k).name), n, 1)]; %#ok<AGROW>
+if ~exist(outDir,'dir')
+    mkdir(outDir)
 end
 
-% Assemble, sort, and export
-T = table(allStart, allEnd, 'VariableNames', {'StartTime','EndTime'});
-T = sortrows(T, 'StartTime');
-writetable(T, outCSV);
-fprintf('Wrote %d calls to %s\n', height(T), outCSV);
+matCSV = fullfile(outDir,[site '_BlueWhale_D_calls_MAT.csv']);
+xmlCSV = fullfile(outDir,[site '_BlueWhale_D_calls_XML.csv']);
 
-%% ---------- Helpers Functions ----------
+%% --------------------------------------------------------
+%% LOAD MAT FILES
+%% --------------------------------------------------------
+
+fprintf('\nLoading MAT detections...\n')
+
+matFiles = dir(fullfile(matDir,'*.mat'));
+
+allStartMAT = datetime.empty(0,1);
+allStartMAT.TimeZone = 'UTC';
+
+allEndMAT = datetime.empty(0,1);
+allEndMAT.TimeZone = 'UTC';
+
+allSrcMAT = strings(0,1);
+
+for k = 1:numel(matFiles)
+
+    try
+
+        fpath = fullfile(matFiles(k).folder, matFiles(k).name);
+
+        load(fpath,'-mat');
+
+        calls = hyd.detection.calls;
+
+        [tStartRaw,tEndRaw] = getStartEnd(calls);
+
+        tStart = toDatetime(tStartRaw);
+        tEnd   = toDatetime(tEndRaw);
+
+        n = min(numel(tStart), numel(tEnd));
+
+        tStart = tStart(1:n);
+        tEnd   = tEnd(1:n);
+
+        allStartMAT = [allStartMAT; tStart];
+        allEndMAT   = [allEndMAT; tEnd];
+
+        allSrcMAT = [allSrcMAT; ...
+            repmat(string(matFiles(k).name),n,1)];
+
+    catch ME
+
+        warning('Problem reading MAT file: %s\n%s', ...
+            matFiles(k).name, ME.message);
+
+    end
+end
+
+%% Save MAT CSV
+
+Tmat = table( ...
+    allStartMAT, ...
+    allEndMAT, ...
+    allSrcMAT, ...
+    'VariableNames',{'StartTime','EndTime','SourceFile'});
+
+Tmat = sortrows(Tmat,'StartTime');
+
+writetable(Tmat, matCSV);
+
+fprintf('Saved MAT detections: %d\n', height(Tmat));
+
+%% --------------------------------------------------------
+%% LOAD XML FILES
+%% --------------------------------------------------------
+
+fprintf('\nLoading XML detections...\n')
+
+xmlFiles = dir(fullfile(xmlDir,'*.xml'));
+
+allStartXML = datetime.empty(0,1);
+allStartXML.TimeZone = 'UTC';
+
+allEndXML = datetime.empty(0,1);
+allEndXML.TimeZone = 'UTC';
+
+allSrcXML = strings(0,1);
+
+for k = 1:numel(xmlFiles)
+
+    try
+
+        fpath = fullfile(xmlFiles(k).folder, xmlFiles(k).name);
+
+        xDoc = xmlread(fpath);
+
+        detections = xDoc.getElementsByTagName('Detection');
+
+        nDet = detections.getLength;
+
+        for i = 0:nDet-1
+
+            det = detections.item(i);
+
+            children = det.getChildNodes;
+
+            startStr = '';
+            endStr   = '';
+
+            for j = 0:children.getLength-1
+
+                node = children.item(j);
+
+                if node.getNodeType ~= node.ELEMENT_NODE
+                    continue
+                end
+
+                nodeName = char(node.getNodeName);
+
+                switch nodeName
+
+                    case 'Start'
+                        startStr = char(node.getTextContent);
+
+                    case 'End'
+                        endStr = char(node.getTextContent);
+                end
+            end
+
+            if ~isempty(startStr)
+
+                tStart = datetime( ...
+                    startStr, ...
+                    'InputFormat','yyyy-MM-dd''T''HH:mm:ssX', ...
+                    'TimeZone','UTC');
+
+                tEnd = datetime( ...
+                    endStr, ...
+                    'InputFormat','yyyy-MM-dd''T''HH:mm:ssX', ...
+                    'TimeZone','UTC');
+
+                allStartXML(end+1,1) = tStart;
+                allEndXML(end+1,1)   = tEnd;
+
+                allSrcXML(end+1,1) = string(xmlFiles(k).name);
+
+            end
+        end
+
+    catch ME
+
+        warning('Problem reading XML file: %s\n%s', ...
+            xmlFiles(k).name, ME.message);
+
+    end
+end
+
+%% Save XML CSV
+
+Txml = table( ...
+    allStartXML, ...
+    allEndXML, ...
+    allSrcXML, ...
+    'VariableNames',{'StartTime','EndTime','SourceFile'});
+
+Txml = sortrows(Txml,'StartTime');
+
+writetable(Txml, xmlCSV);
+
+fprintf('Saved XML detections: %d\n', height(Txml));
+
+%% --------------------------------------------------------
+%% SUMMARY STATS
+%% --------------------------------------------------------
+
+fprintf('\n====================\n')
+fprintf('COMPARISON SUMMARY\n')
+fprintf('====================\n')
+
+fprintf('MAT detections: %d\n', height(Tmat));
+fprintf('XML detections: %d\n', height(Txml));
+
+if ~isempty(Tmat)
+    fprintf('MAT range: %s --> %s\n', ...
+        datestr(min(Tmat.StartTime)), ...
+        datestr(max(Tmat.StartTime)));
+end
+
+if ~isempty(Txml)
+    fprintf('XML range: %s --> %s\n', ...
+        datestr(min(Txml.StartTime)), ...
+        datestr(max(Txml.StartTime)));
+end
+
+%% --------------------------------------------------------
+%% DAILY COUNTS
+%% --------------------------------------------------------
+
+if ~isempty(Tmat)
+
+    matDaily = groupsummary( ...
+        table(dateshift(Tmat.StartTime,'start','day')), ...
+        'Var1');
+
+    matDaily.Properties.VariableNames = ...
+        {'Date','Count'};
+
+else
+
+    matDaily = table;
+
+end
+
+if ~isempty(Txml)
+
+    xmlDaily = groupsummary( ...
+        table(dateshift(Txml.StartTime,'start','day')), ...
+        'Var1');
+
+    xmlDaily.Properties.VariableNames = ...
+        {'Date','Count'};
+
+else
+
+    xmlDaily = table;
+
+end
+
+%% --------------------------------------------------------
+%% DAILY PLOT
+%% --------------------------------------------------------
+
+figure('Color','w');
+hold on
+
+if ~isempty(matDaily)
+
+    plot(matDaily.Date, matDaily.Count, ...
+        'LineWidth',1.5);
+
+end
+
+if ~isempty(xmlDaily)
+
+    plot(xmlDaily.Date, xmlDaily.Count, ...
+        'LineWidth',1.5);
+
+end
+
+xlabel('Date')
+ylabel('Daily detections')
+
+title([site ' Blue Whale D-call Daily Comparison'])
+
+legendEntries = {};
+
+if ~isempty(matDaily)
+    legendEntries{end+1} = 'MAT';
+end
+
+if ~isempty(xmlDaily)
+    legendEntries{end+1} = 'XML';
+end
+
+if ~isempty(legendEntries)
+    legend(legendEntries)
+end
+
+grid on
+
+saveas(gcf, fullfile(outDir, ...
+    [site '_BlueWhale_DailyComparison.png']));
+
+%% --------------------------------------------------------
+%% WEEKLY COUNTS
+%% --------------------------------------------------------
+
+if ~isempty(Tmat)
+
+    matWeekly = groupsummary( ...
+        table(dateshift(Tmat.StartTime,'start','week')), ...
+        'Var1');
+
+    matWeekly.Properties.VariableNames = ...
+        {'Date','Count'};
+
+else
+
+    matWeekly = table;
+
+end
+
+if ~isempty(Txml)
+
+    xmlWeekly = groupsummary( ...
+        table(dateshift(Txml.StartTime,'start','week')), ...
+        'Var1');
+
+    xmlWeekly.Properties.VariableNames = ...
+        {'Date','Count'};
+
+else
+
+    xmlWeekly = table;
+
+end
+
+%% --------------------------------------------------------
+%% WEEKLY PLOT
+%% --------------------------------------------------------
+
+figure('Color','w');
+hold on
+
+if ~isempty(matWeekly)
+
+    plot(matWeekly.Date, matWeekly.Count, ...
+        'LineWidth',1.5);
+
+end
+
+if ~isempty(xmlWeekly)
+
+    plot(xmlWeekly.Date, xmlWeekly.Count, ...
+        'LineWidth',1.5);
+
+end
+
+xlabel('Date')
+ylabel('Weekly detections')
+
+title([site ' Blue Whale D-call Weekly Comparison'])
+
+legendEntries = {};
+
+if ~isempty(matWeekly)
+    legendEntries{end+1} = 'MAT';
+end
+
+if ~isempty(xmlWeekly)
+    legendEntries{end+1} = 'XML';
+end
+
+if ~isempty(legendEntries)
+    legend(legendEntries)
+end
+
+grid on
+
+saveas(gcf, fullfile(outDir, ...
+    [site '_BlueWhale_WeeklyComparison.png']));
+
+fprintf('\nFinished!\n')
+
+%% ========================================================
+%% HELPER FUNCTIONS
+%% ========================================================
+
 function [tStartRaw, tEndRaw] = getStartEnd(calls)
-% Return raw julian_start_time / julian_end_time from a table or struct/struct-array.
+
     if istable(calls)
-        assert(any(strcmpi(calls.Properties.VariableNames,'julian_start_time')) && ...
-               any(strcmpi(calls.Properties.VariableNames,'julian_end_time')), ...
-               'Calls table lacks julian_start_time or julian_end_time.');
-        tStartRaw = calls.(calls.Properties.VariableNames{strcmpi(calls.Properties.VariableNames,'julian_start_time')});
-        tEndRaw   = calls.(calls.Properties.VariableNames{strcmpi(calls.Properties.VariableNames,'julian_end_time')});
+
+        tStartRaw = calls.julian_start_time;
+        tEndRaw   = calls.julian_end_time;
+
         return
     end
 
     if isstruct(calls)
-        assert(isfield(calls,'julian_start_time') && isfield(calls,'julian_end_time'), ...
-               'Calls struct lacks julian_start_time or julian_end_time.');
+
         if numel(calls) > 1
-            % struct array with scalar fields
+
             tStartRaw = [calls.julian_start_time]';
             tEndRaw   = [calls.julian_end_time]';
+
         else
-            % scalar struct with vector fields
+
             tStartRaw = calls.julian_start_time;
             tEndRaw   = calls.julian_end_time;
+
         end
+
         return
     end
 
-    error('Unsupported calls type: %s', class(calls));
+    error('Unsupported calls type')
 end
 
+%% --------------------------------------------------------
+
 function dt = toDatetime(x)
-% Convert datetime / datenum / POSIX seconds to datetime (UTC)
-    if isempty(x); dt = []; return; end
+
+    if isempty(x)
+
+        dt = datetime.empty(0,1);
+        dt.TimeZone = 'UTC';
+
+        return
+    end
+
     if isdatetime(x)
+
         dt = x;
-        if isempty(dt.TimeZone); dt.TimeZone = 'UTC'; end
-        return
-    end
-    if isnumeric(x)
-        x = x(:);
-        xmax = max(x);
-        if xmax > 1e9
-            dt = datetime(x, 'ConvertFrom', 'posixtime', 'TimeZone', 'UTC');   % POSIX seconds
-        elseif xmax > 5e5
-            dt = datetime(x, 'ConvertFrom', 'datenum',   'TimeZone', 'UTC');   % MATLAB datenum
-        else
-            error('Values look like samples/seconds offset. Convert using recording start and/or sample rate first.');
+
+        if isempty(dt.TimeZone)
+            dt.TimeZone = 'UTC';
         end
+
         return
     end
-    error('Unsupported time type: %s', class(x));
+
+    if isnumeric(x)
+
+        x = x(:);
+
+        xmax = max(x);
+
+        if xmax > 1e9
+
+            dt = datetime( ...
+                x, ...
+                'ConvertFrom','posixtime', ...
+                'TimeZone','UTC');
+
+        elseif xmax > 5e5
+
+            dt = datetime( ...
+                x, ...
+                'ConvertFrom','datenum', ...
+                'TimeZone','UTC');
+
+        else
+
+            error('Unknown numeric time format')
+
+        end
+
+        return
+    end
+
+    error('Unsupported time type')
 end
