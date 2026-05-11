@@ -4,29 +4,31 @@ clear; clc;
 
 %% ---------------- USER SETTINGS ----------------
 
-site = 'SSI';
+site = 'EI';
 
 % MAT detector output 
-foldermatDir = ['\snowman.ucsd.edu\Ally_Working_Disk\Analysis\Bm\Bm D call detector output\Antarc',site,'\data'];
+foldermatDir = ['\\snowman.ucsd.edu\Ally_Working_Disk\Analysis\Bm\Bm D call detector output\Antarc\',site,'\data'];
 
 % XML detector output
-folderxmlDir = ['\snowman.ucsd.edu\Ally_Working_Disk\Analysis\Bm\Bm D call detector output\Antarc',site,'\submitted to tethys'];
+folderxmlDir = ['\\snowman.ucsd.edu\Ally_Working_Disk\Analysis\Bm\Bm D call detector output\Antarc\',site,'\submitted to tethys'];
 
 % Output
 folderoutDir = 'L:\Shared drives\Antarctic Marine Mammals\Marine Mammal Data\Mysticetes';
 
 % Output 
-CSVsmatCSV = fullfile(outDir, [site,'_BlueWhale_D_calls_MAT.csv']);xmlCSV = fullfile(outDir, [site,'_BlueWhale_D_calls_XML.csv']);
+CSVsmatCSV = fullfile(folderoutDir, [site,'_BlueWhale_D_calls_MAT.csv']);
+xmlCSV = fullfile(folderoutDir, [site,'_BlueWhale_D_calls_XML.csv']);
 
 %% ---------------- LOAD MAT FILES ----------------
 
 fprintf('\nLoading MAT detections...\n');
 
-matFiles = dir(fullfile(matDir, '*.mat'));
+matFiles = dir(fullfile(foldermatDir, '*.mat'));
 
-matStart = datetime.empty(0,1);matEnd   = datetime.empty(0,1);matSrc   = strings(0,1);
+matStart = datetime.empty(0,1);
+matEnd   = datetime.empty(0,1);matSrc   = strings(0,1);
 
-for k = 1(matFiles)
+for k = 1:length(matFiles)
 
 fpath = fullfile(matFiles(k).folder, matFiles(k).name);
 
@@ -45,6 +47,18 @@ try
     tStart = tStart(1:n);
     tEnd   = tEnd(1:n);
 
+    % Remove timezone inconsistencies
+tStart.TimeZone = '';
+tEnd.TimeZone   = '';
+
+if ~isempty(matStart)
+    matStart.TimeZone = '';
+end
+
+if ~isempty(matEnd)
+    matEnd.TimeZone = '';
+end
+
     matStart = [matStart; tStart]; %#ok<AGROW>
     matEnd   = [matEnd; tEnd]; %#ok<AGROW>
     matSrc   = [matSrc; repmat(string(matFiles(k).name), n, 1)]; %#ok<AGROW>
@@ -57,11 +71,12 @@ end
 
 %% ---------------- SAVE MAT CSV ----------------
 
-Tmat = table(matStart, matEnd, matSrc, ...'VariableNames', {'StartTime','EndTime','SourceFile'});
+Tmat = table(matStart, matEnd, matSrc, ...
+    'VariableNames', {'StartTime','EndTime','SourceFile'});
 
 Tmat = sortrows(Tmat, 'StartTime');
 
-writetable(Tmat, matCSV);
+writetable(Tmat, CSVsmatCSV);
 
 fprintf('Saved MAT detections: %d calls\n', height(Tmat));
 
@@ -69,72 +84,50 @@ fprintf('Saved MAT detections: %d calls\n', height(Tmat));
 
 fprintf('\nLoading XML detections...\n');
 
-xmlFiles = dir(fullfile(xmlDir, '*.xml'));
+xmlFiles = dir(fullfile(folderxmlDir, '*.xml'));
 
 xmlStart = datetime.empty(0,1);xmlEnd   = datetime.empty(0,1);xmlSrc   = strings(0,1);
 
-for k = 1(xmlFiles)
+for k = 1:length(xmlFiles)
 
 fpath = fullfile(xmlFiles(k).folder, xmlFiles(k).name);
 
 try
 
-    xDoc = xmlread(fpath);
+  xDoc = xmlread(fpath);
 
-    % ---- Find all Detection nodes ----
-    detections = xDoc.getElementsByTagName('*');
+% Get all Start and End nodes
+startNodes = xDoc.getElementsByTagName('Start');
+endNodes   = xDoc.getElementsByTagName('End');
 
-    fileStarts = datetime.empty(0,1);
-    fileEnds   = datetime.empty(0,1);
+fileStarts = datetime.empty(0,1);
+fileEnds   = datetime.empty(0,1);
 
-    for i = 0:detections.getLength-1
+nNodes = min(startNodes.getLength, endNodes.getLength);
 
-        node = detections.item(i);
+for i = 0:nNodes-1
 
-        % Try common field names
-        attrs = node.getAttributes;
+    try
 
-        if isempty(attrs)
-            continue;
-        end
+        startStr = char(startNodes.item(i).getTextContent);
+        endStr   = char(endNodes.item(i).getTextContent);
 
-        startStr = '';
-        endStr   = '';
+        t1 = parseXMLTime(startStr);
+        t2 = parseXMLTime(endStr);
 
-        for j = 0:attrs.getLength-1
+        % Remove timezone for consistency
+        t1.TimeZone = '';
+        t2.TimeZone = '';
 
-            attrName  = char(attrs.item(j).getName);
-            attrValue = char(attrs.item(j).getValue);
+        fileStarts(end+1,1) = t1; %#ok<SAGROW>
+        fileEnds(end+1,1)   = t2; %#ok<SAGROW>
 
-            switch lower(attrName)
+    catch ME
 
-                case {'start','starttime','start_time'}
-                    startStr = attrValue;
+        warning('Problem parsing XML detection: %s', ME.message);
 
-                case {'end','endtime','end_time'}
-                    endStr = attrValue;
-            end
-        end
-
-        % Convert if found
-        if ~isempty(startStr)
-
-            try
-                t1 = parseXMLTime(startStr);
-
-                if ~isempty(endStr)
-                    t2 = parseXMLTime(endStr);
-                else
-                    t2 = t1;
-                end
-
-                fileStarts(end+1,1) = t1; %#ok<SAGROW>
-                fileEnds(end+1,1)   = t2; %#ok<SAGROW>
-
-            catch
-            end
-        end
     end
+end
 
     n = min(numel(fileStarts), numel(fileEnds));
 
@@ -150,7 +143,8 @@ end
 
 %% ---------------- SAVE XML CSV ----------------
 
-Txml = table(xmlStart, xmlEnd, xmlSrc, ...'VariableNames', {'StartTime','EndTime','SourceFile'});
+Txml = table(xmlStart, xmlEnd, xmlSrc, ...
+    'VariableNames', {'StartTime','EndTime','SourceFile'});
 
 Txml = sortrows(Txml, 'StartTime');
 
@@ -166,35 +160,51 @@ fprintf('MAT detections: %d\n', height(Tmat));fprintf('XML detections: %d\n', he
 
 fprintf('\nDate ranges:\n');
 
-fprintf('MAT: %s --> %s\n', ...datestr(min(Tmat.StartTime)), ...datestr(max(Tmat.StartTime)));
+fprintf('MAT: %s --> %s\n', ...
+    datestr(min(Tmat.StartTime)), ...
+    datestr(max(Tmat.StartTime)));
 
-fprintf('XML: %s --> %s\n', ...datestr(min(Txml.StartTime)), ...datestr(max(Txml.StartTime)));
+fprintf('XML: %s --> %s\n', ...
+    datestr(min(Txml.StartTime)), ...
+    datestr(max(Txml.StartTime)));
 
 %% ---------------- DAILY COUNTS ----------------
 
-matDaily = groupsummary( ...table(dateshift(Tmat.StartTime,'start','day')), ...'Var1');
+matDaily = groupsummary( ...
+    table(dateshift(Tmat.StartTime,'start','day')), ...
+    'Var1');
 
-xmlDaily = groupsummary( ...table(dateshift(Txml.StartTime,'start','day')), ...'Var1');
+xmlDaily = groupsummary( ...
+    table(dateshift(Txml.StartTime,'start','day')), ...
+    'Var1');
 
-matDaily.Properties.VariableNames = {'Date','GroupCount'};xmlDaily.Properties.VariableNames = {'Date','GroupCount'};
+matDaily.Properties.VariableNames = {'Date','GroupCount'};
+xmlDaily.Properties.VariableNames = {'Date','GroupCount'};
 
 %% ---------------- WEEKLY COUNTS ----------------
 
-matWeekly = groupsummary( ...table(dateshift(Tmat.StartTime,'start','week')), ...'Var1');
+matWeekly = groupsummary( ...
+    table(dateshift(Tmat.StartTime,'start','week')), ...
+    'Var1');
 
-xmlWeekly = groupsummary( ...table(dateshift(Txml.StartTime,'start','week')), ...'Var1');
+xmlWeekly = groupsummary( ...
+    table(dateshift(Txml.StartTime,'start','week')), ...
+    'Var1');
 
-matWeekly.Properties.VariableNames = {'Date','GroupCount'};xmlWeekly.Properties.VariableNames = {'Date','GroupCount'};
+matWeekly.Properties.VariableNames = {'Date','GroupCount'};
+xmlWeekly.Properties.VariableNames = {'Date','GroupCount'};
 
 %% ---------------- DAILY PLOT ----------------
 
 figure('Color','w');
 
-plot(matDaily.Date, matDaily.GroupCount, ...'LineWidth',1.5);
+plot(matDaily.Date, matDaily.GroupCount, ...
+    'LineWidth',1.5);
 
 hold on
 
-plot(xmlDaily.Date, xmlDaily.GroupCount, ...'LineWidth',1.5);
+plot(xmlDaily.Date, xmlDaily.GroupCount, ...
+    'LineWidth',1.5);
 
 xlabel('Date');ylabel('Daily detections');
 
@@ -204,17 +214,20 @@ legend('MAT','XML');
 
 grid on
 
-saveas(gcf, fullfile(outDir, ...[site '_BlueWhale_DailyComparison.png']));
+saveas(gcf, fullfile(folderoutDir, ...
+    [site '_BlueWhale_DailyComparison.png']));
 
 %% ---------------- WEEKLY PLOT ----------------
 
 figure('Color','w');
 
-plot(matWeekly.Date, matWeekly.GroupCount, ...'LineWidth',1.5);
+plot(matWeekly.Date, matWeekly.GroupCount, ...
+    'LineWidth',1.5);
 
 hold on
 
-plot(xmlWeekly.Date, xmlWeekly.GroupCount, ...'LineWidth',1.5);
+plot(xmlWeekly.Date, xmlWeekly.GroupCount, ...
+    'LineWidth',1.5);
 
 xlabel('Date');ylabel('Weekly detections');
 
@@ -224,7 +237,8 @@ legend('MAT','XML');
 
 grid on
 
-saveas(gcf, fullfile(outDir, ...[site '_BlueWhale_WeeklyComparison.png']));
+saveas(gcf, fullfile(folderoutDir, ...
+    [site '_BlueWhale_WeeklyComparison.png']));
 
 fprintf('\nFinished!\n');
 
@@ -313,23 +327,21 @@ end
 
 function dt = parseXMLTime(tstr)
 
-% Attempt ISO format first
-try
-    dt = datetime(tstr, ...
-        'InputFormat','yyyy-MM-dd''T''HH:mm:ss', ...
-        'TimeZone','UTC');
-    return
-end
+% Remove trailing Z
+tstr = erase(tstr, 'Z');
 
-% Attempt fractional seconds
 try
+
     dt = datetime(tstr, ...
         'InputFormat','yyyy-MM-dd''T''HH:mm:ss.SSS', ...
         'TimeZone','UTC');
-    return
-end
 
-% Generic fallback
-dt = datetime(tstr, 'TimeZone','UTC');
+catch
+
+    dt = datetime(tstr, ...
+        'InputFormat','yyyy-MM-dd''T''HH:mm:ss', ...
+        'TimeZone','UTC');
+
+end
 
 end

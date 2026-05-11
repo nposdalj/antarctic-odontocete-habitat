@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+	<name>Antarctica.kml</name>
+	<Style id="failed">
+	</Style>
+	<Style id="failed0">
+	</Style>
+	<StyleMap id="failed1">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#failed3</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#failed10</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="failed10">
+	</Style>
+	<Style id="failed11">
+	</Style>
+	<StyleMap id="failed12">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#failed17</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#failed20</styleUrl>
+		</Pair>
+	</StyleMap>
+	<StyleMap id="failed13">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#failed11</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#failed6</styleUrl>
+		</Pair>
+	</StyleMap>
+	<StyleMap id="failed14">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#failed15</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#failed0</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="failed15">
+	</Style>
+	<Style id="failed16">
+	</Style>
+	<Style id="failed17">
+	</Style>
+	<Style id="failed18">
+	</Style>
+	<Style id="failed19">
+	</Style>
+	<StyleMap id="failed2">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#failed18</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#failed19</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="failed20">
+	</Style>
+	<Style id="failed21">
+	</Style>
+	<StyleMap id="failed22">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#failed7</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#failed16</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="failed3">
+	</Style>
+	<Style id="failed4">
+	</Style>
+	<Style id="failed5">
+	</Style>
+	<Style id="failed6">
+	</Style>
+	<Style id="failed7">
+	</Style>
+	<StyleMap id="failed8">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#failed</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#failed4</styleUrl>
+		</Pair>
+	</StyleMap>
+	<StyleMap id="failed9">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#failed5</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#failed21</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Folder>
+		<name>AMLR_25_26</name>
+		<open>1</open>
+		<Placemark>
+			<name>Gerlache</name>
+			<snippet></snippet>
+			<styleUrl>#failed12</styleUrl>
+			<Point>
+				<coordinates>-61.4524,-63.7361,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<name>CS4</name>
+			<snippet></snippet>
+			<styleUrl>#failed22</styleUrl>
+			<Point>
+				<coordinates>-61.0203,-62.2908,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<name>CS5</name>
+			<snippet></snippet>
+			<Point>
+				<coordinates>-60.7641,-62.1766,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<name>EI_2014</name>
+			<snippet></snippet>
+			<styleUrl>#failed9</styleUrl>
+			<Point>
+				<coordinates>-55.954,-60.8869,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<name>KG_2015</name>
+			<snippet></snippet>
+			<styleUrl>#failed1</styleUrl>
+			<Point>
+				<coordinates>-57.941917,-61.45781700000001,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<name>CI_2016</name>
+			<snippet></snippet>
+			<styleUrl>#failed8</styleUrl>
+			<Point>
+				<coordinates>-53.48343299999999,-61.251867,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<name>CS6</name>
+			<snippet></snippet>
+			<Point>
+				<coordinates>-60.64459999999999,-62.31949999999999,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<name>Ger2</name>
+			<snippet></snippet>
+			<LookAt>
+				<longitude>-60.80825376513475</longitude>
+				<latitude>-62.19806300074907</latitude>
+				<altitude>0</altitude>
+				<heading>0.0001959509807943941</heading>
+				<tilt>0</tilt>
+				<range>17248.01889833053</range>
+				<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			</LookAt>
+			<Point>
+				<coordinates>-61.2667,-63.75,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<name>Boyd_NE</name>
+			<snippet></snippet>
+			<Point>
+				<coordinates>-61.9649,-62.95989999999999,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<name>Boyd_NW</name>
+			<snippet></snippet>
+			<Point>
+				<coordinates>-62.17790000000001,-63.0019,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<name>Low</name>
+			<snippet></snippet>
+			<Point>
+				<coordinates>-61.9868,-63.5268,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<name>Hoseason</name>
+			<snippet></snippet>
+			<Point>
+				<coordinates>-61.94760000000001,-63.6796,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<name>F1</name>
+			<snippet></snippet>
+			<Point>
+				<coordinates>-59.517,-63.18299999999999,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<name>Proposed_CS</name>
+			<LookAt>
+				<longitude>-60.78341818118124</longitude>
+				<latitude>-62.06477486145525</latitude>
+				<altitude>0</altitude>
+				<heading>0.924438922648672</heading>
+				<tilt>0</tilt>
+				<range>63203.08776113027</range>
+				<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			</LookAt>
+			<styleUrl>#failed2</styleUrl>
+			<Point>
+				<gx:drawOrder>1</gx:drawOrder>
+				<coordinates>-61.07680500176379,-62.18764440309999,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<name>Proposed_Boyd</name>
+			<LookAt>
+				<longitude>-61.83882756206802</longitude>
+				<latitude>-63.021693241569</latitude>
+				<altitude>0</altitude>
+				<heading>1.865370985365114</heading>
+				<tilt>0</tilt>
+				<range>62122.54761288205</range>
+				<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			</LookAt>
+			<styleUrl>#failed14</styleUrl>
+			<Point>
+				<gx:drawOrder>1</gx:drawOrder>
+				<coordinates>-61.96955405691995,-62.86711442066027,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<name>Proposed BFS - TBW Flow</name>
+			<LookAt>
+				<longitude>-58.91205228538692</longitude>
+				<latitude>-62.778031199469</latitude>
+				<altitude>0</altitude>
+				<heading>-1.548984714869361</heading>
+				<tilt>0</tilt>
+				<range>151930.9220491632</range>
+				<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>
+			</LookAt>
+			<styleUrl>#failed13</styleUrl>
+			<Point>
+				<gx:drawOrder>1</gx:drawOrder>
+				<coordinates>-60.00999515765815,-62.90849702496665,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<name>F2</name>
+			<snippet></snippet>
+			<Point>
+				<coordinates>-59.25,-63.1333,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<name>F3</name>
+			<snippet></snippet>
+			<Point>
+				<coordinates>-59.36709999999999,-63.2416,0</coordinates>
+			</Point>
+		</Placemark>
+		<Placemark>
+			<name>CS</name>
+			<visibility>0</visibility>
+			<snippet></snippet>
+			<Point>
+				<coordinates>-60.7865,-62.45530000000001,0</coordinates>
+			</Point>
+		</Placemark>
+		<atom:link rel="app" href="https://www.google.com/earth/about/versions/#earth-pro" title="Google Earth Pro 7.3.7.1155"></atom:link>
+	</Folder>
+</Document>
+</kml>
