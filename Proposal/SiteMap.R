@@ -55,6 +55,14 @@ site_depths <- data.frame(
 # Merge depths
 sites <- left_join(sites, site_depths, by = "name")
 
+# ----------------------- SAVE SITE LOCATIONS ----------------------------
+
+write.csv(
+  sites,
+  file.path(output_dir, "Site_Locations.csv"),
+  row.names = FALSE
+)
+
 # Convert to sf
 sites_sf <- st_as_sf(
   sites,
