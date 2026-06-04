@@ -1,7 +1,7 @@
 % ==============================
 % USER INPUT
 % ==============================
-data_dir = 'F:\Antarctic_Mysticetes\D calls\filtered';  % <-- your folder
+data_dir = 'L:\Shared drives\Antarctic Marine Mammals\Marine Mammal Data\Mysticetes\Random';  % <-- your folder
 
 files = dir(fullfile(data_dir, '*.mat'));
 
