@@ -1,7 +1,7 @@
 % ==============================
 % USER INPUT
 % ==============================
-data_dir = 'F:\Antarctic_Mysticetes\D calls\EI\filtered';  % your folder
+data_dir = 'F:\Antarctic_Mysticetes\D calls\EIE\filtered';  % your folder
 out_name = 'All_Detections_Concatenated';
 
 files = dir(fullfile(data_dir, '*.mat'));

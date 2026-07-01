@@ -4,13 +4,13 @@ clear; clc;
 
 %% ---------------- USER SETTINGS ----------------
 
-site = 'EI';
+site = 'EIE';
 
 % MAT detector output 
-foldermatDir = ['\\snowman.ucsd.edu\Ally_Working_Disk\Analysis\Bm\Bm D call detector output\Antarc\',site,'\data'];
+foldermatDir = ['\\snowman.ucsd.edu\Ally_Working_Disk\Analysis\Bm\Bm D call detector output\Antarc\',site,'\Data'];
 
 % XML detector output
-folderxmlDir = ['\\snowman.ucsd.edu\Ally_Working_Disk\Analysis\Bm\Bm D call detector output\Antarc\',site,'\submitted to tethys'];
+folderxmlDir = ['\\snowman.ucsd.edu\Ally_Working_Disk\Analysis\Bm\Bm D call detector output\Antarc\',site,'\Uploaded'];
 
 % Output
 folderoutDir = 'L:\Shared drives\Antarctic Marine Mammals\Marine Mammal Data\Mysticetes';

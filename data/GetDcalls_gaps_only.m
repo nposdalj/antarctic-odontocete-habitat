@@ -12,7 +12,7 @@ clear; clc;
 %% USER SETTINGS
 %% --------------------------------------------------------
 
-site = 'EI';
+site = 'EIE';
 
 % OLD detector MAT files
 oldDir = ['\\snowman.ucsd.edu\Ally_Working_Disk\Analysis\Bm\Bm D call detector output\Antarc\',site,'\data'];

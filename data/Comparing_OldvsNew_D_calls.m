@@ -31,7 +31,7 @@ close all;
 %% USER SETTINGS
 %% =========================================================
 
-site = 'EI';
+site = 'EIE';
 
 % Choose daily metric
 % Options: 'count' or 'minutes'
@@ -45,7 +45,9 @@ switch site
     % Date cutoff
     cutoff = datetime(2015,2,10);
     case 'EI'
-    cutoff = datetime (2014,03,05);    
+    cutoff = datetime (2014,03,05);  
+    case 'EIE'
+    cutoff = datetime(2016,02,03);
 end
 
 % Input files
@@ -273,43 +275,51 @@ fprintf('\nLoading gap table...\n');
 
 gaps = readtable(gapCSV);
 
-gaps.GapStart = datetime(gaps.GapStart);
-gaps.GapEnd   = datetime(gaps.GapEnd);
-
-gaps.GapStart.TimeZone = '';
-gaps.GapEnd.TimeZone   = '';
-
+% Always create these columns, even if the gap table is empty
 Daily.GapStatus = strings(height(Daily),1);
 Daily.GapStatus(:) = "Full verified day";
 
 Daily.GapMinutes = zeros(height(Daily),1);
 
-for i = 1:height(Daily)
+% Only process gaps if the gap table has rows
+if isempty(gaps) || height(gaps) == 0
 
-    dayStart = Daily.Date(i);
-    dayEnd   = dayStart + days(1);
+    fprintf('Gap table is empty. Treating all days as full verified days.\n');
 
-    gapOverlapIdx = find(gaps.GapStart < dayEnd & gaps.GapEnd > dayStart);
+else
 
-    totalGapMinutes = 0;
+    gaps.GapStart = datetime(gaps.GapStart);
+    gaps.GapEnd   = datetime(gaps.GapEnd);
 
-    for g = gapOverlapIdx'
+    gaps.GapStart.TimeZone = '';
+    gaps.GapEnd.TimeZone   = '';
 
-        thisGapStart = max(gaps.GapStart(g), dayStart);
-        thisGapEnd   = min(gaps.GapEnd(g), dayEnd);
+    for i = 1:height(Daily)
 
-        totalGapMinutes = totalGapMinutes + minutes(thisGapEnd - thisGapStart);
-    end
+        dayStart = Daily.Date(i);
+        dayEnd   = dayStart + days(1);
 
-    Daily.GapMinutes(i) = totalGapMinutes;
+        gapOverlapIdx = find(gaps.GapStart < dayEnd & gaps.GapEnd > dayStart);
 
-    if totalGapMinutes >= 1440
-        Daily.GapStatus(i) = "Completely unverified gap day";
-    elseif totalGapMinutes > 0
-        Daily.GapStatus(i) = "Partial gap day";
+        totalGapMinutes = 0;
+
+        for g = gapOverlapIdx'
+
+            thisGapStart = max(gaps.GapStart(g), dayStart);
+            thisGapEnd   = min(gaps.GapEnd(g), dayEnd);
+
+            totalGapMinutes = totalGapMinutes + minutes(thisGapEnd - thisGapStart);
+        end
+
+        Daily.GapMinutes(i) = totalGapMinutes;
+
+        if totalGapMinutes >= 1440
+            Daily.GapStatus(i) = "Completely unverified gap day";
+        elseif totalGapMinutes > 0
+            Daily.GapStatus(i) = "Partial gap day";
+        end
     end
 end
-
 %% =========================================================
 %% ESTIMATE VERIFICATION RATE FROM FULL VERIFIED DAYS
 %% =========================================================
