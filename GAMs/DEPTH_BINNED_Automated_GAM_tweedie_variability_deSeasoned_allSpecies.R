@@ -603,7 +603,7 @@ save_acf_outputs(
 )
 
 # =========================================================
-# STEP 7.5: STACKED ENVIRONMENTAL + PRESENCE TIMESERIES PLOTS
+# STEP 6: STACKED ENVIRONMENTAL + PRESENCE TIMESERIES PLOTS
 # (daily resolution and ACF-binned resolution, per site)
 # =========================================================
 
@@ -742,7 +742,7 @@ for (site in sites) {
 }
 
 # =========================================================
-# STEP 6: VIF SCREENING
+# STEP 7: VIF SCREENING
 # =========================================================
 
 vif_stepwise_drop <- function(data, response, predictors,
@@ -1351,7 +1351,7 @@ save_theme_selection_outputs(
   save_dir = precheck_save_dir
 )
 # =========================================================
-# STEP 7: BUILD GAMS
+# STEP 8: BUILD GAMS
 # =========================================================
 
 plotGam <- function(gam) {
@@ -1417,7 +1417,7 @@ for (site in names(binned_deseasoned)) {
 }
 
 # =========================================================
-# STEP 8: VISUALIZE GAMS
+# STEP 9: VISUALIZE GAMS
 # =========================================================
 gam_save_dir <- file.path(plot_save_dir, "final_gams")
 dir.create(gam_save_dir, recursive = TRUE, showWarnings = FALSE)
@@ -1723,7 +1723,7 @@ for (site in names(final_models)) {
 }
 
 # =========================================================
-# STEP 9: MODEL CHECKING
+# STEP 10: MODEL CHECKING
 # =========================================================
 
 diag_save_dir <- file.path(plot_save_dir, "diagnostics")
