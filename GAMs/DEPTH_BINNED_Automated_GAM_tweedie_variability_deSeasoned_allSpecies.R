@@ -13,8 +13,8 @@ library(lubridate)
 # CONFIG
 # =========================================================
 
-plot_save_dir <- "/Users/Default User.DESKTOP-VFJ1NAJ/Desktop/Baleen Whalesssss/mysticetes/GAMs/humpback"
-allData <- read.csv("/Users/Default User.DESKTOP-VFJ1NAJ/Desktop/Baleen Whalesssss/mysticetes/allData_humpback.csv")
+plot_save_dir <- "L:/.shortcut-targets-by-id/16QptdYF6Cj57YnsWH6TVUR-l-QkP8voO/Baleen Whalesssss/mysticetes/GAMs/humpback"
+allData <- read.csv("L:/.shortcut-targets-by-id/16QptdYF6Cj57YnsWH6TVUR-l-QkP8voO/Baleen Whalesssss/mysticetes/allData_humpback.csv")
 
 # Choose species as a SINGLE string
 species <- "Mn"   # options: "BW29", "BW37", "BW58", "Gm", "Pm", "Oo", "Bp", "Mn", "Bm"
@@ -316,12 +316,7 @@ for (site in sites) {
     envir = .GlobalEnv
   )
 }
-save_acf_outputs(
-  acf_results = acf_results,
-  acf_table = acf_table,
-  species_name = species,
-  save_dir = precheck_save_dir
-)
+
 save_acf_outputs <- function(acf_results, acf_table, species_name, save_dir) {
   
   dir.create(save_dir, recursive = TRUE, showWarnings = FALSE)
@@ -1238,6 +1233,142 @@ for (site in names(binned_deseasoned)) {
     response = species,
     predictors = winner_results[[site]]$winners
   )
+}
+
+# =========================================================
+# STEP 7.5: STACKED ENVIRONMENTAL + PRESENCE TIMESERIES PLOTS
+# (daily resolution and ACF-binned resolution, per site)
+# =========================================================
+
+stack_save_dir <- file.path(plot_save_dir, "stacked_timeseries")
+dir.create(stack_save_dir, recursive = TRUE, showWarnings = FALSE)
+
+# Daily monthly-mean-centered anomalies, computed the same way as binned_deseasoned
+# (STEP 5), so the daily and binned stacked plots use consistently-computed "_anom" columns.
+daily_deseasoned <- list()
+
+for (site in sites) {
+  site_daily <- sp_specific %>% filter(Site == site)
+
+  daily_deseasoned[[site]] <- make_monthly_anoms_binned(
+    site_daily,
+    vars_to_anom,
+    date_col = "date",
+    site_col = "Site",
+    standardize = FALSE
+  )
+}
+
+# Variables to plot, in panel order (top to bottom)
+stack_vars <- tibble::tribble(
+  ~var,                      ~label,
+  "EKE_mad_111054",          "EKE MAD (0-54m, cm²/s²)",
+  "EKE_mad_130222",          "EKE MAD (130-222m, cm²/s²)",
+  "FSLE",                    "FSLE Magnitude",
+  "fsle_orient",             "FSLE Orientation",
+  "mixed_layer_anom",        "De-seasoned Mixed Layer Depth (m)",
+  "temperature_111054_anom", "De-seasoned Temperature (0-54m, °C)",
+  "temperature_130222_anom", "De-seasoned Temperature (130-222m, °C)",
+  "salinity_111054_anom",    "De-seasoned Salinity (0-54m, psu)",
+  "salinity_130222_anom",    "De-seasoned Salinity (130-222m, psu)",
+  "o2_111054_anom",          "De-seasoned Oxygen (0-54m, mmol/m3)",
+  "o2_130222_anom",          "De-seasoned Oxygen (130-222m, mmol/m3)",
+  "chla_111054",             "Chlorophyll (0-54m, mg/m3)",
+  "ice_conc",                "Sea Ice Concentration"
+)
+
+stack_var_colors <- setNames(scales::hue_pal()(nrow(stack_vars)), stack_vars$var)
+
+make_stack_env_panel <- function(data, var, label, col, date_col, show_x = FALSE) {
+  x_scale <- if (show_x) scale_x_date(date_labels = "%b %Y") else scale_x_date(labels = NULL)
+
+  ggplot(data, aes(x = .data[[date_col]], y = .data[[var]])) +
+    geom_line(color = col, linewidth = 0.7, na.rm = TRUE) +
+    labs(y = NULL, x = NULL, title = label) +
+    x_scale +
+    theme(
+      plot.margin = unit(c(0, 0.5, 0.3, 0.5), units = "line"),
+      plot.title  = element_text(size = 9, margin = margin(t = 0, b = 0), face = "bold"),
+      panel.background = element_rect(fill = "white", color = "black"),
+      panel.grid.major = element_line(color = "gray"),
+      panel.grid.minor = element_blank()
+    )
+}
+
+make_stack_presence_panel <- function(data, species_col, date_col) {
+  ggplot(data, aes(x = .data[[date_col]], y = .data[[species_col]])) +
+    geom_col(width = 1, color = "darkmagenta", fill = "mediumorchid", na.rm = TRUE) +
+    scale_x_date(date_labels = "%b %Y") +
+    labs(y = NULL, x = NULL, title = paste0(species_col, " Presence")) +
+    theme(
+      plot.margin = unit(c(0, 0.5, 0, 0.5), units = "line"),
+      plot.title  = element_text(size = 9, margin = margin(t = 0, b = 0), face = "bold"),
+      panel.background = element_rect(fill = "white", color = "black"),
+      panel.grid.major = element_line(color = "gray"),
+      panel.grid.minor = element_blank()
+    )
+}
+
+build_stacked_plot <- function(data, site, species_col, date_col, title_suffix) {
+  vars_present <- stack_vars %>% filter(var %in% names(data))
+
+  missing_vars <- setdiff(stack_vars$var, vars_present$var)
+  if (length(missing_vars) > 0) {
+    message(
+      "Skipping missing columns for ", site, " (", title_suffix, "): ",
+      paste(missing_vars, collapse = ", ")
+    )
+  }
+
+  env_plots <- purrr::pmap(vars_present, function(var, label) {
+    show_x <- (var == tail(vars_present$var, 1))
+    make_stack_env_panel(data, var, label, stack_var_colors[[var]], date_col, show_x = show_x)
+  })
+
+  pres_plot <- make_stack_presence_panel(data, species_col, date_col)
+
+  wrap_plots(c(env_plots, list(pres_plot)), ncol = 1) &
+    plot_annotation(
+      title = paste0(name(species_col), " at ", name(site), " (", title_suffix, ")")
+    ) &
+    theme(legend.position = "none")
+}
+
+for (site in sites) {
+
+  # --- Daily version ---
+  if (site %in% names(daily_deseasoned)) {
+    daily_plot <- build_stacked_plot(
+      data = daily_deseasoned[[site]],
+      site = site,
+      species_col = species,
+      date_col = "date",
+      title_suffix = "Daily"
+    )
+    print(daily_plot)
+    ggsave(
+      filename = file.path(stack_save_dir, paste0("StackedTimeseries_", species, "_", site, "_daily.png")),
+      plot = daily_plot,
+      width = 10, height = 16, dpi = 300, bg = "white"
+    )
+  }
+
+  # --- ACF-binned version ---
+  if (site %in% names(binned_deseasoned)) {
+    binned_plot <- build_stacked_plot(
+      data = binned_deseasoned[[site]],
+      site = site,
+      species_col = species,
+      date_col = "bin_start",
+      title_suffix = "ACF-Binned"
+    )
+    print(binned_plot)
+    ggsave(
+      filename = file.path(stack_save_dir, paste0("StackedTimeseries_", species, "_", site, "_binned.png")),
+      plot = binned_plot,
+      width = 10, height = 16, dpi = 300, bg = "white"
+    )
+  }
 }
 
 # =========================================================
