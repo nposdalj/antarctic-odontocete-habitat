@@ -52,7 +52,7 @@ lon_max <- 308
 loadFSLE <- function(date) {
   # loading file for specified date
   date_str <- format(date, "%Y%m%d")
-  FSLE_nc <- nc_open(paste0("D:/FSLE/AVISO_Global_FSLE/dt_global_allsat_madt_fsle_",
+  FSLE_nc <- nc_open(paste0("F:/Trisha's Old Stuff/FSLE/AVISO_Global_FSLE/dt_global_allsat_madt_fsle_",
                             date_str,"_20180704.nc"))
   
   # Extract lat long and constrain to bounding box
