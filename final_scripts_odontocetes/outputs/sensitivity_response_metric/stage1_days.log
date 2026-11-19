@@ -1,0 +1,64 @@
+
+==== Pm (Sperm whale) ====
+Bin length: 2 d (max site lag 2)
+Ice cutoff: 0.898
+EI: 68 bins, 40 with detections -> modeled
+Theme winners: mixed_layer, FSLE, fsle_orient, salinity_375, o2_375, productivity_lag5
+Final: Pm ~ s(FSLE, k = 4) + s(o2_375, k = 4) + s(productivity_lag5, k = 4)
+KGI: 177 bins, 0 with detections -> descriptive only
+CI: 152 bins, 115 with detections -> modeled
+Theme winners: mixed_layer, fsle_orient, EKE_mad_0, o2_1665, chla_lag4
+Final: Pm ~ s(chla_lag4, k = 4)
+
+==== Gm (Long-finned pilot whale) ====
+Bin length: 4 d (max site lag 4)
+Ice cutoff: 0.334
+EI: 34 bins, 19 with detections -> modeled (low sample)
+Theme winners: mixed_layer, fsle_orient, salinity_0, EKE_0, chla_lag2, o2_16_anom
+Final: Gm ~ s(mixed_layer, k = 4) + s(EKE_0, k = 4)
+KGI: 64 bins, 18 with detections -> modeled (low sample)
+Theme winners: fsle_orient, EKE_mad_16, temperature_635, salinity_635, productivity_16, o2_0_anom
+Final: Gm ~ s(productivity_16, k = 4)
+CI: 64 bins, 11 with detections -> modeled (low sample)
+Theme winners: fsle_orient, salinity_0, EKE_635, chla_0, o2_16_anom
+Final: Gm ~ s(chla_0, k = 4)
+
+==== Oo (Killer whale) ====
+Bin length: 2 d (max site lag 2)
+Ice cutoff: 0.889
+EI: 68 bins, 3 with detections -> descriptive only
+KGI: 177 bins, 3 with detections -> descriptive only
+CI: 151 bins, 11 with detections -> modeled (low sample)
+Theme winners: mixed_layer, fsle_orient, o2_455, EKE_455, chla_0
+Final: Oo ~ s(EKE_455, k = 4) + s(chla_0, k = 4)
+
+==== BW29 (Southern bottlenose whale) ====
+Bin length: 4 d (max site lag 6)
+Ice cutoff: 0.126
+EI: 34 bins, 26 with detections -> modeled
+Theme winners: mixed_layer, fsle_orient, salinity_0, EKE_0, o2_768, chla_lag2
+Final: BW29 ~ s(EKE_0, k = 4)
+KGI: 56 bins, 20 with detections -> modeled (low sample)
+Theme winners: mixed_layer, fsle_orient, EKE_0, salinity_768, chla_lag2, o2_0_anom
+Final: BW29 ~ s(chla_lag2, k = 4)
+CI: 52 bins, 24 with detections -> modeled
+Theme winners: fsle_orient, salinity_0, EKE_mad_0, o2_768, chla_0, temperature_0_anom
+Final: BW29 ~ s(chla_0, k = 4) + s(temperature_0_anom, k = 4)
+
+==== BW37 (BW37 beaked whale) ====
+Bin length: 4 d (max site lag 16)
+Ice cutoff: 0.126
+EI: 34 bins, 17 with detections -> modeled (low sample)
+Theme winners: mixed_layer, FSLE, fsle_orient, salinity_0, productivity_lag5, o2_0_anom, temperature_67_anom
+Final: BW37 ~ s(FSLE, k = 4)
+KGI: 56 bins, 27 with detections -> modeled
+Theme winners: mixed_layer, fsle_orient, salinity_67, EKE_mad_920, o2_0_anom, temperature_0_anom
+Final: BW37 ~ s(EKE_mad_920, k = 4) + s(o2_0_anom, k = 4)
+CI: 52 bins, 7 with detections -> descriptive only
+Warning messages:
+1: In cov2cor(v) :
+  diag(V) had non-positive or NA entries; the non-finite result may be dubious
+2: In cov2cor(v) :
+  diag(V) had non-positive or NA entries; the non-finite result may be dubious
+
+Stage 1 complete: 11 models. Outputs in ./final_scripts_odontocetes/outputs/sensitivity_response_metric/days/06_statistical_analyses/stage1

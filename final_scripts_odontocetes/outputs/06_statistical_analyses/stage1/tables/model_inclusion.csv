@@ -1,0 +1,16 @@
+species,site,bin_days,n_bins,n_detection_bins,status
+Pm,EI,4,34,23,modeled
+Pm,KGI,4,89,0,descriptive only
+Pm,CI,4,76,65,modeled
+Gm,EI,4,34,19,modeled (low sample)
+Gm,KGI,4,64,18,modeled (low sample)
+Gm,CI,4,64,11,modeled (low sample)
+Oo,EI,2,68,3,descriptive only
+Oo,KGI,2,177,3,descriptive only
+Oo,CI,2,151,11,modeled (low sample)
+BW29,EI,4,34,26,modeled
+BW29,KGI,4,56,20,modeled (low sample)
+BW29,CI,4,52,24,modeled
+BW37,EI,4,34,17,modeled (low sample)
+BW37,KGI,4,56,27,modeled
+BW37,CI,4,52,7,descriptive only

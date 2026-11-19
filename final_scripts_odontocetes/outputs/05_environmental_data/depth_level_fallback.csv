@@ -1,0 +1,4 @@
+site,nominal_depth_m,product,level_used_m,n_cells_with_water,reason
+KGI,920,BGC,773.37,1,no water at nearest level 947.45 m in the main box; deepest level with water used
+KGI,1665,BGC,773.37,1,no water at nearest level 1652.57 m in the main box; deepest level with water used
+CI,1665,BGC,1045.85,1,no water at nearest level 1652.57 m in the main box; deepest level with water used

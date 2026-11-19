@@ -1,0 +1,11 @@
+feature,segment,n_points,trimmed_start_pts,trimmed_end_pts,segments_on_land_after_trim
+ASF,1,209,0,0,0
+ASF eddy,1,25,0,0,0
+ASF eddy,2,23,0,0,0
+BC recirculation,1,106,0,0,0
+Bransfield Current,1,103,4,0,0
+Peninsula Front,1,114,0,0,0
+TWW / ACoC,1,123,0,0,0
+TWW / ACoC,2,65,0,0,0
+TWW / ACoC,3,38,0,0,0
+mCDW intrusion,1,27,0,0,0

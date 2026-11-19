@@ -1,0 +1,55 @@
+2026-11-17 13:07:59  Start (method = ncss)
+2026-11-17 13:07:59  NCSS CI 2011-01-01 .. 2011-12-31
+2026-11-17 13:12:56  NCSS CI 2012-01-01 .. 2012-12-31
+2026-11-17 13:20:22  NCSS CI 2013-01-01 .. 2013-12-31
+2026-11-17 13:25:28  NCSS CI 2014-01-01 .. 2014-12-31
+2026-11-17 13:30:50  NCSS CI 2015-01-01 .. 2015-12-31
+2026-11-17 13:36:09  NCSS CI 2016-01-01 .. 2016-12-31
+2026-11-17 13:41:47  NCSS CI 2017-01-01 .. 2017-12-31
+2026-11-17 13:46:51  FAILED CI 2017: Failed to perform HTTP request.
+Caused by error in `curl::curl_fetch_disk()`:
+! Failure when receiving data from the peer [tds-odatis.aviso.altimetry.fr]:
+Recv failure: Connection was reset
+2026-11-17 13:46:53  NCSS CI 2018-01-01 .. 2018-12-31
+2026-11-17 13:51:55  FAILED CI 2018: Failed to perform HTTP request.
+Caused by error in `curl::curl_fetch_disk()`:
+! Failure when receiving data from the peer [tds-odatis.aviso.altimetry.fr]:
+Recv failure: Connection was reset
+2026-11-17 13:51:57  NCSS CI 2019-01-01 .. 2019-12-31
+2026-11-17 13:57:10  NCSS CI 2020-01-01 .. 2020-12-31
+2026-11-17 14:02:22  NCSS CI 2021-01-01 .. 2021-12-31
+2026-11-17 14:07:31  NCSS EI 2009-01-01 .. 2009-12-31
+2026-11-17 14:12:47  NCSS EI 2010-01-01 .. 2010-12-31
+2026-11-17 14:17:51  NCSS EI 2011-01-01 .. 2011-12-31
+2026-11-17 14:21:50  NCSS EI 2012-01-01 .. 2012-12-31
+2026-11-17 14:24:57  NCSS EI 2013-01-01 .. 2013-12-31
+2026-11-17 14:28:40  NCSS EI 2014-01-01 .. 2014-12-31
+2026-11-17 14:32:22  NCSS EI 2015-01-01 .. 2015-12-31
+2026-11-17 14:36:00  NCSS EI 2016-01-01 .. 2016-12-31
+2026-11-17 14:39:42  NCSS EI 2017-01-01 .. 2017-12-31
+2026-11-17 14:43:25  NCSS EI 2018-01-01 .. 2018-12-31
+2026-11-17 14:47:12  NCSS EI 2019-01-01 .. 2019-12-31
+2026-11-17 14:50:53  NCSS KGI 2010-01-01 .. 2010-12-31
+2026-11-17 14:54:08  NCSS KGI 2011-01-01 .. 2011-12-31
+2026-11-17 14:57:27  NCSS KGI 2012-01-01 .. 2012-12-31
+2026-11-17 15:00:57  NCSS KGI 2013-01-01 .. 2013-12-31
+2026-11-17 15:03:57  NCSS KGI 2014-01-01 .. 2014-12-31
+2026-11-17 15:07:06  NCSS KGI 2015-01-01 .. 2015-12-31
+2026-11-17 15:10:12  NCSS KGI 2016-01-01 .. 2016-12-31
+2026-11-17 15:13:34  NCSS KGI 2017-01-01 .. 2017-12-31
+2026-11-17 15:16:32  NCSS KGI 2018-01-01 .. 2018-12-31
+2026-11-17 15:19:34  NCSS KGI 2019-01-01 .. 2019-12-31
+2026-11-17 15:22:24  NCSS KGI 2020-01-01 .. 2020-12-31
+2026-11-17 15:26:30  NCSS KGI 2021-01-01 .. 2021-12-31
+2026-11-17 15:30:29  Done. Files in ./final_scripts_odontocetes/outputs/downloads/aviso_fsle; failures (if any) are listed in download_log.txt - re-run the script to retry them.
+2026-11-18 09:34:22  Start (method = ncss)
+2026-11-18 09:34:22  NCSS CI 2017-01-01 .. 2017-12-31
+2026-11-18 09:39:23  FAILED CI 2017: Failed to perform HTTP request.
+Caused by error in `curl::curl_fetch_disk()`:
+! Failure when receiving data from the peer [tds-odatis.aviso.altimetry.fr]:
+Recv failure: Connection was reset
+2026-11-18 09:39:25  NCSS CI 2018-01-01 .. 2018-12-31
+2026-11-18 09:44:25  Done. Files in ./final_scripts_odontocetes/outputs/downloads/aviso_fsle; failures (if any) are listed in download_log.txt - re-run the script to retry them.
+2026-11-18 10:24:49  Start (method = ncss)
+2026-11-18 10:24:49  NCSS CI 2017-01-01 .. 2017-12-31
+2026-11-18 10:29:38  Done. Files in ./final_scripts_odontocetes/outputs/downloads/aviso_fsle; failures (if any) are listed in download_log.txt - re-run the script to retry them.

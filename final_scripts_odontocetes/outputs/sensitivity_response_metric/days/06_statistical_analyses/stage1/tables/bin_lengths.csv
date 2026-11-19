@@ -1,0 +1,6 @@
+species,max_site_lag,cap_days,bin_days,capped
+Pm,2,4,2,FALSE
+Gm,4,4,4,FALSE
+Oo,2,4,2,FALSE
+BW29,6,4,4,TRUE
+BW37,16,4,4,TRUE

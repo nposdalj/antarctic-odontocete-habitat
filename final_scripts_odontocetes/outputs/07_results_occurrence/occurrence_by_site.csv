@@ -1,0 +1,19 @@
+species,species_name,site,recording_days,recording_hours,detection_days,pct_days_with_detections,presence_hours,pct_time_present
+Pm,Sperm whale,EI,135,2690.1,66,48.9,238.5,7.388
+Pm,Sperm whale,KGI,354,6363.9,0,0,0,0
+Pm,Sperm whale,CI,303,7253.3,182,60.1,104,1.434
+Gm,Long-finned pilot whale,EI,135,2690.1,47,34.8,41.9,1.299
+Gm,Long-finned pilot whale,KGI,354,6363.9,32,9,10.4,0.123
+Gm,Long-finned pilot whale,CI,303,7253.3,15,5,11.4,0.157
+Oo,Killer whale,EI,135,2690.1,3,2.2,1.7,0.052
+Oo,Killer whale,KGI,354,6363.9,3,0.8,1.2,0.014
+Oo,Killer whale,CI,303,7253.3,14,4.6,11.2,0.154
+BW29,Southern bottlenose whale,EI,135,2690.1,57,42.2,62.1,1.923
+BW29,Southern bottlenose whale,KGI,354,6363.9,27,7.6,4.5,0.053
+BW29,Southern bottlenose whale,CI,303,7253.3,51,16.8,54,0.744
+BW37,BW37 beaked whale,EI,135,2690.1,28,20.7,6.5,0.201
+BW37,BW37 beaked whale,KGI,354,6363.9,50,14.1,9.1,0.107
+BW37,BW37 beaked whale,CI,303,7253.3,11,3.6,2.2,0.031
+BW58,BW58 beaked whale,EI,135,2690.1,1,0.7,0.3,0.01
+BW58,BW58 beaked whale,KGI,354,6363.9,2,0.6,0.3,0.004
+BW58,BW58 beaked whale,CI,303,7253.3,0,0,0,0

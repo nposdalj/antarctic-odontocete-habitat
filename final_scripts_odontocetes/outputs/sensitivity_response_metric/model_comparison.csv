@@ -1,0 +1,34 @@
+species,site,bin_days,n_bins,n_detection_bins,dev_expl,resid_acf_ok,terms,metric
+BW29,CI,4,52,24,0.626,FALSE,chla_0 + temperature_0_anom,minutes
+BW29,CI,4,52,24,0.615,FALSE,chla_0 + temperature_0_anom,hours
+BW29,CI,4,52,24,0.488,FALSE,chla_0 + temperature_0_anom,days
+BW29,EI,4,34,26,0.389,TRUE,EKE_0 + mixed_layer,minutes
+BW29,EI,4,34,26,0.482,TRUE,EKE_0 + fsle_orient + mixed_layer,hours
+BW29,EI,4,34,26,0.173,TRUE,EKE_0,days
+BW29,KGI,4,56,20,0.447,FALSE,chla_lag2,minutes
+BW29,KGI,4,56,20,0.453,FALSE,chla_lag2,hours
+BW29,KGI,4,56,20,0.463,FALSE,chla_lag2,days
+BW37,EI,4,34,17,0.52,TRUE,FSLE + salinity_0,minutes
+BW37,EI,4,34,17,0.493,TRUE,FSLE + salinity_0,hours
+BW37,EI,4,34,17,0.346,TRUE,FSLE,days
+BW37,KGI,4,56,27,0.5,FALSE,EKE_mad_920 + fsle_orient + o2_0_anom,minutes
+BW37,KGI,4,56,27,0.515,FALSE,EKE_mad_920 + fsle_orient + o2_0_anom,hours
+BW37,KGI,4,56,27,0.341,FALSE,EKE_mad_920 + o2_0_anom,days
+Gm,CI,4,64,11,0.495,FALSE,chla_0,minutes
+Gm,CI,4,64,11,0.378,FALSE,chla_0,hours
+Gm,CI,4,64,11,0.255,FALSE,chla_0,days
+Gm,EI,4,34,19,0.599,FALSE,EKE_0 + mixed_layer,minutes
+Gm,EI,4,34,19,0.558,FALSE,EKE_0 + mixed_layer,hours
+Gm,EI,4,34,19,0.393,TRUE,EKE_0 + mixed_layer,days
+Gm,KGI,4,64,18,0.412,FALSE,productivity_16,minutes
+Gm,KGI,4,64,18,0.391,TRUE,productivity_16,hours
+Gm,KGI,4,64,18,0.332,TRUE,productivity_16,days
+Oo,CI,2,151,11,0.234,FALSE,chla_0 + EKE_455,minutes
+Oo,CI,2,151,11,0.237,FALSE,chla_0 + EKE_455,hours
+Oo,CI,2,151,11,0.285,FALSE,chla_0 + EKE_455,days
+Pm,CI,4,76,65,0.337,TRUE,chla_0 + fsle_orient + mixed_layer,minutes
+Pm,CI,4,76,65,0.507,FALSE,chla_0 + fsle_orient + o2_1665,hours
+Pm,CI,2,152,115,0.124,TRUE,chla_lag4,days
+Pm,EI,4,34,23,0.764,TRUE,FSLE + mixed_layer + o2_375,minutes
+Pm,EI,4,34,23,0.756,TRUE,FSLE + mixed_layer + o2_375,hours
+Pm,EI,2,68,40,0.438,FALSE,FSLE + o2_375 + productivity_lag5,days

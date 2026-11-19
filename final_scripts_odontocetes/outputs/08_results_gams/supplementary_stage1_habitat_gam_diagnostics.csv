@@ -1,0 +1,12 @@
+species,species_name,site,formula,bin_days,ice_cutoff,term_cap,tweedie_p,k_index_min,k_pvalue_min,concurvity_max,resid_acf_lag1,resid_acf_lags_outside,resid_acf_ok,no_significant_terms,all_terms_significant,AIC
+Pm,Sperm whale,EI,"Pm ~ s(mixed_layer, k = 4) + s(FSLE, k = 4) + s(o2_375, k = 4)",4,0.845,3,1.52,0.73,0.155,0.74,0.42,1,TRUE,FALSE,TRUE,278.8
+Pm,Sperm whale,CI,"Pm ~ s(mixed_layer, k = 4) + s(fsle_orient, bs = ""cc"", k = 4) + s(chla_0, k = 4)",4,0.845,7,1.63,0.76,0.112,0.53,0.15,,TRUE,FALSE,TRUE,584.8
+Gm,Long-finned pilot whale,EI,"Gm ~ s(mixed_layer, k = 4) + s(EKE_0, k = 4)",4,0.334,2,1.44,0.98,0.645,0.15,0.3,3,FALSE,FALSE,TRUE,197.6
+Gm,Long-finned pilot whale,KGI,"Gm ~ s(productivity_16, k = 4)",4,0.334,2,1.29,0.99,0.907,0,0.27,1;5,FALSE,FALSE,TRUE,175.3
+Gm,Long-finned pilot whale,CI,"Gm ~ s(chla_0, k = 4)",4,0.334,2,1.44,0.74,0.205,0,0.16,6;9,FALSE,FALSE,TRUE,129.5
+Oo,Killer whale,CI,"Oo ~ s(EKE_455, k = 4) + s(chla_0, k = 4)",2,0.889,2,1.38,0.7,0.21,0.55,0.15,9,FALSE,FALSE,TRUE,175
+BW29,Southern bottlenose whale,EI,"BW29 ~ s(mixed_layer, k = 4) + s(EKE_0, k = 4)",4,0.126,3,1.6,0.65,0.078,0.15,0.19,,TRUE,FALSE,TRUE,263.5
+BW29,Southern bottlenose whale,KGI,"BW29 ~ s(chla_lag2, k = 4)",4,0.126,2,1.16,0.96,0.517,0,0.19,5,FALSE,FALSE,TRUE,135.2
+BW29,Southern bottlenose whale,CI,"BW29 ~ s(chla_0, k = 4) + s(temperature_0_anom, k = 4)",4,0.126,5,1.42,0.89,0.578,0.77,0.29,1;6,FALSE,FALSE,TRUE,260.7
+BW37,BW37 beaked whale,EI,"BW37 ~ s(FSLE, k = 4) + s(salinity_0, k = 4)",4,0.126,2,1.1,0.89,0.365,0.2,0.08,,TRUE,FALSE,TRUE,121.5
+BW37,BW37 beaked whale,KGI,"BW37 ~ s(fsle_orient, bs = ""cc"", k = 4) + s(EKE_mad_920, k = 4) + s(o2_0_anom, k = 4)",4,0.126,5,1.16,0.79,0.125,0.52,-0.15,3,FALSE,FALSE,TRUE,190.1

@@ -1,0 +1,43 @@
+species,theme,n_models,n_models_with_winner,n_models_selected,selected_variables,selected_directions,mean_single_dev_expl_winner,mean_final_dev_expl_term
+Pm,temperature,2,0,0,,,NA,NA
+Pm,salinity,2,1,0,,,0.2259711300362087,NA
+Pm,oxygen,2,2,1,o2_375,negative,0.1797039861647542,0.0658305395351153
+Pm,mesoscale,2,2,1,FSLE,positive,0.34511773914625843,0.4320518590030048
+Pm,front_orientation,2,2,1,fsle_orient,cyclic,0.07251930626743315,0.12903880386371763
+Pm,stratification,2,2,2,mixed_layer,mixed; negative,0.15523015110457195,0.10733035473359859
+Pm,productivity,2,2,1,chla_0,negative,0.3899044438579671,0.21167492452838535
+Gm,temperature,3,1,0,,,0.21121750031330763,NA
+Gm,salinity,3,3,0,,,0.08641437932437042,NA
+Gm,oxygen,3,3,0,,,0.20002759391167216,NA
+Gm,mesoscale,3,3,1,EKE_0,negative,0.33177827485923,0.31299593208578774
+Gm,front_orientation,3,3,0,,,0.03519200590940229,NA
+Gm,stratification,3,1,1,mixed_layer,positive,0.28762782216211635,0.167128694377018
+Gm,productivity,3,3,2,chla_0; productivity_16,mixed; negative,0.3291504441762081,0.45387516467716776
+Oo,temperature,1,0,0,,,NA,NA
+Oo,salinity,1,0,0,,,NA,NA
+Oo,oxygen,1,1,0,,,0.11688732492210677,NA
+Oo,mesoscale,1,1,1,EKE_455,negative,0.08405551955443392,0.14496984665827342
+Oo,front_orientation,1,1,0,,,6.031281119948913e-6,NA
+Oo,stratification,1,1,0,,,0.00277621347349056,NA
+Oo,productivity,1,1,1,chla_0,negative,0.11835360434958218,0.15624640621443928
+BW29,temperature,3,1,1,temperature_0_anom,mixed,0.3427517988506225,0.17085679496775807
+BW29,salinity,3,3,0,,,0.10929966069981877,NA
+BW29,oxygen,3,3,0,,,0.12343679790850942,NA
+BW29,mesoscale,3,3,1,EKE_0,negative,0.20885797618396243,0.27741827831330157
+BW29,front_orientation,3,3,0,,,0.019425213569128002,NA
+BW29,stratification,3,2,1,mixed_layer,mixed,0.06936002689486745,0.11730751980610904
+BW29,productivity,3,3,2,chla_0; chla_lag2,mixed; mixed,0.3440543549194832,0.374597892193941
+BW37,temperature,2,2,0,,,0.1138774123581449,NA
+BW37,salinity,2,2,1,salinity_0,negative,0.22769428742548065,0.15632769741477154
+BW37,oxygen,2,2,1,o2_0_anom,negative,0.21705762809284077,0.19411664798538925
+BW37,mesoscale,2,2,2,EKE_mad_920; FSLE,mixed; mixed,0.3504916544886447,0.2607013255991969
+BW37,front_orientation,2,2,1,fsle_orient,cyclic,0.06544543697817251,0.04989708445228008
+BW37,stratification,2,2,0,,,0.10399160946310593,NA
+BW37,productivity,2,1,0,,,5.555987280887004e-4,NA
+ALL,temperature,11,4,1,temperature_0_anom,mixed,0.195431030970055,0.17085679496775807
+ALL,salinity,11,9,1,salinity_0,negative,0.1409446472177486,0.15632769741477154
+ALL,oxygen,11,11,2,o2_0_anom; o2_375,negative; negative,0.17098215717253104,0.12997359376025228
+ALL,mesoscale,11,11,6,EKE_0; EKE_455; EKE_mad_920; FSLE,positive; negative; negative; negative; mixed; mixed,0.28156209635943796,0.28147309454312686
+ALL,front_orientation,11,11,2,fsle_orient,cyclic; cyclic,0.039980652382538374,0.08946794415799886
+ALL,stratification,11,8,4,mixed_layer,mixed; negative; positive; mixed,0.11844595132008719,0.12477423091258105
+ALL,productivity,11,10,6,chla_0; chla_lag2; productivity_16,negative; mixed; negative; negative; mixed; mixed,0.2918332488080679,0.3374779074141737
