@@ -1,0 +1,7 @@
+# Results figures (GAMs and sea ice) — draft legends
+
+*Figure numbers are placeholders until the manuscript is assembled.*
+
+**Figure [INSERT] (main text; `main_sea_ice_occurrence.png`, script `sea_ice_occurrence.R`).** Acoustic occurrence of odontocetes across sea-ice conditions at Elephant Island (EI), King George Island (KGI) and Clarence Island (CI): percentage of time bins with detections in each sea-ice concentration class (Copernicus Marine Service reanalysis, mean over the ±20 km box). Labels give the number of bins per class; "no bins" indicates that the class did not occur during recording. Bins were 4 days long (killer whales, 2 days).
+
+**Figure S[INSERT] (supplement; `supplementary_sea_ice_response_curves.png`, script `response_curves.R`).** Centered partial effects (log scale) of sea-ice concentration from the sea-ice GAMs, shown for models in which the effect was significant (p ≤ 0.05), with 95% confidence bands (clipped at the panel limits) and the observed values of each bin (rug). Solid lines: effects that remained significant when residual autocorrelation was modeled with an AR(1) process; dashed lines: effects that did not. Curves of southern bottlenose whales and BW37 end at the highest sea-ice concentration at which the species was detected at that site (2.9–5.1%), because no detections occurred at higher concentrations (34–36 bins) and the fitted decline beyond that point is not estimable; these curves are re-centered over the range shown.

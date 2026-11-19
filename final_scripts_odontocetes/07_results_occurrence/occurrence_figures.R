@@ -6,7 +6,8 @@
 #                 per species x site, with recording effort per week and
 #                 periods without recording shaded; BW58 excluded.
 #           (ii)  SUPPLEMENT - weekly presence of the rare BW58 signal.
-#           (iii) SUPPLEMENT - per site, stacked daily environmental time
+#           (iii) SUPPLEMENT - per site, stacked daily time series of the
+#                 habitat-model predictors (as used in the models) and sea ice
 #                 series over the full calendar year(s) of the deployment,
 #                 recording period highlighted, daily presence at the bottom.
 # Inputs  : F_PRESENCE_DAILY (outputs/04_acoustic_detection/presence_daily.csv;
@@ -19,7 +20,8 @@
 #             figS_weekly_presence_BW58.png/.pdf    (ii)
 #             figS_env_presence_<site>.png/.pdf     (iii)
 # Author  : Natalie Posdaljian
-# Date    : 2026-11-16
+# Date    : 2026-11-16 (revised 2026-11-19: figure (iii) shows the final
+#           habitat-model predictors as anomalies by depth layer)
 # Project : Odontocete acoustic occurrence and habitat associations at three
 #           HARP sites in the South Shetland Islands (EI, KGI, CI)
 # Notes   : - Weeks start on Monday (UTC). Grey bars show the number of days
@@ -31,6 +33,11 @@
 
 BASE_DIR <- "."
 source(file.path(BASE_DIR, "final_scripts_odontocetes", "config.R"))
+# Deseasoning settings and functions, so figure (iii) shows the predictors
+# exactly as they enter the habitat models (anomalies from the 10-yr
+# climatology, log10 lagged chl-a)
+source(file.path(FINAL_DIR, "06_statistical_analyses", "00_gam_parameters.R"))
+source(file.path(FINAL_DIR, "06_statistical_analyses", "00_gam_functions.R"))
 
 suppressPackageStartupMessages({
   library(tidyverse)
@@ -46,18 +53,24 @@ FIG_DPI      <- 600
 MAIN_SPECIES <- setdiff(SPECIES_CODES, "BW58")   # BW58 shown in supplement only
 RARE_SPECIES <- "BW58"
 
-# Environmental variables for figure (iii), in panel order, with axis labels.
-# Names follow the F_ENV_DAILY contract in config.R ("_0" = surface level).
+# Environmental variables for figure (iii), in panel order, with axis labels:
+# the habitat-model predictors as they enter the models (revised 2026-11-19),
+# plus sea-ice concentration (sea-ice models, raw). "anom." = anomaly from the
+# 10-yr climatology; layers: surface 0-100 m, mid-water 100-500 m, deep
+# 500-1000 m. Mid-water variables are used by sperm and killer whales only.
 ENV_VARS <- c(
-  ice_conc      = "Sea-ice\nconc.",
-  temperature_0 = "Temp.\n(°C)",
-  salinity_0    = "Salinity",
-  chla_0        = "Chl-a\n(mg m⁻³)",
-  SSH           = "SSH\n(m)",
-  FSLE          = "FSLE\n(day⁻¹)",
-  mixed_layer   = "MLD\n(m)",
-  EKE_0         = "EKE\n(cm² s⁻²)"   # [CONFIRM] EKE units in F_ENV_DAILY
+  ice_conc                 = "Sea ice\n(fraction)",
+  temperature_surface_anom = "Temp. anom.,\n0–100 m (°C)",
+  temperature_mid_anom     = "Temp. anom.,\n100–500 m (°C)",
+  temperature_deep_anom    = "Temp. anom.,\n500–1000 m (°C)",
+  mixed_layer_anom         = "MLD anom.\n(m)",
+  FSLE                     = "FSLE\n(day⁻¹)",
+  fsle_orient              = "FSLV orient.\n(°)",
+  EKE_mid                  = "EKE, 100–\n500 m (cm² s⁻²)",
+  EKE_deep                 = "EKE, 500–\n1000 m (cm² s⁻²)",
+  chla_lag3_anom           = "log10 chl-a\nanom., 3-mo lag"
 )
+ANOM_PANELS <- grep("_anom$", names(ENV_VARS), value = TRUE)
 
 SITE_LABELS <- setNames(sprintf("%s (%s)", SITES$site_name, SITES$site), SITES$site)
 
@@ -198,10 +211,14 @@ plot_env_site <- function(site_code, env) {
     return(NULL)
   }
 
+  zero_lines <- tibble(variable = factor(ENV_VARS[ANOM_PANELS], levels = ENV_VARS))
+
   p_env <- ggplot(env_long, aes(date, value)) +
     geom_rect(data = rec_period, inherit.aes = FALSE,
               aes(xmin = xmin, xmax = xmax, ymin = -Inf, ymax = Inf),
               fill = SITE_COLORS[[site_code]], alpha = 0.10) +
+    geom_hline(data = zero_lines, aes(yintercept = 0), colour = "grey60",
+               linewidth = 0.3) +
     geom_line(linewidth = 0.35, colour = "grey15", na.rm = TRUE) +
     facet_grid(variable ~ ., scales = "free_y", switch = "y") +
     scale_x_date(limits = x_lim, expand = c(0, 0), date_breaks = "1 month",
@@ -241,7 +258,13 @@ if (!file.exists(F_ENV_DAILY)) {
   message("Skipping figure (iii): ", F_ENV_DAILY, " not found. Run the ",
           "05_environmental_data scripts first, then re-run this script.")
 } else {
-  env <- read_csv(F_ENV_DAILY, show_col_types = FALSE)
+  env <- read_csv(F_ENV_DAILY, show_col_types = FALSE) |>
+    mutate(date = as.Date(date))
+  # Same transformation as 01_stage1_automated_selection.R: log10 lagged chl-a,
+  # then anomalies from the 10-yr periodic-spline climatology.
+  if (CHL_LOG10) env <- mutate(env, across(any_of(LAG_COLUMNS), log10))
+  anom_sources <- intersect(sub("_anom$", "", ANOM_PANELS), names(env))
+  env <- add_anomalies(env, build_climatology(env, anom_sources), anom_sources)
   missing_vars <- setdiff(names(ENV_VARS), names(env))
   if (length(missing_vars) > 0) {
     message("Figure (iii): variables not in ", basename(F_ENV_DAILY),

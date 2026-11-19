@@ -1,0 +1,27 @@
+species,species_name,site,n_bins,n_detection_bins,low_sample,dev_expl_model_pct,term,variable,edf,p_value,dev_expl_term_pct,direction,shape,robust_ar1
+Pm,Sperm whale,EI,34,23,FALSE,85.2,FSLE (d-1),FSLE,2.3,<0.001,13.1,mixed,peaked,TRUE
+Pm,Sperm whale,EI,34,23,FALSE,85.2,Anomaly: Mixed layer depth (m),mixed_layer_anom,1.45,0.004,8.4,negative,decreasing,FALSE
+Pm,Sperm whale,EI,34,23,FALSE,85.2,"Anomaly: log10 chl-a (mg m-3), 3-month lag",chla_lag3_anom,1.88,<0.001,23.4,mixed,U-shaped,FALSE
+Pm,Sperm whale,CI,76,65,FALSE,53.1,"FSLV orientation (°; cyclic, -90 = 90)",fsle_orient,1.61,0.007,5.5,cyclic,"cyclic, unimodal (peak 30°, trough -63°)",TRUE
+Pm,Sperm whale,CI,76,65,FALSE,53.1,"EKE (cm2 s-2), mid-water layer (100-500 m)",EKE_mid,0.87,0.004,2.6,negative,decreasing,TRUE
+Pm,Sperm whale,CI,76,65,FALSE,53.1,"EKE (cm2 s-2), deep layer (500-1000 m)",EKE_deep,1.58,0.021,2.5,mixed,peaked,FALSE
+Pm,Sperm whale,CI,76,65,FALSE,53.1,Anomaly: Mixed layer depth (m),mixed_layer_anom,1.52,0.029,4.8,mixed,peaked,FALSE
+Pm,Sperm whale,CI,76,65,FALSE,53.1,"Anomaly: Temperature (°C), surface layer (0-100 m)",temperature_surface_anom,1.79,<0.001,37.2,negative,decreasing,TRUE
+Pm,Sperm whale,CI,76,65,FALSE,53.1,"Anomaly: log10 chl-a (mg m-3), 3-month lag",chla_lag3_anom,1.76,<0.001,10.6,mixed,U-shaped,NA
+Gm,Long-finned pilot whale,EI,34,19,TRUE,84.8,"Anomaly: Temperature (°C), surface layer (0-100 m)",temperature_surface_anom,2.78,<0.001,21.1,positive,increasing,TRUE
+Gm,Long-finned pilot whale,EI,34,19,TRUE,84.8,"Anomaly: log10 chl-a (mg m-3), 3-month lag",chla_lag3_anom,1.56,<0.001,26.3,positive,increasing,TRUE
+Gm,Long-finned pilot whale,KGI,64,18,TRUE,31.9,"Anomaly: Temperature (°C), surface layer (0-100 m)",temperature_surface_anom,1.64,<0.001,31.9,positive,increasing,TRUE
+Gm,Long-finned pilot whale,CI,64,11,TRUE,48,"Anomaly: Temperature (°C), surface layer (0-100 m)",temperature_surface_anom,0.82,0.027,6.8,negative,decreasing,FALSE
+Gm,Long-finned pilot whale,CI,64,11,TRUE,48,"EKE (cm2 s-2), deep layer (500-1000 m)",EKE_deep,1.5,0.010,15.7,mixed,peaked,FALSE
+Oo,Killer whale,CI,151,11,TRUE,21.1,"Anomaly: log10 chl-a (mg m-3), 3-month lag",chla_lag3_anom,1.57,0.007,21.1,mixed,U-shaped,FALSE
+BW29,Southern bottlenose whale,EI,34,26,FALSE,59,FSLE (d-1),FSLE,1.41,0.031,9.8,mixed,peaked,FALSE
+BW29,Southern bottlenose whale,EI,34,26,FALSE,59,"Anomaly: log10 chl-a (mg m-3), 3-month lag",chla_lag3_anom,2.76,<0.001,45.2,mixed,complex,FALSE
+BW29,Southern bottlenose whale,KGI,56,20,TRUE,38.7,"Anomaly: log10 chl-a (mg m-3), 3-month lag",chla_lag3_anom,1.93,0.003,38.7,positive,increasing,TRUE
+BW29,Southern bottlenose whale,CI,52,24,FALSE,66.7,FSLE (d-1),FSLE,1.44,0.003,11.8,mixed,peaked,TRUE
+BW29,Southern bottlenose whale,CI,52,24,FALSE,66.7,"Anomaly: log10 chl-a (mg m-3), 3-month lag",chla_lag3_anom,0.96,<0.001,30.2,negative,decreasing,NA
+BW29,Southern bottlenose whale,CI,52,24,FALSE,66.7,Anomaly: Mixed layer depth (m),mixed_layer_anom,0.9,0.003,6.9,negative,decreasing,TRUE
+BW29,Southern bottlenose whale,CI,52,24,FALSE,66.7,"Anomaly: Temperature (°C), surface layer (0-100 m)",temperature_surface_anom,1.87,<0.001,27,mixed,peaked,TRUE
+BW37,BW37 beaked whale,EI,34,17,TRUE,47.8,FSLE (d-1),FSLE,1.84,<0.001,34.7,mixed,U-shaped,TRUE
+BW37,BW37 beaked whale,EI,34,17,TRUE,47.8,"FSLV orientation (°; cyclic, -90 = 90)",fsle_orient,1.35,0.029,11.5,cyclic,"cyclic, unimodal (peak -66°, trough 26°)",TRUE
+BW37,BW37 beaked whale,KGI,56,27,FALSE,42.5,Anomaly: Mixed layer depth (m),mixed_layer_anom,1.4,0.018,8.4,mixed,U-shaped,FALSE
+BW37,BW37 beaked whale,KGI,56,27,FALSE,42.5,"Anomaly: Temperature (°C), deep layer (500-1000 m)",temperature_deep_anom,1.8,<0.001,34.1,mixed,peaked,TRUE

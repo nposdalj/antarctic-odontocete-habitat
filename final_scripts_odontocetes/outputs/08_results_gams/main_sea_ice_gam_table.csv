@@ -1,16 +1,16 @@
-species,species_name,site,status,n_bins,n_detection_bins,low_sample,edf,p_value,dev_expl_pct,shape,direction
-Pm,Sperm whale,EI,modeled,34,23,FALSE,0.73,0.064,6.5,not significant,none
-Pm,Sperm whale,KGI,descriptive only,89,0,FALSE,NA,NA,NA,NA,NA
-Pm,Sperm whale,CI,modeled,76,65,FALSE,1.6,0.002,11.7,peaked,mixed
-Gm,Long-finned pilot whale,EI,modeled (low sample),34,19,TRUE,2.21,<0.001,34.7,peaked,mixed
-Gm,Long-finned pilot whale,KGI,modeled (low sample),89,18,TRUE,1.67,0.183,27.9,not significant,none
-Gm,Long-finned pilot whale,CI,modeled (low sample),76,11,TRUE,0.6,0.208,3.8,not significant,none
-Oo,Killer whale,EI,descriptive only,68,3,FALSE,NA,NA,NA,NA,NA
-Oo,Killer whale,KGI,descriptive only,177,3,FALSE,NA,NA,NA,NA,NA
-Oo,Killer whale,CI,modeled (low sample),152,11,TRUE,1.66,<0.001,28.5,peaked,mixed
-BW29,Southern bottlenose whale,EI,modeled,34,26,FALSE,0.09,0.292,0.5,not significant,none
-BW29,Southern bottlenose whale,KGI,modeled (low sample),89,20,TRUE,0.85,0.041,32.9,decreasing,negative
-BW29,Southern bottlenose whale,CI,modeled,76,24,FALSE,0.92,<0.001,56.1,decreasing,negative
-BW37,BW37 beaked whale,EI,modeled (low sample),34,17,TRUE,0.83,0.201,5.3,not significant,none
-BW37,BW37 beaked whale,KGI,modeled,89,27,FALSE,0.9,0.009,35.5,decreasing,negative
-BW37,BW37 beaked whale,CI,descriptive only,76,7,FALSE,NA,NA,NA,NA,NA
+species,species_name,site,status,n_bins,n_detection_bins,low_sample,edf,p_value,dev_expl_pct,shape,direction,robust_ar1
+Pm,Sperm whale,EI,modeled,34,23,FALSE,0.73,0.064,6.5,not significant,none,NA
+Pm,Sperm whale,KGI,descriptive only,89,0,FALSE,NA,NA,NA,NA,NA,NA
+Pm,Sperm whale,CI,modeled,76,65,FALSE,1.6,0.002,11.7,peaked,mixed,FALSE
+Gm,Long-finned pilot whale,EI,modeled (low sample),34,19,TRUE,2.21,<0.001,34.7,peaked,mixed,FALSE
+Gm,Long-finned pilot whale,KGI,modeled (low sample),89,18,TRUE,1.67,0.183,27.9,not significant,none,NA
+Gm,Long-finned pilot whale,CI,modeled (low sample),76,11,TRUE,0.6,0.208,3.8,not significant,none,NA
+Oo,Killer whale,EI,descriptive only,68,3,FALSE,NA,NA,NA,NA,NA,NA
+Oo,Killer whale,KGI,descriptive only,177,3,FALSE,NA,NA,NA,NA,NA,NA
+Oo,Killer whale,CI,modeled (low sample),152,11,TRUE,1.66,<0.001,28.5,peaked,mixed,FALSE
+BW29,Southern bottlenose whale,EI,modeled,34,26,FALSE,0.09,0.292,0.5,not significant,none,NA
+BW29,Southern bottlenose whale,KGI,modeled (low sample),89,20,TRUE,0.85,0.041,32.9,decreasing,negative,TRUE
+BW29,Southern bottlenose whale,CI,modeled,76,24,FALSE,0.92,<0.001,56.1,decreasing,negative,TRUE
+BW37,BW37 beaked whale,EI,modeled (low sample),34,17,TRUE,0.83,0.201,5.3,not significant,none,NA
+BW37,BW37 beaked whale,KGI,modeled,89,27,FALSE,0.9,0.009,35.5,decreasing,negative,TRUE
+BW37,BW37 beaked whale,CI,descriptive only,76,7,FALSE,NA,NA,NA,NA,NA,NA

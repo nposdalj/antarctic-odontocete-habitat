@@ -1,0 +1,27 @@
+species,site,stage,term,variable,theme,edf,ref_df,F,p_value,dev_expl_term,shape,direction
+Pm,EI,stage3,s(FSLE),FSLE,surface_fronts,2.3000505396776716,3,6.728530632262999,4.45099302333829e-4,0.1311964335282384,peaked,mixed
+Pm,EI,stage3,s(mixed_layer_anom),mixed_layer_anom,stratification,1.445798665070655,3,3.3206953764471048,0.004071113873938104,0.08416843510925198,decreasing,negative
+Pm,EI,stage3,s(chla_lag3_anom),chla_lag3_anom,productivity,1.8841178059048498,3,11.794557696489173,5.002066312265185e-6,0.23402398485910725,U-shaped,mixed
+Pm,CI,stage3,s(fsle_orient),fsle_orient,front_orientation,1.6059924580346294,2,4.266018033350862,0.006932635286035049,0.05549602410393023,"cyclic, unimodal (peak 30°, trough -63°)",cyclic
+Pm,CI,stage3,s(EKE_mid),EKE_mid,eddy_mid,0.8668338333048693,3,2.151514667882252,0.003911045730160434,0.025591629493761925,decreasing,negative
+Pm,CI,stage3,s(EKE_deep),EKE_deep,eddy_deep,1.580549018680643,3,2.0743156639122984,0.020562445359271098,0.025183102381010514,peaked,mixed
+Pm,CI,stage3,s(mixed_layer_anom),mixed_layer_anom,stratification,1.5175850247395228,3,1.8303321231914003,0.0293172624426723,0.04818276965422463,peaked,mixed
+Pm,CI,stage3,s(temperature_surface_anom),temperature_surface_anom,water_mass_surface,1.7897240129971048,3,17.239598761659327,0,0.3717417555013672,decreasing,negative
+Pm,CI,stage3,s(chla_lag3_anom),chla_lag3_anom,productivity,1.7635323044534934,3,5.510005278920438,1.550910412215778e-4,0.10555391178008222,U-shaped,mixed
+Gm,EI,stage3,s(temperature_surface_anom),temperature_surface_anom,water_mass_surface,2.779153014737511,3,8.873590987704501,1.2168362884001915e-4,0.21091793665458758,increasing,positive
+Gm,EI,stage3,s(chla_lag3_anom),chla_lag3_anom,productivity,1.5553594193830145,3,11.590181869066292,2.9464538586765343e-6,0.2625013985502739,increasing,positive
+Gm,KGI,stage3,s(temperature_surface_anom),temperature_surface_anom,water_mass_surface,1.642132826082435,3,5.666242215334626,1.5658297652665354e-4,0.3191716639828216,increasing,positive
+Gm,CI,stage3,s(temperature_surface_anom),temperature_surface_anom,water_mass_surface,0.8217583033739753,3,1.359667439298262,0.026771502853921048,0.06805983796762682,decreasing,negative
+Gm,CI,stage3,s(EKE_deep),EKE_deep,eddy_deep,1.49701322312268,3,2.4714904758361853,0.009596107302740853,0.157464286160385,peaked,mixed
+Oo,CI,stage3,s(chla_lag3_anom),chla_lag3_anom,productivity,1.5667770724534376,3,2.714443930878678,0.006509801062179688,0.21146801633724796,U-shaped,mixed
+BW29,EI,stage3,s(FSLE),FSLE,surface_fronts,1.4123000793706297,3,1.8367358129226867,0.030812996632899936,0.09826629928157149,peaked,mixed
+BW29,EI,stage3,s(chla_lag3_anom),chla_lag3_anom,productivity,2.760459353516641,3,11.734119683344085,1.3589090391841196e-5,0.4521451697371477,complex,mixed
+BW29,KGI,stage3,s(chla_lag3_anom),chla_lag3_anom,productivity,1.9334334794081083,3,3.8429251893649994,0.0034750141164086035,0.3870680839836164,increasing,positive
+BW29,CI,stage3,s(FSLE),FSLE,surface_fronts,1.4377086622280446,3,3.155698106635283,0.003103010940642914,0.11827572547695009,peaked,mixed
+BW29,CI,stage3,s(chla_lag3_anom),chla_lag3_anom,productivity,0.96085470391589,3,7.946150951220882,6.653967925096538e-6,0.3020146057544924,decreasing,negative
+BW29,CI,stage3,s(mixed_layer_anom),mixed_layer_anom,stratification,0.8979502109238143,3,2.800333085399434,0.0032647867277419973,0.06871223199357268,decreasing,negative
+BW29,CI,stage3,s(temperature_surface_anom),temperature_surface_anom,water_mass_surface,1.8712154903326677,3,7.172542191152314,7.108277668965712e-5,0.2700646474101541,peaked,mixed
+BW37,EI,stage3,s(FSLE),FSLE,surface_fronts,1.8377913136041568,3,6.587252775459221,2.6902105758908057e-4,0.34708272412655883,U-shaped,mixed
+BW37,EI,stage3,s(fsle_orient),fsle_orient,front_orientation,1.3525973186428404,2,2.716351025478371,0.02949665073377239,0.11473754885596676,"cyclic, unimodal (peak -66°, trough 26°)",cyclic
+BW37,KGI,stage3,s(mixed_layer_anom),mixed_layer_anom,stratification,1.399933811665101,3,2.0512782857242637,0.018238020917235254,0.08353326710083131,U-shaped,mixed
+BW37,KGI,stage3,s(temperature_deep_anom),temperature_deep_anom,water_mass_deep,1.8026876228639732,3,9.105732058387956,6.2725096872107144e-6,0.3413667003447961,peaked,mixed

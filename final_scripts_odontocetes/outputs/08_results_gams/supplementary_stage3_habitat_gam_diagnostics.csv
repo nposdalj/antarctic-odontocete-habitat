@@ -1,0 +1,12 @@
+species,species_name,site,formula,bin_days,ice_cutoff,term_cap,tweedie_p,k_index_min,k_pvalue_min,concurvity_max,resid_acf_lag1,ljung_box_p,resid_acf_ok,no_significant_terms,all_terms_significant,AIC,delta_aic_ar1,ar1_supported
+Pm,Sperm whale,EI,"Pm ~ s(FSLE, k = 4) + s(mixed_layer_anom, k = 4) + s(chla_lag3_anom, k = 4)",4,0.845,3,1.47,0.76,0.22,0.74,0.37,0.066,TRUE,FALSE,TRUE,267.2,-25.6,TRUE
+Pm,Sperm whale,CI,"Pm ~ s(fsle_orient, bs = ""cc"", k = 4) + s(EKE_mid, k = 4) + s(EKE_deep, k = 4) + s(mixed_layer_anom, k = 4) + s(temperature_surface_anom, k = 4) + s(chla_lag3_anom, k = 4)",4,0.845,7,1.57,0.77,0.122,0.88,0.04,0.17,TRUE,FALSE,TRUE,564.5,-23.1,TRUE
+Gm,Long-finned pilot whale,EI,"Gm ~ s(temperature_surface_anom, k = 4) + s(chla_lag3_anom, k = 4)",4,0.334,2,1.31,0.78,0.148,0.49,-0.16,0.28,TRUE,FALSE,TRUE,176,NA,FALSE
+Gm,Long-finned pilot whale,KGI,"Gm ~ s(temperature_surface_anom, k = 4)",4,0.334,2,1.32,0.98,0.948,0,0.44,4.4e-5,FALSE,FALSE,TRUE,180.5,-5.7,TRUE
+Gm,Long-finned pilot whale,CI,"Gm ~ s(temperature_surface_anom, k = 4) + s(EKE_deep, k = 4)",4,0.334,2,1.44,0.75,0.4,0.25,0.11,0.16,TRUE,FALSE,TRUE,134,2.9,FALSE
+Oo,Killer whale,CI,"Oo ~ s(chla_lag3_anom, k = 4)",2,0.889,2,1.35,0.76,0.66,0,0.12,0.34,TRUE,FALSE,TRUE,175.9,-19.1,TRUE
+BW29,Southern bottlenose whale,EI,"BW29 ~ s(FSLE, k = 4) + s(chla_lag3_anom, k = 4)",4,0.126,3,1.5,0.82,0.295,0.71,-0.21,0.35,TRUE,FALSE,TRUE,253.6,-3.6,TRUE
+BW29,Southern bottlenose whale,KGI,"BW29 ~ s(chla_lag3_anom, k = 4)",4,0.126,2,1.18,0.71,0.05,0,0.27,0.14,TRUE,FALSE,TRUE,140.6,NA,FALSE
+BW29,Southern bottlenose whale,CI,"BW29 ~ s(FSLE, k = 4) + s(chla_lag3_anom, k = 4) + s(mixed_layer_anom, k = 4) + s(temperature_surface_anom, k = 4)",4,0.126,5,1.39,0.8,0.265,0.71,0.35,0.034,FALSE,FALSE,TRUE,258.5,3.2,FALSE
+BW37,BW37 beaked whale,EI,"BW37 ~ s(FSLE, k = 4) + s(fsle_orient, bs = ""cc"", k = 4)",4,0.126,2,1.1,0.96,0.54,0.26,0.01,0.47,TRUE,FALSE,TRUE,125.7,2,FALSE
+BW37,BW37 beaked whale,KGI,"BW37 ~ s(mixed_layer_anom, k = 4) + s(temperature_deep_anom, k = 4)",4,0.126,5,1.17,0.94,0.53,0.06,-0.1,0.58,TRUE,FALSE,TRUE,196.9,2.2,FALSE

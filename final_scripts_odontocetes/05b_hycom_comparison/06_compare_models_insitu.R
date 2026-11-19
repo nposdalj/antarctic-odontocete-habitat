@@ -222,45 +222,54 @@ map_panel <- ggplot() +
   bathymetry_layers(bathy, ocean_alpha = 0.6) +
   geom_rect(data = boxes, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
             fill = NA, colour = "black", linewidth = 0.6) +
+  site_layers() +
+  # site_layers() sets the site colour scale; the profile types get their own
   new_scale_colour() +
   geom_point(data = used_casts, aes(lon, lat, colour = probe, shape = probe),
              size = 1.4, alpha = 0.8) +
   scale_colour_manual(values = c("#e66101", "#5e3c99", "#1b7837", "#b2182b", "grey20"),
                       name = "Profile type", drop = TRUE) +
   scale_shape_manual(values = c(16, 17, 15, 18, 4), name = "Profile type", drop = TRUE) +
-  site_layers() +
   map_frame(xlim = REGION_LON, ylim = REGION_LAT, corner = "bl") +
-  theme(legend.key.height = unit(0.5, "cm"))
+  # Legends below the map: horizontal depth bar and profile types in two rows
+  guides(fill = guide_colourbar(direction = "horizontal", title.position = "top",
+                                barwidth = unit(5, "cm"), barheight = unit(0.35, "cm"),
+                                order = 1),
+         colour = guide_legend(nrow = 3, title.position = "top", order = 2),
+         shape = guide_legend(nrow = 3, title.position = "top", order = 2)) +
+  theme(legend.position = "bottom", legend.box = "horizontal",
+        legend.key.height = unit(0.4, "cm"), legend.key.width = unit(0.4, "cm"),
+        legend.title = element_text(size = 9), legend.text = element_text(size = 8))
 
-# (b) Bias and RMSE profiles
+# (b) Bias and RMSE profiles: one row per metric, each with its own x scales
 level_plot_data <- by_level |>
   filter(n >= 10) |>
-  pivot_longer(c(bias, rmse), names_to = "metric") |>
-  mutate(variable = factor(VAR_LABELS[variable], levels = VAR_LABELS),
-         metric = factor(metric, levels = c("bias", "rmse"),
-                         labels = c("Bias (model - observed)", "RMSE")))
+  mutate(variable = factor(VAR_LABELS[variable], levels = VAR_LABELS))
 
 sqrt_rev <- scales::transform_compose(scales::transform_sqrt(),
                                       scales::transform_reverse())
-profile_panel <- ggplot(level_plot_data, aes(value, model_depth_m, colour = model)) +
-  geom_vline(data = tibble(metric = factor("Bias (model - observed)",
-                                           levels = levels(level_plot_data$metric))),
-             aes(xintercept = 0), colour = "grey50") +
-  geom_hline(yintercept = LAYERS$bottom_m[-nrow(LAYERS)], linetype = "dashed",
-             colour = "grey40") +
-  geom_path() +
-  geom_point(size = 0.9) +
-  facet_grid(metric ~ variable, scales = "free_x", switch = "y") +
-  scale_y_continuous(transform = sqrt_rev, breaks = c(0, 50, 100, 200, 500, 1000)) +
-  scale_colour_manual(values = MODEL_COLORS, name = NULL) +
-  labs(x = NULL, y = "Depth (m)") +
-  theme_bw(base_size = 10) +
-  theme(panel.grid.minor = element_blank(), strip.placement = "outside",
-        strip.background = element_rect(fill = "grey92"),
-        legend.position = "top")
+metric_row <- function(metric, xlab, zero_line) {
+  ggplot(level_plot_data, aes(.data[[metric]], model_depth_m, colour = model)) +
+    { if (zero_line) geom_vline(xintercept = 0, colour = "grey50") } +
+    geom_hline(yintercept = LAYERS$bottom_m[-nrow(LAYERS)], linetype = "dashed",
+               colour = "grey40") +
+    geom_path() +
+    geom_point(size = 0.9) +
+    facet_wrap(~variable, nrow = 1, scales = "free_x") +
+    scale_y_continuous(transform = sqrt_rev, breaks = c(0, 50, 100, 200, 500, 1000)) +
+    scale_colour_manual(values = MODEL_COLORS, name = NULL) +
+    labs(x = xlab, y = "Depth (m)") +
+    theme_bw(base_size = 10) +
+    theme(panel.grid.minor = element_blank(),
+          strip.background = element_rect(fill = "grey92"))
+}
+profile_panel <- (metric_row("bias", "Bias (model − observed)", TRUE) /
+                    metric_row("rmse", "RMSE", FALSE)) +
+  plot_layout(guides = "collect") &
+  theme(legend.position = "top")
 
-fig <- (map_panel | profile_panel) +
-  plot_layout(widths = c(1, 1.5)) +
+fig <- wrap_elements(map_panel) + wrap_elements(profile_panel) +
+  plot_layout(widths = c(1.15, 1.5)) +
   plot_annotation(tag_levels = "a")
 
 ggsave(out_path(SECTION, "FigS4_insitu_validation.png"), fig, width = 14, height = 8,

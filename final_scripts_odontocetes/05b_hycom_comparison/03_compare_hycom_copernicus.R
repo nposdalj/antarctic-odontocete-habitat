@@ -6,7 +6,9 @@
 #           model (HYCOM) at the species-relevant depths, over the same
 #           +/- 40 km boxes and the same days.
 #             (a) surface temperature: HYCOM vs Aqua MODIS, Copernicus vs MODIS
-#             (b) species depths: HYCOM vs Copernicus, temperature and salinity
+#             (b) HYCOM vs Copernicus, temperature and salinity, by level to
+#                 1000 m with the layer boundaries (figure); metrics table at
+#                 the species depths (comparison_metrics.csv)
 #           Metrics: bias (mean difference), RMSE, Pearson r and n, on raw
 #           daily values and on deseasoned anomalies.
 # Inputs  : config.R
@@ -302,22 +304,27 @@ p_ts <- ggplot(ts_models, aes(date, temperature, colour = product)) +
   labs(x = NULL, y = "Surface temperature (\u00B0C)", tag = "a") +
   theme_s1
 
-# (b) HYCOM - Copernicus bias and RMSE profiles; species depths dashed.
+# (b) HYCOM - Copernicus bias and RMSE profiles to the bottom of the deep
+# layer (1000 m), with the layer boundaries (config.R LAYERS) dashed, as in
+# Fig. 2 and Fig. S4 (revised 2026-11-19; previously species depths to
+# 1684 m).
 profile_long <- profile %>%
+  filter(depth_m <= max(LAYERS$bottom_m)) %>%
   pivot_longer(c(bias, rmse), names_to = "metric") %>%
   mutate(panel = factor(
     paste(str_to_sentence(variable), if_else(metric == "bias", "bias", "RMSE")),
     levels = c("Temperature bias", "Temperature RMSE", "Salinity bias", "Salinity RMSE")))
 
 p_prof <- ggplot(profile_long, aes(value, depth_m, colour = site)) +
-  geom_hline(yintercept = unique(depth_map$depth_m), colour = "grey75",
-             linetype = "dashed", linewidth = 0.3) +
+  geom_hline(yintercept = LAYERS$bottom_m[-nrow(LAYERS)], colour = "grey40",
+             linetype = "dashed", linewidth = 0.4) +
   geom_vline(xintercept = 0, colour = "grey40", linewidth = 0.3) +
   geom_path(linewidth = 0.6) +
-  geom_point(data = semi_join(profile_long, depth_map, by = "depth_m"), size = 1.2) +
+  geom_point(size = 0.7) +
   facet_wrap(~ panel, nrow = 1, scales = "free_x") +
   scale_y_continuous(trans = scales::compose_trans("sqrt", "reverse"),
-                     breaks = c(0, 50, 100, 250, 500, 1000, 1500)) +
+                     breaks = c(0, 50, 100, 200, 500, 1000),
+                     limits = c(max(LAYERS$bottom_m), 0)) +
   scale_colour_manual(values = SITE_COLORS, breaks = SITE_ORDER, name = NULL) +
   labs(x = "HYCOM \u2212 Copernicus: bias and RMSE (\u00B0C or psu)",
        y = "Depth (m)", tag = "b") +

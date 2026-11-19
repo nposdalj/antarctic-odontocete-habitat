@@ -68,18 +68,35 @@ read_stage <- function(stage) {
                             show_col_types = FALSE))
 }
 
+# AR(1) sensitivity results of one stage (05_ar1_sensitivity.R), if present:
+# per model (AIC change, AR(1) supported) and per term (robust or not).
+read_ar1 <- function(stage) {
+  d <- file.path(STATS_DIR, stage, "tables")
+  if (!file.exists(file.path(d, "ar1_sensitivity_models.csv"))) return(NULL)
+  list(models = read_csv(file.path(d, "ar1_sensitivity_models.csv"), show_col_types = FALSE) |>
+         select(species, site, delta_aic_ar1, ar1_supported),
+       terms = read_csv(file.path(d, "ar1_sensitivity_terms.csv"), show_col_types = FALSE) |>
+         transmute(species, site, variable = term_variable(term), robust_ar1 = holds))
+}
+
 # Supplementary diagnostics table (same columns for both model types).
-diagnostics_table <- function(summaries) {
-  summaries |>
+# Residual autocorrelation: Ljung-Box test over lags 1-5 (OK = p > 0.05).
+diagnostics_table <- function(summaries, ar1 = NULL) {
+  out <- summaries |>
     transmute(species, species_name = species_label(species), site, formula,
               bin_days, ice_cutoff = round(ice_cutoff, 3), term_cap,
               tweedie_p = round(tweedie_p, 2),
               k_index_min = round(k_index_min, 2), k_pvalue_min = round(k_pvalue_min, 3),
               concurvity_max = round(concurvity_max, 2),
               resid_acf_lag1 = round(resid_acf_lag1, 2),
-              resid_acf_lags_outside, resid_acf_ok,
-              no_significant_terms, all_terms_significant, AIC = round(AIC, 1)) |>
-    order_rows()
+              ljung_box_p = signif(ljung_box_p, 2), resid_acf_ok,
+              no_significant_terms, all_terms_significant, AIC = round(AIC, 1))
+  if (!is.null(ar1)) {
+    out <- out |>
+      left_join(ar1$models |> mutate(delta_aic_ar1 = round(delta_aic_ar1, 1)),
+                by = c("species", "site"))
+  }
+  order_rows(out)
 }
 
 # -----------------------------------------------------------------------------
@@ -87,36 +104,46 @@ diagnostics_table <- function(summaries) {
 # -----------------------------------------------------------------------------
 # One row per species x site, including those not modeled.
 ice <- read_stage("sea_ice")
+ice_ar1 <- read_ar1("sea_ice")
 sea_ice_table <- ice$inclusion |>
   left_join(ice$terms |> select(species, site, edf, p_value, shape, direction),
             by = c("species", "site")) |>
   left_join(ice$summaries |> select(species, site, dev_expl), by = c("species", "site")) |>
+  left_join(if (!is.null(ice_ar1)) ice_ar1$terms |> select(-variable) else
+              tibble(species = character(), site = character(), robust_ar1 = logical()),
+            by = c("species", "site")) |>
   transmute(species, species_name = species_label(species), site, status,
             n_bins, n_detection_bins, low_sample = status == "modeled (low sample)",
             edf = round(edf, 2), p_value = format_p(p_value),
-            dev_expl_pct = round(100 * dev_expl, 1), shape, direction) |>
+            dev_expl_pct = round(100 * dev_expl, 1), shape, direction,
+            robust_ar1 = if_else(p_value <= P_THRESH, robust_ar1, NA)) |>
   order_rows()
 write_csv(sea_ice_table, out_file("main_sea_ice_gam_table.csv"))
-write_csv(diagnostics_table(ice$summaries),
+write_csv(diagnostics_table(ice$summaries, ice_ar1),
           out_file("supplementary_sea_ice_gam_diagnostics.csv"))
 
 # -----------------------------------------------------------------------------
 # 2. Habitat models (Stage 3 main text; Stage 1 supplementary)
 # -----------------------------------------------------------------------------
 hab <- read_stage(RESULTS_STAGE)
+hab_ar1 <- read_ar1(RESULTS_STAGE)
 
 # Long form: one row per term, ready for formatting in the manuscript.
 main_terms <- hab$terms |>
   left_join(hab$summaries |>
               select(species, site, dev_expl, n_bins, n_detection_bins, low_sample),
             by = c("species", "site")) |>
+  left_join(if (!is.null(hab_ar1)) hab_ar1$terms else
+              tibble(species = character(), site = character(), variable = character(),
+                     robust_ar1 = logical()),
+            by = c("species", "site", "variable")) |>
   transmute(species, species_name = species_label(species), site,
             n_bins, n_detection_bins, low_sample,
             dev_expl_model_pct = round(100 * dev_expl, 1),
-            term = variable_label(variable), variable, theme,
+            term = variable_label(variable), variable,
             edf = round(edf, 2), p_value = format_p(p_value),
             dev_expl_term_pct = round(100 * dev_expl_term, 1),
-            direction, shape) |>
+            direction, shape, robust_ar1) |>
   order_rows()
 write_csv(main_terms, out_file(paste0(HABITAT_LABEL, "_habitat_gam_table_terms.csv")))
 
@@ -143,7 +170,7 @@ main_table <- hab$inclusion |>
             term_cap, dev_expl_model_pct, terms) |>
   order_rows()
 write_csv(main_table, out_file(paste0(HABITAT_LABEL, "_habitat_gam_table.csv")))
-write_csv(diagnostics_table(hab$summaries),
+write_csv(diagnostics_table(hab$summaries, hab_ar1),
           out_file(paste0("supplementary_", RESULTS_STAGE, "_habitat_gam_diagnostics.csv")))
 
 message("Result tables (sea ice + habitat ", RESULTS_STAGE, ") written to ", RESULTS_DIR)
