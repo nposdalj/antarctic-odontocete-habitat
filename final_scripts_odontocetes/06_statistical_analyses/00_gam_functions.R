@@ -32,22 +32,32 @@ suppressPackageStartupMessages({
 # =============================================================================
 
 # Split a candidate column name into its parts, e.g.
+#   "temperature_mid_anom" -> base "temperature", layer "mid", anomaly TRUE
 #   "temperature_375_anom" -> base "temperature", depth 375, anomaly TRUE
 #   "chla_lag3"            -> base "chla", lag 3
-# Used to assign themes, depths and labels from the column name alone.
+# Used to assign themes, depths/layers and labels from the column name alone.
+# Layer variables get the theme water_mass_<layer> (temperature, salinity,
+# oxygen) or eddy_<layer> (EKE); other variables use THEME_OF_BASE.
 parse_variable <- function(variable) {
   is_anom <- grepl("_anom$", variable)
   stem    <- sub("_anom$", "", variable)
-  lag     <- suppressWarnings(as.integer(sub("^.*_lag(\\d+)$", "\\1", stem)))
-  lag[!grepl("_lag\\d+$", stem)] <- NA_integer_
-  stem    <- sub("_lag\\d+$", "", stem)
-  depth   <- suppressWarnings(as.numeric(sub("^.*_(\\d+)$", "\\1", stem)))
-  depth[!grepl("_\\d+$", stem)] <- NA_real_
-  base    <- sub("_\\d+$", "", stem)
-  tibble(variable = variable, base = base, depth_m = depth,
-         lag_months = lag, is_anom = is_anom,
-         theme = coalesce(unname(THEME_OF_BASE[base]),
-                          if_else(base == ICE_MODEL_VAR, "sea ice", NA_character_)))
+  lag     <- suppressWarnings(as.integer(sub("^.*_lag([0-9]+)$", "\\1", stem)))
+  lag[!grepl("_lag[0-9]+$", stem)] <- NA_integer_
+  stem    <- sub("_lag[0-9]+$", "", stem)
+  layer_pat <- paste0("_(", paste(LAYERS$layer, collapse = "|"), ")$")
+  layer   <- ifelse(grepl(layer_pat, stem), sub(paste0("^.*", layer_pat), "\\1", stem),
+                    NA_character_)
+  stem    <- sub(layer_pat, "", stem)
+  depth   <- suppressWarnings(as.numeric(sub("^.*_([0-9]+)$", "\\1", stem)))
+  depth[!grepl("_[0-9]+$", stem)] <- NA_real_
+  base    <- sub("_[0-9]+$", "", stem)
+  theme   <- case_when(
+    !is.na(layer) & base %in% WATER_MASS_BASES ~ paste0("water_mass_", layer),
+    !is.na(layer) & base == "EKE"              ~ paste0("eddy_", layer),
+    base == ICE_MODEL_VAR                      ~ "sea ice",
+    TRUE                                       ~ unname(THEME_OF_BASE[base]))
+  tibble(variable = variable, base = base, layer = layer, depth_m = depth,
+         lag_months = lag, is_anom = is_anom, theme = theme)
 }
 
 # Human-readable variable label with units, for figures and tables.
@@ -67,12 +77,16 @@ variable_label <- function(variable) {
     fsle_orient  = "FSLV orientation (°; cyclic, -90 = 90)",
     ice_conc     = "Sea-ice concentration"
   )
+  layer_labels <- setNames(paste0(", ", tolower(sub(" [(].*", "", LAYERS$label)),
+                                  " (", LAYERS$top_m, "-", LAYERS$bottom_m, " m)"),
+                           LAYERS$layer)
   p <- parse_variable(variable)
   lab <- unname(base_labels[p$base])
   lab[is.na(lab)] <- p$base[is.na(lab)]
   prefix <- ifelse(p$is_anom, "Anomaly: ", "")
-  depth  <- ifelse(is.na(p$depth_m), "",
-                   ifelse(p$depth_m == 0, ", surface", paste0(", ", p$depth_m, " m")))
+  depth  <- ifelse(!is.na(p$layer), unname(layer_labels[p$layer]),
+                   ifelse(is.na(p$depth_m), "",
+                          ifelse(p$depth_m == 0, ", surface", paste0(", ", p$depth_m, " m"))))
   lag    <- ifelse(is.na(p$lag_months), "", paste0(", ", p$lag_months, "-month lag"))
   paste0(prefix, lab, depth, lag)
 }
@@ -85,26 +99,27 @@ model_id      <- function(species, site) paste0(species, "_", site)
 # =============================================================================
 
 # Source columns of the candidates for one species: surface variables,
-# water-column variables at the species' depths_m (oxygen only at depths >=
-# O2_MIN_DEPTH_M) and the chl-a lags. Sea ice is not a habitat-model
-# candidate (it has its own model, 04_sea_ice_models.R).
-# Change: lags 1-6 (was 3 and 6 only); same-day chl-a and productivity
-# dropped; oxygen restricted to dive depths (decisions 2026-11-19).
+# layer-averaged water-column variables for the species' layers
+# (species_layers(), config.R; oxygen and EKE only below the surface layer)
+# and the 3-month chl-a lag. Sea ice is not a habitat-model candidate (it has
+# its own model, 04_sea_ice_models.R).
+# Change: layer averages replace species-specific depths; one common 3-month
+# chl-a lag; same-day chl-a and productivity dropped; SSH and EKE_mad dropped
+# (decisions 2026-11-19).
+layer_columns <- function(species, bases) {
+  layers <- species_layers(species)
+  out <- as.vector(outer(bases, layers, paste, sep = "_"))
+  out[!(sub("_[a-z]+$", "", out) %in% SUBSURFACE_ONLY & grepl("_surface$", out))]
+}
+
 raw_candidates <- function(species) {
-  depths <- SPECIES[[species]]$depths_m
-  depth_vars <- as.vector(outer(setdiff(DEPTH_BASES, "o2"), depths, paste, sep = "_"))
-  o2_vars <- paste0("o2_", depths[depths >= O2_MIN_DEPTH_M])
-  c(SURFACE_VARS, depth_vars, o2_vars, LAG_COLUMNS)
+  c(SURFACE_VARS, layer_columns(species, LAYER_BASES), LAG_COLUMNS)
 }
 
 # Columns that enter as anomalies for one species: everything except the
-# mesoscale and front variables (EKE_*, EKE_mad_*, FSLE, fsle_orient).
+# mesoscale and front variables (EKE_<layer>, FSLE, fsle_orient).
 anomaly_sources <- function(species) {
-  depths <- SPECIES[[species]]$depths_m
-  c(ANOM_SURFACE_VARS,
-    as.vector(outer(ANOM_DEPTH_BASES, depths, paste, sep = "_")),
-    paste0("o2_", depths[depths >= O2_MIN_DEPTH_M]),
-    LAG_COLUMNS)
+  c(ANOM_SURFACE_VARS, layer_columns(species, ANOM_LAYER_BASES), LAG_COLUMNS)
 }
 
 # =============================================================================
@@ -194,7 +209,8 @@ build_climatology <- function(env_daily, variables) {
 # longer depends on them.
 site_candidates <- function(species, site, seasonal) {
   use_anom <- intersect(raw_candidates(species), anomaly_sources(species))
-  c(setdiff(raw_candidates(species), use_anom), paste0(use_anom, "_anom"))
+  out <- c(setdiff(raw_candidates(species), use_anom), paste0(use_anom, "_anom"))
+  out[!sub("_anom$", "", out) %in% EXCLUDE_VARS]
 }
 
 # Add <var>_anom columns: daily value minus the spline climatology evaluated at
@@ -403,14 +419,15 @@ single_term_screen <- function(data, response, candidates) {
   list(results = bind_rows(map(fits, "result")), grids = bind_rows(map(fits, "grid")))
 }
 
-# One winner per theme by lowest single-term AIC among the VIF-retained
-# candidates of that theme (kept as coded). The original prefer_anoms step is
-# no longer needed: each variable enters either raw or as anomaly.
-select_theme_winners <- function(screen, vif_kept) {
+# One winner per theme by lowest single-term AIC among the eligible
+# candidates of that theme (`eligible`: usable candidates; VIF is applied to
+# the winners afterwards, see 01_stage1_automated_selection.R). The original
+# prefer_anoms step is no longer needed: each variable enters either raw or
+# as anomaly.
+select_theme_winners <- function(screen, eligible) {
   screen |>
     left_join(parse_variable(screen$variable), by = "variable") |>
-    mutate(vif_retained = variable %in% vif_kept,
-           competes = vif_retained & fit_ok) |>
+    mutate(competes = variable %in% eligible & fit_ok) |>
     group_by(theme) |>
     mutate(aic_rank_all = rank(AIC, ties.method = "first", na.last = "keep"),
            aic_rank_theme = if_else(competes,
@@ -592,6 +609,14 @@ model_diagnostics <- function(mod, data, id, diag_dir) {
   ggsave(file.path(diag_dir, paste0(id, "_resid_acf.png")), acf_plot,
          width = 6, height = 4, dpi = 300, bg = "white")
 
+  # Ljung-Box test over lags 1..h, computed from the gap-aware ACF above:
+  # Q = n (n + 2) sum_k r_k^2 / (n - k), chi-squared with h df (n = bins
+  # with residuals). stats::Box.test() would ignore the gaps.
+  h  <- min(LJUNG_BOX_LAGS, n_obs - 2)
+  rk <- acf_tbl$acf[match(seq_len(h), acf_tbl$lag)]
+  lb_q <- n_obs * (n_obs + 2) * sum(rk^2 / (n_obs - seq_len(h)))
+  lb_p <- pchisq(lb_q, df = h, lower.tail = FALSE)
+
   list(
     summary = tibble(
       k_index_min = min(kc[, "k-index"]),
@@ -599,7 +624,10 @@ model_diagnostics <- function(mod, data, id, diag_dir) {
       concurvity_max = if (nrow(conc_tbl) > 0) max(conc_tbl$worst) else NA_real_,
       resid_acf_lag1 = acf_tbl$acf[acf_tbl$lag == 1],
       resid_acf_lags_outside = paste(acf_tbl$lag[acf_tbl$outside], collapse = ";"),
-      resid_acf_ok = !any(acf_tbl$outside & acf_tbl$lag >= 2)),
+      ljung_box_lags = h,
+      ljung_box_q = lb_q,
+      ljung_box_p = lb_p,
+      resid_acf_ok = lb_p > ACF_TEST_ALPHA),
     acf = acf_tbl,
     concurvity = conc_tbl,
     k_check = as_tibble(kc, rownames = "term")

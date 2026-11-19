@@ -1,0 +1,16 @@
+site,variable,seasonal_var_frac,version_used
+CI,chla_lag3,0.959277399465452,anomaly
+CI,mixed_layer,0.24312874171547016,anomaly
+CI,temperature_deep,0.09165803926197857,anomaly
+CI,temperature_mid,0.1488890439233217,anomaly
+CI,temperature_surface,0.6909213005190697,anomaly
+EI,chla_lag3,0.9272144375506213,anomaly
+EI,mixed_layer,0.3654467299269839,anomaly
+EI,temperature_deep,0.010793500897460007,anomaly
+EI,temperature_mid,0.02636534642460342,anomaly
+EI,temperature_surface,0.8844536168109641,anomaly
+KGI,chla_lag3,0.8845424072903924,anomaly
+KGI,mixed_layer,0.4080089959347213,anomaly
+KGI,temperature_deep,0.0977006706980521,anomaly
+KGI,temperature_mid,0.07178049788776841,anomaly
+KGI,temperature_surface,0.8892082321270047,anomaly

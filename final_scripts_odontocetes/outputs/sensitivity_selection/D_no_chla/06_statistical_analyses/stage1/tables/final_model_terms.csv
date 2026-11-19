@@ -1,0 +1,26 @@
+species,site,stage,term,variable,theme,edf,ref_df,F,p_value,dev_expl_term,shape,direction
+Pm,EI,stage1,s(FSLE),FSLE,surface_fronts,2.224973163747693,3,17.747335656440853,0,0.49295877177392367,peaked,mixed
+Pm,EI,stage1,s(mixed_layer_anom),mixed_layer_anom,stratification,0.8678063229091839,3,2.08970758305288,0.011544954121980644,0.058778824328479695,decreasing,negative
+Pm,EI,stage1,s(temperature_mid_anom),temperature_mid_anom,water_mass_mid,0.8865642974385469,3,2.565916575687207,0.006141539163117327,0.07695819726406261,decreasing,negative
+Pm,CI,stage1,s(EKE_mid),EKE_mid,eddy_mid,0.9279692591028829,3,4.282911795804739,1.5397011546314232e-4,0.11342982651709205,decreasing,negative
+Pm,CI,stage1,s(EKE_deep),EKE_deep,eddy_deep,1.623123547597216,3,2.5641698103432438,0.010283685354513405,0.08494193718027315,peaked,mixed
+Pm,CI,stage1,s(mixed_layer_anom),mixed_layer_anom,stratification,1.5451228369308632,3,1.897862964773096,0.0252828135760782,0.05695916253691913,peaked,mixed
+Pm,CI,stage1,s(temperature_surface_anom),temperature_surface_anom,water_mass_surface,1.813590471047311,3,13.701274017115535,0,0.2564110294523383,peaked,mixed
+Pm,CI,stage1,s(temperature_mid_anom),temperature_mid_anom,water_mass_mid,0.8048439953301905,3,1.2812679359021877,0.026170209867254712,0.03371452681546544,increasing,positive
+Gm,EI,stage1,s(mixed_layer_anom),mixed_layer_anom,stratification,1.7919381070613458,3,4.401449921265703,0.002434522786185278,0.15370424913161684,U-shaped,mixed
+Gm,EI,stage1,s(temperature_deep_anom),temperature_deep_anom,water_mass_deep,1.7984203026292687,3,7.026414706410551,1.6424047415541931e-4,0.213487009610917,increasing,positive
+Gm,KGI,stage1,s(mixed_layer_anom),mixed_layer_anom,stratification,1.7887610276529826,3,6.838521911165117,5.7657567406721455e-5,0.2634883710272736,peaked,mixed
+Gm,KGI,stage1,s(temperature_surface_anom),temperature_surface_anom,water_mass_surface,0.970753881991301,3,10.569218512434054,4.2925856613695856e-7,0.5726145275549553,increasing,positive
+Gm,CI,stage1,s(EKE_deep),EKE_deep,eddy_deep,1.4970132231227788,3,2.471490475836539,0.009596107302740742,0.1574642861603871,peaked,mixed
+Gm,CI,stage1,s(temperature_surface_anom),temperature_surface_anom,water_mass_surface,0.8217583033739705,3,1.359667439298119,0.026771502853930262,0.06805983796762871,decreasing,negative
+Oo,CI,stage1,s(EKE_mid),EKE_mid,eddy_mid,0.8860400914824944,3,2.2408419185116686,0.004923209207525425,0.2016829360128599,decreasing,negative
+Oo,CI,stage1,s(temperature_surface_anom),temperature_surface_anom,water_mass_surface,1.6852488812331434,3,3.5207989668391235,0.0023444231218165967,0.28545591502271184,U-shaped,mixed
+BW29,EI,stage1,s(FSLE),FSLE,surface_fronts,1.5700614017199388,3,2.6375250488039215,0.012617846458758963,0.14557816838031062,peaked,mixed
+BW29,EI,stage1,s(temperature_surface_anom),temperature_surface_anom,water_mass_surface,1.7184903562004703,3,4.373433266204715,0.0019772381219347324,0.25578358653113775,peaked,mixed
+BW29,KGI,stage1,s(temperature_surface_anom),temperature_surface_anom,water_mass_surface,2.2881889914336657,3,5.125871450591288,0.0010753542609980293,0.33813157105190994,peaked,mixed
+BW29,CI,stage1,s(mixed_layer_anom),mixed_layer_anom,stratification,0.8820684562509014,3,2.473273034192051,0.0055472902390549805,0.08277552806728433,decreasing,negative
+BW29,CI,stage1,s(temperature_deep_anom),temperature_deep_anom,water_mass_deep,0.9683233902326941,3,10.115762408796614,1.2973248808556548e-6,0.41717986156741116,decreasing,negative
+BW37,EI,stage1,s(FSLE),FSLE,surface_fronts,1.8377913136041555,3,6.587252775459227,2.6902105758908057e-4,0.34708272412655883,U-shaped,mixed
+BW37,EI,stage1,s(fsle_orient),fsle_orient,front_orientation,1.3525973186428413,2,2.7163510254783745,0.029496650733773166,0.1147375488559676,"cyclic, unimodal (peak -66°, trough 26°)",cyclic
+BW37,KGI,stage1,s(mixed_layer_anom),mixed_layer_anom,stratification,1.3999338116651014,3,2.0512782857242717,0.01823802091723503,0.08353326710083153,U-shaped,mixed
+BW37,KGI,stage1,s(temperature_deep_anom),temperature_deep_anom,water_mass_deep,1.8026876228639732,3,9.10573205838798,6.272509687321737e-6,0.34136670034479627,peaked,mixed

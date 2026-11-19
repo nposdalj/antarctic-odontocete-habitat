@@ -1,0 +1,31 @@
+site,method,boundary,depth_m
+EI,coherence (4 layers),b1,102
+EI,coherence (4 layers),b2,182
+EI,coherence (4 layers),b3,462
+EI,coherence (3 layers),b1,102
+EI,coherence (3 layers),b2,462
+EI,coherence (2 layers),b1,102
+KGI,coherence (4 layers),b1,118
+KGI,coherence (4 layers),b2,318
+KGI,coherence (4 layers),b3,692
+KGI,coherence (3 layers),b1,118
+KGI,coherence (3 layers),b2,692
+KGI,coherence (2 layers),b1,118
+CI,coherence (4 layers),b1,52
+CI,coherence (4 layers),b2,222
+CI,coherence (4 layers),b3,502
+CI,coherence (3 layers),b1,222
+CI,coherence (3 layers),b2,502
+CI,coherence (2 layers),b1,502
+EI,water mass,winter mixed layer (90th pct),68
+EI,water mass,Winter Water T-min (summer),78
+EI,water mass,main pycnocline,72
+EI,water mass,warm-water T-max,318
+KGI,water mass,winter mixed layer (90th pct),69
+KGI,water mass,Winter Water T-min (summer),78
+KGI,water mass,main pycnocline,72
+KGI,water mass,warm-water T-max,454
+CI,water mass,winter mixed layer (90th pct),51
+CI,water mass,Winter Water T-min (summer),92
+CI,water mass,main pycnocline,52
+CI,water mass,warm-water T-max,266

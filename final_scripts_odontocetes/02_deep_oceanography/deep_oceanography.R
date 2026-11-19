@@ -1,40 +1,42 @@
 # =============================================================================
 # Script  : deep_oceanography.R
 # Section : 2.2 Deep oceanography
-# Purpose : Describe the full-water-column (0.5 to ~1684 m model levels)
-#           temperature, salinity and dissolved oxygen at the HARP sites, as
-#           context for the depths used by each species:
+# Purpose : Describe temperature, salinity and dissolved oxygen through the
+#           upper 1000 m at the HARP sites, as context for the depth layers
+#           used by the habitat models (surface 0-100 m, mid-water 100-500 m,
+#           deep 500-1000 m; config.R LAYERS):
 #             (a) one continuous depth x time section of temperature,
-#                 salinity and oxygen, Jan 2014 - Dec 2016, stitched from the site that
-#                 was (or was about to be) recording in each period, with
-#                 species-relevant depths marked, each site's recording period
-#                 outlined, and a sea-ice concentration strip on top;
+#                 salinity and oxygen, Jan 2014 - Dec 2016, stitched from the
+#                 site that was (or was about to be) recording in each period,
+#                 with the layer boundaries marked, each site's recording
+#                 period outlined, and a sea-ice concentration strip on top;
 #             (b) temperature-salinity (T-S) diagram, one panel per site
-#                 (recording period only), points coloured by depth, with
-#                 potential-density (sigma-theta) contours;
-#             (c) table of mean +/- SD temperature, salinity and oxygen at each
-#                 species depth (nearest model level) per site over its
-#                 recording period.
+#                 (recording period, levels to 1000 m), points coloured by
+#                 depth, with potential-density (sigma-theta) contours;
+#             (c) table of mean +/- SD layer-averaged temperature, salinity,
+#                 oxygen and EKE per site over its recording period.
 # Inputs  : F_COP_PHY_DEPTH  (outputs/05_environmental_data/copernicus_phy_by_depth.csv)
 #             date, site, depth_m, temperature, salinity, coverage, ...
-#           F_PRESENCE_DAILY (outputs/04_acoustic_detection/presence_daily.csv)
-#             species detected at each site (for the oxygen-depth notes)
 #           F_COP_BGC_DEPTH  (outputs/05_environmental_data/copernicus_bgc_by_depth.csv)
 #             date, site, depth_m, o2, coverage, ...
 #           F_COP_SURFACE    (outputs/05_environmental_data/copernicus_surface.csv)
 #             date, site, ice_conc, ...
 #           F_COP_COVERAGE   (outputs/05_environmental_data/copernicus_depth_coverage.csv)
 #             site, product, depth_m, n_cells, coverage
-#           final_scripts_odontocetes/config.R (SITES, SPECIES, SITE_ORDER,
-#             SITE_COLORS, BOX_HALF_KM, ...)
+#           F_MODEL_INPUT    (outputs/05_environmental_data/model_input_daily.csv)
+#             layer-averaged predictors on recording days, for the table
+#           final_scripts_odontocetes/config.R (SITES, LAYERS, SITE_ORDER,
+#             SITE_COLORS, BOX_HALF_KM, species_layers(), ...)
 # Outputs : outputs/02_deep_oceanography/ts_sections.png / .pdf
 #           outputs/02_deep_oceanography/ts_diagram.png / .pdf
-#           outputs/02_deep_oceanography/ts_at_species_depths.csv
+#           outputs/02_deep_oceanography/layer_means_recording.csv
 #           outputs/02_deep_oceanography/box_coverage_by_level.csv
+#           outputs/02_deep_oceanography/low_coverage_depth.csv
 # Author  : Natalie Posdaljian
 # Date    : 2026-11-16 (revised 2026-11-18: main +/- BOX_HALF_KM box,
 #           continuous 2014-2016 section, oxygen panel, captions moved to
-#           the manuscript figure legends)
+#           the manuscript figure legends; revised 2026-11-19: depth layers
+#           replace species depths, sections and T-S diagram to 1000 m)
 # Project : Odontocete acoustic occurrence and habitat associations at three
 #           HARP sites in the South Shetland Islands (EI, KGI, CI)
 # Notes   : - Values are daily means over each site's main analysis box
@@ -45,16 +47,15 @@
 #             Deep levels exist in only part of each box (the shelf is
 #             shallower), so deep means represent only the cells deep enough;
 #             the depth below which less than half of the box has water is
-#             not drawn on the sections (it was easily confused with the
-#             species-depth lines) but is saved in low_coverage_depth.csv
-#             for the figure legend.
+#             saved in low_coverage_depth.csv for the figure legend.
 #           - The input files span each site's 10-year window, so the
 #             continuous section can show the model at a site outside its
 #             recording period; the actual recording periods are outlined.
 #           - All days are shown (no sea-ice filter).
 #           - Copernicus `thetao` is potential temperature and `so` practical
 #             salinity, so sigma-theta is computed at zero pressure.
-#           - No water-mass classification is applied.
+#           - The layer boundaries are derived in layer_boundaries.R
+#             (supplement); this script only draws them.
 # =============================================================================
 
 BASE_DIR <- "."
@@ -70,9 +71,12 @@ suppressPackageStartupMessages({
 # -----------------------------------------------------------------------------
 # 1. Settings
 # -----------------------------------------------------------------------------
-# Deepest level shown: the deepest species depth is 1665 m (sperm whale),
-# whose nearest model level is ~1684 m.
-max_depth_m <- 1700
+# Deepest depth shown: the bottom of the deep layer (config.R LAYERS, 1000 m;
+# below ~1060 m less than half of the KGI and CI boxes has water). Levels down
+# to max_depth_m + read_margin_m are read so profiles can be interpolated to
+# max_depth_m.
+max_depth_m   <- max(LAYERS$bottom_m)
+read_margin_m <- 100
 
 # Box-coverage threshold used to report where deep means become
 # representative of less than half of the box.
@@ -130,12 +134,12 @@ recording <- SITES |>
 phy_all <- read_csv(F_COP_PHY_DEPTH, show_col_types = FALSE) |>
   select(date, site, depth_m, temperature, salinity) |>
   mutate(date = as.Date(date), site = factor(site, levels = SITE_ORDER)) |>
-  filter(depth_m <= max_depth_m)
+  filter(depth_m <= max_depth_m + read_margin_m)
 
 bgc_all <- read_csv(F_COP_BGC_DEPTH, show_col_types = FALSE) |>
   select(date, site, depth_m, oxygen = o2) |>
   mutate(date = as.Date(date), site = factor(site, levels = SITE_ORDER)) |>
-  filter(depth_m <= max_depth_m)
+  filter(depth_m <= max_depth_m + read_margin_m)
 
 ice_all <- read_csv(F_COP_SURFACE, show_col_types = FALSE) |>
   select(date, site, ice_conc) |>
@@ -144,7 +148,7 @@ ice_all <- read_csv(F_COP_SURFACE, show_col_types = FALSE) |>
 # Main-box coverage of each model level (fraction of box cells with water),
 # for the PHY grid (temperature, salinity) and the BGC grid (oxygen)
 coverage_all <- read_csv(F_COP_COVERAGE, show_col_types = FALSE) |>
-  filter(depth_m <= max_depth_m) |>
+  filter(depth_m <= max_depth_m + read_margin_m) |>
   transmute(site = factor(site, levels = SITE_ORDER), product, depth_m,
             coverage)
 coverage_by_level <- coverage_all |>
@@ -192,35 +196,25 @@ phy_section_long <- bind_rows(
 stopifnot(!anyDuplicated(distinct(phy_section_long, date, site)$date))
 
 # -----------------------------------------------------------------------------
-# 3. Species depths
+# 3. Depth layers
 # -----------------------------------------------------------------------------
-# Nominal species depths from config (surface excluded from the section
-# markers: it is the top of the plot). Species sharing a depth are combined
-# into one label.
-species_depths <- enframe(SPECIES, name = "species", value = "info") |>
-  mutate(depth_m = map(info, "depths_m")) |>
-  select(species, depth_m) |>
-  unnest(depth_m) |>
-  filter(species %in% MODELED_SPECIES)
-
-depth_markers <- species_depths |>
-  filter(depth_m > 0) |>
-  group_by(depth_m) |>
-  summarise(label = paste0(paste(species, collapse = "/"), " ", depth_m, " m"),
-            .groups = "drop") |>
-  arrange(depth_m)
-
-# Axis labels for the markers: depths that would overprint each other on the
-# square-root depth axis (e.g., 11 and 16 m) share one combined label placed
-# at their mean depth; every depth still gets its own line.
-min_label_gap_sqrt_m <- 1.5
-marker_labels <- depth_markers |>
-  mutate(label_group = cumsum(c(TRUE,
-                                diff(sqrt(depth_m)) > min_label_gap_sqrt_m))) |>
-  group_by(label_group) |>
-  summarise(depth_m = mean(depth_m),
-            label = paste(label, collapse = ", "),
-            .groups = "drop")
+# The layers used for the habitat predictors (config.R LAYERS; supplement,
+# layer_boundaries.R). Layer boundaries (100 and 500 m) are drawn as dashed
+# lines; the right-hand axis names each layer and the species that use it
+# (every species uses the surface layer; species_layers() in config.R).
+layer_species <- map(set_names(LAYERS$layer), function(l) {
+  MODELED_SPECIES[map_lgl(MODELED_SPECIES, \(sp) l %in% species_layers(sp))]
+})
+layer_markers <- LAYERS |>
+  mutate(
+    # label at the layer's midpoint on the square-root depth axis
+    depth_m = ((sqrt(top_m) + sqrt(bottom_m)) / 2)^2,
+    label = paste0(sub(" [(].*", "", label), "\n", top_m, "-", bottom_m, " m\n(",
+                   map_chr(layer, \(l) if (l == "surface") "all species"
+                                       else paste(layer_species[[l]], collapse = ", ")),
+                   ")")
+  )
+layer_boundaries <- LAYERS$bottom_m[-nrow(LAYERS)]
 
 # -----------------------------------------------------------------------------
 # 4. Box coverage per site
@@ -284,7 +278,7 @@ sections <- phy_section_long |>
 # of that product).
 sqrt_reverse <- scales::transform_compose(scales::transform_sqrt(),
                                           scales::transform_reverse())
-depth_breaks <- c(0, 50, 100, 200, 400, 800, 1200, 1600)
+depth_breaks <- c(0, 50, 100, 200, 500, 1000)
 
 section_theme <- theme_bw(base_size = 10) +
   theme(panel.grid = element_blank(),
@@ -328,21 +322,21 @@ section_panel <- function(var, label, colours, contour_step,
     geom_contour(aes(z = value), binwidth = contour_step, color = "white",
                  linewidth = 0.15, alpha = 0.7) +
     scale_fill_gradientn(colours = colours, name = label) +
-    # Species depths
-    geom_hline(data = depth_markers, aes(yintercept = depth_m),
-               linetype = "dashed", linewidth = 0.3, color = "black") +
+    # Layer boundaries
+    geom_hline(yintercept = layer_boundaries, linetype = "dashed",
+               linewidth = 0.5, color = "black") +
     # Site switches and recording periods
     geom_vline(xintercept = site_switches, linewidth = 0.4,
                color = "grey15") +
     recording_outline(y_range = range(depth_grid)) +
     scale_y_continuous(transform = sqrt_reverse, breaks = depth_breaks,
                        expand = c(0, 0),
-                       sec.axis = dup_axis(breaks = marker_labels$depth_m,
-                                           labels = marker_labels$label,
+                       sec.axis = dup_axis(breaks = layer_markers$depth_m,
+                                           labels = layer_markers$label,
                                            name = NULL)) +
     date_scale +
     coord_cartesian(xlim = section_range,
-                    ylim = rev(range(depth_grid))) +
+                    ylim = c(max_depth_m, min(depth_grid))) +
     labs(x = NULL, y = "Depth (m)") +
     section_theme
 
@@ -360,43 +354,26 @@ oxygen_plot      <- section_panel("oxygen", section_label_o2,
                                   viridisLite::viridis(256),
                                   oxygen_contour_step, show_dates = TRUE)
 
-# Oxygen-depth notes: where the 1/4-degree BGC box has no water below some
-# level, species depths below it take oxygen from the deepest available level
-# (as in the model predictors, 05_compile_dataset.R). Each affected segment is
-# labelled in its grey (no-data) area. Gaps smaller than `o2_gap_min_m` (e.g.
-# EI, deepest level 1653 m vs Pm 1665 m) are only the nearest-level rounding
-# used everywhere else and are not labelled. Only species detected at a site
-# are listed for it (e.g. no sperm whale detections at KGI, so no Pm model).
-o2_gap_min_m <- 50
+# Oxygen notes: where the 1/4-degree BGC box has no water below some level
+# within the deep layer, the deep-layer oxygen average covers only the water
+# present (05_compile_dataset.R); each affected segment is labelled in its
+# grey (no-data) area.
 o2_deepest <- bgc_all |>
   filter(!is.na(oxygen)) |>
   group_by(site) |>
   summarise(deepest_m = max(depth_m), .groups = "drop")
 
-detected_at_site <- read_csv(F_PRESENCE_DAILY, show_col_types = FALSE) |>
-  pivot_longer(any_of(names(SPECIES)), names_to = "species",
-               values_to = "minutes") |>
-  group_by(site, species) |>
-  summarise(detected = any(minutes > 0), .groups = "drop") |>
-  filter(detected) |>
-  mutate(site = factor(site, levels = SITE_ORDER))
-
-o2_notes <- species_depths |>
-  filter(depth_m > 0) |>
-  cross_join(o2_deepest) |>
-  semi_join(detected_at_site, by = c("site", "species")) |>
-  filter(depth_m > deepest_m + o2_gap_min_m) |>
-  arrange(depth_m) |>
-  group_by(site, deepest_m) |>
-  summarise(species = paste0(species, " ", depth_m, " m", collapse = ", "),
-            .groups = "drop") |>
+deep_top_m <- LAYERS$top_m[LAYERS$layer == "deep"]
+o2_notes <- o2_deepest |>
+  filter(deepest_m < max_depth_m) |>
   inner_join(section_segments, by = "site") |>
   mutate(
     mid = seg_start + (seg_end - seg_start) / 2,
     # vertical centre of the grey area, in square-root depth
-    y = ((sqrt(deepest_m) + sqrt(max(depth_grid))) / 2)^2,
-    label = paste0("No model oxygen below ", round(deepest_m), " m\n",
-                   species, ": oxygen from ", round(deepest_m), " m")
+    y = ((sqrt(deepest_m) + sqrt(max_depth_m)) / 2)^2,
+    label = paste0("No model oxygen below ", round(deepest_m), " m:\n",
+                   "deep-layer oxygen averages ", deep_top_m, "-",
+                   round(deepest_m), " m")
   )
 
 oxygen_plot <- oxygen_plot +
@@ -445,6 +422,7 @@ ggsave(out_path(out_section, "ts_sections.pdf"), sections_figure,
 # -----------------------------------------------------------------------------
 # Only levels where both temperature and salinity are defined are plotted.
 ts_points <- phy |>
+  filter(depth_m <= max_depth_m) |>
   filter(!is.na(temperature), !is.na(salinity)) |>
   arrange(depth_m)   # deep points drawn last so they are not hidden
 
@@ -521,68 +499,22 @@ ggsave(out_path(out_section, "ts_diagram.pdf"), ts_plot,
        width = 11, height = 4.2, device = cairo_pdf)
 
 # -----------------------------------------------------------------------------
-# 8. Table: T, S and oxygen at species depths
+# 8. Table: layer means over each recording period
 # -----------------------------------------------------------------------------
-# For each site and nominal species depth (including the surface), the
-# nearest PHY level where temperature is defined (T, S) and the nearest BGC
-# level where oxygen is defined are used, and daily values over the recording
-# period are summarised as mean +/- SD. Where a species depth lies below the
-# deepest oxygen level in the BGC box, oxygen comes from that deepest level
-# (o2_model_depth_m shows which).
-nearest_level <- function(target, levels) {
-  levels[which.min(abs(levels - target))]
-}
+# Mean +/- SD of the daily layer-averaged temperature, salinity, oxygen and
+# EKE (the habitat-model predictors, raw values; 05_compile_dataset.R) over
+# each site's recording days. Oxygen and EKE are not used in the surface layer
+# (see 06_statistical_analyses/00_gam_parameters.R) but are listed for
+# context.
+layer_vars <- c("temperature", "salinity", "o2", "EKE")
+layer_table <- read_csv(F_MODEL_INPUT, show_col_types = FALSE) |>
+  select(site, any_of(as.vector(outer(layer_vars, LAYERS$layer, paste, sep = "_")))) |>
+  pivot_longer(-site, names_to = c("variable", "layer"),
+               names_pattern = "^(.*)_(surface|mid|deep)$") |>
+  group_by(site = factor(site, levels = SITE_ORDER),
+           layer = factor(layer, levels = LAYERS$layer), variable) |>
+  summarise(n_days = n(), mean = mean(value), sd = sd(value), .groups = "drop") |>
+  mutate(across(c(mean, sd), ~ signif(.x, 4))) |>
+  arrange(site, layer, factor(variable, levels = layer_vars))
 
-site_levels <- phy |>
-  filter(!is.na(temperature), !is.na(salinity)) |>
-  distinct(site, depth_m)
-
-species_depth_table <- species_depths |>
-  group_by(depth_m) |>
-  summarise(species = paste(species, collapse = "/"), .groups = "drop") |>
-  rename(nominal_depth_m = depth_m) |>
-  cross_join(tibble(site = factor(SITE_ORDER, levels = SITE_ORDER))) |>
-  rowwise() |>
-  mutate(model_depth_m = nearest_level(
-    nominal_depth_m, site_levels$depth_m[site_levels$site == site]
-  )) |>
-  ungroup()
-
-ts_summary <- species_depth_table |>
-  left_join(phy, by = c("site", "model_depth_m" = "depth_m")) |>
-  group_by(site, species, nominal_depth_m, model_depth_m) |>
-  summarise(n_days           = sum(!is.na(temperature)),
-            box_coverage     = mean(coverage),
-            temperature_mean = mean(temperature, na.rm = TRUE),
-            temperature_sd   = sd(temperature, na.rm = TRUE),
-            salinity_mean    = mean(salinity, na.rm = TRUE),
-            salinity_sd      = sd(salinity, na.rm = TRUE),
-            .groups = "drop") |>
-  arrange(site, nominal_depth_m)
-
-o2_levels <- bgc |>
-  filter(!is.na(oxygen)) |>
-  distinct(site, depth_m)
-
-o2_summary <- species_depth_table |>
-  select(site, nominal_depth_m) |>
-  rowwise() |>
-  mutate(o2_model_depth_m = nearest_level(
-    nominal_depth_m, o2_levels$depth_m[o2_levels$site == site]
-  )) |>
-  ungroup() |>
-  left_join(bgc, by = c("site", "o2_model_depth_m" = "depth_m"),
-            relationship = "many-to-many") |>   # depths can share a level
-  group_by(site, nominal_depth_m, o2_model_depth_m) |>
-  summarise(o2_mean = mean(oxygen, na.rm = TRUE),
-            o2_sd   = sd(oxygen, na.rm = TRUE),
-            .groups = "drop")
-
-ts_summary <- ts_summary |>
-  left_join(o2_summary, by = c("site", "nominal_depth_m")) |>
-  mutate(across(c(model_depth_m, o2_model_depth_m, box_coverage),
-                ~ round(.x, 2)),
-         across(starts_with(c("temperature", "salinity")), ~ round(.x, 3)),
-         across(c(o2_mean, o2_sd), ~ round(.x, 1)))
-
-write_csv(ts_summary, out_path(out_section, "ts_at_species_depths.csv"))
+write_csv(layer_table, out_path(out_section, "layer_means_recording.csv"))

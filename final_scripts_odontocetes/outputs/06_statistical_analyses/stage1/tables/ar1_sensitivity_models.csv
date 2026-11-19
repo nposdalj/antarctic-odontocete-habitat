@@ -1,0 +1,12 @@
+species,site,ljung_box_p_gam,resid_acf_lag1_gam,delta_aic_ar1,ar1_phi,status,ar1_supported,n_terms,n_hold,terms_not_holding
+BW29,CI,0.034,0.352,3.154,0.54,ok,FALSE,4,3,
+BW29,EI,0.348,-0.209,-3.637,0.256,ok,TRUE,2,0,s(FSLE); s(chla_lag3_anom)
+BW29,KGI,0.142,0.273,NA,NA,AR(1) fit failed,FALSE,1,1,
+BW37,EI,0.47,0.007,2.015,0.286,ok,FALSE,2,2,
+BW37,KGI,0.152,-0.245,NA,NA,AR(1) fit failed,FALSE,4,2,s(fsle_orient); s(mixed_layer_anom)
+Gm,CI,0.262,0.113,0.691,0.781,ok,FALSE,1,1,
+Gm,EI,0.282,-0.161,NA,NA,AR(1) fit failed,FALSE,2,2,
+Gm,KGI,0,0.439,-3.739,0.82,ok,TRUE,1,0,s(chla_lag3_anom)
+Oo,CI,0.437,0.123,-17.364,0.098,ok,TRUE,1,0,s(salinity_mid_anom)
+Pm,CI,0.145,0.09,NA,NA,AR(1) fit failed,FALSE,5,1,s(temperature_surface_anom); s(salinity_mid_anom); s(temperature_deep_anom); s(chla_lag3_anom)
+Pm,EI,0.066,0.368,-25.637,0.915,ok,TRUE,3,1,s(mixed_layer_anom); s(chla_lag3_anom)

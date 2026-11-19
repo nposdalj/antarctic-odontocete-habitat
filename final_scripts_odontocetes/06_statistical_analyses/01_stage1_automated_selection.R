@@ -3,9 +3,9 @@
 # Section : 2.6 Statistical analyses (Stage 1 results reported in the supplement)
 # Purpose : Stage 1 of the habitat-model workflow: automated predictor
 #           selection for one Tweedie GAM per species x site. Steps:
-#             1. 10-yr monthly climatology (periodic cubic spline); SSH, MLD,
-#                temperature, salinity, oxygen (dive depths only) and log10
-#                lagged chl-a enter as anomalies; EKE, EKE_mad, FSLE and FSLV
+#             1. 10-yr monthly climatology (periodic cubic spline); MLD,
+#                temperature, salinity, oxygen (dive depths) and log10 3-month
+#                lagged chl-a enter as anomalies; EKE (dive depths), FSLE and FSLV
 #                orientation stay raw (decision 2026-11-19)
 #             2. Bin length per species from block-model residual ACF
 #                (max across sites, capped at BIN_CAP_DAYS)
@@ -205,23 +205,31 @@ for (sp in MODELED_SPECIES) {
     cand <- intersect(site_candidates(sp, st, climatology$seasonal), sp_candidates)
     has_na <- cand[vapply(dat[cand], anyNA, logical(1))]
     usable <- remove_zero_var(dat, setdiff(cand, has_na))
-    vif <- vif_stepwise_drop(dat, sp, usable)
+
+    # Order (decision 2026-11-19): single-term screening of every usable
+    # candidate -> one winner per theme by single-term AIC -> collinearity
+    # (VIF) screening among the theme winners only -> backward elimination.
+    # Screening the winners (not all candidates) means a strong predictor is
+    # never removed only for being collinear with a weaker one of another
+    # theme; two layers both survive only if they carry different information.
+    screen <- single_term_screen(dat, sp, usable)
+    themes <- select_theme_winners(screen$results, usable)
+    theme_winners <- themes |> filter(theme_winner) |> pull(variable)
+    vif <- vif_stepwise_drop(dat, sp, theme_winners)
+    winners <- vif$kept
+    theme_tbl[[id]] <- mutate(themes, species = sp, site = st, .before = 1,
+                              vif_retained = variable %in% winners)
+    smooth_tbl[[id]] <- mutate(screen$grids, species = sp, site = st, .before = 1)
+    vif_tbl[[id]] <- mutate(vif$steps, species = sp, site = st, .before = 1)
     candidates_tbl[[id]] <- parse_variable(cand) |>
       mutate(species = sp, site = st, .before = 1,
              screening = case_when(variable %in% has_na ~ "removed (missing values)",
                                    !variable %in% usable ~ "removed (zero variance)",
-                                   variable %in% vif$kept ~ "VIF retained",
+                                   !variable %in% theme_winners ~ "not theme winner",
+                                   variable %in% winners ~ "VIF retained",
                                    TRUE ~ "removed (VIF)"))
-    vif_tbl[[id]] <- mutate(vif$steps, species = sp, site = st, .before = 1)
-
-    # Single-term screening of every usable candidate (not only VIF-retained
-    # ones) so Stage 2 can show the evidence for all variables.
-    screen <- single_term_screen(dat, sp, usable)
-    themes <- select_theme_winners(screen$results, vif$kept)
-    theme_tbl[[id]] <- mutate(themes, species = sp, site = st, .before = 1)
-    smooth_tbl[[id]] <- mutate(screen$grids, species = sp, site = st, .before = 1)
-    winners <- themes |> filter(theme_winner) |> pull(variable)
-    message("Theme winners: ", paste(winners, collapse = ", "))
+    message("Theme winners: ", paste(theme_winners, collapse = ", "),
+            "; after VIF: ", paste(winners, collapse = ", "))
 
     # Backward elimination with the term cap (floor(n_bins / 10); 2 terms in
     # low-sample models).

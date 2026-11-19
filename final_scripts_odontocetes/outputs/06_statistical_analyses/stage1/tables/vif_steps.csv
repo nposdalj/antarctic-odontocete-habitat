@@ -1,101 +1,20 @@
 species,site,step,n_predictors,action,variable,max_vif
-Pm,EI,1,24,drop (max VIF),chla_lag5_anom,423.6801042415082
-Pm,EI,2,23,drop (max VIF),chla_lag1_anom,186.1018954066647
-Pm,EI,3,22,drop (max VIF),temperature_1665_anom,51.098817717605115
-Pm,EI,4,21,drop (max VIF),temperature_0_anom,39.8462640740717
-Pm,EI,5,20,drop (max VIF),SSH_anom,27.962867177330466
-Pm,EI,6,19,drop (max VIF),EKE_1665,19.210144622083007
-Pm,EI,7,18,drop (max VIF),temperature_375_anom,16.60517059420735
-Pm,EI,8,17,drop (max VIF),chla_lag4_anom,10.456603936024637
-Pm,EI,9,16,drop (max VIF),FSLE,7.253141104469309
-Pm,EI,10,15,drop (max VIF),o2_1665_anom,5.198510932859889
-Pm,EI,11,14,stop (all VIF <= threshold),EKE_375,4.513747206177501
-Pm,CI,1,24,drop (max VIF),o2_1665_anom,142.517341169112
-Pm,CI,2,23,drop (max VIF),chla_lag6_anom,87.16360608495003
-Pm,CI,3,22,drop (max VIF),salinity_1665_anom,46.07183567624719
-Pm,CI,4,21,drop (max VIF),temperature_0_anom,29.82337005464232
-Pm,CI,5,20,drop (max VIF),chla_lag5_anom,18.871956221285185
-Pm,CI,6,19,drop (max VIF),temperature_375_anom,10.366308841600612
-Pm,CI,7,18,drop (max VIF),salinity_0_anom,9.696069776383634
-Pm,CI,8,17,drop (max VIF),chla_lag3_anom,5.111761925383805
-Pm,CI,9,16,stop (all VIF <= threshold),temperature_1665_anom,4.696266364088904
-Gm,EI,1,23,drop (max VIF),temperature_16_anom,4903.247423020342
-Gm,EI,2,22,drop (max VIF),EKE_mad_0,2849.814422817746
-Gm,EI,3,21,drop (max VIF),salinity_0_anom,1429.7485036312926
-Gm,EI,4,20,drop (max VIF),chla_lag5_anom,407.5141881736919
-Gm,EI,5,19,drop (max VIF),chla_lag1_anom,98.43849812054157
-Gm,EI,6,18,drop (max VIF),temperature_635_anom,52.68741227234378
-Gm,EI,7,17,drop (max VIF),EKE_16,20.689923989948984
-Gm,EI,8,16,drop (max VIF),temperature_0_anom,16.449754263417844
-Gm,EI,9,15,drop (max VIF),SSH_anom,7.354281900625453
-Gm,EI,10,14,drop (max VIF),chla_lag4_anom,7.0103445291166855
-Gm,EI,11,13,drop (max VIF),EKE_635,6.606826955954032
-Gm,EI,12,12,stop (all VIF <= threshold),FSLE,3.9429884834592435
-Gm,KGI,1,23,drop (max VIF),salinity_0_anom,1671.811688002344
-Gm,KGI,2,22,drop (max VIF),EKE_mad_0,514.2675374546977
-Gm,KGI,3,21,drop (max VIF),temperature_16_anom,460.42294119941704
-Gm,KGI,4,20,drop (max VIF),chla_lag4_anom,21.504319814338754
-Gm,KGI,5,19,drop (max VIF),chla_lag1_anom,16.637484884667767
-Gm,KGI,6,18,drop (max VIF),chla_lag3_anom,12.500825349954614
-Gm,KGI,7,17,drop (max VIF),EKE_16,11.46463743561034
-Gm,KGI,8,16,stop (all VIF <= threshold),chla_lag2_anom,4.848569424059709
-Gm,CI,1,23,drop (max VIF),salinity_16_anom,1796.6019449337225
-Gm,CI,2,22,drop (max VIF),temperature_16_anom,931.1462091155471
-Gm,CI,3,21,drop (max VIF),EKE_mad_0,49.775534890707824
-Gm,CI,4,20,drop (max VIF),temperature_635_anom,45.527583805569606
-Gm,CI,5,19,drop (max VIF),chla_lag6_anom,20.287480982445672
-Gm,CI,6,18,drop (max VIF),temperature_0_anom,12.503054022521471
-Gm,CI,7,17,drop (max VIF),chla_lag3_anom,10.009394596079284
-Gm,CI,8,16,drop (max VIF),EKE_16,7.1146528542197185
-Gm,CI,9,15,stop (all VIF <= threshold),chla_lag5_anom,4.647382978740999
-Oo,CI,1,23,drop (max VIF),salinity_11_anom,3225.792252407727
-Oo,CI,2,22,drop (max VIF),temperature_11_anom,620.6228120153279
-Oo,CI,3,21,drop (max VIF),EKE_mad_11,87.19697727883079
-Oo,CI,4,20,drop (max VIF),temperature_455_anom,43.804310921167335
-Oo,CI,5,19,drop (max VIF),chla_lag6_anom,22.79149078377224
-Oo,CI,6,18,drop (max VIF),chla_lag3_anom,8.947695338560331
-Oo,CI,7,17,drop (max VIF),EKE_11,7.4641659109877905
-Oo,CI,8,16,drop (max VIF),temperature_0_anom,5.934310144136346
-Oo,CI,9,15,stop (all VIF <= threshold),salinity_0_anom,4.419460175346436
-BW29,EI,1,19,drop (max VIF),chla_lag5_anom,363.1388314385224
-BW29,EI,2,18,drop (max VIF),chla_lag1_anom,70.594808426251
-BW29,EI,3,17,drop (max VIF),temperature_768_anom,38.527282062641525
-BW29,EI,4,16,drop (max VIF),temperature_0_anom,12.073762963117927
-BW29,EI,5,15,drop (max VIF),EKE_768,8.569945986039922
-BW29,EI,6,14,drop (max VIF),SSH_anom,7.632870432851367
-BW29,EI,7,13,drop (max VIF),chla_lag4_anom,7.2427457840017
-BW29,EI,8,12,stop (all VIF <= threshold),chla_lag3_anom,4.000307536632228
-BW29,KGI,1,19,drop (max VIF),chla_lag4_anom,26.36015582140461
-BW29,KGI,2,18,drop (max VIF),chla_lag1_anom,17.856974106180083
-BW29,KGI,3,17,drop (max VIF),chla_lag3_anom,14.201815318193406
-BW29,KGI,4,16,drop (max VIF),temperature_0_anom,7.867407059763124
-BW29,KGI,5,15,drop (max VIF),chla_lag2_anom,5.107856578845952
-BW29,KGI,6,14,stop (all VIF <= threshold),EKE_mad_0,3.916691074206212
-BW29,CI,1,19,drop (max VIF),salinity_768_anom,75.19800251673291
-BW29,CI,2,18,drop (max VIF),o2_768_anom,39.3911847095414
-BW29,CI,3,17,drop (max VIF),temperature_0_anom,19.403681048380367
-BW29,CI,4,16,drop (max VIF),chla_lag5_anom,16.516117104860392
-BW29,CI,5,15,drop (max VIF),chla_lag6_anom,6.416433677279984
-BW29,CI,6,14,drop (max VIF),chla_lag3_anom,5.688617079428877
-BW29,CI,7,13,stop (all VIF <= threshold),temperature_768_anom,4.084478943438793
-BW37,EI,1,24,drop (max VIF),chla_lag5_anom,446.51854197784957
-BW37,EI,2,23,drop (max VIF),temperature_920_anom,129.66650937728846
-BW37,EI,3,22,drop (max VIF),EKE_mad_0,109.73507177216604
-BW37,EI,4,21,drop (max VIF),chla_lag1_anom,74.35878153527021
-BW37,EI,5,20,drop (max VIF),salinity_67_anom,58.128535492195496
-BW37,EI,6,19,drop (max VIF),chla_lag4_anom,33.12577592475201
-BW37,EI,7,18,drop (max VIF),temperature_0_anom,14.05722604662408
-BW37,EI,8,17,drop (max VIF),EKE_67,13.187889807139673
-BW37,EI,9,16,drop (max VIF),chla_lag3_anom,9.766473248472545
-BW37,EI,10,15,drop (max VIF),EKE_920,8.135293649214567
-BW37,EI,11,14,drop (max VIF),SSH_anom,7.218297844670203
-BW37,EI,12,13,stop (all VIF <= threshold),o2_67_anom,3.7251184749406723
-BW37,KGI,1,24,drop (max VIF),chla_lag4_anom,41.87364215510075
-BW37,KGI,2,23,drop (max VIF),chla_lag3_anom,35.25794858848034
-BW37,KGI,3,22,drop (max VIF),chla_lag1_anom,27.32111236081538
-BW37,KGI,4,21,drop (max VIF),salinity_67_anom,22.531682823443617
-BW37,KGI,5,20,drop (max VIF),EKE_mad_0,19.720821553154902
-BW37,KGI,6,19,drop (max VIF),temperature_0_anom,11.049166490557036
-BW37,KGI,7,18,drop (max VIF),o2_67_anom,7.4667219813834516
-BW37,KGI,8,17,drop (max VIF),temperature_67_anom,6.493374283902434
-BW37,KGI,9,16,stop (all VIF <= threshold),chla_lag2_anom,4.650244349418511
+Pm,EI,1,9,drop (max VIF),EKE_mid,21.31221908962429
+Pm,EI,2,8,drop (max VIF),temperature_deep_anom,13.289833307496746
+Pm,EI,3,7,stop (all VIF <= threshold),FSLE,3.5672391145534115
+Pm,CI,1,9,drop (max VIF),temperature_deep_anom,15.60101682176485
+Pm,CI,2,8,stop (all VIF <= threshold),EKE_mid,3.2733361135503944
+Gm,EI,1,7,stop (all VIF <= threshold),temperature_deep_anom,4.087119682924223
+Gm,KGI,1,7,drop (max VIF),temperature_surface_anom,5.9665994026847
+Gm,KGI,2,6,stop (all VIF <= threshold),fsle_orient,1.9760303114186555
+Gm,CI,1,7,drop (max VIF),temperature_deep_anom,5.5105857362537405
+Gm,CI,2,6,stop (all VIF <= threshold),EKE_deep,1.4655398793793195
+Oo,CI,1,7,stop (all VIF <= threshold),temperature_mid_anom,2.239585533726488
+BW29,EI,1,7,stop (all VIF <= threshold),temperature_deep_anom,4.087119682924227
+BW29,KGI,1,7,drop (max VIF),temperature_surface_anom,6.5132245733016605
+BW29,KGI,2,6,stop (all VIF <= threshold),chla_lag3_anom,2.0350978715021006
+BW29,CI,1,7,drop (max VIF),temperature_deep_anom,10.755227417355613
+BW29,CI,2,6,stop (all VIF <= threshold),EKE_deep,1.6708890135058851
+BW37,EI,1,7,stop (all VIF <= threshold),temperature_deep_anom,4.087119682924226
+BW37,KGI,1,7,drop (max VIF),temperature_surface_anom,6.513224573301652
+BW37,KGI,2,6,stop (all VIF <= threshold),chla_lag3_anom,2.0350978715021

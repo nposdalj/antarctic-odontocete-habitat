@@ -1,0 +1,15 @@
+species,site,step,n_predictors,action,variable,max_vif
+Pm,EI,1,8,drop (max VIF),EKE_mid,20.064953154788874
+Pm,EI,2,7,drop (max VIF),temperature_deep_anom,10.001631082397786
+Pm,EI,3,6,stop (all VIF <= threshold),FSLE,2.9234288962436885
+Pm,CI,1,8,drop (max VIF),temperature_deep_anom,15.474646004239847
+Pm,CI,2,7,stop (all VIF <= threshold),EKE_mid,3.2733248355830304
+Gm,EI,1,6,stop (all VIF <= threshold),FSLE,3.023300692488641
+Gm,KGI,1,6,stop (all VIF <= threshold),temperature_surface_anom,2.4947805505836143
+Gm,CI,1,6,stop (all VIF <= threshold),temperature_deep_anom,2.68778301487061
+Oo,CI,1,6,stop (all VIF <= threshold),EKE_mid,1.9961578881789348
+BW29,EI,1,6,stop (all VIF <= threshold),FSLE,3.0233006924886427
+BW29,KGI,1,6,stop (all VIF <= threshold),temperature_surface_anom,2.643380753916252
+BW29,CI,1,6,stop (all VIF <= threshold),temperature_deep_anom,2.6471354402777982
+BW37,EI,1,6,stop (all VIF <= threshold),FSLE,3.0233006924886396
+BW37,KGI,1,6,stop (all VIF <= threshold),temperature_surface_anom,2.6433807539162517

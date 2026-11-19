@@ -128,6 +128,30 @@ SPECIES_CODES <- names(SPECIES)
 MODELED_SPECIES <- names(Filter(function(s) s$model, SPECIES))
 ALL_DEPTHS_M <- sort(unique(unlist(lapply(SPECIES, `[[`, "depths_m"))))
 
+# Depth layers (decision 2026-11-19; supplement, 02_deep_oceanography/
+# layer_boundaries.R). Boundaries from two lines of evidence at all three
+# sites: depth coherence of temperature-salinity anomalies (constrained
+# clustering) and water-mass structure (winter mixed layer 51-69 m, Winter
+# Water temperature minimum 78-92 m, warm Circumpolar Deep Water core 266-454
+# m, coherence breaks 102-118 m and 462-692 m). The deep layer stops at 1000
+# m: below ~1060 m less than half of the KGI and CI boxes has water.
+LAYERS <- tibble::tibble(
+  layer    = c("surface", "mid", "deep"),
+  top_m    = c(0, 100, 500),
+  bottom_m = c(100, 500, 1000),
+  label    = c("Surface layer (0-100 m)", "Mid-water layer (100-500 m)",
+               "Deep layer (500-1000 m)")
+)
+# Layer of each nominal species depth (the surface layer is used by every
+# species): Oo 11, Gm 16, BW37 67 -> surface; Pm 375, Oo 455 -> mid;
+# Gm 635, BW29 768, BW37 920, Pm 1665 (capped at 1000 m) -> deep.
+depth_layer <- function(d) {
+  LAYERS$layer[pmin(findInterval(d, LAYERS$top_m), nrow(LAYERS))]
+}
+species_layers <- function(species) {
+  unique(c("surface", depth_layer(SPECIES[[species]]$depths_m)))
+}
+
 # Only echolocation clicks define presence (sperm whale slow clicks and
 # killer whale HFM whistles are excluded).
 PRESENCE_CALLS <- c("Clicks", "regular-click")

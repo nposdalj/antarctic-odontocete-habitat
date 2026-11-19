@@ -17,7 +17,8 @@
 #             date, site, julian_day, ice_conc, ice_thickness, SSH,
 #             mixed_layer, FSLE, fsle_orient, temperature_<d>, salinity_<d>,
 #             o2_<d>, EKE_<d>, EKE_mad_<d>, chla_<d>, productivity_<d>
-#             (d <= CHL_PROD_MAX_DEPTH_M only), chla_lag<N>,
+#             (d <= CHL_PROD_MAX_DEPTH_M only), temperature_<L>, salinity_<L>,
+#             EKE_<L>, o2_<L> (L = surface, mid, deep layer means), chla_lag<N>,
 #             productivity_lag<N>; <d> = nominal depth (m) in ALL_DEPTHS_M
 #           F_MODEL_INPUT model_input_daily.csv
 #             recording days only: F_ENV_DAILY joined to presence
@@ -186,6 +187,47 @@ bgc_wide <- bgc %>%
   pivot_wider(names_from = c(var, nominal_depth_m), values_from = value)
 
 # -----------------------------------------------------------------------------
+# 4b. Layer averages (config.R LAYERS)
+# -----------------------------------------------------------------------------
+# Thickness-weighted mean over the model levels in each layer: each level
+# represents the depth interval between the midpoints to its neighbouring
+# levels, and its weight is the overlap of that interval with the layer.
+# Levels without water in the box on a day are skipped (weights renormalized),
+# so a layer mean represents the water present in the box. Temperature,
+# salinity and EKE use the PHY levels, oxygen the BGC levels (at KGI and CI
+# the BGC box has no water below 773 and 1046 m, so the deep-layer oxygen
+# there covers 500-773 m and 500-1000 m). Columns: <var>_<layer>, e.g.
+# temperature_mid, o2_deep, EKE_deep.
+level_weights <- function(levels) {
+  edges <- c(0, (head(levels, -1) + levels[-1]) / 2, Inf)
+  expand_grid(i = seq_along(levels), l = seq_len(nrow(LAYERS))) %>%
+    mutate(depth_m = levels[i], layer = LAYERS$layer[l],
+           weight = pmax(0, pmin(edges[i + 1], LAYERS$bottom_m[l]) -
+                            pmax(edges[i], LAYERS$top_m[l]))) %>%
+    filter(weight > 0) %>%
+    select(depth_m, layer, weight)
+}
+
+layer_means <- function(df, vars, levels) {
+  df %>%
+    inner_join(level_weights(levels), by = "depth_m", relationship = "many-to-many") %>%
+    pivot_longer(all_of(vars), names_to = "var", values_to = "value") %>%
+    filter(!is.na(value)) %>%
+    group_by(date, site, var, layer) %>%
+    summarise(value = sum(value * weight) / sum(weight), .groups = "drop") %>%
+    pivot_wider(names_from = c(var, layer), values_from = value)
+}
+
+# EKE per level (same definition as section 3) before averaging over layers
+eke_levels <- phy %>%
+  group_by(site, depth_m) %>%
+  mutate(EKE = 0.5 * ((u - mean(u))^2 + (v - mean(v))^2) * 1e4) %>%
+  ungroup()
+
+layer_wide <- layer_means(eke_levels, c("temperature", "salinity", "EKE"), phy_levels) %>%
+  left_join(layer_means(bgc, "o2", bgc_levels), by = c("date", "site"))
+
+# -----------------------------------------------------------------------------
 # 5. Lagged chl-a and productivity (surface level)
 # -----------------------------------------------------------------------------
 # On a gap-free daily calendar per site, the trailing window mean (all days
@@ -222,6 +264,7 @@ env <- surface %>%
   left_join(select(fsle, date, site, FSLE, fsle_orient), by = c("date", "site")) %>%
   left_join(phy_wide, by = c("date", "site")) %>%
   left_join(bgc_wide, by = c("date", "site")) %>%
+  left_join(layer_wide, by = c("date", "site")) %>%
   left_join(lags, by = c("date", "site")) %>%
   mutate(julian_day = yday(date), .after = site)
 
@@ -235,7 +278,10 @@ env <- env %>%
          all_of(c(depth_cols("temperature", ALL_DEPTHS_M), depth_cols("salinity", ALL_DEPTHS_M),
                   depth_cols("o2", ALL_DEPTHS_M), depth_cols("EKE", ALL_DEPTHS_M),
                   depth_cols("EKE_mad", ALL_DEPTHS_M), depth_cols("chla", chl_depths),
-                  depth_cols("productivity", chl_depths), lag_cols))) %>%
+                  depth_cols("productivity", chl_depths),
+                  depth_cols("temperature", LAYERS$layer), depth_cols("salinity", LAYERS$layer),
+                  depth_cols("EKE", LAYERS$layer), depth_cols("o2", LAYERS$layer),
+                  lag_cols))) %>%
   arrange(factor(site, levels = SITE_ORDER), date)
 
 write_csv(env, F_ENV_DAILY)

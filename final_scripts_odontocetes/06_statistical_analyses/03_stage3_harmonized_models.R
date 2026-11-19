@@ -35,17 +35,26 @@ source(file.path(FINAL_DIR, "06_statistical_analyses", "00_gam_parameters.R"))
 source(file.path(FINAL_DIR, "06_statistical_analyses", "00_gam_functions.R"))
 
 # -----------------------------------------------------------------------------
-# 1. Harmonized terms  [INSERT harmonized formulas after reviewing Stage 2]
+# 1. Harmonized terms (chosen by N. Posdaljian, 2026-11-19)
 # -----------------------------------------------------------------------------
 # One row per species (site = "all": every modeled site of that species) or
 # per species x site (a site-specific row overrides the "all" row). `terms`
-# holds candidate column names exactly as in stage2_decision_table.csv
-# (e.g., "temperature_375_anom", "chla_lag3"); each becomes s(term, k = GAM_K).
+# holds candidate column names exactly as in stage2_decision_table.csv; each
+# becomes s(term, k = GAM_K). One predictor set per species, used at every
+# site: the union of the Stage 1 selections across that species' sites, one
+# per theme, with the common 3-month chl-a lag and layer-averaged water-column
+# variables, temperature as the only water-mass variable (review page,
+# version 7). No species had sites disagreeing within a theme.
+# Approved by N. Posdaljian, 2026-11-19.
 harmonized_terms <- tribble(
   ~species, ~site, ~terms,
-  # [INSERT harmonized formulas after reviewing Stage 2], e.g.
-  # "Pm",   "all", c("temperature_0_anom", "chla_lag2"),
-  # "BW29", "CI",  c("chla_0"),
+  "Pm",   "all", c("FSLE", "fsle_orient", "EKE_mid", "EKE_deep", "mixed_layer_anom",
+                   "temperature_surface_anom", "chla_lag3_anom"),
+  "Gm",   "all", c("temperature_surface_anom", "chla_lag3_anom", "EKE_deep"),
+  "Oo",   "all", c("chla_lag3_anom"),
+  "BW29", "all", c("FSLE", "chla_lag3_anom", "mixed_layer_anom",
+                   "temperature_surface_anom"),
+  "BW37", "all", c("FSLE", "fsle_orient", "mixed_layer_anom", "temperature_deep_anom")
 )
 
 if (nrow(harmonized_terms) == 0) {

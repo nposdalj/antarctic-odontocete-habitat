@@ -1,114 +1,38 @@
 species,theme,variable,variable_label,n_sites_candidate,n_sites_vif_retained,n_sites_theme_winner,n_sites_selected,n_sites_single_p_sig,mean_single_dev_expl,directions_by_site,shapes_by_site
-Pm,temperature,temperature_1665_anom,"Anomaly: Temperature (°C), 1665 m",2,1,1,1,2,0.2293878680612345,EI:negative; CI:mixed,EI:decreasing; CI:peaked
-Pm,temperature,temperature_0_anom,"Anomaly: Temperature (°C), surface",2,0,0,0,2,0.3465036897519166,EI:positive; CI:mixed,EI:increasing; CI:peaked
-Pm,temperature,temperature_375_anom,"Anomaly: Temperature (°C), 375 m",2,0,0,0,2,0.2520634538001605,EI:negative; CI:mixed,EI:decreasing; CI:peaked
-Pm,salinity,salinity_375_anom,"Anomaly: Salinity (psu), 375 m",2,2,1,0,1,0.10812878943376458,EI:none; CI:mixed,EI:not significant; CI:U-shaped
-Pm,salinity,salinity_1665_anom,"Anomaly: Salinity (psu), 1665 m",2,1,1,0,0,0.05861333789615836,EI:none; CI:none,EI:not significant; CI:not significant
-Pm,salinity,salinity_0_anom,"Anomaly: Salinity (psu), surface",2,1,0,0,0,0.042844024536968575,EI:none; CI:none,EI:not significant; CI:not significant
-Pm,oxygen,o2_375_anom,"Anomaly: Oxygen (mmol m-3), 375 m",2,2,2,0,2,0.2897619016788048,EI:negative; CI:mixed,EI:decreasing; CI:complex
-Pm,oxygen,o2_1665_anom,"Anomaly: Oxygen (mmol m-3), 1665 m",2,0,0,0,2,0.15442890536081616,EI:positive; CI:positive,EI:increasing; CI:increasing
-Pm,mesoscale,FSLE,FSLE (d-1),2,1,0,0,1,0.28974178483360097,EI:positive; CI:none,EI:increasing; CI:not significant
-Pm,mesoscale,EKE_1665,"EKE (cm2 s-2), 1665 m",2,1,0,0,2,0.12392114712387366,EI:mixed; CI:negative,EI:peaked; CI:decreasing
-Pm,mesoscale,EKE_mad_1665,"EKE MAD (cm2 s-2), 1665 m",2,2,1,0,0,0.08908178726384608,EI:none; CI:none,EI:not significant; CI:not significant
-Pm,mesoscale,EKE_0,"EKE (cm2 s-2), surface",2,2,1,0,0,0.07796758398575467,EI:none; CI:none,EI:not significant; CI:not significant
-Pm,mesoscale,SSH_anom,Anomaly: SSH (m),2,1,0,0,1,0.0776517785807821,EI:negative; CI:none,EI:decreasing; CI:not significant
-Pm,mesoscale,EKE_mad_375,"EKE MAD (cm2 s-2), 375 m",2,2,0,0,0,0.04119338669144817,EI:none; CI:none,EI:not significant; CI:not significant
-Pm,mesoscale,EKE_375,"EKE (cm2 s-2), 375 m",2,2,0,0,1,0.03720663048453736,EI:none; CI:negative,EI:not significant; CI:decreasing
-Pm,mesoscale,EKE_mad_0,"EKE MAD (cm2 s-2), surface",2,2,0,0,0,0.00496358461561552,EI:none; CI:none,EI:not significant; CI:not significant
-Pm,front_orientation,fsle_orient,"FSLV orientation (°; cyclic, -90 = 90)",2,2,2,1,1,0.07251930626743315,EI:none; CI:cyclic,"EI:not significant; CI:cyclic, unimodal (peak 28°, trough -66°)"
-Pm,stratification,mixed_layer_anom,Anomaly: Mixed layer depth (m),2,2,2,2,1,0.06673963016555196,EI:mixed; CI:negative,EI:U-shaped; CI:decreasing
-Pm,productivity,chla_lag1_anom,"Anomaly: log10 chl-a (mg m-3), 1-month lag",2,1,1,1,2,0.4822113576096475,EI:positive; CI:mixed,EI:increasing; CI:peaked
-Pm,productivity,chla_lag3_anom,"Anomaly: log10 chl-a (mg m-3), 3-month lag",2,1,1,1,2,0.455110328996958,EI:mixed; CI:mixed,EI:U-shaped; CI:complex
-Pm,productivity,chla_lag6_anom,"Anomaly: log10 chl-a (mg m-3), 6-month lag",2,1,0,0,2,0.36368650880062214,EI:positive; CI:mixed,EI:increasing; CI:U-shaped
-Pm,productivity,chla_lag5_anom,"Anomaly: log10 chl-a (mg m-3), 5-month lag",2,0,0,0,1,0.21297812600381033,EI:mixed; CI:none,EI:complex; CI:not significant
-Pm,productivity,chla_lag2_anom,"Anomaly: log10 chl-a (mg m-3), 2-month lag",2,2,0,0,0,0.03791224406437571,EI:none; CI:none,EI:not significant; CI:not significant
-Pm,productivity,chla_lag4_anom,"Anomaly: log10 chl-a (mg m-3), 4-month lag",2,1,0,0,0,0.0115337208272173,EI:none; CI:none,EI:not significant; CI:not significant
-Gm,temperature,temperature_0_anom,"Anomaly: Temperature (°C), surface",3,1,1,1,3,0.5078821473217037,EI:mixed; KGI:positive; CI:mixed,EI:peaked; KGI:increasing; CI:peaked
-Gm,temperature,temperature_16_anom,"Anomaly: Temperature (°C), 16 m",3,0,0,0,3,0.5075006149582354,EI:mixed; KGI:positive; CI:mixed,EI:peaked; KGI:increasing; CI:peaked
-Gm,temperature,temperature_635_anom,"Anomaly: Temperature (°C), 635 m",3,1,0,0,1,0.2759652963725756,EI:positive; KGI:none; CI:none,EI:increasing; KGI:not significant; CI:not significant
-Gm,salinity,salinity_0_anom,"Anomaly: Salinity (psu), surface",3,1,1,1,1,0.18872558567529651,EI:none; KGI:none; CI:positive,EI:not significant; KGI:not significant; CI:increasing
-Gm,salinity,salinity_16_anom,"Anomaly: Salinity (psu), 16 m",3,2,2,0,1,0.18954340053350047,EI:none; KGI:none; CI:mixed,EI:not significant; KGI:not significant; CI:peaked
-Gm,salinity,salinity_635_anom,"Anomaly: Salinity (psu), 635 m",3,3,0,0,1,0.11815448122529465,EI:none; KGI:none; CI:positive,EI:not significant; KGI:not significant; CI:increasing
-Gm,oxygen,o2_635_anom,"Anomaly: Oxygen (mmol m-3), 635 m",3,3,3,0,0,0.1574915066524485,EI:none; KGI:none; CI:none,EI:not significant; KGI:not significant; CI:not significant
-Gm,mesoscale,EKE_0,"EKE (cm2 s-2), surface",3,3,1,1,2,0.2530104541248508,EI:negative; KGI:none; CI:positive,EI:decreasing; KGI:not significant; CI:increasing
-Gm,mesoscale,EKE_635,"EKE (cm2 s-2), 635 m",3,2,1,1,2,0.18222346648095228,EI:negative; KGI:none; CI:positive,EI:decreasing; KGI:not significant; CI:increasing
-Gm,mesoscale,EKE_16,"EKE (cm2 s-2), 16 m",3,0,0,0,2,0.23130444615648818,EI:negative; KGI:none; CI:positive,EI:decreasing; KGI:not significant; CI:increasing
-Gm,mesoscale,SSH_anom,Anomaly: SSH (m),3,2,0,0,2,0.2099618601875684,EI:positive; KGI:positive; CI:none,EI:increasing; KGI:increasing; CI:not significant
-Gm,mesoscale,EKE_mad_0,"EKE MAD (cm2 s-2), surface",3,0,0,0,1,0.16371458331692565,EI:none; KGI:negative; CI:none,EI:not significant; KGI:decreasing; CI:not significant
-Gm,mesoscale,EKE_mad_16,"EKE MAD (cm2 s-2), 16 m",3,3,1,0,1,0.15896722021438697,EI:none; KGI:negative; CI:none,EI:not significant; KGI:decreasing; CI:not significant
-Gm,mesoscale,FSLE,FSLE (d-1),3,3,0,0,1,0.12787806038599028,EI:none; KGI:none; CI:mixed,EI:not significant; KGI:not significant; CI:U-shaped
-Gm,mesoscale,EKE_mad_635,"EKE MAD (cm2 s-2), 635 m",3,3,0,0,1,0.09633376914801696,EI:none; KGI:negative; CI:none,EI:not significant; KGI:decreasing; CI:not significant
+Pm,water_mass_surface,temperature_surface_anom,"Anomaly: Temperature (°C), surface layer (0-100 m)",2,2,2,1,1,0.11073873591227315,EI:none; CI:negative,EI:not significant; CI:decreasing
+Pm,water_mass_mid,temperature_mid_anom,"Anomaly: Temperature (°C), mid-water layer (100-500 m)",2,2,2,0,1,0.10694247420701407,EI:negative; CI:none,EI:decreasing; CI:not significant
+Pm,water_mass_deep,temperature_deep_anom,"Anomaly: Temperature (°C), deep layer (500-1000 m)",2,0,2,0,2,0.280347710846816,EI:negative; CI:positive,EI:decreasing; CI:increasing
+Pm,surface_fronts,FSLE,FSLE (d-1),2,2,2,1,1,0.28974178483360097,EI:mixed; CI:none,EI:peaked; CI:not significant
+Pm,front_orientation,fsle_orient,"FSLV orientation (°; cyclic, -90 = 90)",2,2,2,1,1,0.07251930626743315,EI:none; CI:cyclic,"EI:not significant; CI:cyclic, unimodal (peak 30°, trough -63°)"
+Pm,eddy_mid,EKE_mid,"EKE (cm2 s-2), mid-water layer (100-500 m)",2,1,2,1,0,0.03640569308766957,EI:none; CI:negative,EI:not significant; CI:decreasing
+Pm,eddy_deep,EKE_deep,"EKE (cm2 s-2), deep layer (500-1000 m)",2,2,2,1,0,0.044229402065432605,EI:none; CI:mixed,EI:not significant; CI:peaked
+Pm,stratification,mixed_layer_anom,Anomaly: Mixed layer depth (m),2,2,2,2,1,0.06673963016555196,EI:negative; CI:mixed,EI:decreasing; CI:peaked
+Pm,productivity,chla_lag3_anom,"Anomaly: log10 chl-a (mg m-3), 3-month lag",2,2,2,2,2,0.455110328996958,EI:mixed; CI:mixed,EI:U-shaped; CI:U-shaped
+Gm,water_mass_surface,temperature_surface_anom,"Anomaly: Temperature (°C), surface layer (0-100 m)",3,2,3,2,3,0.4263479219198386,EI:positive; KGI:positive; CI:negative,EI:increasing; KGI:increasing; CI:decreasing
+Gm,water_mass_deep,temperature_deep_anom,"Anomaly: Temperature (°C), deep layer (500-1000 m)",3,2,3,0,1,0.28816212131934194,EI:positive; KGI:none; CI:none,EI:increasing; KGI:not significant; CI:not significant
+Gm,surface_fronts,FSLE,FSLE (d-1),3,3,3,0,1,0.12787806038599028,EI:none; KGI:none; CI:mixed,EI:not significant; KGI:not significant; CI:U-shaped
 Gm,front_orientation,fsle_orient,"FSLV orientation (°; cyclic, -90 = 90)",3,3,3,0,0,0.03519200590940229,EI:none; KGI:none; CI:none,EI:not significant; KGI:not significant; CI:not significant
-Gm,stratification,mixed_layer_anom,Anomaly: Mixed layer depth (m),3,3,3,1,1,0.30034538048942355,EI:mixed; KGI:mixed; CI:none,EI:U-shaped; KGI:peaked; CI:not significant
-Gm,productivity,chla_lag3_anom,"Anomaly: log10 chl-a (mg m-3), 3-month lag",3,1,1,1,2,0.37870768041962966,EI:mixed; KGI:mixed; CI:none,EI:U-shaped; KGI:U-shaped; CI:not significant
-Gm,productivity,chla_lag5_anom,"Anomaly: log10 chl-a (mg m-3), 5-month lag",3,2,1,0,3,0.4291676193782125,EI:negative; KGI:mixed; CI:mixed,EI:decreasing; KGI:complex; CI:peaked
-Gm,productivity,chla_lag1_anom,"Anomaly: log10 chl-a (mg m-3), 1-month lag",3,1,0,0,1,0.41331199300024696,EI:positive; KGI:none; CI:none,EI:increasing; KGI:not significant; CI:not significant
-Gm,productivity,chla_lag2_anom,"Anomaly: log10 chl-a (mg m-3), 2-month lag",3,3,1,0,2,0.3636219789144862,EI:positive; KGI:mixed; CI:none,EI:increasing; KGI:complex; CI:not significant
-Gm,productivity,chla_lag6_anom,"Anomaly: log10 chl-a (mg m-3), 6-month lag",3,2,0,0,3,0.2962371793263794,EI:mixed; KGI:negative; CI:positive,EI:peaked; KGI:decreasing; CI:increasing
-Gm,productivity,chla_lag4_anom,"Anomaly: log10 chl-a (mg m-3), 4-month lag",3,1,0,0,1,0.23453068503052843,EI:none; KGI:mixed; CI:none,EI:not significant; KGI:U-shaped; CI:not significant
-Oo,temperature,temperature_11_anom,"Anomaly: Temperature (°C), 11 m",1,0,0,0,1,0.10226353371454155,CI:negative,CI:decreasing
-Oo,temperature,temperature_0_anom,"Anomaly: Temperature (°C), surface",1,0,0,0,1,0.1021222846912824,CI:negative,CI:decreasing
-Oo,temperature,temperature_455_anom,"Anomaly: Temperature (°C), 455 m",1,0,0,0,0,0.03214965655173228,CI:none,CI:not significant
-Oo,salinity,salinity_455_anom,"Anomaly: Salinity (psu), 455 m",1,1,1,1,0,0.1439698358105138,CI:positive,CI:increasing
-Oo,salinity,salinity_11_anom,"Anomaly: Salinity (psu), 11 m",1,0,0,0,0,0.02711659965068303,CI:none,CI:not significant
-Oo,salinity,salinity_0_anom,"Anomaly: Salinity (psu), surface",1,1,0,0,0,0.02684096508161333,CI:none,CI:not significant
-Oo,oxygen,o2_455_anom,"Anomaly: Oxygen (mmol m-3), 455 m",1,1,1,1,0,0.07572390902813854,CI:mixed,CI:U-shaped
-Oo,mesoscale,EKE_mad_455,"EKE MAD (cm2 s-2), 455 m",1,1,0,0,0,0.09453054488320198,CI:none,CI:not significant
-Oo,mesoscale,SSH_anom,Anomaly: SSH (m),1,1,0,0,0,0.09393898831110956,CI:none,CI:not significant
-Oo,mesoscale,EKE_0,"EKE (cm2 s-2), surface",1,1,0,0,0,0.08864154154137391,CI:none,CI:not significant
-Oo,mesoscale,EKE_455,"EKE (cm2 s-2), 455 m",1,1,1,0,0,0.08405551955443392,CI:none,CI:not significant
-Oo,mesoscale,FSLE,FSLE (d-1),1,1,0,0,0,0.05519813797093224,CI:none,CI:not significant
-Oo,mesoscale,EKE_11,"EKE (cm2 s-2), 11 m",1,0,0,0,0,0.04108769561881848,CI:none,CI:not significant
-Oo,mesoscale,EKE_mad_0,"EKE MAD (cm2 s-2), surface",1,1,0,0,0,0.0406535570524079,CI:none,CI:not significant
-Oo,mesoscale,EKE_mad_11,"EKE MAD (cm2 s-2), 11 m",1,0,0,0,0,0.03168003181778935,CI:none,CI:not significant
+Gm,eddy_deep,EKE_deep,"EKE (cm2 s-2), deep layer (500-1000 m)",3,3,3,1,2,0.21643764027919296,EI:negative; KGI:none; CI:mixed,EI:decreasing; KGI:not significant; CI:peaked
+Gm,stratification,mixed_layer_anom,Anomaly: Mixed layer depth (m),3,3,3,0,1,0.30034538048942355,EI:mixed; KGI:none; CI:none,EI:U-shaped; KGI:not significant; CI:not significant
+Gm,productivity,chla_lag3_anom,"Anomaly: log10 chl-a (mg m-3), 3-month lag",3,3,3,2,2,0.37870768041962966,EI:positive; KGI:mixed; CI:none,EI:increasing; KGI:U-shaped; CI:not significant
+Oo,water_mass_surface,temperature_surface_anom,"Anomaly: Temperature (°C), surface layer (0-100 m)",1,1,1,0,0,0.07436485725761387,CI:none,CI:not significant
+Oo,water_mass_mid,temperature_mid_anom,"Anomaly: Temperature (°C), mid-water layer (100-500 m)",1,1,1,0,0,0.02386185766424346,CI:none,CI:not significant
+Oo,surface_fronts,FSLE,FSLE (d-1),1,1,1,0,0,0.05519813797093224,CI:none,CI:not significant
 Oo,front_orientation,fsle_orient,"FSLV orientation (°; cyclic, -90 = 90)",1,1,1,0,0,6.031281119948913e-6,CI:none,CI:not significant
+Oo,eddy_mid,EKE_mid,"EKE (cm2 s-2), mid-water layer (100-500 m)",1,1,1,0,0,0.078743516327703,CI:none,CI:not significant
 Oo,stratification,mixed_layer_anom,Anomaly: Mixed layer depth (m),1,1,1,0,0,0.00189072479342178,CI:none,CI:not significant
-Oo,productivity,chla_lag6_anom,"Anomaly: log10 chl-a (mg m-3), 6-month lag",1,0,0,0,1,0.28799116561259164,CI:positive,CI:increasing
-Oo,productivity,chla_lag2_anom,"Anomaly: log10 chl-a (mg m-3), 2-month lag",1,1,1,0,0,0.21798485569889875,CI:none,CI:not significant
-Oo,productivity,chla_lag3_anom,"Anomaly: log10 chl-a (mg m-3), 3-month lag",1,0,0,0,1,0.21690660671298936,CI:mixed,CI:U-shaped
-Oo,productivity,chla_lag1_anom,"Anomaly: log10 chl-a (mg m-3), 1-month lag",1,1,0,0,0,0.1293003527096431,CI:none,CI:not significant
-Oo,productivity,chla_lag5_anom,"Anomaly: log10 chl-a (mg m-3), 5-month lag",1,1,0,0,0,0.04326565556229141,CI:none,CI:not significant
-Oo,productivity,chla_lag4_anom,"Anomaly: log10 chl-a (mg m-3), 4-month lag",1,1,0,0,0,0.00364961198495126,CI:none,CI:not significant
-BW29,temperature,temperature_768_anom,"Anomaly: Temperature (°C), 768 m",3,2,2,1,2,0.24007908772744868,EI:none; KGI:positive; CI:negative,EI:not significant; KGI:increasing; CI:decreasing
-BW29,temperature,temperature_0_anom,"Anomaly: Temperature (°C), surface",3,0,0,0,3,0.38774374315896537,EI:mixed; KGI:positive; CI:mixed,EI:peaked; KGI:increasing; CI:U-shaped
-BW29,salinity,salinity_768_anom,"Anomaly: Salinity (psu), 768 m",3,2,1,0,1,0.17437256649698193,EI:none; KGI:none; CI:mixed,EI:not significant; KGI:not significant; CI:peaked
-BW29,salinity,salinity_0_anom,"Anomaly: Salinity (psu), surface",3,3,2,0,1,0.10491152294959379,EI:none; KGI:none; CI:mixed,EI:not significant; KGI:not significant; CI:U-shaped
-BW29,oxygen,o2_768_anom,"Anomaly: Oxygen (mmol m-3), 768 m",3,2,2,0,1,0.17225644298637371,EI:none; KGI:none; CI:mixed,EI:not significant; KGI:not significant; CI:U-shaped
-BW29,mesoscale,EKE_0,"EKE (cm2 s-2), surface",3,3,2,1,2,0.1376927082596776,EI:negative; KGI:negative; CI:none,EI:decreasing; KGI:decreasing; CI:not significant
-BW29,mesoscale,EKE_768,"EKE (cm2 s-2), 768 m",3,2,0,0,2,0.17663831278045802,EI:mixed; KGI:none; CI:negative,EI:complex; KGI:not significant; CI:decreasing
-BW29,mesoscale,SSH_anom,Anomaly: SSH (m),3,2,1,0,2,0.16146716543137637,EI:positive; KGI:none; CI:mixed,EI:increasing; KGI:not significant; CI:peaked
-BW29,mesoscale,EKE_mad_768,"EKE MAD (cm2 s-2), 768 m",3,3,0,0,1,0.13642483858890375,EI:mixed; KGI:none; CI:none,EI:peaked; KGI:not significant; CI:not significant
-BW29,mesoscale,FSLE,FSLE (d-1),3,3,0,0,0,0.12651566055486493,EI:none; KGI:none; CI:none,EI:not significant; KGI:not significant; CI:not significant
-BW29,mesoscale,EKE_mad_0,"EKE MAD (cm2 s-2), surface",3,3,0,0,1,0.09354014617453257,EI:none; KGI:none; CI:mixed,EI:not significant; KGI:not significant; CI:U-shaped
+Oo,productivity,chla_lag3_anom,"Anomaly: log10 chl-a (mg m-3), 3-month lag",1,1,1,1,1,0.21690660671298936,CI:mixed,CI:U-shaped
+BW29,water_mass_surface,temperature_surface_anom,"Anomaly: Temperature (°C), surface layer (0-100 m)",3,2,3,1,3,0.2989864481893161,EI:mixed; KGI:mixed; CI:mixed,EI:peaked; KGI:peaked; CI:peaked
+BW29,water_mass_deep,temperature_deep_anom,"Anomaly: Temperature (°C), deep layer (500-1000 m)",3,2,3,0,2,0.2329934889676397,EI:none; KGI:positive; CI:negative,EI:not significant; KGI:increasing; CI:decreasing
+BW29,surface_fronts,FSLE,FSLE (d-1),3,3,3,2,0,0.12651566055486493,EI:mixed; KGI:none; CI:mixed,EI:peaked; KGI:not significant; CI:peaked
 BW29,front_orientation,fsle_orient,"FSLV orientation (°; cyclic, -90 = 90)",3,3,3,0,0,0.019425213569128002,EI:none; KGI:none; CI:none,EI:not significant; KGI:not significant; CI:not significant
-BW29,stratification,mixed_layer_anom,Anomaly: Mixed layer depth (m),3,3,3,2,1,0.1396304049856588,EI:none; KGI:negative; CI:negative,EI:not significant; KGI:decreasing; CI:decreasing
-BW29,productivity,chla_lag3_anom,"Anomaly: log10 chl-a (mg m-3), 3-month lag",3,1,1,1,2,0.42885566987977936,EI:positive; KGI:none; CI:negative,EI:increasing; KGI:not significant; CI:decreasing
-BW29,productivity,chla_lag1_anom,"Anomaly: log10 chl-a (mg m-3), 1-month lag",3,1,1,1,2,0.3797599697151782,EI:mixed; KGI:none; CI:mixed,EI:peaked; KGI:not significant; CI:U-shaped
-BW29,productivity,chla_lag5_anom,"Anomaly: log10 chl-a (mg m-3), 5-month lag",3,1,1,1,1,0.20726329622508732,EI:negative; KGI:positive; CI:none,EI:decreasing; KGI:increasing; CI:not significant
-BW29,productivity,chla_lag2_anom,"Anomaly: log10 chl-a (mg m-3), 2-month lag",3,2,0,0,1,0.25803678336112656,EI:mixed; KGI:none; CI:none,EI:U-shaped; KGI:not significant; CI:not significant
-BW29,productivity,chla_lag4_anom,"Anomaly: log10 chl-a (mg m-3), 4-month lag",3,1,0,0,1,0.14798074192557173,EI:negative; KGI:none; CI:none,EI:decreasing; KGI:not significant; CI:not significant
-BW29,productivity,chla_lag6_anom,"Anomaly: log10 chl-a (mg m-3), 6-month lag",3,2,0,0,1,0.11484582527914995,EI:positive; KGI:none; CI:none,EI:increasing; KGI:not significant; CI:not significant
-BW37,temperature,temperature_0_anom,"Anomaly: Temperature (°C), surface",2,0,0,0,2,0.31313772080589897,EI:mixed; KGI:mixed,EI:U-shaped; KGI:U-shaped
-BW37,temperature,temperature_920_anom,"Anomaly: Temperature (°C), 920 m",2,1,1,0,1,0.18784347901931925,EI:none; KGI:mixed,EI:not significant; KGI:peaked
-BW37,temperature,temperature_67_anom,"Anomaly: Temperature (°C), 67 m",2,1,1,0,0,0.07876753614183078,EI:none; KGI:none,EI:not significant; KGI:not significant
-BW37,salinity,salinity_920_anom,"Anomaly: Salinity (psu), 920 m",2,2,1,0,0,0.1524054985641186,EI:none; KGI:none,EI:not significant; KGI:not significant
-BW37,salinity,salinity_67_anom,"Anomaly: Salinity (psu), 67 m",2,0,0,0,0,0.10593702902051332,EI:none; KGI:none,EI:not significant; KGI:not significant
-BW37,salinity,salinity_0_anom,"Anomaly: Salinity (psu), surface",2,2,1,0,1,0.05317493316403461,EI:none; KGI:positive,EI:not significant; KGI:increasing
-BW37,oxygen,o2_67_anom,"Anomaly: Oxygen (mmol m-3), 67 m",2,1,1,0,0,0.06970301966894678,EI:none; KGI:none,EI:not significant; KGI:not significant
-BW37,oxygen,o2_920_anom,"Anomaly: Oxygen (mmol m-3), 920 m",2,2,1,0,0,0.017037648395565826,EI:none; KGI:none,EI:not significant; KGI:not significant
-BW37,mesoscale,FSLE,FSLE (d-1),2,2,1,1,1,0.21856490851612279,EI:mixed; KGI:none,EI:U-shaped; KGI:not significant
-BW37,mesoscale,EKE_mad_920,"EKE MAD (cm2 s-2), 920 m",2,2,1,1,1,0.14722586957864028,EI:none; KGI:mixed,EI:not significant; KGI:peaked
-BW37,mesoscale,SSH_anom,Anomaly: SSH (m),2,1,0,0,2,0.2014284104090489,EI:mixed; KGI:negative,EI:U-shaped; KGI:decreasing
-BW37,mesoscale,EKE_67,"EKE (cm2 s-2), 67 m",2,1,0,0,0,0.0527155937221639,EI:none; KGI:none,EI:not significant; KGI:not significant
-BW37,mesoscale,EKE_0,"EKE (cm2 s-2), surface",2,2,0,0,0,0.035637729584434966,EI:none; KGI:none,EI:not significant; KGI:not significant
-BW37,mesoscale,EKE_mad_0,"EKE MAD (cm2 s-2), surface",2,0,0,0,0,0.028395972475421617,EI:none; KGI:none,EI:not significant; KGI:not significant
-BW37,mesoscale,EKE_mad_67,"EKE MAD (cm2 s-2), 67 m",2,2,0,0,0,0.016649585587660276,EI:none; KGI:none,EI:not significant; KGI:not significant
-BW37,mesoscale,EKE_920,"EKE (cm2 s-2), 920 m",2,1,0,0,0,0.010809647273512395,EI:none; KGI:none,EI:not significant; KGI:not significant
-BW37,front_orientation,fsle_orient,"FSLV orientation (°; cyclic, -90 = 90)",2,2,2,0,1,0.06544543697817251,EI:cyclic; KGI:none,"EI:cyclic, unimodal (peak -54°, trough 32°); KGI:not significant"
-BW37,stratification,mixed_layer_anom,Anomaly: Mixed layer depth (m),2,2,2,0,1,0.044325995903205004,EI:none; KGI:positive,EI:not significant; KGI:increasing
-BW37,productivity,chla_lag2_anom,"Anomaly: log10 chl-a (mg m-3), 2-month lag",2,2,2,2,2,0.40932503012111243,EI:mixed; KGI:negative,EI:peaked; KGI:decreasing
-BW37,productivity,chla_lag1_anom,"Anomaly: log10 chl-a (mg m-3), 1-month lag",2,0,0,0,2,0.2939145413902876,EI:mixed; KGI:mixed,EI:U-shaped; KGI:peaked
-BW37,productivity,chla_lag3_anom,"Anomaly: log10 chl-a (mg m-3), 3-month lag",2,0,0,0,2,0.2398206009107454,EI:negative; KGI:mixed,EI:decreasing; KGI:complex
-BW37,productivity,chla_lag4_anom,"Anomaly: log10 chl-a (mg m-3), 4-month lag",2,0,0,0,1,0.21421167458931387,EI:none; KGI:mixed,EI:not significant; KGI:peaked
-BW37,productivity,chla_lag5_anom,"Anomaly: log10 chl-a (mg m-3), 5-month lag",2,1,0,0,1,0.13894786060560896,EI:none; KGI:mixed,EI:not significant; KGI:peaked
-BW37,productivity,chla_lag6_anom,"Anomaly: log10 chl-a (mg m-3), 6-month lag",2,2,0,0,1,0.1080558789017933,EI:none; KGI:mixed,EI:not significant; KGI:peaked
+BW29,eddy_deep,EKE_deep,"EKE (cm2 s-2), deep layer (500-1000 m)",3,3,3,0,2,0.170729096906697,EI:mixed; KGI:none; CI:negative,EI:complex; KGI:not significant; CI:decreasing
+BW29,stratification,mixed_layer_anom,Anomaly: Mixed layer depth (m),3,3,3,1,1,0.1396304049856588,EI:none; KGI:mixed; CI:negative,EI:not significant; KGI:complex; CI:decreasing
+BW29,productivity,chla_lag3_anom,"Anomaly: log10 chl-a (mg m-3), 3-month lag",3,3,3,3,2,0.42885566987977936,EI:mixed; KGI:positive; CI:negative,EI:complex; KGI:increasing; CI:decreasing
+BW37,water_mass_surface,temperature_surface_anom,"Anomaly: Temperature (°C), surface layer (0-100 m)",2,1,2,0,0,0.06819672481728295,EI:none; KGI:none,EI:not significant; KGI:not significant
+BW37,water_mass_deep,temperature_deep_anom,"Anomaly: Temperature (°C), deep layer (500-1000 m)",2,2,2,1,1,0.23603420269108097,EI:none; KGI:mixed,EI:not significant; KGI:peaked
+BW37,surface_fronts,FSLE,FSLE (d-1),2,2,2,1,1,0.21856490851612279,EI:mixed; KGI:none,EI:U-shaped; KGI:not significant
+BW37,front_orientation,fsle_orient,"FSLV orientation (°; cyclic, -90 = 90)",2,2,2,1,1,0.06544543697817251,EI:cyclic; KGI:none,"EI:cyclic, unimodal (peak -66°, trough 26°); KGI:not significant"
+BW37,eddy_deep,EKE_deep,"EKE (cm2 s-2), deep layer (500-1000 m)",2,2,2,0,0,0.012072888016034719,EI:none; KGI:none,EI:not significant; KGI:not significant
+BW37,stratification,mixed_layer_anom,Anomaly: Mixed layer depth (m),2,2,2,1,1,0.044325995903205004,EI:none; KGI:mixed,EI:not significant; KGI:U-shaped
+BW37,productivity,chla_lag3_anom,"Anomaly: log10 chl-a (mg m-3), 3-month lag",2,2,2,0,2,0.2398206009107454,EI:negative; KGI:mixed,EI:decreasing; KGI:complex
