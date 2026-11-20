@@ -5,6 +5,7 @@ date: today
 format:
   pdf:
     pdf-engine: xelatex
+    documentclass: article
     mainfont: "Times New Roman"
     fontsize: 11pt
     linestretch: 1.5
@@ -43,7 +44,7 @@ source("_values.R")
 
 # Abstract {.unnumbered}
 
-Toothed whales are the most diverse group of top predators in the Southern Ocean, yet where and when they occur in Antarctic waters, particularly in winter, remains poorly known. Many of these species forage hundreds of metres below the surface, where Antarctic Circumpolar Current, Bellingshausen Sea and Weddell Sea waters meet around the Antarctic Peninsula. Habitat studies, however, have relied mostly on surface conditions and on summer ship-based surveys. How odontocete occurrence relates to sea ice and to conditions at foraging depth has therefore not been tested. Here we show, using year-round passive acoustic recordings at three sites in the South Shetland Islands (2014--2016), that sea ice and anomalous ocean conditions at the surface and at depth structure odontocete occurrence. `r tools::toTitleCase(and_list(SP_TEXT[heavy_ice_species]))` were detected under more than 50% sea-ice cover, whereas long-finned pilot whales were never detected above `r ceiling(cutoff[["Gm"]])`% cover and two beaked whale signal types (BW29 and BW37) never above `r ceiling(cutoff[["BW29"]])`%. After the seasonal cycle was removed, warmer-than-usual surface water was associated with pilot whale presence at all three sites. Beaked whale and sperm whale presence was linked to surface fronts, and to mid-water eddy activity and deep-layer temperature anomalies, depending on site. Responses differed among sites that sample distinct water masses, indicating that habitat associations are local rather than species-wide. As sea ice retreats and warm Circumpolar Deep Water increasingly reaches the Antarctic Peninsula shelf, subsurface conditions may shape odontocete distribution as much as surface conditions do. Ocean reanalyses validated against in-situ profiles offer a way to include them in habitat models. \conf{wording of the habitat sentences after the final run}
+Toothed whales are the most diverse group of top predators in the Southern Ocean, yet where and when they occur in Antarctic waters, particularly in winter, remains poorly known. Many of these species forage hundreds of metres below the surface, where Antarctic Circumpolar Current, Bellingshausen Sea and Weddell Sea waters meet around the Antarctic Peninsula. Habitat studies, however, have relied mostly on surface conditions and on summer ship-based surveys. How odontocete occurrence relates to sea ice and to conditions at foraging depth has therefore not been tested. Here we show, using year-round passive acoustic recordings at three sites in the South Shetland Islands (2014--2016), that sea ice and anomalous ocean conditions at the surface and at depth structure odontocete occurrence. `r cap_first(and_list(SP_TEXT[heavy_ice_species]))` were detected under more than 50% sea-ice cover, whereas long-finned pilot whales were never detected above `r ceiling(cutoff[["Gm"]])`% cover and two beaked whale signal types (BW29 and BW37) never above `r ceiling(cutoff[["BW29"]])`%. After the seasonal cycle was removed, warmer-than-usual surface water was associated with pilot whale presence at all three sites. Beaked whale and sperm whale presence was linked to surface fronts, and to mid-water eddy activity and deep-layer temperature anomalies, depending on site. Responses differed among sites, which sample distinct water masses but were also recorded in different years. \conf{site and year are confounded; keep this sentence descriptive} As sea ice retreats and warm Circumpolar Deep Water increasingly reaches the Antarctic Peninsula shelf, subsurface conditions may shape odontocete distribution as much as surface conditions do. Ocean reanalyses validated against in-situ profiles offer a way to include them in habitat models. \conf{wording of the habitat sentences after the final run}
 
 # Introduction
 
@@ -153,7 +154,7 @@ data.frame(
 
 ## Acoustic occurrence {#sec-occ}
 
-\ins{Occurrence text to be written (@fig-weekly; detection days per species and site)}
+\ins{Occurrence text to be written (Fig. \ref{fig-weekly}; detection days per species and site)}
 
 Occurrence differed strongly across sea-ice conditions (@fig-iceocc). \ins{Text to be written}
 
@@ -169,7 +170,7 @@ The Copernicus reanalysis agreed with the independent observations at least as w
 
 ## Habitat models
 
-\ins{Results text to be written (Table \ref{tab:habitat}; @fig-curves)}
+\ins{Results text to be written (Table \ref{tab:habitat}; Fig. \ref{fig-curves})}
 
 ![Partial effects of the significant terms in the final habitat GAMs, by predictor and species, colored by site (EI, KGI, CI), with 95% confidence bands, shown over the observed range of each predictor. \conf{legend details: line types, rugs, scale}](../outputs/08_results_gams/main_stage3_habitat_response_curves_grid.png){#fig-curves width=100%}
 
@@ -184,7 +185,7 @@ habitat_table() |>
                     "at most two terms). † Term not significant when residual autocorrelation was",
                     "modeled with an AR(1) process, or when refit by maximum likelihood (Supplement S5).",
                     "Bins were 4 days long (killer whales, 2 days)."),
-              widths = c("2.2cm", NA, "1.4cm", NA, "4cm", NA, NA, NA, "2.6cm"), long = TRUE)
+              widths = c("1.9cm", NA, "1.3cm", NA, "3.6cm", NA, NA, NA, "2.2cm"), long = TRUE)
 ```
 
 # Discussion

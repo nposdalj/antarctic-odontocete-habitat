@@ -185,3 +185,5 @@ duty_table <- function() {
               `5-min bins` = simplify(`% 5-min bins retained`),
               `Presence days` = simplify(`% presence days retained`))
 }
+
+cap_first <- function(x) paste0(toupper(substr(x, 1, 1)), substring(x, 2))

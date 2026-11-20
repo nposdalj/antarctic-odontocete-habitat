@@ -6,9 +6,7 @@
 %
 \documentclass[
   11pt,
-  letterpaper,
-  DIV=11,
-  numbers=noendperiod]{scrartcl}
+]{article}
 \usepackage{xcolor}
 \usepackage[margin=2.5cm]{geometry}
 \usepackage{amsmath,amssymb}
@@ -131,7 +129,6 @@
 \usepackage{booktabs}
 \usepackage{longtable}
 \usepackage{array}
-\KOMAoption{captions}{tableheading}
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
@@ -207,17 +204,18 @@ occurrence relates to sea ice and to conditions at foraging depth has
 therefore not been tested. Here we show, using year-round passive
 acoustic recordings at three sites in the South Shetland Islands
 (2014--2016), that sea ice and anomalous ocean conditions at the surface
-and at depth structure odontocete occurrence. Sperm Whales and Killer
-Whales were detected under more than 50\% sea-ice cover, whereas
+and at depth structure odontocete occurrence. Sperm whales and killer
+whales were detected under more than 50\% sea-ice cover, whereas
 long-finned pilot whales were never detected above 34\% cover and two
 beaked whale signal types (BW29 and BW37) never above 13\%. After the
 seasonal cycle was removed, warmer-than-usual surface water was
 associated with pilot whale presence at all three sites. Beaked whale
 and sperm whale presence was linked to surface fronts, and to mid-water
 eddy activity and deep-layer temperature anomalies, depending on site.
-Responses differed among sites that sample distinct water masses,
-indicating that habitat associations are local rather than species-wide.
-As sea ice retreats and warm Circumpolar Deep Water increasingly reaches
+Responses differed among sites, which sample distinct water masses but
+were also recorded in different years.
+\conf{site and year are confounded; keep this sentence descriptive} As
+sea ice retreats and warm Circumpolar Deep Water increasingly reaches
 the Antarctic Peninsula shelf, subsurface conditions may shape
 odontocete distribution as much as surface conditions do. Ocean
 reanalyses validated against in-situ profiles offer a way to include
@@ -720,7 +718,7 @@ log10 chlorophyll-a, 30-day mean ending 3 months earlier & Delayed productivity 
 
 \subsection{Acoustic occurrence}\label{sec-occ}
 
-\ins{Occurrence text to be written (@fig-weekly; detection days per species and site)}
+\ins{Occurrence text to be written (Fig. \ref{fig-weekly}; detection days per species and site)}
 
 Occurrence differed strongly across sea-ice conditions
 (Figure~\ref{fig-iceocc}). \ins{Text to be written}
@@ -789,7 +787,7 @@ in the habitat models (Section~\ref{sec-stats}).
 
 \subsection{Habitat models}\label{habitat-models}
 
-\ins{Results text to be written (Table \ref{tab:habitat}; @fig-curves)}
+\ins{Results text to be written (Table \ref{tab:habitat}; Fig. \ref{fig-curves})}
 
 \begin{figure}[htbp]
 
@@ -808,7 +806,7 @@ each predictor. \conf{legend details: line types, rugs, scale}}
 
 \begingroup\fontsize{8}{10}\selectfont
 
-\begin{longtable}[t]{>{\raggedright\arraybackslash}p{2.2cm}l>{\raggedright\arraybackslash}p{1.4cm}l>{\raggedright\arraybackslash}p{4cm}lll>{\raggedright\arraybackslash}p{2.6cm}}
+\begin{longtable}[t]{>{\raggedright\arraybackslash}p{1.9cm}l>{\raggedright\arraybackslash}p{1.3cm}l>{\raggedright\arraybackslash}p{3.6cm}lll>{\raggedright\arraybackslash}p{2.2cm}}
 \caption{\label{tab:habitat}Final habitat models (Tweedie GAMs) for each species and site. Predictors are anomalies from the 10-year climatology except FSLE, FSLV orientation and EKE. Term deviance explained is the decrease in deviance explained when the term is removed and the model refit, so terms need not sum to the model total. Shape describes the fitted smooth. ‡ Low-sample model (10--20 bins with detections; at most two terms). † Term not significant when residual autocorrelation was modeled with an AR(1) process, or when refit by maximum likelihood (Supplement S5). Bins were 4 days long (killer whales, 2 days).}\\
 \toprule
 Species & Site & Bins (det.) & Dev. (\%) & Term & edf & p & Term dev. (\%) & Shape\\
