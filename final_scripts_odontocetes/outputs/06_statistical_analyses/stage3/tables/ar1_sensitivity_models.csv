@@ -1,12 +1,12 @@
 species,site,ljung_box_p_gam,resid_acf_lag1_gam,delta_aic_ar1,ar1_phi,status,ar1_supported,n_terms,n_hold,terms_not_holding
-BW29,CI,0.034,0.352,3.154,0.54,ok,FALSE,4,3,
-BW29,EI,0.348,-0.209,-3.637,0.256,ok,TRUE,2,0,s(FSLE); s(chla_lag3_anom)
-BW29,KGI,0.142,0.273,NA,NA,AR(1) fit failed,FALSE,1,1,
+BW29,CI,0.024,0.369,2.954,0.51,ok,FALSE,4,3,
+BW29,EI,0.91,0.06,NA,0.524,ok,FALSE,2,0,
+BW29,KGI,0.057,0.23,NA,NA,AR(1) fit failed,FALSE,1,1,
 BW37,EI,0.47,0.007,2.015,0.286,ok,FALSE,2,2,
 BW37,KGI,0.58,-0.099,2.182,0.66,ok,FALSE,2,1,s(mixed_layer_anom)
-Gm,CI,0.163,0.107,2.887,0.48,ok,FALSE,2,0,s(temperature_surface_anom); s(EKE_deep)
-Gm,EI,0.282,-0.161,NA,NA,AR(1) fit failed,FALSE,2,2,
-Gm,KGI,0,0.444,-5.692,0.821,ok,TRUE,1,1,
-Oo,CI,0.342,0.121,-19.055,0.114,ok,TRUE,1,0,s(chla_lag3_anom)
-Pm,CI,0.168,0.042,-23.062,0.122,ok,TRUE,6,3,s(EKE_deep); s(mixed_layer_anom)
-Pm,EI,0.066,0.368,-25.637,0.915,ok,TRUE,3,1,s(mixed_layer_anom); s(chla_lag3_anom)
+Gm,CI,0.022,0.113,3.023,0.206,ok,FALSE,2,1,s(mixed_layer_anom)
+Gm,EI,0.296,-0.158,NA,NA,AR(1) fit failed,FALSE,2,2,
+Gm,KGI,0.059,0.105,3.542,0.709,ok,FALSE,2,2,
+Oo,CI,0.132,0.161,-18.566,0.088,ok,TRUE,2,0,s(EKE_mid); s(temperature_surface_anom)
+Pm,CI,0.207,0.05,-18.104,0.321,ok,TRUE,4,1,s(mixed_layer_anom); s(temperature_surface_anom); s(chla_lag3_anom)
+Pm,EI,0.173,0.33,-25.42,0.796,ok,TRUE,3,1,s(mixed_layer_anom)

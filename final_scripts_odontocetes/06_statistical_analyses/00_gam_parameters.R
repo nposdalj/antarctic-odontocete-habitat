@@ -175,6 +175,12 @@ ICE_MODEL_VAR     <- "ice_conc"
 # and net primary productivity is dropped (largely redundant with chl-a).
 CHL_LAG_MONTHS    <- 3
 LAG_COLUMNS       <- paste0("chla_lag", CHL_LAG_MONTHS)
+# Standardized chl-a anomaly: divide the
+# anomaly by its seasonal SD (smooth monthly SD of the anomaly over the
+# 10-year record), so anomalies are comparable across months (Wilks 2011).
+# Adopted 2026-11-20 (decision N. Posdaljian); set the env variable to FALSE
+# to reproduce the unstandardized run.
+CHL_STANDARDIZE   <- toupper(Sys.getenv("ODONTOCETE_CHL_STANDARDIZE", unset = "TRUE")) == "TRUE"
 
 # One winner per theme enters VIF screening and backward elimination. Themes
 # come from the base variable name and, for layer variables, the layer

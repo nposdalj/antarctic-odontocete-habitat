@@ -1,0 +1,202 @@
+species,site,n_terms,dev_expl,terms,run,shift_days
+Pm,EI,3,87.73580728726698,FSLE + mixed_layer_anom + chla_lag3_anom,0,0
+Pm,EI,2,81.50541709698864,temperature_deep_anom + chla_lag3_anom,1,-1462
+Pm,EI,3,78.48893411381323,EKE_mid + temperature_deep_anom + chla_lag3_anom,2,744
+Pm,EI,3,75.56809068240561,fsle_orient + EKE_mid + chla_lag3_anom,3,1064
+Pm,EI,2,41.304919230169055,FSLE + chla_lag3_anom,4,326
+Pm,EI,3,80.09037225329874,EKE_mid + temperature_mid_anom + chla_lag3_anom,5,675
+Pm,EI,3,87.76508047762982,temperature_surface_anom + temperature_deep_anom + chla_lag3_anom,6,-307
+Pm,EI,3,81.86031726587217,EKE_mid + temperature_deep_anom + chla_lag3_anom,7,1156
+Pm,EI,2,72.45724588944375,FSLE + temperature_surface_anom,8,-1087
+Pm,EI,3,45.611774723269754,FSLE + EKE_deep + chla_lag3_anom,9,-716
+Pm,EI,3,87.01111109060578,fsle_orient + temperature_surface_anom + temperature_deep_anom,10,420
+Pm,EI,3,67.97964753799843,EKE_mid + temperature_surface_anom + temperature_mid_anom,11,1845
+Pm,EI,3,92.99688955306247,temperature_mid_anom + temperature_deep_anom + chla_lag3_anom,12,1423
+Pm,EI,2,82.72450668049765,EKE_mid + chla_lag3_anom,13,727
+Pm,EI,3,75.65915195010156,mixed_layer_anom + temperature_surface_anom + temperature_deep_anom,14,1108
+Pm,EI,3,79.71470072760741,EKE_mid + temperature_mid_anom + chla_lag3_anom,15,1819
+Pm,EI,3,67.67520166917957,mixed_layer_anom + temperature_deep_anom + chla_lag3_anom,16,-1445
+Pm,EI,3,50.63931565389337,fsle_orient + temperature_mid_anom + temperature_deep_anom,17,-1825
+Pm,EI,3,77.98656820896463,EKE_mid + mixed_layer_anom + chla_lag3_anom,18,700
+Pm,EI,3,83.73388183811888,EKE_mid + temperature_mid_anom + chla_lag3_anom,19,1084
+Pm,EI,2,50.90795249298134,FSLE + temperature_surface_anom,20,335
+Pm,EI,3,80.02295268989621,FSLE + temperature_deep_anom + chla_lag3_anom,21,-751
+Pm,EI,3,87.81365112660409,FSLE + temperature_mid_anom + chla_lag3_anom,22,-1051
+Pm,EI,2,71.86971798492826,temperature_mid_anom + chla_lag3_anom,23,1822
+Pm,EI,2,43.20504964331746,EKE_mid + chla_lag3_anom,24,-1119
+Pm,EI,2,91.07278622826405,temperature_surface_anom + chla_lag3_anom,25,-688
+Pm,EI,2,76.70495269963524,FSLE + EKE_deep,26,1489
+Pm,EI,3,92.02967549968537,temperature_surface_anom + temperature_deep_anom + chla_lag3_anom,27,350
+Pm,EI,3,50.99924146757265,FSLE + fsle_orient + mixed_layer_anom,28,-365
+Pm,EI,2,72.45724588944375,FSLE + temperature_surface_anom,29,-1087
+Pm,EI,3,92.83274421613639,temperature_surface_anom + temperature_mid_anom + chla_lag3_anom,30,1102
+Pm,EI,3,83.4744869228843,EKE_mid + temperature_surface_anom + temperature_mid_anom,31,1804
+Pm,EI,1,19.57318189735361,temperature_mid_anom,32,-1805
+Pm,EI,2,78.27091068517994,EKE_mid + chla_lag3_anom,33,725
+Pm,EI,3,70.03207596418707,mixed_layer_anom + temperature_surface_anom + temperature_deep_anom,34,-1426
+Pm,EI,2,80.93120577319621,temperature_mid_anom + chla_lag3_anom,35,-1065
+Pm,EI,3,77.7437069645186,temperature_surface_anom + temperature_deep_anom + chla_lag3_anom,36,404
+Pm,EI,3,60.769298464869706,fsle_orient + EKE_deep + temperature_surface_anom,37,-1414
+Pm,EI,2,79.0361379388666,fsle_orient + temperature_deep_anom,38,-1493
+Pm,EI,2,84.08834897123316,temperature_mid_anom + chla_lag3_anom,39,1837
+Pm,EI,3,77.17158530227272,fsle_orient + mixed_layer_anom + chla_lag3_anom,40,1780
+Pm,EI,3,78.87739844679939,mixed_layer_anom + temperature_deep_anom + chla_lag3_anom,41,-1467
+Pm,EI,2,38.50352696077425,FSLE + temperature_mid_anom,42,-1812
+Pm,EI,3,67.89593098136062,mixed_layer_anom + temperature_deep_anom + chla_lag3_anom,43,-1471
+Pm,EI,2,57.63445941168469,mixed_layer_anom + chla_lag3_anom,44,-728
+Pm,EI,3,73.30039443962045,FSLE + EKE_mid + chla_lag3_anom,45,-1068
+Pm,EI,3,67.76105724695891,FSLE + fsle_orient + mixed_layer_anom,46,774
+Pm,EI,3,87.41573375851995,mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,47,1481
+Pm,EI,3,86.4894144706609,mixed_layer_anom + temperature_mid_anom + temperature_deep_anom,48,1070
+Pm,EI,3,77.14756698928709,EKE_mid + temperature_mid_anom + chla_lag3_anom,49,1079
+Pm,EI,3,68.34325806011175,FSLE + temperature_mid_anom + chla_lag3_anom,50,1783
+Pm,EI,3,48.55648933209297,fsle_orient + temperature_surface_anom + temperature_deep_anom,51,-1823
+Pm,EI,3,72.85066951317421,mixed_layer_anom + temperature_surface_anom + temperature_deep_anom,52,383
+Pm,EI,3,69.94279477350786,FSLE + EKE_mid + chla_lag3_anom,53,-1046
+Pm,EI,2,69.56589897281117,temperature_deep_anom + chla_lag3_anom,54,743
+Pm,EI,3,73.44862507218734,FSLE + temperature_mid_anom + temperature_deep_anom,55,-776
+Pm,EI,3,77.7437069645186,temperature_surface_anom + temperature_deep_anom + chla_lag3_anom,56,404
+Pm,EI,3,73.43211297469793,fsle_orient + temperature_mid_anom + temperature_deep_anom,57,-783
+Pm,EI,3,55.46024647394292,EKE_deep + mixed_layer_anom + temperature_deep_anom,58,-1509
+Pm,EI,3,92.82375835342205,EKE_mid + temperature_deep_anom + chla_lag3_anom,59,1150
+Pm,EI,3,66.91623750796344,FSLE + temperature_deep_anom + chla_lag3_anom,60,307
+Pm,EI,3,83.94892568039415,temperature_surface_anom + temperature_deep_anom + chla_lag3_anom,61,-306
+Pm,EI,3,92.83274421613639,temperature_surface_anom + temperature_mid_anom + chla_lag3_anom,62,1102
+Pm,EI,3,92.68362058891053,temperature_mid_anom + temperature_deep_anom + chla_lag3_anom,63,1420
+Pm,EI,3,77.64966143088932,temperature_surface_anom + temperature_mid_anom + chla_lag3_anom,64,-1057
+Pm,EI,3,85.04967814647635,mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,65,1477
+Pm,EI,3,49.06678690809133,FSLE + EKE_mid + temperature_surface_anom,66,-1801
+Pm,EI,3,72.85066951317421,mixed_layer_anom + temperature_surface_anom + temperature_deep_anom,67,383
+Pm,EI,3,81.13597774516266,temperature_surface_anom + temperature_mid_anom + chla_lag3_anom,68,1855
+Pm,EI,2,74.5542005625365,EKE_mid + chla_lag3_anom,69,723
+Pm,EI,3,81.77187351351584,EKE_mid + temperature_deep_anom + chla_lag3_anom,70,748
+Pm,EI,2,92.29111986686522,temperature_surface_anom + temperature_mid_anom,71,-1108
+Pm,EI,3,87.40164724585946,FSLE + temperature_deep_anom + chla_lag3_anom,72,1769
+Pm,EI,3,86.1661309453464,EKE_mid + mixed_layer_anom + temperature_surface_anom,73,1863
+Pm,EI,3,74.91568459223339,FSLE + fsle_orient + mixed_layer_anom,74,776
+Pm,EI,3,75.90056321494595,fsle_orient + temperature_surface_anom + temperature_deep_anom,75,-1411
+Pm,EI,2,81.50541709698864,temperature_deep_anom + chla_lag3_anom,76,-1462
+Pm,EI,3,96.59289798800695,EKE_mid + mixed_layer_anom + chla_lag3_anom,77,1050
+Pm,EI,2,72.03711485734141,fsle_orient + temperature_deep_anom,78,-1497
+Pm,EI,2,61.29777982768959,FSLE + chla_lag3_anom,79,765
+Pm,EI,3,81.74275633075462,EKE_mid + temperature_mid_anom + chla_lag3_anom,80,-1064
+Pm,EI,3,87.80818163907725,temperature_surface_anom + temperature_mid_anom + chla_lag3_anom,81,-670
+Pm,EI,3,81.28528018095582,FSLE + temperature_mid_anom + chla_lag3_anom,82,1785
+Pm,EI,3,76.7558551800351,FSLE + EKE_mid + chla_lag3_anom,83,-343
+Pm,EI,2,39.13621470068917,temperature_mid_anom + temperature_deep_anom,84,-1826
+Pm,EI,3,79.42365394377987,mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,85,410
+Pm,EI,3,82.92048093612802,fsle_orient + temperature_surface_anom + chla_lag3_anom,86,-1096
+Pm,EI,3,71.05873436891976,FSLE + temperature_surface_anom + temperature_deep_anom,87,-1436
+Pm,EI,3,67.76105724695891,FSLE + fsle_orient + mixed_layer_anom,88,774
+Pm,EI,3,82.50146617177101,temperature_mid_anom + temperature_deep_anom + chla_lag3_anom,89,-1135
+Pm,EI,2,83.05608895203389,mixed_layer_anom + temperature_mid_anom,90,1074
+Pm,EI,2,76.81031159519839,temperature_surface_anom + temperature_mid_anom,91,1813
+Pm,EI,3,54.3144708433497,FSLE + mixed_layer_anom + temperature_mid_anom,92,-369
+Pm,EI,2,39.1797778990774,temperature_deep_anom + chla_lag3_anom,93,-424
+Pm,EI,2,43.20504964331746,EKE_mid + chla_lag3_anom,94,-1119
+Pm,EI,3,68.82149505248623,FSLE + temperature_mid_anom + chla_lag3_anom,95,-756
+Pm,EI,3,48.68390186320432,FSLE + EKE_mid + temperature_surface_anom,96,-1798
+Pm,EI,3,79.19832338155238,EKE_mid + temperature_deep_anom + chla_lag3_anom,97,751
+Pm,EI,3,57.69779165500463,fsle_orient + temperature_surface_anom + temperature_deep_anom,98,-1473
+Pm,EI,3,72.5369025949889,fsle_orient + mixed_layer_anom + temperature_deep_anom,99,782
+Pm,EI,3,56.53244981999226,FSLE + mixed_layer_anom + temperature_mid_anom,100,-370
+Pm,EI,2,75.21856307599556,FSLE + temperature_surface_anom,101,-1084
+Pm,EI,2,73.99566733209055,temperature_surface_anom + temperature_mid_anom,102,1873
+Pm,EI,3,87.3400399904928,fsle_orient + mixed_layer_anom + temperature_deep_anom,103,397
+Pm,EI,3,76.67153745248797,EKE_mid + temperature_surface_anom + temperature_mid_anom,104,-1771
+Pm,EI,2,83.05608895203389,mixed_layer_anom + temperature_mid_anom,105,1074
+Pm,EI,3,74.69647411699286,FSLE + temperature_deep_anom + chla_lag3_anom,106,-755
+Pm,EI,2,50.90795249298134,FSLE + temperature_surface_anom,107,335
+Pm,EI,3,62.062288804681906,FSLE + temperature_mid_anom + temperature_deep_anom,108,-1873
+Pm,EI,3,85.01798864697902,FSLE + temperature_surface_anom + temperature_deep_anom,109,419
+Pm,EI,3,82.77076040545485,FSLE + mixed_layer_anom + temperature_deep_anom,110,1884
+Pm,EI,2,86.06088582879983,mixed_layer_anom + temperature_surface_anom,111,1484
+Pm,EI,3,85.04967814647635,mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,112,1477
+Pm,EI,3,82.06953802543393,temperature_surface_anom + temperature_deep_anom + chla_lag3_anom,113,688
+Pm,EI,3,86.70928162234497,temperature_surface_anom + temperature_deep_anom + chla_lag3_anom,114,787
+Pm,EI,3,94.57540139555684,temperature_surface_anom + temperature_mid_anom + chla_lag3_anom,115,-1109
+Pm,EI,3,85.2678190647493,FSLE + temperature_surface_anom + temperature_mid_anom,116,-1078
+Pm,EI,3,75.03080116143856,FSLE + temperature_mid_anom + chla_lag3_anom,117,-782
+Pm,EI,3,88.0056344786621,EKE_mid + temperature_surface_anom + temperature_mid_anom,118,1864
+Pm,EI,3,85.69393360788582,FSLE + fsle_orient + temperature_deep_anom,119,1497
+Pm,EI,3,74.05572136099057,FSLE + temperature_surface_anom + temperature_mid_anom,120,-1072
+Pm,EI,3,84.31295074161108,fsle_orient + temperature_mid_anom + chla_lag3_anom,121,1085
+Pm,EI,3,71.30449330888574,mixed_layer_anom + temperature_deep_anom + chla_lag3_anom,122,741
+Pm,EI,3,49.025039128615475,EKE_mid + mixed_layer_anom + chla_lag3_anom,123,-1508
+Pm,EI,3,84.19453303202022,EKE_deep + temperature_surface_anom + chla_lag3_anom,124,-1112
+Pm,EI,3,89.13365489165584,temperature_surface_anom + temperature_mid_anom + chla_lag3_anom,125,-1106
+Pm,EI,3,77.60719076155142,EKE_deep + temperature_mid_anom + chla_lag3_anom,126,-702
+Pm,EI,2,31.896734140044376,FSLE + EKE_mid,127,-1795
+Pm,EI,3,89.71270565324009,fsle_orient + temperature_surface_anom + temperature_deep_anom,128,423
+Pm,EI,3,60.02676267149491,FSLE + temperature_surface_anom + temperature_deep_anom,129,-1504
+Pm,EI,3,68.70099247862026,FSLE + temperature_mid_anom + chla_lag3_anom,130,-760
+Pm,EI,3,73.92839210601737,mixed_layer_anom + temperature_surface_anom + temperature_deep_anom,131,382
+Pm,EI,3,65.46082089264897,FSLE + fsle_orient + chla_lag3_anom,132,769
+Pm,EI,3,71.79942640469673,temperature_surface_anom + temperature_mid_anom + chla_lag3_anom,133,-1139
+Pm,EI,3,83.14940522340186,fsle_orient + temperature_mid_anom + chla_lag3_anom,134,1087
+Pm,EI,3,84.52500708253002,EKE_mid + temperature_surface_anom + temperature_mid_anom,135,1856
+Pm,EI,2,83.49339338137757,FSLE + EKE_mid,136,1121
+Pm,EI,3,68.70099247862026,FSLE + temperature_mid_anom + chla_lag3_anom,137,-760
+Pm,EI,3,85.99246024747353,FSLE + EKE_mid + chla_lag3_anom,138,-735
+Pm,EI,3,73.44862507218734,FSLE + temperature_mid_anom + temperature_deep_anom,139,-776
+Pm,EI,3,83.24817396631761,EKE_mid + temperature_surface_anom + temperature_deep_anom,140,1112
+Pm,EI,3,78.21831278887753,temperature_surface_anom + temperature_mid_anom + chla_lag3_anom,141,1498
+Pm,EI,3,72.9567530093299,temperature_mid_anom + temperature_deep_anom + chla_lag3_anom,142,-1138
+Pm,EI,1,71.0356656234112,chla_lag3_anom,143,1038
+Pm,EI,3,48.1924658053787,FSLE + EKE_mid + temperature_surface_anom,144,-1799
+Pm,EI,3,59.806731900033526,FSLE + temperature_mid_anom + temperature_deep_anom,145,1409
+Pm,EI,3,88.0056344786621,EKE_mid + temperature_surface_anom + temperature_mid_anom,146,1864
+Pm,EI,3,94.7163321849526,EKE_mid + temperature_surface_anom + chla_lag3_anom,147,1049
+Pm,EI,3,84.52500708253002,EKE_mid + temperature_surface_anom + temperature_mid_anom,148,1856
+Pm,EI,2,80.32999041221213,temperature_surface_anom + temperature_deep_anom,149,-1489
+Pm,EI,3,70.97077121140664,temperature_mid_anom + temperature_deep_anom + chla_lag3_anom,150,-1129
+Pm,EI,3,83.23209182481752,FSLE + EKE_mid + temperature_surface_anom,151,-1768
+Pm,EI,3,60.28465690972248,FSLE + fsle_orient + chla_lag3_anom,152,-717
+Pm,EI,2,85.89732404614921,temperature_mid_anom + chla_lag3_anom,153,1835
+Pm,EI,2,81.96317153939778,temperature_mid_anom + chla_lag3_anom,154,1838
+Pm,EI,2,40.6039420256056,FSLE + temperature_mid_anom,155,-1813
+Pm,EI,3,56.93569744013829,FSLE + fsle_orient + mixed_layer_anom,156,772
+Pm,EI,3,75.27653014388545,FSLE + temperature_surface_anom + temperature_deep_anom,157,-1437
+Pm,EI,2,54.27736227560844,EKE_mid + EKE_deep,158,-1117
+Pm,EI,3,73.46956935456099,EKE_deep + temperature_surface_anom + chla_lag3_anom,159,-1421
+Pm,EI,3,60.5811755922073,fsle_orient + temperature_surface_anom + chla_lag3_anom,160,311
+Pm,EI,3,70.85316621574177,mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,161,-1517
+Pm,EI,3,81.17270980353321,temperature_surface_anom + temperature_deep_anom + chla_lag3_anom,162,-1434
+Pm,EI,2,72.07453703031634,FSLE + temperature_surface_anom,163,-1088
+Pm,EI,3,63.87840715284585,FSLE + temperature_surface_anom + temperature_mid_anom,164,-1886
+Pm,EI,2,74.7924217982492,fsle_orient + temperature_deep_anom,165,-1491
+Pm,EI,3,90.69985529289639,FSLE + EKE_mid + mixed_layer_anom,166,1119
+Pm,EI,3,81.94315363677569,EKE_mid + mixed_layer_anom + chla_lag3_anom,167,-357
+Pm,EI,3,80.29097810364097,EKE_mid + temperature_deep_anom + chla_lag3_anom,168,1147
+Pm,EI,3,81.39548006384425,mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,169,682
+Pm,EI,2,60.25572828120932,fsle_orient + temperature_surface_anom,170,-1416
+Pm,EI,3,87.06525239357592,mixed_layer_anom + temperature_deep_anom + chla_lag3_anom,171,696
+Pm,EI,1,60.18584467775101,temperature_deep_anom,172,-1487
+Pm,EI,3,84.73512476214165,EKE_mid + temperature_surface_anom + temperature_mid_anom,173,1135
+Pm,EI,2,52.40309242322233,FSLE + temperature_deep_anom,174,-768
+Pm,EI,3,86.58266249305169,EKE_mid + temperature_surface_anom + chla_lag3_anom,175,-396
+Pm,EI,1,48.34818527536987,temperature_mid_anom,176,-1853
+Pm,EI,3,75.7808962330789,FSLE + EKE_mid + chla_lag3_anom,177,-390
+Pm,EI,3,71.10041117794168,FSLE + fsle_orient + mixed_layer_anom,178,-790
+Pm,EI,3,72.34027935290518,FSLE + mixed_layer_anom + temperature_deep_anom,179,-1480
+Pm,EI,3,74.14940789751745,FSLE + mixed_layer_anom + temperature_deep_anom,180,-1439
+Pm,EI,3,89.71270565324009,fsle_orient + temperature_surface_anom + temperature_deep_anom,181,423
+Pm,EI,3,87.95122103098586,temperature_surface_anom + temperature_mid_anom + chla_lag3_anom,182,-1104
+Pm,EI,3,65.47672243364094,mixed_layer_anom + temperature_deep_anom + chla_lag3_anom,183,-1446
+Pm,EI,3,77.32627841805463,fsle_orient + temperature_deep_anom + chla_lag3_anom,184,305
+Pm,EI,3,89.37940338830174,fsle_orient + temperature_deep_anom + chla_lag3_anom,185,425
+Pm,EI,3,83.44548613848241,fsle_orient + mixed_layer_anom + temperature_mid_anom,186,1083
+Pm,EI,3,91.50460600753097,mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,187,1483
+Pm,EI,3,70.68672417728364,FSLE + mixed_layer_anom + temperature_mid_anom,188,-1041
+Pm,EI,2,50.10548471659172,EKE_mid + EKE_deep,189,-1116
+Pm,EI,3,83.62226844766708,EKE_mid + temperature_mid_anom + chla_lag3_anom,190,676
+Pm,EI,3,87.11579802601005,EKE_deep + temperature_surface_anom + chla_lag3_anom,191,-1102
+Pm,EI,3,65.47672243364094,mixed_layer_anom + temperature_deep_anom + chla_lag3_anom,192,-1446
+Pm,EI,1,30.203728361797328,EKE_mid,193,-1836
+Pm,EI,3,73.46956935456099,EKE_deep + temperature_surface_anom + chla_lag3_anom,194,-1421
+Pm,EI,2,49.08316821811469,FSLE + chla_lag3_anom,195,324
+Pm,EI,3,73.00267322292947,fsle_orient + mixed_layer_anom + temperature_deep_anom,196,783
+Pm,EI,3,78.65244164945987,EKE_mid + temperature_mid_anom + chla_lag3_anom,197,1841
+Pm,EI,3,86.46045789757471,FSLE + temperature_mid_anom + temperature_deep_anom,198,1427
+Pm,EI,3,90.92888833880123,temperature_mid_anom + temperature_deep_anom + chla_lag3_anom,199,1419
+Pm,EI,3,78.57912847027976,EKE_deep + temperature_mid_anom + temperature_deep_anom,200,-420

@@ -1,47 +1,47 @@
 species,theme,n_models,n_models_with_winner,n_models_selected,selected_variables,selected_directions,mean_single_dev_expl_winner,mean_final_dev_expl_term
-Pm,water_mass_surface,2,2,1,temperature_surface_anom,negative,0.11073873591227315,0.3717417555013311
+Pm,water_mass_surface,2,2,1,temperature_surface_anom,mixed,0.11073873591227315,0.31846605840776004
 Pm,water_mass_mid,2,2,0,,,0.10694247420701407,NA
 Pm,water_mass_deep,2,2,0,,,0.280347710846816,NA
-Pm,surface_fronts,2,2,1,FSLE,mixed,0.28974178483360097,0.1311964335282434
-Pm,front_orientation,2,2,1,fsle_orient,cyclic,0.07251930626743315,0.05549602410389581
-Pm,eddy_mid,2,2,1,EKE_mid,negative,0.03640569308766957,0.02559162949373283
-Pm,eddy_deep,2,2,1,EKE_deep,mixed,0.044229402065432605,0.02518310238097587
-Pm,stratification,2,2,2,mixed_layer_anom,negative; mixed,0.06673963016555196,0.06617560238171755
-Pm,productivity,2,2,2,chla_lag3_anom,mixed; mixed,0.455110328996958,0.1697889483195864
-Gm,water_mass_surface,3,3,2,temperature_surface_anom,positive; negative,0.4263479219198386,0.13948888731110864
+Pm,surface_fronts,2,2,1,FSLE,mixed,0.28974178483360097,0.09033644112035066
+Pm,front_orientation,2,2,1,fsle_orient,cyclic,0.07251930626743315,0.2162979762214991
+Pm,eddy_mid,2,2,0,,,0.032183797670413454,NA
+Pm,eddy_deep,2,2,0,,,0.01421787025599354,NA
+Pm,stratification,2,2,2,mixed_layer_anom,negative; mixed,0.06673963016555196,0.06421782881799581
+Pm,productivity,2,2,2,chla_lag3_anom,mixed; mixed,0.4767724513115878,0.2072991421465197
+Gm,water_mass_surface,3,3,2,temperature_surface_anom,positive; negative,0.4263479219198386,0.211501971065586
 Gm,water_mass_deep,3,3,0,,,0.28816212131934194,NA
 Gm,surface_fronts,3,3,0,,,0.12787806038599028,NA
 Gm,front_orientation,3,3,0,,,0.03519200590940229,NA
-Gm,eddy_deep,3,3,1,EKE_deep,mixed,0.21643764027919296,0.1574642861603871
-Gm,stratification,3,3,0,,,0.30034538048942355,NA
-Gm,productivity,3,3,2,chla_lag3_anom,positive; mixed,0.37870768041962966,0.26832031606822637
-Oo,water_mass_surface,1,1,0,,,0.07436485725761387,NA
+Gm,eddy_deep,3,3,0,,,0.1264473185262328,NA
+Gm,stratification,3,3,1,mixed_layer_anom,mixed,0.30034538048942355,0.17085376974832656
+Gm,productivity,3,3,2,chla_lag3_anom,positive; mixed,0.4000466394885189,0.2871727148836071
+Oo,water_mass_surface,1,1,1,temperature_surface_anom,mixed,0.07436485725761387,0.24816291729856543
 Oo,water_mass_mid,1,1,0,,,0.02386185766424346,NA
 Oo,surface_fronts,1,1,0,,,0.05519813797093224,NA
 Oo,front_orientation,1,1,0,,,6.031281119948913e-6,NA
-Oo,eddy_mid,1,1,0,,,0.078743516327703,NA
+Oo,eddy_mid,1,1,1,EKE_mid,negative,0.03896194130688186,0.18684803711400064
 Oo,stratification,1,1,0,,,0.00189072479342178,NA
-Oo,productivity,1,1,1,chla_lag3_anom,mixed,0.21690660671298936,0.21146801633724788
-BW29,water_mass_surface,3,3,1,temperature_surface_anom,mixed,0.2989864481893161,0.27006464741015346
+Oo,productivity,1,1,0,,,0.2470178890081224,NA
+BW29,water_mass_surface,3,3,1,temperature_surface_anom,mixed,0.2989864481893161,0.27125886139146427
 BW29,water_mass_deep,3,3,0,,,0.2329934889676397,NA
-BW29,surface_fronts,3,3,2,FSLE,mixed; mixed,0.12651566055486493,0.10827101237925735
+BW29,surface_fronts,3,3,1,FSLE,mixed,0.12651566055486493,0.13971354831469196
 BW29,front_orientation,3,3,0,,,0.019425213569128002,NA
-BW29,eddy_deep,3,3,0,,,0.170729096906697,NA
-BW29,stratification,3,3,1,mixed_layer_anom,negative,0.1396304049856588,0.06871223199357146
-BW29,productivity,3,3,3,chla_lag3_anom,mixed; positive; negative,0.42885566987977936,0.3804092864917642
+BW29,eddy_deep,3,3,1,EKE_deep,mixed,0.16749851862130918,0.12954215643020645
+BW29,stratification,3,3,1,mixed_layer_anom,negative,0.1396304049856588,0.1130139523454392
+BW29,productivity,3,3,3,chla_lag3_anom,positive; positive; negative,0.3944445683485379,0.29070410921163975
 BW37,water_mass_surface,2,2,0,,,0.06819672481728295,NA
 BW37,water_mass_deep,2,2,1,temperature_deep_anom,mixed,0.23603420269108097,0.34136670034479627
 BW37,surface_fronts,2,2,1,FSLE,mixed,0.21856490851612279,0.34708272412655883
 BW37,front_orientation,2,2,1,fsle_orient,cyclic,0.06544543697817251,0.1147375488559676
-BW37,eddy_deep,2,2,0,,,0.012072888016034719,NA
+BW37,eddy_deep,2,2,0,,,0.03579896815845181,NA
 BW37,stratification,2,2,1,mixed_layer_anom,mixed,0.044325995903205004,0.08353326710083153
-BW37,productivity,2,2,0,,,0.2398206009107454,NA
-ALL,water_mass_surface,11,11,4,temperature_surface_anom,negative; positive; negative; mixed,0.23711262627674456,0.23019604438342545
+BW37,productivity,2,2,0,,,0.21810717501381913,NA
+ALL,water_mass_surface,11,11,5,temperature_surface_anom,mixed; positive; negative; mixed; mixed,0.23711262627674456,0.25217835584579235
 ALL,water_mass_mid,3,3,0,,,0.07924893535942386,NA
 ALL,water_mass_deep,10,10,1,temperature_deep_anom,mixed,0.2596230657936739,0.34136670034479627
-ALL,surface_fronts,11,11,4,FSLE,mixed; mixed; mixed; mixed,0.1668175170448132,0.17370529560332923
-ALL,front_orientation,11,11,2,fsle_orient,cyclic; cyclic,0.039980652382538374,0.0851167864799317
-ALL,eddy_mid,3,3,1,EKE_mid,negative,0.050518300834347385,0.02559162949373283
-ALL,eddy_deep,10,10,2,EKE_deep,mixed; mixed,0.12741047917206044,0.09132369427068149
-ALL,stratification,11,11,4,mixed_layer_anom,negative; mixed; negative; mixed,0.14035903030510752,0.07114917596445952
-ALL,productivity,11,11,8,chla_lag3_anom,mixed; mixed; positive; mixed; mixed; mixed; positive; negative,0.3663144106751476,0.27861430057352077
+ALL,surface_fronts,11,11,3,FSLE,mixed; mixed; mixed,0.1668175170448132,0.19237757118720047
+ALL,front_orientation,11,11,2,fsle_orient,cyclic; cyclic,0.039980652382538374,0.16551776253873335
+ALL,eddy_mid,3,3,1,EKE_mid,negative,0.03444317888256959,0.18684803711400064
+ALL,eddy_deep,10,10,1,EKE_deep,mixed,0.09818711882715167,0.12954215643020645
+ALL,stratification,11,11,5,mixed_layer_anom,negative; mixed; mixed; negative; mixed,0.14035903030510752,0.09916732936611779
+ALL,productivity,11,11,7,chla_lag3_anom,mixed; mixed; positive; mixed; positive; positive; negative,0.3654773422881915,0.26586514881359613

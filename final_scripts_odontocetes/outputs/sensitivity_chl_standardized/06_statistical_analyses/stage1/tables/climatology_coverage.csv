@@ -1,0 +1,16 @@
+site,variable,n_years,n_months,first_date,last_date
+CI,chla_lag3,11,12,2011-04-30,2021-12-31
+CI,mixed_layer,11,12,2011-01-01,2021-12-31
+CI,temperature_deep,11,12,2011-01-01,2021-12-31
+CI,temperature_mid,11,12,2011-01-01,2021-12-31
+CI,temperature_surface,11,12,2011-01-01,2021-12-31
+EI,chla_lag3,11,12,2009-04-30,2019-12-31
+EI,mixed_layer,11,12,2009-01-01,2019-12-31
+EI,temperature_deep,11,12,2009-01-01,2019-12-31
+EI,temperature_mid,11,12,2009-01-01,2019-12-31
+EI,temperature_surface,11,12,2009-01-01,2019-12-31
+KGI,chla_lag3,12,12,2010-04-30,2021-12-31
+KGI,mixed_layer,12,12,2010-01-01,2021-12-31
+KGI,temperature_deep,12,12,2010-01-01,2021-12-31
+KGI,temperature_mid,12,12,2010-01-01,2021-12-31
+KGI,temperature_surface,12,12,2010-01-01,2021-12-31

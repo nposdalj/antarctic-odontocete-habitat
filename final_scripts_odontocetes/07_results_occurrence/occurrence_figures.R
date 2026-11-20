@@ -68,7 +68,7 @@ ENV_VARS <- c(
   fsle_orient              = "FSLV orient.\n(°)",
   EKE_mid                  = "EKE, 100–\n500 m (cm² s⁻²)",
   EKE_deep                 = "EKE, 500–\n1000 m (cm² s⁻²)",
-  chla_lag3_anom           = "log10 chl-a\nanom., 3-mo lag"
+  chla_lag3_anom           = "log10 chl-a std.\nanom. (SD), 3-mo lag"
 )
 ANOM_PANELS <- grep("_anom$", names(ENV_VARS), value = TRUE)
 
@@ -176,13 +176,12 @@ plot_weekly <- function(species_codes) {
           panel.spacing.y = unit(0.3, "cm"))
 }
 
-# (i) Main text: all species except BW58.
-save_figure(plot_weekly(MAIN_SPECIES), "fig_weekly_presence",
-            height_in = 1.0 + 0.95 * length(MAIN_SPECIES))
-
-# (ii) Supplement: BW58 only.
-save_figure(plot_weekly(RARE_SPECIES), "figS_weekly_presence_BW58",
-            height_in = 2.8)
+# (i) Main text: all species, BW58 included as the last panel
+#     (decision N. Posdaljian 2026-11-20; the separate BW58 supplementary
+#     figure is no longer produced).
+all_species <- c(MAIN_SPECIES, RARE_SPECIES)
+save_figure(plot_weekly(all_species), "fig_weekly_presence",
+            height_in = 1.0 + 0.95 * length(all_species))
 
 # -----------------------------------------------------------------------------
 # 3. (iii) Supplement: environmental time series + presence per site
@@ -265,6 +264,7 @@ if (!file.exists(F_ENV_DAILY)) {
   if (CHL_LOG10) env <- mutate(env, across(any_of(LAG_COLUMNS), log10))
   anom_sources <- intersect(sub("_anom$", "", ANOM_PANELS), names(env))
   env <- add_anomalies(env, build_climatology(env, anom_sources), anom_sources)
+  if (CHL_STANDARDIZE) env <- standardize_anomalies(env, env, intersect(LAG_COLUMNS, anom_sources))
   missing_vars <- setdiff(names(ENV_VARS), names(env))
   if (length(missing_vars) > 0) {
     message("Figure (iii): variables not in ", basename(F_ENV_DAILY),

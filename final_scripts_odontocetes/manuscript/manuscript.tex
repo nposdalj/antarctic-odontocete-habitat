@@ -123,6 +123,7 @@
 \usepackage[normalem]{ulem}
 \usepackage{makecell}
 \usepackage{xcolor}
+\usepackage{float}
 \usepackage{xcolor}
 \newcommand{\ins}[1]{\textcolor{red}{[#1]}}
 \newcommand{\conf}[1]{\textcolor{red}{[CONFIRM: #1]}}
@@ -209,11 +210,12 @@ whales were detected under more than 50\% sea-ice cover, whereas
 long-finned pilot whales were never detected above 34\% cover and two
 beaked whale signal types (BW29 and BW37) never above 13\%. After the
 seasonal cycle was removed, warmer-than-usual surface water was
-associated with pilot whale presence at all three sites. Beaked whale
-and sperm whale presence was linked to surface fronts, and to mid-water
-eddy activity and deep-layer temperature anomalies, depending on site.
-Responses differed among sites, which sample distinct water masses but
-were also recorded in different years.
+associated with pilot whale presence at all three sites. Sperm whale and
+beaked whale presence was linked mainly to surface fronts,
+stratification and lagged productivity, and at single sites to
+deep-layer temperature and eddy activity. Responses differed among
+sites, which sample distinct water masses but were also recorded in
+different years.
 \conf{site and year are confounded; keep this sentence descriptive} As
 sea ice retreats and warm Circumpolar Deep Water increasingly reaches
 the Antarctic Peninsula shelf, subsurface conditions may shape
@@ -268,10 +270,10 @@ of the ACC, and CI under stronger Weddell Sea influence
 
 High-frequency Acoustic Recording Packages (HARPs; Wiggins \& Hildebrand
 2007) were deployed sequentially at the three sites, sampling at 200
-kHz. Recordings spanned 5 March -- 17 July 2014 at EI (134.5 days), 10
-February 2015 -- 29 January 2016 at KGI (353.6 days), and 3 February --
-2 December 2016 at CI (302.2 days) (Table \ref{tab:deploy}). The EI and
-KGI recorders were duty-cycled (5 min on every 6 min and 10 min on every
+kHz. Recordings spanned 5 March -- 17 July 2014 at EI (134 days), 10
+February 2015 -- 29 January 2016 at KGI (353 days), and 3 February -- 2
+December 2016 at CI (302 days) (Table \ref{tab:deploy}). The EI and KGI
+recorders were duty-cycled (5 min on every 6 min and 10 min on every
 13.33 min, respectively), whereas the CI recorder recorded continuously.
 
 Bathymetry for the study-area map (Figure~\ref{fig-map}) was obtained
@@ -287,21 +289,21 @@ Antarctic Circumpolar Current from Orsi et al.~(1995).
 
 \begin{table}[!h]
 \centering
-\caption{\label{tab:deploy}HARP deployments.}
+\caption{\label{tab:deploy}High-frequency Acoustic Recording Package (HARP) deployments at the three sites in the South Shetland Islands: position, seafloor depth of the recorder, recording period (UTC), duration (complete days) and duty cycle (recording minutes per cycle). The CI recorder recorded continuously.}
 \centering
-\fontsize{9}{11}\selectfont
-\begin{tabular}[t]{lllrllrl}
+\fontsize{8}{10}\selectfont
+\begin{tabular}[t]{>{\raggedright\arraybackslash}p{2.6cm}llr>{\raggedright\arraybackslash}p{1.9cm}>{\raggedright\arraybackslash}p{1.9cm}r>{\raggedright\arraybackslash}p{1.6cm}}
 \toprule
 Site & Latitude & Longitude & Depth (m) & Start (UTC) & End (UTC) & Duration (d) & Duty cycle\\
 \midrule
-EI & 60°53.214′S & 55°57.238′W & 762 & 2014-03-05 00:00 & 2014-07-17 12:03 & 134.5 & 5 of 6 min\\
-KGI & 61°27.469′S & 57°56.515′W & 768 & 2015-02-10 00:00 & 2016-01-29 13:15 & 353.6 & 10 of 13.33 min\\
-CI & 61°15.112′S & 53°29.006′W & 1033 & 2016-02-03 23:59 & 2016-12-02 05:15 & 302.2 & Continuous\\
+Elephant Island (EI) & 60°53.214′S & 55°57.238′W & 762 & 2014-03-05 00:00 & 2014-07-17 12:03 & 134 & 5 of 6 min\\
+King George Island (KGI) & 61°27.469′S & 57°56.515′W & 768 & 2015-02-10 00:00 & 2016-01-29 13:15 & 353 & 10 of 13.33 min\\
+Clarence Island (CI) & 61°15.112′S & 53°29.006′W & 1033 & 2016-02-03 23:59 & 2016-12-02 05:15 & 302 & Continuous\\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 
 \centering{
 
@@ -371,7 +373,7 @@ plotted with contours of potential density anomaly (\(\sigma_\theta\))
 calculated at zero pressure using the UNESCO EOS-80 equation of state
 (oce R package 1.8-3; Kelley \& Richards 2024) (Figure~\ref{fig-ts}).
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 
 \centering{
 
@@ -524,14 +526,15 @@ depth interval between the midpoints to its neighbouring levels, and its
 weight is the overlap of that interval with the layer. Only grid cells
 with water at a level contributed, so deep-layer means represent the
 parts of the box deep enough to reach them. Eddy kinetic energy (EKE)
-was calculated at each model level as \(\frac{1}{2}(u'^2 + v'^2)\),
-where \(u'\) and \(v'\) are the daily box-mean velocity components minus
-their 10-year means at that site and level, and then averaged over the
-mid-water and deep layers in the same way. Because a box mean over fewer
-grid cells averages out less of the eddy variability, absolute EKE
-values are not directly comparable between layers or sites (e.g., at EI,
-deep-layer EKE exceeded surface EKE); within a site and layer, its
-variation over time is comparable.
+was calculated in each grid cell and at each model level as
+\(\frac{1}{2}(u'^2 + v'^2)\), where \(u'\) and \(v'\) are the daily
+velocity components minus that cell's 10-year mean at that level (Ducet
+et al.~2000 \conf{reference}), and then averaged over the box cells with
+water and over the mid-water and deep layers in the same way. Computing
+EKE per cell before averaging keeps eddies within the box from
+cancelling; an EKE computed from box-mean velocities was 2--6 times
+smaller and, at CI, poorly correlated with it (Supplement S3;
+Figure~\ref{fig-eke}).
 
 Mean FSLE included grid cells with an FSLE of zero, where the
 particle-separation threshold was not reached within the integration
@@ -592,27 +595,26 @@ Argo), this comparison is not fully independent.
 \subsection{Statistical analyses}\label{sec-stats}
 
 Relationships between odontocete acoustic presence and environmental
-conditions were modeled with generalized additive models (GAMs),
-consistent with the methods described for baleen whales in
-\ins{COMPANION PAPER}. Separate models were fit for each species at each
-site. To reduce temporal autocorrelation, daily presence was aggregated
-into consecutive multi-day bins. For each species and site, a GAM of
-daily presence minutes on a smooth of days since the start of recording
-was fit, and the bin length was the first lag at which the
-autocorrelation of its residuals fell within the 95\% confidence bounds.
-For comparability across sites, each species was assigned the longest
-bin length among its sites, capped at 4 days to retain at least 30 bins
-at the shortest deployment (EI, 135 days). Bins were 4 days long for all
-species except killer whales (2 days); the cap applied to sperm whales,
-southern bottlenose whales, and BW37, whose residual autocorrelation
-lasted 6, 11, and 17 days, respectively. The response was the mean daily
-presence minutes within each bin. Species--site combinations with fewer
-than 10 bins containing detections were not modeled and are described
-only in Section~\ref{sec-occ} (sperm whales at KGI, killer whales at EI
-and KGI, and BW37 at CI). Models with 10--20 bins with detections
-(long-finned pilot whales at EI, KGI, and CI, killer whales at CI,
-southern bottlenose whales at KGI, and BW37 at EI) were identified as
-low-sample models.
+conditions were modeled with generalized additive models (GAMs).
+Separate models were fit for each species at each site. To reduce
+temporal autocorrelation, daily presence was aggregated into consecutive
+multi-day bins. For each species and site, a GAM of daily presence
+minutes on a smooth of days since the start of recording was fit, and
+the bin length was the first lag at which the autocorrelation of its
+residuals fell within the 95\% confidence bounds. For comparability
+across sites, each species was assigned the longest bin length among its
+sites, capped at 4 days to retain at least 30 bins at the shortest
+deployment (EI, 135 days). Bins were 4 days long for all species except
+killer whales (2 days); the cap applied to sperm whales, southern
+bottlenose whales, and BW37, whose residual autocorrelation lasted 6,
+11, and 17 days, respectively. The response was the mean daily presence
+minutes within each bin. Species--site combinations with fewer than 10
+bins containing detections were not modeled and are described only in
+Section~\ref{sec-occ} (sperm whales at KGI, killer whales at EI and KGI,
+and BW37 at CI). Models with 10--20 bins with detections (long-finned
+pilot whales at EI, KGI, and CI, killer whales at CI, southern
+bottlenose whales at KGI, and BW37 at EI) were identified as low-sample
+models.
 
 Two types of model were fit. Sea-ice models related presence to sea-ice
 concentration alone, using all bins, and describe the seasonal pattern
@@ -647,13 +649,20 @@ compared with in-situ profiles (Section~\ref{sec-valid}; \(r\) =
 0.15 for oxygen). Eddy activity was represented by EKE in the mid-water
 and deep layers used by each species, and surface fronts by FSLE and
 FSLV orientation. Stratification was represented by the mixed layer
-depth anomaly. Productivity was represented by the anomaly of
-log\(_{10}\)-transformed surface chlorophyll-\emph{a} averaged over the
-30-day window ending 3 months before each day. A single lag was used for
-all species: among the candidate lags, the 3-month lag was the most
-consistently associated with presence in exploratory single-term models
-(significant in 9 of 11 species--site models, versus 6 of 11 for a
-5-month lag).
+depth anomaly. Productivity was represented by log\(_{10}\)-transformed
+surface chlorophyll-\emph{a} averaged over the 30-day window ending 3
+months before each day, expressed as a standardized anomaly: the anomaly
+was divided by its standard deviation in that calendar month over the
+10-year record (interpolated to daily values with the same periodic
+spline; Wilks 2011 \conf{reference and edition}). Standardizing was
+needed because the variability of the chlorophyll-\emph{a} anomaly was
+strongly seasonal (e.g., at KGI its standard deviation ranged from 0.04
+in September to 0.21 in May), so unstandardized anomalies would be
+dominated by a few months. A single lag was used for all species: among
+the candidate lags, the 3-month lag was the most consistently associated
+with presence in exploratory single-term models (significant in 9 of 11
+species--site models, versus 6 of 11 for a 5-month lag
+\conf{counts from unstandardized anomalies}).
 
 All models used a Tweedie distribution with a log link (power parameter
 estimated between 1.1 and 1.9), smoothing parameters estimated by
@@ -676,7 +685,7 @@ term per 10 bins with detections). The limit was applied during backward
 selection: once all remaining terms were significant, the least
 significant term continued to be removed until the model met the limit.
 With shrinkage, smooth terms in the final models had a median of 1.6
-effective degrees of freedom (range 0.8--2.8). A common set of
+effective degrees of freedom (range 0.9--2.8). A common set of
 predictors was then chosen for each species (the predictors selected at
 any of its sites), and the final model at each site was refit from this
 set with the same backward selection.
@@ -697,19 +706,21 @@ likelihood-ratio test (Supplement S5). Analyses were conducted in R
 
 \begin{table}[!h]
 \centering
-\caption{\label{tab:pred}Candidate predictors for the habitat models. Layers: surface 0--100 m (all species); mid-water 100--500 m (sperm whale, killer whale); deep 500--1000 m (sperm whale, long-finned pilot whale, southern bottlenose whale, BW37). Sea-ice concentration (Copernicus PHY) was used only in the sea-ice models and for the ice cutoff.}
+\caption{\label{tab:pred}Environmental predictors. Habitat-model candidates are listed first; sea-ice concentration was used only in the sea-ice models and to set the ice cutoff for the habitat models (Section 2.3). Layers: surface 0--100 m (all species); mid-water 100--500 m (sperm whale, killer whale); deep 500--1000 m (sperm whale, long-finned pilot whale, southern bottlenose whale, BW37).}
 \centering
-\fontsize{9}{11}\selectfont
-\begin{tabular}[t]{>{\raggedright\arraybackslash}p{3.3cm}>{\raggedright\arraybackslash}p{3.4cm}>{\raggedright\arraybackslash}p{2.6cm}>{\raggedright\arraybackslash}p{1.8cm}>{\raggedright\arraybackslash}p{1.3cm}>{\raggedright\arraybackslash}p{2cm}}
+\fontsize{8}{10}\selectfont
+\begin{tabular}[t]{>{\raggedright\arraybackslash}p{3cm}>{\raggedright\arraybackslash}p{2.8cm}>{\raggedright\arraybackslash}p{2.2cm}>{\raggedright\arraybackslash}p{1.3cm}>{\raggedright\arraybackslash}p{1.8cm}>{\raggedright\arraybackslash}p{1.8cm}>{\raggedright\arraybackslash}p{1.8cm}}
 \toprule
-Predictor & Represents & Layer & Units & Form & Source\\
+Predictor & Represents & Layer & Units & Form & Model & Source\\
 \midrule
-Potential temperature & Water mass & Mean of each layer used & °C & Anomaly & Copernicus PHY\\
-FSLE (backward-in-time) & Surface fronts and stirring & Surface & day⁻¹ & Raw & AVISO+\\
-FSLV orientation (cyclic) & Orientation of surface fronts & Surface & ° & Raw & AVISO+\\
-EKE, ½(u′² + v′²) & Eddy activity at foraging depth & Mid-water and/or deep & cm² s⁻² & Raw & Copernicus PHY\\
-Mixed layer depth & Stratification & Surface & m & Anomaly & Copernicus PHY\\
-log10 chlorophyll-a, 30-day mean ending 3 months earlier & Delayed productivity (prey) & Surface & log10 mg m⁻³ & Anomaly & Copernicus BGC\\
+Potential temperature & Water mass & Mean of each layer used & °C & Anomaly & Habitat & Copernicus PHY\\
+FSLE (backward-in-time) & Surface fronts and stirring & Surface & day⁻¹ & Raw & Habitat & AVISO+\\
+FSLV orientation (cyclic) & Orientation of surface fronts & Surface & ° & Raw & Habitat & AVISO+\\
+EKE, ½(u′² + v′²) per grid cell & Eddy activity at foraging depth & Mid-water and/or deep & cm² s⁻² & Raw & Habitat & Copernicus PHY\\
+Mixed layer depth & Stratification & Surface & m & Anomaly & Habitat & Copernicus PHY\\
+log10 chlorophyll-a, 30-day mean ending 3 months earlier & Delayed productivity (prey) & Surface & SD & Standardized anomaly & Habitat & Copernicus BGC\\
+\midrule
+Sea-ice concentration & Seasonal ice cover & Surface & \% & Raw & Sea-ice models; ice cutoff & Copernicus PHY\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -726,13 +737,13 @@ Occurrence differed strongly across sea-ice conditions
 Three species--site combinations had too few detections to model (killer
 whales at EI and KGI, 3 detection days each; BW37 at CI, 11 days; Table
 \ref{tab:rare}). Killer whale detections at KGI coincided with high eddy
-kinetic energy in the mid-water and deep layers (94th--97th percentile
-of recording days), and one of the three detections occurred under 70\%
+kinetic energy in the mid-water and deep layers (97th percentile of
+recording days), and one of the three detections occurred under 70\%
 sea-ice cover. BW37 at CI was detected only in ice-free periods
 (March--April and November), on days with above-typical deep-layer eddy
-kinetic energy (83rd percentile).
+kinetic energy (76th percentile).
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 
 \centering{
 
@@ -741,11 +752,18 @@ kinetic energy (83rd percentile).
 }
 
 \caption{\label{fig-weekly}Weekly acoustic presence of odontocetes at
-EI, KGI and CI. \ins{Legend to be drafted}}
+Elephant Island (EI; 2014), King George Island (KGI; 2015--2016) and
+Clarence Island (CI; 2016). Colored bars give the number of days per
+week with detections, by site; light grey bars give the number of days
+recorded in that week (maximum 7), and dark grey shading marks periods
+without recording. Panels show sperm whales (Pm), long-finned pilot
+whales (Gm), killer whales (Oo), southern bottlenose whales (BW29) and
+the BW37 and BW58 beaked whale signal types. BW58 was detected on only
+three days and was not modeled.}
 
 \end{figure}%
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 
 \centering{
 
@@ -789,18 +807,27 @@ in the habitat models (Section~\ref{sec-stats}).
 
 \ins{Results text to be written (Table \ref{tab:habitat}; Fig. \ref{fig-curves})}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 
 \centering{
 
-\includegraphics[width=1\linewidth,height=\textheight,keepaspectratio]{../outputs/08_results_gams/main_stage3_habitat_response_curves_grid.png}
+\includegraphics[width=0.95\linewidth,height=\textheight,keepaspectratio]{../outputs/08_results_gams/main_stage3_habitat_response_curves_grid.png}
 
 }
 
-\caption{\label{fig-curves}Partial effects of the significant terms in
-the final habitat GAMs, by predictor and species, colored by site (EI,
-KGI, CI), with 95\% confidence bands, shown over the observed range of
-each predictor. \conf{legend details: line types, rugs, scale}}
+\caption{\label{fig-curves}Partial effects (log scale, centered) of the
+predictors retained in the final habitat GAMs, for predictors selected
+in at least two models. Rows are species--site models (Pm, sperm whale;
+Gm, long-finned pilot whale; Oo, killer whale; BW29, southern bottlenose
+whale; BW37, BW37 beaked whale), colored by site (EI, pink; KGI, purple;
+CI, blue); columns are predictors, with a common x axis within each
+column. Lines show the fitted smooth and shading its 95\% confidence
+band, drawn over the range of values observed at that site; ticks along
+the bottom show the observed values of each time bin. Each row has its
+own y axis, and the p-value of each term is given in the panel. Empty
+cells mark predictors that were not retained in that model. Predictors
+selected in only one model (mid-water and deep EKE, deep-layer
+temperature) are shown with all models in Figure~\ref{fig-curvesall}.}
 
 \end{figure}%
 
@@ -821,42 +848,72 @@ Species & Site & Bins (det.) & Dev. (\%) & Term & edf & p & Term dev. (\%) & Sha
 \endfoot
 \bottomrule
 \endlastfoot
-Sperm whale & EI & 34 (23) & 85.2 & FSLE & 2.30 & <0.001 & 13.1 & peaked\\
- &  &  &  & Mixed layer depth anomaly† & 1.45 & 0.004 & 8.4 & decreasing\\
- &  &  &  & Chl-a anomaly, 3-month lag† & 1.88 & <0.001 & 23.4 & U-shaped\\
-Sperm whale & KGI & 89 (0) & -- & not modeled (<10 bins with detections) &  &  &  & \\
-Sperm whale & CI & 76 (65) & 53.1 & FSLV orientation & 1.61 & 0.007 & 5.5 & cyclic, unimodal (peak 30°, trough -63°)\\
- &  &  &  & EKE, mid-water layer & 0.87 & 0.004 & 2.6 & decreasing\\
- &  &  &  & EKE, deep layer† & 1.58 & 0.021 & 2.5 & peaked\\
- &  &  &  & Mixed layer depth anomaly† & 1.52 & 0.029 & 4.8 & peaked\\
- &  &  &  & Temperature anomaly, surface layer & 1.79 & <0.001 & 37.2 & decreasing\\
- &  &  &  & Chl-a anomaly, 3-month lag & 1.76 & <0.001 & 10.6 & U-shaped\\
-Long-finned pilot whale & EI & 34 (19)‡ & 84.8 & Temperature anomaly, surface layer & 2.78 & <0.001 & 21.1 & increasing\\
- &  &  &  & Chl-a anomaly, 3-month lag & 1.56 & <0.001 & 26.3 & increasing\\
-Long-finned pilot whale & KGI & 64 (18)‡ & 31.9 & Temperature anomaly, surface layer & 1.64 & <0.001 & 31.9 & increasing\\
-Long-finned pilot whale & CI & 64 (11)‡ & 48.0 & Temperature anomaly, surface layer† & 0.82 & 0.027 & 6.8 & decreasing\\
- &  &  &  & EKE, deep layer† & 1.50 & 0.010 & 15.7 & peaked\\
+Sperm whale & EI & 34 (23) & 87.7 & FSLE & 2.51 & <0.001 & 9.0 & peaked\\
+ &  &  &  & Mixed layer depth anomaly† & 1.16 & 0.004 & 6.7 & decreasing\\
+ &  &  &  & Chl-a standardized anomaly, 3-month lag & 1.93 & <0.001 & 26.0 & U-shaped\\
+ & KGI & 89 (0) & -- & not modeled (<10 bins with detections) &  &  &  & \\
+ & CI & 76 (65) & 49.7 & FSLV orientation & 1.81 & <0.001 & 21.6 & cyclic, unimodal (peak 28°, trough -65°)\\
+ &  &  &  & Mixed layer depth anomaly† & 1.51 & 0.010 & 6.2 & peaked\\
+ &  &  &  & Temperature anomaly, surface layer† & 1.68 & <0.001 & 31.8 & peaked\\
+ &  &  &  & Chl-a standardized anomaly, 3-month lag† & 2.81 & <0.001 & 15.5 & complex\\
+\midrule
+Long-finned pilot whale & EI & 34 (19)‡ & 84.7 & Temperature anomaly, surface layer & 2.79 & <0.001 & 18.3 & increasing\\
+ &  &  &  & Chl-a standardized anomaly, 3-month lag & 0.97 & <0.001 & 26.1 & increasing\\
+ & KGI & 64 (18)‡ & 58.3 & Temperature anomaly, surface layer & 0.97 & <0.001 & 57.3 & increasing\\
+ &  &  &  & Mixed layer depth anomaly & 1.79 & <0.001 & 26.3 & peaked\\
+ & CI & 64 (11)‡ & 49.4 & Temperature anomaly, surface layer & 0.92 & 0.001 & 24.0 & decreasing\\
+ &  &  &  & Mixed layer depth anomaly† & 1.52 & 0.016 & 17.1 & peaked\\
+\midrule
 Killer whale & EI & 68 (3) & -- & not modeled (<10 bins with detections) &  &  &  & \\
-Killer whale & KGI & 177 (3) & -- & not modeled (<10 bins with detections) &  &  &  & \\
-Killer whale & CI & 151 (11)‡ & 21.1 & Chl-a anomaly, 3-month lag† & 1.57 & 0.007 & 21.1 & U-shaped\\
-Southern bottlenose whale & EI & 34 (26) & 59.0 & FSLE† & 1.41 & 0.031 & 9.8 & peaked\\
- &  &  &  & Chl-a anomaly, 3-month lag† & 2.76 & <0.001 & 45.2 & complex\\
-Southern bottlenose whale & KGI & 56 (20)‡ & 38.7 & Chl-a anomaly, 3-month lag & 1.93 & 0.003 & 38.7 & increasing\\
-Southern bottlenose whale & CI & 52 (24) & 66.7 & FSLE & 1.44 & 0.003 & 11.8 & peaked\\
- &  &  &  & Chl-a anomaly, 3-month lag & 0.96 & <0.001 & 30.2 & decreasing\\
- &  &  &  & Mixed layer depth anomaly & 0.90 & 0.003 & 6.9 & decreasing\\
- &  &  &  & Temperature anomaly, surface layer & 1.87 & <0.001 & 27.0 & peaked\\
+ & KGI & 177 (3) & -- & not modeled (<10 bins with detections) &  &  &  & \\
+ & CI & 151 (11)‡ & 27.1 & EKE, mid-water layer† & 0.88 & 0.006 & 18.7 & decreasing\\
+ &  &  &  & Temperature anomaly, surface layer† & 1.64 & 0.006 & 24.8 & U-shaped\\
+\midrule
+Southern bottlenose whale & EI & 34 (26) & 46.6 & EKE, deep layer & 1.57 & 0.019 & 13.0 & peaked\\
+ &  &  &  & Chl-a standardized anomaly, 3-month lag & 1.64 & 0.004 & 16.8 & increasing\\
+ & KGI & 56 (20)‡ & 42.1 & Chl-a standardized anomaly, 3-month lag & 2.00 & 0.003 & 42.1 & increasing\\
+ & CI & 52 (24) & 64.8 & FSLE & 1.55 & 0.002 & 14.0 & peaked\\
+ &  &  &  & Chl-a standardized anomaly, 3-month lag & 0.96 & <0.001 & 28.3 & decreasing\\
+ &  &  &  & Mixed layer depth anomaly & 0.95 & <0.001 & 11.3 & decreasing\\
+ &  &  &  & Temperature anomaly, surface layer & 1.89 & <0.001 & 27.1 & peaked\\
+\midrule
 BW37 beaked whale & EI & 34 (17)‡ & 47.8 & FSLE & 1.84 & <0.001 & 34.7 & U-shaped\\
  &  &  &  & FSLV orientation & 1.35 & 0.029 & 11.5 & cyclic, unimodal (peak -66°, trough 26°)\\
-BW37 beaked whale & KGI & 56 (27) & 42.5 & Mixed layer depth anomaly† & 1.40 & 0.018 & 8.4 & U-shaped\\
+ & KGI & 56 (27) & 42.5 & Mixed layer depth anomaly† & 1.40 & 0.018 & 8.4 & U-shaped\\
  &  &  &  & Temperature anomaly, deep layer & 1.80 & <0.001 & 34.1 & peaked\\
-BW37 beaked whale & CI & 52 (7) & -- & not modeled (<10 bins with detections) &  &  &  & \\*
+ & CI & 52 (7) & -- & not modeled (<10 bins with detections) &  &  &  & \\*
 \end{longtable}
 \endgroup{}
 
 \section{Discussion}\label{discussion}
 
-\ins{Discussion to be written. Points noted so far: residual autocorrelation remained in 2 of 11 habitat models (Ljung--Box p ≤ 0.05; long-finned pilot whales at KGI and southern bottlenose whales at CI), and AR(1) retained 14 of 24 testable terms; lagged chlorophyll-a effects were not robust; EKE box-averaging caveat; qualitative description of the rare species--site combinations.}
+\ins{Discussion to be written. Points noted so far: residual autocorrelation remained in 2 of 11 habitat models (Ljung--Box p ≤ 0.05; long-finned pilot whales at CI and southern bottlenose whales at CI), and AR(1) retained 14 of 22 testable terms; qualitative description of the rare species--site combinations.}
+
+\ins{Draft note, concurvity:} Some predictors in the same model
+overlapped nonlinearly even though they passed the collinearity screen.
+VIF measures only linear overlap, whereas concurvity measures how well
+one smooth term can be reproduced by the others. Pairs with a worst-case
+concurvity above 0.5 were FSLE and chlorophyll-a standardized anomaly,
+3-month lag (sperm whales at EI; 0.77), temperature anomaly, surface
+layer and chlorophyll-a standardized anomaly, 3-month lag (long-finned
+pilot whales at EI; 0.60), and temperature anomaly, surface layer and
+mixed layer depth anomaly (long-finned pilot whales at KGI; 0.55). The
+models as a whole are unaffected, but the separate effects of these
+pairs cannot be cleanly separated, and their individual response curves
+should be interpreted together.
+
+\ins{Draft note, site/year:} Each site was recorded in a different year,
+so differences between sites are site/year differences. The
+environmental records show that mid-water and deep temperature, FSLE and
+chlorophyll-\emph{a} differed consistently among sites in all three
+years (site explained 89.2\% and 46.4\% of the non-seasonal variance in
+deep temperature and FSLE, versus 1.2\% and 0.4\% for year), whereas sea
+ice, mixed layer depth and surface temperature varied as much between
+years as between sites (Supplement S7). The EI recording year (2014) was
+unusual at that site, with the coldest mid-water and deep layers and the
+highest deep-layer EKE of its 10-year record.
+
+\ins{Further points: residual autocorrelation and the AR(1) results; detection may vary with ambient noise (sea ice, wind), which was not modeled; validation tested raw values whereas models use anomalies; permutation test results.}
 
 \clearpage
 
@@ -889,7 +946,7 @@ m; 692 m at KGI). The deep layer was capped at 1000 m because, below
 \textasciitilde1060 m, less than half of the KGI and CI boxes contains
 water.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 
 \centering{
 
@@ -907,7 +964,7 @@ shows the surface freezing temperature.}
 
 \end{figure}%
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 
 \centering{
 
@@ -952,12 +1009,11 @@ BW37 beaked whale & 12.6 & 0/34 & 33/89 & 24/76\\
 \end{tabular}
 \end{table}
 
-\textbackslash begin\{table\}{[}!h{]} \centering
-\textbackslash caption\{\label{tab:duty}Duty-cycle subsampling of
-continuous CI recordings (mean \% retained, range across 100 phase
-offsets). BW58 was not detected at CI and could not be evaluated.\}
-\centering \fontsize{9}{11}\selectfont
-
+\begin{table}[!h]
+\centering
+\caption{\label{tab:duty}Duty-cycle subsampling of continuous CI recordings (mean \% retained, range across 100 phase offsets). BW58 was not detected at CI and could not be evaluated.}
+\centering
+\fontsize{9}{11}\selectfont
 \begin{tabular}[t]{lllll}
 \toprule
 Species & Duty cycle & Events & 5-min bins & Presence days\\
@@ -974,10 +1030,9 @@ BW37 beaked whale & EI (5 of 6 min) & 100.0 & 99.3 (96.3–100.0) & 100.0\\
 BW37 beaked whale & KGI (10 of 13.33 min) & 92.3 (83.3–100.0) & 92.5 (81.5–100.0) & 96.5 (90.9–100.0)\\
 \bottomrule
 \end{tabular}
+\end{table}
 
-\textbackslash end\{table\}
-
-\begin{figure}[htbp]
+\begin{figure}[H]
 
 \centering{
 
@@ -995,9 +1050,9 @@ relative to continuous recording. Points show the mean and bars the
 range across phase offsets. Dashed horizontal lines mark the proportion
 of time recorded under each duty cycle (83.3\% for EI, 75.0\% for KGI).
 Open symbols mark species not detected at the site whose duty cycle was
-simulated (sperm whale at KGI). BW58 is not shown because it was not
-detected at CI. Pm, sperm whale; Gm, long-finned pilot whale; Oo, killer
-whale; BW29, southern bottlenose whale; BW37, BW37 beaked whale.}
+simulated. BW58 is not shown because it was not detected at CI. Pm,
+sperm whale; Gm, long-finned pilot whale; Oo, killer whale; BW29,
+southern bottlenose whale; BW37, BW37 beaked whale.}
 
 \end{figure}%
 
@@ -1006,7 +1061,7 @@ validation}\label{s3.-ocean-model-comparison-and-validation}
 \addcontentsline{toc}{subsection}{S3. Ocean model comparison and
 validation}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 
 \centering{
 
@@ -1024,7 +1079,7 @@ site; dashed lines mark the layer boundaries (100 and 500 m).}
 
 \end{figure}%
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 
 \centering{
 
@@ -1041,6 +1096,33 @@ salinity and dissolved oxygen (Copernicus only) at each model level,
 computed on the same profiles and levels for both models (levels with ≥
 10 matched profiles). Dashed lines mark the layer boundaries (100 and
 500 m).}
+
+\end{figure}%
+
+Eddy kinetic energy was computed per grid cell before averaging over the
+box (Section~\ref{sec-env}). For comparison, EKE was also computed from
+the box-mean velocities, as in some earlier box-averaged analyses; in
+that version, eddies within the box partly cancel. Over the recording
+periods the per-cell EKE was 1.6--6.2 times larger (median), and the two
+versions were closely correlated at EI and KGI (\(r\) = 0.88--0.97) but
+not at CI (\(r\) = 0.62--0.68), where the box-mean EKE fell by one to
+two orders of magnitude while per-cell EKE did not
+(Figure~\ref{fig-eke}).
+
+\begin{figure}[H]
+
+\centering{
+
+\includegraphics[width=1\linewidth,height=\textheight,keepaspectratio]{../outputs/05_environmental_data/eke_definition_comparison.png}
+
+}
+
+\caption{\label{fig-eke}Daily acoustic presence (top) and eddy kinetic
+energy in the mid-water (100--500 m) and deep (500--1000 m) layers
+(log\(_{10}\) cm² s⁻²) over each site's recording period, computed per
+grid cell (orange; used in the models) and from box-mean velocities
+(grey). Species: Pm, sperm whale; Gm, long-finned pilot whale; Oo,
+killer whale; BW29, southern bottlenose whale; BW37, BW37 beaked whale.}
 
 \end{figure}%
 
@@ -1075,11 +1157,11 @@ BW37 beaked whale & CI & 76 (7) & -- & -- & -- & not modeled & \\
 \end{tabular}
 \end{table}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 
 \centering{
 
-\includegraphics[width=1\linewidth,height=\textheight,keepaspectratio]{../outputs/08_results_gams/supplementary_sea_ice_response_curves.png}
+\includegraphics[width=0.75\linewidth,height=\textheight,keepaspectratio]{../outputs/08_results_gams/supplementary_sea_ice_response_curves.png}
 
 }
 
@@ -1102,22 +1184,20 @@ autocorrelation}\label{s5.-habitat-model-diagnostics-and-sensitivity-to-residual
 \addcontentsline{toc}{subsection}{S5. Habitat model diagnostics and
 sensitivity to residual autocorrelation}
 
-AR(1) was supported (ΔAIC \textless{} −2) in 5 of 11 models: sperm
-whales at EI and CI, long-finned pilot whales at KGI, killer whales at
-CI, and southern bottlenose whales at EI. Across all models, 14 of the
-24 testable terms remained significant (2 terms could not be tested
-because a reduced model failed to converge). Under AR(1), lagged
-chlorophyll-\emph{a} was not significant in any of the three models
-where it could be tested (sperm whales at EI, killer whales at CI,
-southern bottlenose whales at EI), nor were mixed layer depth (sperm
-whales at EI and CI) or deep-layer EKE (sperm whales at CI). FSLE (sperm
-whales at EI), FSLV orientation, mid-water EKE and surface-layer
-temperature (sperm whales at CI), and surface-layer temperature (pilot
-whales at KGI) remained significant. Three further terms were not
-significant when refit by maximum likelihood even without AR(1) (pilot
-whales at CI; mixed layer depth for BW37 at KGI). Effects that are not
-robust are interpreted cautiously in the Discussion.
-\conf{term-by-term sentences are typed; check against ar1\_sensitivity\_terms.csv after the final run}
+AR(1) was supported (ΔAIC \textless{} −2) in 3 of 11 models: sperm
+whales at EI and CI and killer whales at CI. Across all models, 14 of
+the 22 testable terms remained significant (4 terms could not be tested
+because a reduced model failed to converge). Terms that were not
+significant once AR(1) was included: mixed layer depth anomaly (sperm
+whales at EI), mixed layer depth anomaly (sperm whales at CI),
+temperature anomaly, surface layer (sperm whales at CI), chlorophyll-a
+standardized anomaly, 3-month lag (sperm whales at CI), EKE, mid-water
+layer (killer whales at CI), and temperature anomaly, surface layer
+(killer whales at CI). Terms that were not significant when refit by
+maximum likelihood even without AR(1): mixed layer depth anomaly
+(long-finned pilot whales at CI) and mixed layer depth anomaly (BW37 at
+KGI). Effects that are not robust are interpreted cautiously in the
+Discussion.
 
 \begin{table}[!h]
 \centering
@@ -1128,20 +1208,37 @@ robust are interpreted cautiously in the Discussion.
 \toprule
 Species & Site & Bin (d) & Tweedie p & Min k-index p & Max concurvity & Lag-1 ACF & Ljung–Box p & ΔAIC with AR(1)\\
 \midrule
-Sperm whale & EI & 4 & 1.47 & 0.220 & 0.74 & 0.37 & 0.066 & -25.6\\
-Sperm whale & CI & 4 & 1.57 & 0.122 & 0.88 & 0.04 & 0.170 & -23.1\\
-Long-finned pilot whale & EI & 4 & 1.31 & 0.148 & 0.49 & -0.16 & 0.280 & --\\
-Long-finned pilot whale & KGI & 4 & 1.32 & 0.948 & 0.00 & 0.44 & <0.001 & -5.7\\
-Long-finned pilot whale & CI & 4 & 1.44 & 0.400 & 0.25 & 0.11 & 0.160 & 2.9\\
-Killer whale & CI & 2 & 1.35 & 0.660 & 0.00 & 0.12 & 0.340 & -19.1\\
-Southern bottlenose whale & EI & 4 & 1.50 & 0.295 & 0.71 & -0.21 & 0.350 & -3.6\\
-Southern bottlenose whale & KGI & 4 & 1.18 & 0.050 & 0.00 & 0.27 & 0.140 & --\\
-Southern bottlenose whale & CI & 4 & 1.39 & 0.265 & 0.71 & 0.35 & 0.034 & 3.2\\
+Sperm whale & EI & 4 & 1.46 & 0.348 & 0.80 & 0.33 & 0.170 & -25.4\\
+Sperm whale & CI & 4 & 1.57 & 0.185 & 0.52 & 0.05 & 0.210 & -18.1\\
+Long-finned pilot whale & EI & 4 & 1.32 & 0.180 & 0.60 & -0.16 & 0.300 & --\\
+Long-finned pilot whale & KGI & 4 & 1.26 & 0.325 & 0.55 & 0.11 & 0.059 & 3.5\\
+Long-finned pilot whale & CI & 4 & 1.41 & 0.362 & 0.20 & 0.11 & 0.022 & 3.0\\
+Killer whale & CI & 2 & 1.37 & 0.415 & 0.31 & 0.16 & 0.130 & -18.6\\
+Southern bottlenose whale & EI & 4 & 1.56 & 0.475 & 0.41 & 0.06 & 0.910 & --\\
+Southern bottlenose whale & KGI & 4 & 1.18 & 0.002 & 0.00 & 0.23 & 0.057 & --\\
+Southern bottlenose whale & CI & 4 & 1.42 & 0.100 & 0.69 & 0.37 & 0.024 & 3.0\\
 BW37 beaked whale & EI & 4 & 1.10 & 0.540 & 0.26 & 0.01 & 0.470 & 2.0\\
 BW37 beaked whale & KGI & 4 & 1.17 & 0.530 & 0.06 & -0.10 & 0.580 & 2.2\\
 \bottomrule
 \end{tabular}
 \end{table}
+
+\begin{figure}[H]
+
+\centering{
+
+\includegraphics[width=0.95\linewidth,height=\textheight,keepaspectratio]{../outputs/08_results_gams/supplementary_stage3_habitat_response_curves_grid_all.png}
+
+}
+
+\caption{\label{fig-curvesall}Partial effects of all predictors retained
+in the final habitat GAMs, for all models (layout and symbols as in
+Figure~\ref{fig-curves}). This version includes the predictors selected
+in only one model: mid-water EKE (killer whales at CI), deep-layer EKE
+(southern bottlenose whales at EI) and deep-layer temperature (BW37 at
+KGI). \conf{list after final run}}
+
+\end{figure}%
 
 \subsection*{S6. Species--site combinations not
 modeled}\label{s6.-speciessite-combinations-not-modeled}
@@ -1157,18 +1254,86 @@ modeled}
 \toprule
 Species, site & Detection days & Months & Sea-ice cover on detection days & EKE (percentile among recording days) & Other conditions\\
 \midrule
-Killer whale, EI & 3 & Mar, May, Jun 2014 & 0–0.4\% & 73rd–74th (mid-water, deep) & typical\\
-Killer whale, KGI & 3 & May, Jul, Oct 2015 & 1\% (26 May), 10\% (2 Jul), 70\% (5 Oct) & 94th–97th (mid-water, deep) & surface layer warmer than usual (81st percentile)\\
-BW37, CI & 11 & Mar–Apr, Nov 2016 & 0\% (all days) & 83rd (deep) & typical\\
+Killer whale, EI & 3 & Mar, May, Jun 2014 & 0–0.4\% & 64th–70th (mid-water, deep) & typical\\
+Killer whale, KGI & 3 & May, Jul, Oct 2015 & 1\% (26 May), 10\% (2 Jul), 70\% (5 Oct) & 97th (mid-water, deep) & surface layer warmer than usual (81st percentile)\\
+BW37, CI & 11 & Mar–Apr, Nov 2016 & 0\% (all days) & 76th (deep) & typical\\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\subsection*{S7. Supplementary occurrence
-figures}\label{s7.-supplementary-occurrence-figures}
-\addcontentsline{toc}{subsection}{S7. Supplementary occurrence figures}
+\subsection*{S7. Separating site from year in the environmental
+conditions}\label{s7.-separating-site-from-year-in-the-environmental-conditions}
+\addcontentsline{toc}{subsection}{S7. Separating site from year in the
+environmental conditions}
 
-\begin{figure}[htbp]
+Each site was recorded in a different year (EI 2014, KGI 2015, CI 2016),
+so site and year are confounded in the acoustic data. The environmental
+records, however, cover all three sites in all three years. For each
+predictor and sea ice, monthly means for 2014--2016 at the three sites
+were analysed with a linear model with month, site, year and the site ×
+year interaction, and the variance not explained by month was
+partitioned among site, year, their interaction and the residual (Table
+\ref{tab:siteyear}; Figure~\ref{fig-siteyear}). In addition, the mean of
+each variable over each recording period was compared with the same
+calendar window in every other year of that site's 10-year record.
+Mid-water and deep temperature, FSLE and chlorophyll-\emph{a} differed
+mainly among sites (site 35.0--89.2\% of the non-seasonal variance, year
+≤ 2.1\%), whereas sea ice, mixed layer depth and surface temperature
+differed little among sites and as much or more among years. EKE
+differed among sites but with a stronger site × year interaction
+(10.0--14.0\%). The EI recording year was unusual at that site: its
+mid-water and deep layers were the coldest, its mixed layer the
+shallowest and its deep-layer EKE the highest in the 10-year record. KGI
+2015 had more sea ice than 91\% of the other years at that site, and CI
+2016 had the deepest mixed layer of its record.
+\conf{percentiles typed from site\_year\_recording\_percentile.csv}
+
+\begin{table}[!h]
+\centering
+\caption{\label{tab:siteyear}Partition of the non-seasonal variance of monthly means (2014--2016, all three sites) among site, year, their interaction and the residual, after removing the seasonal cycle (month). The last column gives the share of the total variance explained by month.}
+\centering
+\fontsize{8}{10}\selectfont
+\begin{tabular}[t]{>{\raggedright\arraybackslash}p{4.5cm}llll>{\raggedright\arraybackslash}p{2.5cm}}
+\toprule
+Variable & Site (\%) & Year (\%) & Site × year (\%) & Residual (\%) & Seasonal share of total (\%)\\
+\midrule
+Sea-ice concentration & 7.2 & 15.7 & 1.0 & 76.0 & 54.8\\
+Temperature, surface layer & 12.1 & 2.4 & 5.0 & 80.6 & 77.4\\
+Temperature, mid-water layer & 83.6 & 1.8 & 2.4 & 12.3 & 2.5\\
+Temperature, deep layer & 89.2 & 1.2 & 1.8 & 7.8 & 0.6\\
+Mixed layer depth & 7.9 & 13.2 & 4.3 & 74.6 & 61.7\\
+FSLE & 46.4 & 0.4 & 3.0 & 50.1 & 6.0\\
+EKE, mid-water layer & 43.7 & 7.2 & 10.0 & 39.1 & 6.0\\
+EKE, deep layer & 33.9 & 11.1 & 14.0 & 41.0 & 6.5\\
+log10 chlorophyll-a, 3-month lag & 35.0 & 2.1 & 1.0 & 61.9 & 88.5\\
+FSLV orientation (cos 2θ) & 25.6 & 5.6 & 2.9 & 66.0 & 5.9\\
+FSLV orientation (sin 2θ) & 13.6 & 0.6 & 2.6 & 83.3 & 5.5\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+
+\centering{
+
+\includegraphics[width=1\linewidth,height=\textheight,keepaspectratio]{../outputs/05_environmental_data/site_year_comparison.png}
+
+}
+
+\caption{\label{fig-siteyear}Monthly means of the environmental
+predictors and sea ice at EI (pink), KGI (purple) and CI (blue) in 2014
+(solid), 2015 (dashed) and 2016 (dotted), from the ±20 km box around
+each site. Points mark the months of each site's recording period. EKE
+is the per-cell definition used in the models; chlorophyll-\emph{a} is
+shown as log\(_{10}\) values (not anomalies) with the 3-month lag.}
+
+\end{figure}%
+
+\subsection*{S8. Supplementary occurrence
+figures}\label{s8.-supplementary-occurrence-figures}
+\addcontentsline{toc}{subsection}{S8. Supplementary occurrence figures}
+
+\begin{figure}[H]
 
 \centering{
 
@@ -1176,12 +1341,21 @@ figures}\label{s7.-supplementary-occurrence-figures}
 
 }
 
-\caption{\label{fig-envEI}Acoustic presence and the final model
-predictors (anomalies by layer) at EI. \ins{Legend to be drafted}}
+\caption{\label{fig-envEI}Daily acoustic presence and the predictors of
+the final habitat models at Elephant Island (EI). Top panels: daily time
+series of each predictor over the calendar year(s) containing the
+recording period (shaded). Predictors are shown as used in the models:
+temperature and mixed layer depth as anomalies from the 10-year
+climatology, chlorophyll-\emph{a} as a standardized anomaly (SD units,
+3-month lag), and FSLE, FSLV orientation and EKE as raw values;
+horizontal grey lines mark zero for anomalies. Bottom panel: days with
+detections of each species (Pm, sperm whale; Gm, long-finned pilot
+whale; Oo, killer whale; BW29, southern bottlenose whale; BW37 and BW58,
+beaked whale signal types).}
 
 \end{figure}%
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 
 \centering{
 
@@ -1189,11 +1363,12 @@ predictors (anomalies by layer) at EI. \ins{Legend to be drafted}}
 
 }
 
-\caption{\label{fig-envKGI}As Figure~\ref{fig-envEI}, for KGI.}
+\caption{\label{fig-envKGI}As Figure~\ref{fig-envEI}, for King George
+Island (KGI).}
 
 \end{figure}%
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 
 \centering{
 
@@ -1201,20 +1376,8 @@ predictors (anomalies by layer) at EI. \ins{Legend to be drafted}}
 
 }
 
-\caption{\label{fig-envCI}As Figure~\ref{fig-envEI}, for CI.}
-
-\end{figure}%
-
-\begin{figure}[htbp]
-
-\centering{
-
-\includegraphics[width=1\linewidth,height=\textheight,keepaspectratio]{../outputs/07_results_occurrence/figS_weekly_presence_BW58.png}
-
-}
-
-\caption{\label{fig-bw58}Weekly acoustic presence of the BW58 beaked
-whale signal type. \ins{Legend to be drafted}}
+\caption{\label{fig-envCI}As Figure~\ref{fig-envEI}, for Clarence Island
+(CI).}
 
 \end{figure}%
 

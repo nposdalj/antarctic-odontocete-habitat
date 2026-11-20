@@ -68,7 +68,7 @@ PREDICTOR_SHORT <- c(
   fsle_orient              = "FSLV orientation (°)",
   EKE_mid                  = "EKE, mid-water\nlayer (cm² s⁻²)",
   EKE_deep                 = "EKE, deep layer\n(cm² s⁻²)",
-  chla_lag3_anom           = "log10 chl-a anomaly,\n3-month lag")
+  chla_lag3_anom           = "log10 chl-a std. anomaly\n(SD), 3-month lag")
 
 if (!dir.exists(RESULTS_DIR)) dir.create(RESULTS_DIR, recursive = TRUE)
 hab_fig_dir <- file.path(RESULTS_DIR, paste0(HABITAT_LABEL, "_habitat_response_curves"))
@@ -301,22 +301,39 @@ grid_cell <- function(sp, st, v, first_col, last_row) {
     theme_cell
 }
 
-cells <- list()
-for (r in seq_len(nrow(model_order))) {
-  for (j in seq_along(cols)) {
-    cells[[length(cells) + 1]] <- grid_cell(model_order$species[r], model_order$site[r],
-                                            cols[j], first_col = j == 1,
-                                            last_row = r == nrow(model_order))
+
+# Writes one grid for the given predictor columns and model rows.
+save_grid <- function(cols, rows, file_stem) {
+  cells <- list()
+  for (r in seq_len(nrow(rows))) {
+    for (j in seq_along(cols)) {
+      cells[[length(cells) + 1]] <- grid_cell(rows$species[r], rows$site[r], cols[j],
+                                              first_col = j == 1,
+                                              last_row = r == nrow(rows))
+    }
   }
+  fig <- wrap_plots(cells, ncol = length(cols), byrow = TRUE)
+  w <- 1.45 * length(cols) + 0.5
+  h <- 1.05 * nrow(rows) + 0.6
+  ggsave(file.path(RESULTS_DIR, paste0(file_stem, ".png")), fig, width = w, height = h,
+         dpi = 600, device = ragg::agg_png, bg = "white")
+  ggsave(file.path(RESULTS_DIR, paste0(file_stem, ".pdf")), fig, width = w, height = h,
+         device = cairo_pdf)
 }
-grid_fig <- wrap_plots(cells, ncol = length(cols), byrow = TRUE) +
-  plot_annotation(caption = NULL)
-grid_w <- 1.45 * length(cols) + 0.5
-grid_h <- 1.05 * nrow(model_order) + 0.6
-ggsave(file.path(RESULTS_DIR, paste0(HABITAT_LABEL, "_habitat_response_curves_grid.png")),
-       grid_fig, width = grid_w, height = grid_h, dpi = 600, device = ragg::agg_png,
-       bg = "white")
-ggsave(file.path(RESULTS_DIR, paste0(HABITAT_LABEL, "_habitat_response_curves_grid.pdf")),
-       grid_fig, width = grid_w, height = grid_h, device = cairo_pdf)
+
+# Main text: predictors selected in at least MIN_MODELS_MAIN final models,
+# and the models with at least one of them (decision N. Posdaljian
+# 2026-11-20: less white space; predictors selected only once are shown in
+# the supplementary grid).
+MIN_MODELS_MAIN <- 2
+n_models_per_var <- distinct(hab_curves, species, site, variable) |> count(variable)
+cols_main <- intersect(cols, n_models_per_var$variable[n_models_per_var$n >= MIN_MODELS_MAIN])
+rows_main <- model_order |>
+  semi_join(filter(distinct(hab_curves, species, site, variable), variable %in% cols_main),
+            by = c("species", "site"))
+save_grid(cols_main, rows_main, paste0(HABITAT_LABEL, "_habitat_response_curves_grid"))
+
+# Supplement: every predictor and model.
+save_grid(cols, model_order, paste0("supplementary_", RESULTS_STAGE, "_habitat_response_curves_grid_all"))
 
 message("Response curves (sea ice + habitat ", RESULTS_STAGE, ") written to ", RESULTS_DIR)

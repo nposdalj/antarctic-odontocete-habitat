@@ -48,11 +48,13 @@ source(file.path(FINAL_DIR, "06_statistical_analyses", "00_gam_functions.R"))
 # Approved by N. Posdaljian, 2026-11-19.
 harmonized_terms <- tribble(
   ~species, ~site, ~terms,
-  "Pm",   "all", c("FSLE", "fsle_orient", "EKE_mid", "EKE_deep", "mixed_layer_anom",
+  # Union of the Stage 1 picks per species (re-derived 2026-11-20 after the
+  # switch to per-cell EKE and standardized chl-a anomalies)
+  "Pm",   "all", c("FSLE", "fsle_orient", "mixed_layer_anom",
                    "temperature_surface_anom", "chla_lag3_anom"),
-  "Gm",   "all", c("temperature_surface_anom", "chla_lag3_anom", "EKE_deep"),
-  "Oo",   "all", c("chla_lag3_anom"),
-  "BW29", "all", c("FSLE", "chla_lag3_anom", "mixed_layer_anom",
+  "Gm",   "all", c("temperature_surface_anom", "chla_lag3_anom", "mixed_layer_anom"),
+  "Oo",   "all", c("EKE_mid", "temperature_surface_anom"),
+  "BW29", "all", c("EKE_deep", "FSLE", "chla_lag3_anom", "mixed_layer_anom",
                    "temperature_surface_anom"),
   "BW37", "all", c("FSLE", "fsle_orient", "mixed_layer_anom", "temperature_deep_anom")
 )

@@ -47,6 +47,7 @@ env <- read_csv(F_ENV_DAILY, show_col_types = FALSE) |> mutate(date = as.Date(da
 if (CHL_LOG10) env <- mutate(env, across(any_of(LAG_COLUMNS), log10))
 anom_sources <- intersect(sub("_anom$", "", grep("_anom$", VARS, value = TRUE)), names(env))
 env <- add_anomalies(env, build_climatology(env, anom_sources), anom_sources)
+if (CHL_STANDARDIZE) env <- standardize_anomalies(env, env, intersect(LAG_COLUMNS, anom_sources))
 
 presence <- read_csv(F_PRESENCE_DAILY, show_col_types = FALSE) |>
   filter(rec_minutes > 0) |>

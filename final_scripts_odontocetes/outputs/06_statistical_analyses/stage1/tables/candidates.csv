@@ -36,7 +36,7 @@ Gm,CI,VIF retained,fsle_orient,fsle_orient,NA,NA,NA,FALSE,front_orientation
 Gm,CI,VIF retained,EKE_deep,EKE,deep,NA,NA,FALSE,eddy_deep
 Gm,CI,VIF retained,mixed_layer_anom,mixed_layer,NA,NA,NA,TRUE,stratification
 Gm,CI,VIF retained,temperature_surface_anom,temperature,surface,NA,NA,TRUE,water_mass_surface
-Gm,CI,removed (VIF),temperature_deep_anom,temperature,deep,NA,NA,TRUE,water_mass_deep
+Gm,CI,VIF retained,temperature_deep_anom,temperature,deep,NA,NA,TRUE,water_mass_deep
 Gm,CI,VIF retained,chla_lag3_anom,chla,NA,NA,3,TRUE,productivity
 Oo,CI,VIF retained,FSLE,FSLE,NA,NA,NA,FALSE,surface_fronts
 Oo,CI,VIF retained,fsle_orient,fsle_orient,NA,NA,NA,FALSE,front_orientation
@@ -64,7 +64,7 @@ BW29,CI,VIF retained,fsle_orient,fsle_orient,NA,NA,NA,FALSE,front_orientation
 BW29,CI,VIF retained,EKE_deep,EKE,deep,NA,NA,FALSE,eddy_deep
 BW29,CI,VIF retained,mixed_layer_anom,mixed_layer,NA,NA,NA,TRUE,stratification
 BW29,CI,VIF retained,temperature_surface_anom,temperature,surface,NA,NA,TRUE,water_mass_surface
-BW29,CI,removed (VIF),temperature_deep_anom,temperature,deep,NA,NA,TRUE,water_mass_deep
+BW29,CI,VIF retained,temperature_deep_anom,temperature,deep,NA,NA,TRUE,water_mass_deep
 BW29,CI,VIF retained,chla_lag3_anom,chla,NA,NA,3,TRUE,productivity
 BW37,EI,VIF retained,FSLE,FSLE,NA,NA,NA,FALSE,surface_fronts
 BW37,EI,VIF retained,fsle_orient,fsle_orient,NA,NA,NA,FALSE,front_orientation

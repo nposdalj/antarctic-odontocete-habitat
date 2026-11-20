@@ -84,6 +84,9 @@ variable_label <- function(variable) {
   lab <- unname(base_labels[p$base])
   lab[is.na(lab)] <- p$base[is.na(lab)]
   prefix <- ifelse(p$is_anom, "Anomaly: ", "")
+  std_chl <- p$is_anom & p$base == "chla" & CHL_STANDARDIZE   # in SD units
+  prefix[std_chl] <- "Standardized anomaly: "
+  lab[std_chl] <- "log10 chl-a (SD)"
   depth  <- ifelse(!is.na(p$layer), unname(layer_labels[p$layer]),
                    ifelse(is.na(p$depth_m), "",
                           ifelse(p$depth_m == 0, ", surface", paste0(", ", p$depth_m, " m"))))
@@ -711,4 +714,24 @@ read_stage_models <- function(stage) {
                       full.names = TRUE)
   if (length(files) == 0) stop("No models found for stage '", stage, "' in ", STATS_DIR)
   setNames(map(files, readRDS), sub("\\.rds$", "", basename(files)))
+}
+
+# Standardized anomalies (used only when CHL_STANDARDIZE is TRUE): each
+# <var>_anom is divided by the SD of that anomaly in its calendar month over
+# the 10-year record (env_daily), interpolated to daily values with the same
+# periodic spline as the climatology. The anomaly variance of chl-a is
+# strongly seasonal (e.g. KGI SD 0.04 in September vs 0.21 in May), so raw
+# anomalies give large weight to a few months.
+standardize_anomalies <- function(daily, env_daily, variables) {
+  for (v in variables) {
+    col <- paste0(v, "_anom")
+    for (s in unique(daily$site)) {
+      e <- env_daily[env_daily$site == s, ]
+      sd_month <- tapply(e[[col]], as.integer(format(e$date, "%m")), sd, na.rm = TRUE)
+      f <- fit_periodic_climatology(as.integer(names(sd_month)), as.numeric(sd_month))
+      rows <- which(daily$site == s)
+      daily[[col]][rows] <- daily[[col]][rows] / f(as.integer(format(daily$date[rows], "%j")))
+    }
+  }
+  daily
 }

@@ -29,7 +29,7 @@ TERM_LABEL <- c(FSLE = "FSLE", fsle_orient = "FSLV orientation",
                 temperature_surface_anom = "Temperature anomaly, surface layer",
                 temperature_mid_anom = "Temperature anomaly, mid-water layer",
                 temperature_deep_anom = "Temperature anomaly, deep layer",
-                chla_lag3_anom = "Chl-a anomaly, 3-month lag")
+                chla_lag3_anom = "Chl-a standardized anomaly, 3-month lag")
 
 # ---- Formatting helpers ------------------------------------------------------
 f1 <- function(x) formatC(x, format = "f", digits = 1)
@@ -110,19 +110,29 @@ heavy_ice_species <- ice_occ |> filter(ice_class == ">50", n_detection_bins > 0)
   distinct(species) |> pull(species)
 
 # ---- Tables ------------------------------------------------------------------
-latex_table <- function(d, caption, widths = NULL, size = 8, long = FALSE, align = NULL) {
-  k <- kbl(d, format = "latex", booktabs = TRUE, longtable = long, caption = caption,
+# `hlines`: rows after which a horizontal rule is drawn (e.g. between species).
+# "%" in captions is escaped (in LaTeX it starts a comment and cuts the caption).
+latex_table <- function(d, caption, widths = NULL, size = 8, long = FALSE, align = NULL,
+                        hlines = NULL) {
+  k <- kbl(d, format = "latex", booktabs = TRUE, longtable = long,
+           caption = gsub("%", "\\%", caption, fixed = TRUE),
            align = align, linesep = "")
   k <- kable_styling(k, font_size = size,
                      latex_options = c(if (long) "repeat_header" else "hold_position"))
   if (!is.null(widths)) for (i in seq_along(widths)) if (!is.na(widths[i]))
     k <- column_spec(k, i, width = widths[i])
+  if (length(hlines) > 0) k <- row_spec(k, hlines, hline_after = TRUE)
   k
 }
+# Species shown once per species; site and model columns once per model.
+# The rows ending each species are kept as attribute "species_end".
 blank_repeats <- function(d) {
-  first <- !duplicated(paste(d$Species, d$Site))
-  d$Species[!first] <- ""; d$Site[!first] <- ""
-  d[["Bins (det.)"]][!first] <- ""; d[["Dev. (%)"]][!first] <- ""
+  species_end <- which(d$Species != dplyr::lead(d$Species))
+  first_model <- !duplicated(paste(d$Species, d$Site))
+  first_species <- !duplicated(d$Species)
+  d$Species[!first_species] <- ""
+  for (col in intersect(c("Site", "Bins (det.)", "Dev. (%)"), names(d))) d[[col]][!first_model] <- ""
+  attr(d, "species_end") <- species_end
   d
 }
 
@@ -187,3 +197,59 @@ duty_table <- function() {
 }
 
 cap_first <- function(x) paste0(toupper(substr(x, 1, 1)), substring(x, 2))
+
+# ---- AR(1) check: terms that did not hold ------------------------------------
+strip_s <- function(x) gsub("^s[(]|[)]$", "", x)   # "s(FSLE)" -> "FSLE"
+term_text <- function(v) {   # lower-case the first word unless it is an acronym
+  x <- sub("Chl-a", "chlorophyll-a", TERM_LABEL[v])
+  unname(sub("^([A-Z])([a-z])", "\\L\\1\\2", x, perl = TRUE))
+}
+
+# ---- Site/year comparison (05_environmental_data/07_site_year_comparison.R) ----
+site_year <- rd("05_environmental_data", "site_year_variance.csv")
+site_year_pct <- function(v, col) f1(site_year[[col]][site_year$variable == v])
+site_year_table <- function() {
+  labels <- c(ice_conc = "Sea-ice concentration", temperature_surface = "Temperature, surface layer",
+              temperature_mid = "Temperature, mid-water layer", temperature_deep = "Temperature, deep layer",
+              mixed_layer = "Mixed layer depth", FSLE = "FSLE", EKE_mid = "EKE, mid-water layer",
+              EKE_deep = "EKE, deep layer", chla_lag3 = "log10 chlorophyll-a, 3-month lag",
+              fsle_orient_cos = "FSLV orientation (cos 2θ)", fsle_orient_sin = "FSLV orientation (sin 2θ)")
+  site_year |>
+    transmute(Variable = labels[variable], `Site (%)` = f1(pct_site), `Year (%)` = f1(pct_year),
+              `Site × year (%)` = f1(pct_site_x_year), `Residual (%)` = f1(pct_residual),
+              `Seasonal share of total (%)` = f1(pct_total_seasonal))
+}
+not_holding <- ar1_terms |>
+  filter(holds %in% FALSE) |>
+  mutate(variable = strip_s(term),
+         reason = ifelse(!is.na(p_tmb) & p_tmb > 0.05, "ml", "ar1")) |>
+  order_rows()
+holding_phrase <- function(why) {
+  d <- filter(not_holding, reason == why)
+  if (nrow(d) == 0) return("none")
+  and_list(paste0(term_text(d$variable), " (", SP_TEXT[d$species], " at ", d$site, ")"))
+}
+
+# ---- Pairwise concurvity of the final habitat models (worst case) -------------
+CONCURVITY_FLAG <- 0.5
+concurvity_pairs <- local({
+  files <- list.files(file.path(OUT, "06_statistical_analyses", "stage3", "models"),
+                      pattern = "[.]rds$", full.names = TRUE)
+  purrr::map_dfr(files, function(f) {
+    obj <- readRDS(f)
+    m <- obj$model
+    if (length(m$smooth) < 2) return(NULL)
+    w <- mgcv::concurvity(m, full = FALSE)$worst
+    w <- w[rownames(w) != "para", colnames(w) != "para", drop = FALSE]
+    idx <- which(upper.tri(w) & w > CONCURVITY_FLAG, arr.ind = TRUE)
+    if (nrow(idx) == 0) return(NULL)
+    tibble(species = obj$species, site = obj$site,
+           term1 = strip_s(rownames(w)[idx[, 1]]),
+           term2 = strip_s(colnames(w)[idx[, 2]]),
+           worst = round(w[idx], 2))
+  })
+})
+concurvity_phrase <- if (nrow(concurvity_pairs) == 0) "none" else
+  with(order_rows(concurvity_pairs),
+       and_list(paste0(term_text(term1), " and ", term_text(term2), " (",
+                       SP_TEXT[species], " at ", site, "; ", f2(worst), ")")))

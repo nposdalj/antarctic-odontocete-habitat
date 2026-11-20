@@ -41,11 +41,16 @@
 #             substitutions are listed in depth_level_fallback.csv (site,
 #             nominal_depth_m, product, level_used_m, n_cells_with_water,
 #             reason).
-#           - EKE (cm^2 s^-2) keeps the definition of the original
-#             GetCopernicus.R: u' = daily box-mean u minus the reference mean
-#             u (same for v), EKE = 0.5 (u'^2 + v'^2) x 1e4. Reference mean =
-#             the 10-year mean (full extracted climatology window) per site and
-#             level.
+#           - EKE_<depth> (per level, cm^2 s^-2; not used in the models) keeps
+#             the definition of the original GetCopernicus.R: u' = daily
+#             box-mean u minus its 10-year mean (same for v), EKE = 0.5
+#             (u'^2 + v'^2) x 1e4.
+#           - EKE_<layer> (surface/mid/deep; model predictors) is the
+#             per-cell EKE from 04b_eke_per_cell.R (eke_layers.csv): EKE is
+#             computed in each grid cell relative to that cell's 10-year mean
+#             and then averaged over the box and layer (Ducet et al. 2000).
+#             Changed 2026-11-20 (decision N. Posdaljian): the box-mean
+#             definition let eddies inside the box cancel.
 #           - EKE_mad (cm^2 s^-2) = 0.5 (u_mad^2 + v_mad^2) x 1e4: kinetic
 #             energy of the within-box spatial velocity variability (daily
 #             spatial MADs of u and v), with no mean subtracted. This departs
@@ -218,14 +223,16 @@ layer_means <- function(df, vars, levels) {
     pivot_wider(names_from = c(var, layer), values_from = value)
 }
 
-# EKE per level (same definition as section 3) before averaging over layers
-eke_levels <- phy %>%
-  group_by(site, depth_m) %>%
-  mutate(EKE = 0.5 * ((u - mean(u))^2 + (v - mean(v))^2) * 1e4) %>%
-  ungroup()
+# Layer EKE: per-cell definition from 04b_eke_per_cell.R
+eke_layers <- read_csv(out_path("05_environmental_data", "eke_layers.csv"),
+                       show_col_types = FALSE) %>%
+  mutate(date = as.Date(date)) %>%
+  select(site, date, layer, EKE) %>%
+  pivot_wider(names_from = layer, values_from = EKE, names_prefix = "EKE_")
 
-layer_wide <- layer_means(eke_levels, c("temperature", "salinity", "EKE"), phy_levels) %>%
-  left_join(layer_means(bgc, "o2", bgc_levels), by = c("date", "site"))
+layer_wide <- layer_means(phy, c("temperature", "salinity"), phy_levels) %>%
+  left_join(layer_means(bgc, "o2", bgc_levels), by = c("date", "site")) %>%
+  left_join(eke_layers, by = c("date", "site"))
 
 # -----------------------------------------------------------------------------
 # 5. Lagged chl-a and productivity (surface level)

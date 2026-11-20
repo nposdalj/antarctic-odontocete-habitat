@@ -1,0 +1,13 @@
+period,site,layer,n_days,median_box,median_cell,ratio_cell_to_box,r_pearson,r_spearman
+10-year record,CI,deep,4018,0.936,4,4.27,0.976,0.85
+10-year record,CI,mid,4018,2.15,7.92,3.68,0.915,0.793
+10-year record,EI,deep,4017,22.5,46.7,2.08,0.973,0.944
+10-year record,EI,mid,4017,27.5,59.7,2.17,0.968,0.932
+10-year record,KGI,deep,4383,11.9,20.2,1.69,0.974,0.941
+10-year record,KGI,mid,4383,9.94,24.5,2.46,0.905,0.87
+recording period,CI,deep,303,0.754,4.65,6.17,0.683,0.728
+recording period,CI,mid,303,1.7,8.4,4.94,0.62,0.617
+recording period,EI,deep,135,99.4,170,1.71,0.951,0.914
+recording period,EI,mid,135,57.3,134,2.33,0.897,0.884
+recording period,KGI,deep,354,14.9,23.7,1.59,0.97,0.932
+recording period,KGI,mid,354,10.8,29.8,2.76,0.875,0.867

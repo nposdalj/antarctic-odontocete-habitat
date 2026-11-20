@@ -108,6 +108,10 @@ model_input <- add_anomalies(model_input, climatology, anom_vars) |>
   group_by(site) |>
   mutate(day_index = as.integer(date - min(date))) |>   # block-model time axis
   ungroup()
+if (CHL_STANDARDIZE) {   # sensitivity option (00_gam_parameters.R)
+  model_input <- standardize_anomalies(
+    model_input, add_anomalies(env_daily, climatology, anom_vars), LAG_COLUMNS)
+}
 
 # -----------------------------------------------------------------------------
 # 3. Species loop

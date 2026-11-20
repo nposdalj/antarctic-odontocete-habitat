@@ -1,0 +1,12 @@
+species,site,observed_terms,observed_n_terms,observed_dev_expl,n_null,null_pct_with_terms,null_median_dev_expl,null_95th_dev_expl,p_dev_expl,p_n_terms
+BW29,CI,FSLE + mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,4,66.7,2,100,70.6,78.1,0.6666666666666666,1
+BW29,EI,FSLE + chla_lag3_anom,2,59,2,100,62,67.4,0.6666666666666666,1
+BW29,KGI,chla_lag3_anom,1,38.7,2,100,47.6,55.9,0.6666666666666666,1
+BW37,EI,FSLE + fsle_orient,2,47.8,2,100,38.4,44.3,0.3333333333333333,0.6666666666666666
+BW37,KGI,mixed_layer_anom + temperature_deep_anom,2,42.5,2,100,43.1,45.9,0.6666666666666666,0.6666666666666666
+Gm,CI,EKE_deep + temperature_surface_anom,2,48,2,100,49.1,51.9,0.6666666666666666,1
+Gm,EI,temperature_surface_anom + chla_lag3_anom,2,84.8,2,100,67.2,77.7,0.3333333333333333,1
+Gm,KGI,chla_lag3_anom,1,27.4,2,100,46.5,50.5,1,1
+Oo,CI,chla_lag3_anom,1,21.1,2,100,26.6,29.6,1,1
+Pm,CI,fsle_orient + EKE_mid + EKE_deep + mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,6,53.1,2,100,20.8,23.7,0.3333333333333333,0.3333333333333333
+Pm,EI,FSLE + mixed_layer_anom + chla_lag3_anom,3,85.2,2,100,72.2,80.6,0.3333333333333333,0.6666666666666666

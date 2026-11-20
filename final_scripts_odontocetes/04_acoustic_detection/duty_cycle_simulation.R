@@ -227,10 +227,6 @@ p_sim <- ggplot(fig_data, aes(x = species, colour = cycle_label)) +
   geom_linerange(aes(ymin = lo, ymax = hi), position = dodge, linewidth = 0.6) +
   geom_point(aes(y = mean, shape = status), position = dodge, size = 1.8,
              fill = "white", stroke = 0.8) +
-  geom_text(data = not_detected,
-            aes(y = lo - 2, label = label, group = cycle_label),
-            position = dodge, vjust = 1, size = 2, lineheight = 0.85,
-            show.legend = FALSE) +
   facet_wrap(~ metric, nrow = 1) +
   scale_colour_manual(values = cycle_colors, name = "Simulated duty cycle") +
   scale_shape_manual(values = c("Detected at this site" = 16,
