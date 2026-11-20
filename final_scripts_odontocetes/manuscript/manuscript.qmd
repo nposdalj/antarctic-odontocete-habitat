@@ -26,7 +26,7 @@ execute:
 ---
 
 <!--
-Working draft of the odontocete manuscript. Numbers marked with `r ...` and all
+Working draft of the odontocete manuscript. Inline R numbers and all
 tables built in R chunks are read from final_scripts_odontocetes/outputs/ by
 _values.R, so they update when the analysis is re-run. Figures are read
 directly from outputs/. Typed numbers (site positions, deployment dates,
