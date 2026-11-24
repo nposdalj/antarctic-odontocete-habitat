@@ -11,6 +11,8 @@
 #           F_COP_PHY_DEPTH, F_COP_BGC_DEPTH, F_COP_SURFACE, F_COP_COVERAGE
 #             (main +/- 20 km box; 04_extract_copernicus.R)
 #           F_FSLE_DAILY (03_extract_aviso_fsle.R)
+#           F_BREMEN_ICE (04c_import_bremen_ice.R; only if SEA_ICE_SOURCE ==
+#             "bremen", which replaces the Copernicus ice_conc)
 #           F_PRESENCE_DAILY (04_acoustic_detection; optional - if absent,
 #             the model input table is not written)
 # Outputs : F_ENV_DAILY   env_daily_wide.csv
@@ -98,6 +100,25 @@ phy     <- read_csv(F_COP_PHY_DEPTH, show_col_types = FALSE)
 bgc     <- read_csv(F_COP_BGC_DEPTH, show_col_types = FALSE)
 surface <- read_csv(F_COP_SURFACE,   show_col_types = FALSE)
 fsle    <- read_csv(F_FSLE_DAILY,    show_col_types = FALSE)
+
+# Sea-ice concentration source (config.R SEA_ICE_SOURCE). With "bremen",
+# ice_conc is replaced by the AMSR2 ASI box means from 04c_import_bremen_ice.R.
+# They cover the recording periods only, so ice_conc is NA on other days of
+# env_daily_wide.csv (sea ice is not deseasoned, so no climatology is needed);
+# ice_thickness stays Copernicus.
+SEA_ICE_SOURCE <- match.arg(SEA_ICE_SOURCE, c("bremen", "copernicus"))
+if (SEA_ICE_SOURCE == "bremen") {
+  if (!file.exists(F_BREMEN_ICE)) stop(F_BREMEN_ICE, " not found: run 04c_import_bremen_ice.R first")
+  bremen <- read_csv(F_BREMEN_ICE, show_col_types = FALSE) %>% select(date, site, ice_conc)
+  surface <- surface %>%
+    select(-ice_conc, -ice_conc_sd) %>%
+    left_join(bremen, by = c("date", "site"))
+  missing_days <- anti_join(bremen, surface, by = c("date", "site"))
+  if (nrow(missing_days) > 0) {
+    stop(nrow(missing_days), " Bremen site-days have no Copernicus surface row (outside the extracted period?)")
+  }
+}
+message("Sea-ice concentration source: ", SEA_ICE_SOURCE)
 
 # -----------------------------------------------------------------------------
 # 2. Nominal depth -> nearest model level
