@@ -1,12 +1,12 @@
 species,site,bin_days,n_bins,n_detection_bins,status,terms
-Pm,EI,4,34,23,modeled,FSLE + fsle_orient + mixed_layer_anom + temperature_surface_anom + chla_lag3_anom
-Pm,CI,4,76,65,modeled,FSLE + fsle_orient + mixed_layer_anom + temperature_surface_anom + chla_lag3_anom
-Gm,EI,4,34,19,modeled (low sample),temperature_surface_anom + chla_lag3_anom + mixed_layer_anom
-Gm,KGI,4,64,18,modeled (low sample),temperature_surface_anom + chla_lag3_anom + mixed_layer_anom
-Gm,CI,4,64,11,modeled (low sample),temperature_surface_anom + chla_lag3_anom + mixed_layer_anom
-Oo,CI,2,151,11,modeled (low sample),EKE_mid + temperature_surface_anom
-BW29,EI,4,34,26,modeled,EKE_deep + FSLE + chla_lag3_anom + mixed_layer_anom + temperature_surface_anom
-BW29,KGI,4,56,20,modeled (low sample),EKE_deep + FSLE + chla_lag3_anom + mixed_layer_anom + temperature_surface_anom
-BW29,CI,4,52,24,modeled,EKE_deep + FSLE + chla_lag3_anom + mixed_layer_anom + temperature_surface_anom
-BW37,EI,4,34,17,modeled (low sample),FSLE + fsle_orient + mixed_layer_anom + temperature_deep_anom
-BW37,KGI,4,56,27,modeled,FSLE + fsle_orient + mixed_layer_anom + temperature_deep_anom
+Pm,EI,4,34,23,modeled,FSLE + fsle_orient + mixed_layer_anom + chla_lag3_anom + temperature_mid_anom + temperature_deep_anom + EKE_mid + EKE_deep
+Pm,CI,4,76,65,modeled,FSLE + fsle_orient + mixed_layer_anom + chla_lag3_anom + temperature_mid_anom + temperature_deep_anom + EKE_mid + EKE_deep
+Gm,EI,4,34,19,modeled (low sample),FSLE + fsle_orient + mixed_layer_anom + chla_lag3_anom + temperature_surface_anom + temperature_deep_anom + EKE_deep
+Gm,KGI,4,66,18,modeled (low sample),FSLE + fsle_orient + mixed_layer_anom + chla_lag3_anom + temperature_surface_anom + temperature_deep_anom + EKE_deep
+Gm,CI,4,62,11,modeled (low sample),FSLE + fsle_orient + mixed_layer_anom + chla_lag3_anom + temperature_surface_anom + temperature_deep_anom + EKE_deep
+Oo,CI,2,152,11,modeled (low sample),FSLE + fsle_orient + mixed_layer_anom + chla_lag3_anom + temperature_surface_anom + temperature_mid_anom + EKE_mid
+BW29,EI,4,34,26,modeled,FSLE + fsle_orient + mixed_layer_anom + chla_lag3_anom + temperature_deep_anom + EKE_deep
+BW29,KGI,4,57,20,modeled (low sample),FSLE + fsle_orient + mixed_layer_anom + chla_lag3_anom + temperature_deep_anom + EKE_deep
+BW29,CI,4,51,24,modeled,FSLE + fsle_orient + mixed_layer_anom + chla_lag3_anom + temperature_deep_anom + EKE_deep
+BW37,EI,4,34,17,modeled (low sample),FSLE + fsle_orient + mixed_layer_anom + chla_lag3_anom + temperature_deep_anom + EKE_deep
+BW37,KGI,4,58,27,modeled,FSLE + fsle_orient + mixed_layer_anom + chla_lag3_anom + temperature_deep_anom + EKE_deep

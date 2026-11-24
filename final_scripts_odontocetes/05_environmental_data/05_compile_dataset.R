@@ -16,7 +16,7 @@
 #           F_PRESENCE_DAILY (04_acoustic_detection; optional - if absent,
 #             the model input table is not written)
 # Outputs : F_ENV_DAILY   env_daily_wide.csv
-#             date, site, julian_day, ice_conc, ice_thickness, SSH,
+#             date, site, julian_day, ice_conc (AMSR2), open_water_frac, dist_ice_edge_km, SSH,
 #             mixed_layer, FSLE, fsle_orient, temperature_<d>, salinity_<d>,
 #             o2_<d>, EKE_<d>, EKE_mad_<d>, chla_<d>, productivity_<d>
 #             (d <= CHL_PROD_MAX_DEPTH_M only), temperature_<L>, salinity_<L>,
@@ -287,8 +287,16 @@ lags <- lags %>%
 # -----------------------------------------------------------------------------
 # The PHY surface table defines the site-days; BGC and FSLE are joined to it
 # and any day missing from them is reported.
+# Sea ice: AMSR2 ASI satellite concentration (03_sea_ice/amsr2_site_series.R),
+# not the reanalysis (decision N. Posdaljian 2026-11-20: the reanalysis
+# overestimated ice near the ice edge relative to AMSR2 and MODIS imagery).
+# AMSR2 starts in July 2012, so ice_conc is NA before 2013.
+amsr2 <- read_csv(out_path("03_sea_ice", "amsr2_daily_site.csv"), show_col_types = FALSE) %>%
+  mutate(date = as.Date(date)) %>%
+  select(date, site, ice_conc, open_water_frac, dist_ice_edge_km)
 env <- surface %>%
-  transmute(date, site, ice_conc, ice_thickness, SSH = ssh, mixed_layer) %>%
+  transmute(date, site, SSH = ssh, mixed_layer) %>%
+  left_join(amsr2, by = c("date", "site")) %>%
   left_join(select(fsle, date, site, FSLE, fsle_orient), by = c("date", "site")) %>%
   left_join(phy_wide, by = c("date", "site")) %>%
   left_join(bgc_wide, by = c("date", "site")) %>%
@@ -301,8 +309,8 @@ depth_cols <- function(var, depths) paste0(var, "_", depths)
 chl_depths <- ALL_DEPTHS_M[ALL_DEPTHS_M <= CHL_PROD_MAX_DEPTH_M]
 lag_cols <- names(lags)[str_detect(names(lags), "_lag\\d+$")]
 env <- env %>%
-  select(date, site, julian_day, ice_conc, ice_thickness, SSH, mixed_layer, FSLE,
-         fsle_orient,
+  select(date, site, julian_day, ice_conc, open_water_frac, dist_ice_edge_km, SSH,
+         mixed_layer, FSLE, fsle_orient,
          all_of(c(depth_cols("temperature", ALL_DEPTHS_M), depth_cols("salinity", ALL_DEPTHS_M),
                   depth_cols("o2", ALL_DEPTHS_M), depth_cols("EKE", ALL_DEPTHS_M),
                   depth_cols("EKE_mad", ALL_DEPTHS_M), depth_cols("chla", chl_depths),

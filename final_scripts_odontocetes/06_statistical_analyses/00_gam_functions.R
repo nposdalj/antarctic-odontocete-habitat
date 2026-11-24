@@ -735,3 +735,42 @@ standardize_anomalies <- function(daily, env_daily, variables) {
   }
   daily
 }
+
+# VIF of a set of terms (linear Gaussian fit, as in vif_stepwise_drop)
+vif_of <- function(data, response, terms) {
+  if (length(terms) < 2) return(setNames(rep(1, length(terms)), terms))
+  fit <- glm(reformulate(terms, response), data = data, family = gaussian())
+  v <- car::vif(fit)
+  if (is.matrix(v)) v <- setNames(as.numeric(v[, ncol(v)]), rownames(v))
+  v
+}
+
+# Selection with a collinearity CHECK on the final model (decision
+# N. Posdaljian 2026-11-20; replaces VIF screening of the candidates, which
+# could drop the better-supported of two collinear predictors on a near-tie):
+# backward elimination with the term cap from the full candidate set; if the
+# final model has a term with VIF > vif_thresh, the least significant of the
+# terms above the threshold is removed from the candidates and selection is
+# repeated, until every final term has VIF <= vif_thresh.
+select_vif_checked <- function(data, response, predictors, max_terms = Inf,
+                               vif_thresh = VIF_THRESH) {
+  preds <- remove_zero_var(data, predictors)
+  checks <- list()
+  repeat {
+    be <- backward_eliminate(data, response, preds, max_terms = max_terms)
+    if (be$no_significant_terms || length(be$terms) < 2) break
+    v <- vif_of(data, response, be$terms)
+    pv <- setNames(summary(be$model)$s.pv,
+                   term_variable(rownames(summary(be$model)$s.table)))
+    checks[[length(checks) + 1]] <- tibble(check = length(checks) + 1,
+                                           terms = paste(be$terms, collapse = " + "),
+                                           max_vif = max(v), worst_vif = names(v)[which.max(v)])
+    if (max(v) <= vif_thresh) break
+    high <- names(v)[v > vif_thresh]
+    drop <- high[which.max(pv[high])]
+    checks[[length(checks)]]$dropped <- drop
+    preds <- setdiff(preds, drop)
+  }
+  be$vif_checks <- bind_rows(checks)
+  be
+}

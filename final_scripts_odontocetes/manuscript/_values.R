@@ -162,7 +162,9 @@ sea_ice_table <- function() {
               `Bins (det.)` = paste0(n_bins, " (", n_detection_bins, ")", ifelse(low_sample, "‡", "")),
               edf = ifelse(is.na(edf), "--", f2(edf)), p = fp(p_value),
               `Dev. (%)` = ifelse(is.na(dev_expl_pct), "--", f1(dev_expl_pct)),
-              Shape = ifelse(status == "descriptive only", "not modeled", shape),
+              Shape = case_when(status == "descriptive only" ~ "not modeled",
+                                shape == "not significant" ~ paste(fitted_shape, "(n.s.)"),
+                                TRUE ~ shape),
               `Robust to AR(1)` = ifelse(is.na(robust_ar1), "", ifelse(robust_ar1, "yes", "no")))
 }
 
@@ -253,3 +255,46 @@ concurvity_phrase <- if (nrow(concurvity_pairs) == 0) "none" else
   with(order_rows(concurvity_pairs),
        and_list(paste0(term_text(term1), " and ", term_text(term2), " (",
                        SP_TEXT[species], " at ", site, "; ", f2(worst), ")")))
+
+# ---- Acoustic occurrence (07_results_occurrence/occurrence_summary.R) ----------
+occ <- rd("07_results_occurrence", "occurrence_by_site.csv")
+occ_row <- function(sp, st) occ[occ$species == sp & occ$site == st, ]
+occ_days <- function(sp, st) occ_row(sp, st)$detection_days
+occ_pct <- function(sp, st) round(occ_row(sp, st)$pct_days_with_detections)
+rec_days <- function(st) occ$recording_days[occ$site == st][1]
+occ_txt <- function(sp, st) paste0(occ_days(sp, st), " days (", occ_pct(sp, st), "%)")
+SP_OCC <- c(SP_TABLE, BW58 = "BW58 beaked whale")
+occurrence_table <- function() {
+  occ |>
+    mutate(cell = ifelse(detection_days == 0, "0",
+                         paste0(detection_days, " (", round(pct_days_with_detections), "%); ",
+                                f1(presence_hours), " h"))) |>
+    select(species, site, cell) |>
+    tidyr::pivot_wider(names_from = site, values_from = cell) |>
+    mutate(species = factor(species, names(SP_OCC))) |> arrange(species) |>
+    transmute(Species = SP_OCC[as.character(species)],
+              `EI (2014)` = EI, `KGI (2015–16)` = KGI, `CI (2016)` = CI)
+}
+# Sea-ice classes: bins with detections / bins in the class
+ice_occ_txt <- function(sp, st, cls) with(ice_occ[ice_occ$species == sp & ice_occ$site == st &
+                                                   ice_occ$ice_class == cls, ],
+                                          paste0(n_detection_bins, " of ", n_bins))
+ice_bins_class <- function(st, cls) ice_occ$n_bins[ice_occ$species == "Gm" & ice_occ$site == st &
+                                                     ice_occ$ice_class == cls]
+
+# ---- Sea-ice exploration (03_sea_ice/sea_ice_exploration.R; 15% threshold) ----
+ice_ph <- rd("03_sea_ice", "ice_phenology_by_year.csv") |> filter(threshold_pct == 15)
+ice_rank <- rd("03_sea_ice", "ice_recording_year_rank.csv") |> filter(threshold_pct == 15)
+ice_anova <- rd("03_sea_ice", "ice_site_year_anova.csv")
+ice_sync <- rd("03_sea_ice", "ice_site_synchrony.csv")
+ice_phase <- rd("03_sea_ice", "ice_phase_occurrence.csv")
+rec_ph <- function(st, col) ice_ph[[col]][ice_ph$site == st & ice_ph$recording]
+ice_pctl <- function(st, m) ice_rank$percentile[ice_rank$site == st & ice_rank$metric == m]
+ice_med <- function(st, m) ice_rank$median_other[ice_rank$site == st & ice_rank$metric == m]
+ice_n_years <- function(st) ice_rank$n_years[ice_rank$site == st & ice_rank$metric == "ice_days"]
+ice_anova_pct <- function(m, col) f1(ice_anova[[col]][ice_anova$metric == m])
+ice_sync_r <- function(pair) f2(ice_sync$spearman_r[ice_sync$metric == "cumulative_ice_days" &
+                                                      ice_sync$pair == pair])
+phase_pct <- function(st, sp, ph) ice_phase$pct_days_detected[ice_phase$site == st &
+                                                                ice_phase$species == sp &
+                                                                ice_phase$phase == ph]

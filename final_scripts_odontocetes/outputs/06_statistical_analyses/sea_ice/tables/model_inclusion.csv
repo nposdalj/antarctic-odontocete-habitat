@@ -1,16 +1,16 @@
-species,site,bin_days,n_bins,n_detection_bins,status
-Pm,EI,4,34,23,modeled
-Pm,KGI,4,89,0,descriptive only
-Pm,CI,4,76,65,modeled
-Gm,EI,4,34,19,modeled (low sample)
-Gm,KGI,4,89,18,modeled (low sample)
-Gm,CI,4,76,11,modeled (low sample)
-Oo,EI,2,68,3,descriptive only
-Oo,KGI,2,177,3,descriptive only
-Oo,CI,2,152,11,modeled (low sample)
-BW29,EI,4,34,26,modeled
-BW29,KGI,4,89,20,modeled (low sample)
-BW29,CI,4,76,24,modeled
-BW37,EI,4,34,17,modeled (low sample)
-BW37,KGI,4,89,27,modeled
-BW37,CI,4,76,7,descriptive only
+species,site,bin_days,n_bins,n_detection_bins,max_ice_with_detection,status
+Pm,EI,4,34,23,0,no sea-ice variation
+Pm,KGI,4,89,0,NA,descriptive only
+Pm,CI,4,76,65,0.94665,modeled
+Gm,EI,4,34,19,0,no sea-ice variation
+Gm,KGI,4,89,18,1.75e-4,never detected with sea ice
+Gm,CI,4,76,11,0.17807499999999998,modeled (low sample)
+Oo,EI,2,68,3,0,descriptive only
+Oo,KGI,2,177,3,0.7306,descriptive only
+Oo,CI,2,152,11,0.9657,modeled (low sample)
+BW29,EI,4,34,26,0,no sea-ice variation
+BW29,KGI,4,89,20,0,never detected with sea ice
+BW29,CI,4,76,24,0,never detected with sea ice
+BW37,EI,4,34,17,0,no sea-ice variation
+BW37,KGI,4,89,27,0,never detected with sea ice
+BW37,CI,4,76,7,0.001425,descriptive only

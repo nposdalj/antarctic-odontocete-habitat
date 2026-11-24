@@ -167,6 +167,12 @@ SURFACE_VARS      <- c("mixed_layer", "FSLE", "fsle_orient")
 # defines the ice filter and is modeled on its own in 04_sea_ice_models.R
 # (presence ~ s(ice_conc), all bins). ice_thickness is not used in any model.
 ICE_MODEL_VAR     <- "ice_conc"
+# Signed distance from the recorder to the ice edge (15%; km; < 0 = inside the
+# ice; AMSR2, 03_sea_ice/amsr2_site_series.R). Second candidate in the
+# sea-ice models at the sites with an ice season during recording (decision
+# N. Posdaljian 2026-11-20; EI recorded only before ice advance).
+ICE_EDGE_VAR      <- "dist_ice_edge_km"
+ICE_EDGE_SITES    <- c("KGI", "CI")
 # Productivity theme = lagged chl-a only (decisions 2026-11-19): the 30-day
 # window mean of surface chl-a ending 3 months before each day, one common
 # lag for all species and sites (chosen over 5 months: significant alone in
@@ -218,3 +224,24 @@ ACF_TEST_ALPHA    <- 0.05
 SHAPE_GRID_N        <- 100
 SHAPE_MONO_TOL      <- 0.10  # share of total variation allowed against the trend
 SHAPE_SLOPE_NEGLIG  <- 0.05  # |slope| below this share of max |slope| is ignored
+
+# -----------------------------------------------------------------------------
+# A priori candidate sets for the habitat models (decision N. Posdaljian
+# 2026-11-20). Replaces the Stage 1 union sets: each species' candidates are
+# defined from the literature and its foraging layers, not from the data.
+#   All species : surface fronts (FSLE, FSLV orientation), stratification
+#                 (mixed layer depth anomaly), delayed productivity (chl-a,
+#                 3-month lag, standardized anomaly)
+#   + water mass (temperature anomaly) and eddy activity (EKE) in the layers
+#     each species forages in; + surface temperature for the shallower
+#     foragers (pilot and killer whales)
+# Used by 03_stage3_harmonized_models.R and 07_permutation_hypotheses.R (C).
+# -----------------------------------------------------------------------------
+COMMON_SET <- c("FSLE", "fsle_orient", "mixed_layer_anom", "chla_lag3_anom")
+HYPOTHESIS_SETS <- list(
+  Pm   = c(COMMON_SET, "temperature_mid_anom", "temperature_deep_anom", "EKE_mid", "EKE_deep"),
+  Gm   = c(COMMON_SET, "temperature_surface_anom", "temperature_deep_anom", "EKE_deep"),
+  Oo   = c(COMMON_SET, "temperature_surface_anom", "temperature_mid_anom", "EKE_mid"),
+  BW29 = c(COMMON_SET, "temperature_deep_anom", "EKE_deep"),
+  BW37 = c(COMMON_SET, "temperature_deep_anom", "EKE_deep")
+)

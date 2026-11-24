@@ -92,10 +92,30 @@ model_curves <- function(models) {
 # Rug data: the binned values of each term's predictor in each model
 model_rugs <- function(models) {
   imap(models, function(m, id) {
-    map(m$terms$variable, \(v) tibble(variable = v, x = m$data[[v]])) |>
+    map(m$terms$variable, \(v) tibble(variable = v, x = m$data[[v]],
+                                      detected = m$data[[m$species]] > 0)) |>
       bind_rows() |>
       mutate(species = m$species, site = m$site, .before = 1)
   }) |> bind_rows()
+}
+
+# Kernel density of the observed predictor values of the time bins, drawn
+# along the bottom HIST_HEIGHT of a panel (replaces the rug; decision
+# N. Posdaljian 2026-11-20): all bins (grey) and bins with detections (site
+# colour). The detection density is multiplied by the proportion of bins with
+# detections, so it lies under the all-bins curve and the two share one scale.
+HIST_HEIGHT <- 0.22
+density_curves <- function(x, detected, xr, yr) {
+  grid <- seq(xr[1], xr[2], length.out = 256)
+  dens <- function(v) if (length(v) < 2) rep(0, length(grid)) else
+    approx(density(v, from = xr[1], to = xr[2], n = 256)$x,
+           density(v, from = xr[1], to = xr[2], n = 256)$y, grid)$y
+  # Each density is clipped to the range of the values it describes
+  inside <- function(v) if (length(v) == 0) FALSE else grid >= min(v) & grid <= max(v)
+  all <- dens(x) * inside(x)
+  det <- dens(x[detected]) * mean(detected) * inside(x[detected])
+  scale <- HIST_HEIGHT * diff(yr) / max(all, 1e-12)
+  tibble(x = grid, ymin = yr[1], y_all = yr[1] + all * scale, y_det = yr[1] + det * scale)
 }
 
 # y limits from the curves (not the confidence bands)
@@ -110,11 +130,18 @@ p_label <- function(p) if_else(p < 0.001, "< 0.001", paste("=", sprintf("%.3f", 
 # -----------------------------------------------------------------------------
 # 1. Sea-ice models (significant smooths only)
 # -----------------------------------------------------------------------------
+# Sea-ice models contain sea-ice concentration and, at KGI and CI, the signed
+# distance to the ice edge (ICE_EDGE_VAR; decision N. Posdaljian 2026-11-20).
+# One column per ice variable; concentration in %, distance in km (negative =
+# recorder inside the ice).
+ICE_VAR_LABEL <- c(ice_conc = "Sea-ice concentration (%)",
+                   dist_ice_edge_km = "Distance to ice edge (km; < 0 = inside the ice)")
 ice_models <- read_stage_models("sea_ice")
 ice_terms <- bind_rows(map(ice_models, "terms")) |>
-  select(species, site, p_value)
+  select(species, site, variable, p_value)
+to_plot_x <- \(x, v) if_else(v == "ice_conc", 100 * x, x)
 ice_curves <- model_curves(ice_models) |>
-  left_join(ice_terms, by = c("species", "site")) |>
+  left_join(ice_terms, by = c("species", "site", "variable")) |>
   mutate(species = factor(species, levels = MODELED_SPECIES),
          site = factor(site, levels = SITE_ORDER))
 write_csv(ice_curves, file.path(RESULTS_DIR, "sea_ice_response_curves_data.csv"))
@@ -125,21 +152,25 @@ ice_sig <- filter(ice_curves, p_value <= P_THRESH)
 # supports one; dashed = not robust. Without the AR(1) table all are solid.
 ar1_file <- file.path(STATS_DIR, "sea_ice", "tables", "ar1_sensitivity_terms.csv")
 robust <- if (file.exists(ar1_file)) {
-  read_csv(ar1_file, show_col_types = FALSE) |> transmute(species, site, robust = coalesce(holds, TRUE))
-} else distinct(ice_sig, species, site) |> mutate(robust = TRUE)
+  read_csv(ar1_file, show_col_types = FALSE) |>
+    transmute(species, site, variable = gsub("^s[(]|[)]$", "", term),
+              robust = coalesce(holds, TRUE))
+} else distinct(ice_sig, species, site, variable) |> mutate(robust = TRUE)
 ice_sig <- ice_sig |>
   left_join(mutate(robust, species = factor(species, levels = MODELED_SPECIES),
-                   site = factor(site, levels = SITE_ORDER)), by = c("species", "site")) |>
-  mutate(robust = factor(if_else(robust, "Robust to autocorrelation (AR1)", "Not robust (AR1)"),
+                   site = factor(site, levels = SITE_ORDER)),
+            by = c("species", "site", "variable")) |>
+  mutate(robust = factor(if_else(coalesce(robust, TRUE), "Robust to autocorrelation (AR1)",
+                                 "Not robust (AR1)"),
                          levels = c("Robust to autocorrelation (AR1)", "Not robust (AR1)")))
 ice_rug <- model_rugs(ice_models) |>
-  semi_join(distinct(ice_sig, species, site), by = c("species", "site")) |>
+  semi_join(distinct(ice_sig, species, site, variable), by = c("species", "site", "variable")) |>
   mutate(species = factor(species, levels = MODELED_SPECIES),
          site = factor(site, levels = SITE_ORDER))
 # Where a species was never detected above some ice concentration (complete
 # separation; the beaked whales), the fitted decline beyond that point has an
-# arbitrary steepness. Such a curve (at least MIN_BINS_ABOVE bins above the
-# highest detection) therefore stops at the highest bin-mean ice
+# arbitrary steepness. Such a concentration curve (at least MIN_BINS_ABOVE bins
+# above the highest detection) therefore stops at the highest bin-mean ice
 # concentration with a detection at that site (decision N. Posdaljian,
 # 2026-11-19); the figure legend states the truncation.
 MIN_BINS_ABOVE <- 5
@@ -153,54 +184,56 @@ max_ice_detected <- imap(ice_models, function(m, id) {
 write_csv(max_ice_detected, file.path(RESULTS_DIR, "sea_ice_max_ice_with_detection.csv"))
 ice_sig <- ice_sig |>
   inner_join(max_ice_detected, by = c("species", "site")) |>
-  group_by(species, site) |>
-  mutate(truncated = n_bins_above >= MIN_BINS_ABOVE) |>
-  ungroup() |>
+  mutate(truncated = variable == "ice_conc" & n_bins_above >= MIN_BINS_ABOVE) |>
   filter(!truncated | x <= max_ice_det + 1e-9) |>
   # Re-center truncated curves over the range shown (a centered smooth has
   # no fixed level; the original centering included the removed part).
-  group_by(species, site) |>
+  group_by(species, site, variable) |>
   mutate(shift = if_else(truncated, mean(.estimate), 0),
          across(c(.estimate, .lower_ci, .upper_ci), ~ .x - shift)) |>
   ungroup() |>
   select(-shift)
-ice_rug <- ice_rug   # rugs keep all bins, so the truncation is visible
 
 ice_limits <- ice_sig |>
   group_by(species) |>
   summarise(lo = clip_limits(.estimate)[1], hi = clip_limits(.estimate)[2])
 
-# One faceted plot (one shared site legend). Bands are clipped to each
-# species' limits in the data, since facets cannot have separate
+# One faceted plot (rows = species, columns = ice variable). Bands are clipped
+# to each species' limits in the data, since facets cannot have separate
 # coord_cartesian() limits; the clipping is stated in the figure legend.
 ice_plot_data <- ice_sig |>
   left_join(ice_limits, by = "species") |>
-  mutate(.lower_ci = pmax(.lower_ci, lo), .upper_ci = pmin(.upper_ci, hi))
+  mutate(.lower_ci = pmax(.lower_ci, lo), .upper_ci = pmin(.upper_ci, hi),
+         x_plot = to_plot_x(x, variable),
+         variable = factor(ICE_VAR_LABEL[variable], ICE_VAR_LABEL))
+ice_rug <- ice_rug |>
+  mutate(x_plot = to_plot_x(x, variable), variable = factor(ICE_VAR_LABEL[variable], ICE_VAR_LABEL))
 ice_species <- intersect(MODELED_SPECIES, as.character(unique(ice_sig$species)))
-ice_plot <- ggplot(ice_plot_data, aes(x * 100, .estimate, colour = site, fill = site)) +
+n_ice_cols <- n_distinct(ice_plot_data$variable)
+ice_plot <- ggplot(ice_plot_data, aes(x_plot, .estimate, colour = site, fill = site)) +
   geom_hline(yintercept = 0, colour = "grey60", linewidth = 0.3) +
   geom_ribbon(aes(ymin = .lower_ci, ymax = .upper_ci), alpha = 0.15, colour = NA) +
   geom_line(aes(linetype = robust), linewidth = 0.8) +
   scale_linetype_manual(values = c("Robust to autocorrelation (AR1)" = "solid",
                                    "Not robust (AR1)" = "22"), name = NULL, drop = FALSE) +
-  geom_rug(data = ice_rug, aes(x = x * 100, colour = site), inherit.aes = FALSE,
+  geom_rug(data = ice_rug, aes(x = x_plot, colour = site), inherit.aes = FALSE,
            sides = "b", alpha = 0.6, length = unit(0.04, "npc")) +
-  facet_wrap(~species, ncol = 1, scales = "free_y",
-             labeller = as_labeller(\(x) species_label(x))) +
+  facet_grid(species ~ variable, scales = "free", switch = "x",
+             labeller = labeller(species = as_labeller(\(x) species_label(x)))) +
   scale_colour_manual(values = SITE_COLORS, drop = FALSE, name = "Site") +
   scale_fill_manual(values = SITE_COLORS, drop = FALSE, name = "Site") +
-  scale_x_continuous(limits = c(0, 100), expand = expansion(mult = 0.02)) +
-  labs(x = "Sea-ice concentration (%)", y = "Centered partial effect (log scale)") +
+  labs(x = NULL, y = "Centered partial effect (log scale)") +
   theme_bw(base_size = 9) +
   guides(colour = guide_legend(order = 1), fill = guide_legend(order = 1)) +
   theme(panel.grid.minor = element_blank(), strip.background = element_blank(),
-        strip.text = element_text(hjust = 0, face = "bold"), legend.position = "top",
-        legend.box = "vertical", legend.spacing.y = unit(0, "pt"))
-ice_h <- 1.9 * length(ice_species) + 0.6
+        strip.placement = "outside", strip.text.y = element_text(angle = 0, hjust = 0, face = "bold"),
+        legend.position = "top", legend.box = "vertical", legend.spacing.y = unit(0, "pt"))
+ice_h <- 1.9 * length(ice_species) + 0.8
+ice_w <- 2.6 * n_ice_cols + 1.6
 ggsave(file.path(RESULTS_DIR, "supplementary_sea_ice_response_curves.png"), ice_plot,
-       width = 4.5, height = ice_h, dpi = 600, device = ragg::agg_png, bg = "white")
+       width = ice_w, height = ice_h, dpi = 600, device = ragg::agg_png, bg = "white")
 ggsave(file.path(RESULTS_DIR, "supplementary_sea_ice_response_curves.pdf"), ice_plot,
-       width = 4.5, height = ice_h, device = cairo_pdf)
+       width = ice_w, height = ice_h, device = cairo_pdf)
 
 # -----------------------------------------------------------------------------
 # 2. Habitat models: one figure per model
@@ -287,13 +320,16 @@ grid_cell <- function(sp, st, v, first_col, last_row) {
                    axis.text = element_blank()))
   }
   p <- term_p$p_value[term_p$species == sp & term_p$site == st & term_p$variable == v]
+  obs <- filter(hab_rugs, species == sp, site == st, variable == v)
+  h <- density_curves(obs$x, obs$detected, xr, yr)
   ggplot(d, aes(x, .estimate)) +
+    geom_ribbon(data = h, aes(x = x, ymin = ymin, ymax = y_all), inherit.aes = FALSE,
+                fill = "grey82", colour = NA) +
+    geom_ribbon(data = h, aes(x = x, ymin = ymin, ymax = y_det), inherit.aes = FALSE,
+                fill = SITE_COLORS[[st]], alpha = 0.55, colour = NA) +
     geom_hline(yintercept = 0, colour = "grey70", linewidth = 0.25) +
     geom_ribbon(aes(ymin = .lower_ci, ymax = .upper_ci), fill = SITE_COLORS[[st]], alpha = 0.2) +
     geom_line(colour = SITE_COLORS[[st]], linewidth = 0.6) +
-    geom_rug(data = filter(hab_rugs, species == sp, site == st, variable == v),
-             aes(x = x), inherit.aes = FALSE, sides = "b", alpha = 0.5,
-             length = unit(0.05, "npc"), linewidth = 0.2) +
     annotate("text", x = xr[2], y = yr[2], hjust = 1.05, vjust = 1.3, size = 1.9,
              label = paste0("p ", p_label(p))) +
     coord_cartesian(xlim = xr, ylim = yr) +
@@ -321,19 +357,21 @@ save_grid <- function(cols, rows, file_stem) {
          device = cairo_pdf)
 }
 
-# Main text: predictors selected in at least MIN_MODELS_MAIN final models,
-# and the models with at least one of them (decision N. Posdaljian
-# 2026-11-20: less white space; predictors selected only once are shown in
-# the supplementary grid).
-MIN_MODELS_MAIN <- 2
-n_models_per_var <- distinct(hab_curves, species, site, variable) |> count(variable)
-cols_main <- intersect(cols, n_models_per_var$variable[n_models_per_var$n >= MIN_MODELS_MAIN])
-rows_main <- model_order |>
-  semi_join(filter(distinct(hab_curves, species, site, variable), variable %in% cols_main),
-            by = c("species", "site"))
-save_grid(cols_main, rows_main, paste0(HABITAT_LABEL, "_habitat_response_curves_grid"))
-
-# Supplement: every predictor and model.
-save_grid(cols, model_order, paste0("supplementary_", RESULTS_STAGE, "_habitat_response_curves_grid_all"))
+# Main text: models with at least MIN_TERMS_MAIN retained terms, with all of
+# their terms (decision N. Posdaljian 2026-11-20: the main figure shows the
+# models that can be described ecologically; single-term models go to the
+# supplementary grid).
+MIN_TERMS_MAIN <- 2
+model_terms <- distinct(hab_curves, species, site, variable)
+n_terms <- count(model_terms, species, site)
+split_grid <- function(rows, file_stem) {
+  if (nrow(rows) == 0) return(invisible(NULL))
+  used <- semi_join(model_terms, rows, by = c("species", "site"))$variable
+  save_grid(intersect(cols, used), rows, file_stem)
+}
+split_grid(semi_join(model_order, filter(n_terms, n >= MIN_TERMS_MAIN), by = c("species", "site")),
+           paste0(HABITAT_LABEL, "_habitat_response_curves_grid"))
+split_grid(semi_join(model_order, filter(n_terms, n < MIN_TERMS_MAIN), by = c("species", "site")),
+           paste0("supplementary_", RESULTS_STAGE, "_habitat_response_curves_single_term"))
 
 message("Response curves (sea ice + habitat ", RESULTS_STAGE, ") written to ", RESULTS_DIR)
