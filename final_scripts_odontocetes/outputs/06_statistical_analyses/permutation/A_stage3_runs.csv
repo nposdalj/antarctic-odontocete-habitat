@@ -1,0 +1,2212 @@
+species,site,test,terms,dev_expl,run
+Pm,EI,stage3_selection,FSLE + mixed_layer_anom + chla_lag3_anom,87.73580728726698,0
+Pm,EI,stage3_selection,fsle_orient + mixed_layer_anom + chla_lag3_anom,70.82366980681407,1
+Pm,EI,stage3_selection,FSLE + temperature_surface_anom + chla_lag3_anom,59.989836363487534,2
+Pm,EI,stage3_selection,FSLE + chla_lag3_anom,70.73024711439845,3
+Pm,EI,stage3_selection,mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,71.38200804659793,4
+Pm,EI,stage3_selection,fsle_orient + temperature_surface_anom + chla_lag3_anom,85.1096942230051,5
+Pm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,91.57314850617566,6
+Pm,EI,stage3_selection,FSLE + temperature_surface_anom + chla_lag3_anom,76.13189535935577,7
+Pm,EI,stage3_selection,fsle_orient + temperature_surface_anom + chla_lag3_anom,85.1096942230051,8
+Pm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,86.12709173218092,9
+Pm,EI,stage3_selection,mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,64.77448205004562,10
+Pm,EI,stage3_selection,fsle_orient + temperature_surface_anom + chla_lag3_anom,63.60935040646392,11
+Pm,EI,stage3_selection,fsle_orient + mixed_layer_anom + chla_lag3_anom,63.672898888392396,12
+Pm,EI,stage3_selection,FSLE + chla_lag3_anom,77.19748135880852,13
+Pm,EI,stage3_selection,fsle_orient + temperature_surface_anom,32.73157988849638,14
+Pm,EI,stage3_selection,FSLE + mixed_layer_anom + chla_lag3_anom,72.76425033510594,15
+Pm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,76.87506439304795,16
+Pm,EI,stage3_selection,FSLE + mixed_layer_anom + chla_lag3_anom,80.02421521220268,17
+Pm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,90.350537927983,18
+Pm,EI,stage3_selection,fsle_orient + mixed_layer_anom + chla_lag3_anom,63.2212179898055,19
+Pm,EI,stage3_selection,FSLE + temperature_surface_anom,80.31701583953186,20
+Pm,EI,stage3_selection,FSLE + chla_lag3_anom,32.293480876639634,21
+Pm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,47.96701571614621,22
+Pm,EI,stage3_selection,FSLE + temperature_surface_anom + chla_lag3_anom,70.29441749563307,23
+Pm,EI,stage3_selection,mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,89.31121142459286,24
+Pm,EI,stage3_selection,FSLE + temperature_surface_anom + chla_lag3_anom,66.87012235850702,25
+Pm,EI,stage3_selection,FSLE + chla_lag3_anom,72.76064065100418,26
+Pm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,77.51700439369293,27
+Pm,EI,stage3_selection,FSLE + mixed_layer_anom + chla_lag3_anom,57.342522554899574,28
+Pm,EI,stage3_selection,chla_lag3_anom,42.084756182644526,29
+Pm,EI,stage3_selection,FSLE + fsle_orient + chla_lag3_anom,88.1348912098685,30
+Pm,EI,stage3_selection,fsle_orient + temperature_surface_anom + chla_lag3_anom,80.81936416387806,31
+Pm,EI,stage3_selection,FSLE + temperature_surface_anom,52.371906773218136,32
+Pm,EI,stage3_selection,mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,88.15311271396897,33
+Pm,EI,stage3_selection,mixed_layer_anom + chla_lag3_anom,68.76982207109347,34
+Pm,EI,stage3_selection,FSLE + temperature_surface_anom + chla_lag3_anom,86.57212565734366,35
+Pm,EI,stage3_selection,FSLE + chla_lag3_anom,75.50102509577201,36
+Pm,EI,stage3_selection,FSLE + mixed_layer_anom,46.77274855200704,37
+Pm,EI,stage3_selection,fsle_orient + temperature_surface_anom,49.55027278831512,38
+Pm,EI,stage3_selection,FSLE + temperature_surface_anom,71.10696642934413,39
+Pm,EI,stage3_selection,FSLE + temperature_surface_anom + chla_lag3_anom,56.058994526431086,40
+Pm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,89.40288899101857,41
+Pm,EI,stage3_selection,FSLE + temperature_surface_anom + chla_lag3_anom,62.3062417642994,42
+Pm,EI,stage3_selection,temperature_surface_anom,30.574389611996317,43
+Pm,EI,stage3_selection,FSLE + temperature_surface_anom + chla_lag3_anom,78.61325738470369,44
+Pm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,81.5761187738005,45
+Pm,EI,stage3_selection,chla_lag3_anom,29.69205276326683,46
+Pm,EI,stage3_selection,FSLE,29.8514022079453,47
+Pm,EI,stage3_selection,mixed_layer_anom + chla_lag3_anom,44.68899620019411,48
+Pm,EI,stage3_selection,FSLE + fsle_orient + chla_lag3_anom,61.935399254724935,49
+Pm,EI,stage3_selection,FSLE + chla_lag3_anom,33.270935694786125,50
+Pm,EI,stage3_selection,FSLE + fsle_orient + chla_lag3_anom,77.94311018508877,51
+Pm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,67.48681398779952,52
+Pm,EI,stage3_selection,FSLE + mixed_layer_anom + chla_lag3_anom,59.90374843234759,53
+Pm,EI,stage3_selection,mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,61.544386345160405,54
+Pm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,75.01805332927422,55
+Pm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,63.088578091357974,56
+Pm,EI,stage3_selection,mixed_layer_anom + chla_lag3_anom,63.18412701535821,57
+Pm,EI,stage3_selection,mixed_layer_anom + chla_lag3_anom,74.74914191518734,58
+Pm,EI,stage3_selection,mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,53.16865734503493,59
+Pm,EI,stage3_selection,mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,71.2784009627362,60
+Pm,EI,stage3_selection,FSLE + temperature_surface_anom,75.33239301295373,61
+Pm,EI,stage3_selection,fsle_orient + mixed_layer_anom + temperature_surface_anom,50.07953361575481,62
+Pm,EI,stage3_selection,mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,53.362192558606516,63
+Pm,EI,stage3_selection,FSLE + temperature_surface_anom + chla_lag3_anom,64.26979016309197,64
+Pm,EI,stage3_selection,temperature_surface_anom,30.574389611996317,65
+Pm,EI,stage3_selection,,0,66
+Pm,EI,stage3_selection,FSLE,23.23965097182429,67
+Pm,EI,stage3_selection,FSLE + temperature_surface_anom + chla_lag3_anom,81.50018236830256,68
+Pm,EI,stage3_selection,mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,56.82313108847854,69
+Pm,EI,stage3_selection,FSLE + temperature_surface_anom + chla_lag3_anom,67.48176780102035,70
+Pm,EI,stage3_selection,FSLE + temperature_surface_anom + chla_lag3_anom,82.69055878854948,71
+Pm,EI,stage3_selection,FSLE + fsle_orient + temperature_surface_anom,61.822803720748546,72
+Pm,EI,stage3_selection,mixed_layer_anom + chla_lag3_anom,78.97887570499279,73
+Pm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,44.33068645517993,74
+Pm,EI,stage3_selection,FSLE + fsle_orient + chla_lag3_anom,75.21202395227675,75
+Pm,EI,stage3_selection,FSLE + mixed_layer_anom + temperature_surface_anom,76.38252877940194,76
+Pm,EI,stage3_selection,FSLE + temperature_surface_anom + chla_lag3_anom,58.51273644301217,77
+Pm,EI,stage3_selection,chla_lag3_anom,43.8596487728561,78
+Pm,EI,stage3_selection,mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,57.012862301049175,79
+Pm,EI,stage3_selection,mixed_layer_anom,8.380455857512429,80
+Pm,EI,stage3_selection,FSLE + chla_lag3_anom,70.78970911965509,81
+Pm,EI,stage3_selection,FSLE + chla_lag3_anom,36.85574193203466,82
+Pm,EI,stage3_selection,mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,53.362192558606516,83
+Pm,EI,stage3_selection,FSLE,33.61852961847435,84
+Pm,EI,stage3_selection,mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,53.16865734503493,85
+Pm,EI,stage3_selection,FSLE + fsle_orient + chla_lag3_anom,85.54768759207356,86
+Pm,EI,stage3_selection,mixed_layer_anom + chla_lag3_anom,69.04499872681359,87
+Pm,EI,stage3_selection,fsle_orient + temperature_surface_anom + chla_lag3_anom,81.96863991366014,88
+Pm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,80.2806751644122,89
+Pm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,85.74292986880067,90
+Pm,EI,stage3_selection,FSLE + temperature_surface_anom + chla_lag3_anom,80.80921163545521,91
+Pm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,70.33598145470489,92
+Pm,EI,stage3_selection,FSLE + mixed_layer_anom + chla_lag3_anom,65.43594276340633,93
+Pm,EI,stage3_selection,FSLE + temperature_surface_anom,76.81283183136942,94
+Pm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,61.704855529462286,95
+Pm,EI,stage3_selection,FSLE + mixed_layer_anom + chla_lag3_anom,67.13333043434375,96
+Pm,EI,stage3_selection,FSLE + fsle_orient + chla_lag3_anom,73.497807304406,97
+Pm,EI,stage3_selection,FSLE + mixed_layer_anom,56.62162077510396,98
+Pm,EI,stage3_selection,,0,99
+Pm,EI,stage3_selection,mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,77.70021560088574,100
+Pm,EI,stage3_selection,chla_lag3_anom,55.87264034593101,101
+Pm,EI,stage3_selection,mixed_layer_anom,13.808347853261003,102
+Pm,EI,stage3_selection,FSLE + mixed_layer_anom + chla_lag3_anom,66.1751968468543,103
+Pm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,72.37265339203654,104
+Pm,EI,stage3_selection,mixed_layer_anom + chla_lag3_anom,72.40143744072422,105
+Pm,EI,stage3_selection,mixed_layer_anom + chla_lag3_anom,86.36560838198766,106
+Pm,EI,stage3_selection,fsle_orient + temperature_surface_anom + chla_lag3_anom,70.87026351435513,107
+Pm,EI,stage3_selection,FSLE + temperature_surface_anom + chla_lag3_anom,71.82516994680928,108
+Pm,EI,stage3_selection,mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,61.544386345160405,109
+Pm,EI,stage3_selection,fsle_orient + temperature_surface_anom + chla_lag3_anom,69.40442271773051,110
+Pm,EI,stage3_selection,fsle_orient + mixed_layer_anom + temperature_surface_anom,53.31917759287891,111
+Pm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,70.1958198510631,112
+Pm,EI,stage3_selection,FSLE + temperature_surface_anom + chla_lag3_anom,56.46846763892277,113
+Pm,EI,stage3_selection,FSLE + mixed_layer_anom + temperature_surface_anom,55.85085532440357,114
+Pm,EI,stage3_selection,FSLE + temperature_surface_anom + chla_lag3_anom,67.12046118296438,115
+Pm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,74.99076685169615,116
+Pm,EI,stage3_selection,fsle_orient + mixed_layer_anom + chla_lag3_anom,77.22240227249509,117
+Pm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,73.04632272391798,118
+Pm,EI,stage3_selection,FSLE + fsle_orient + chla_lag3_anom,48.14700309215256,119
+Pm,EI,stage3_selection,fsle_orient + chla_lag3_anom,70.43006729160402,120
+Pm,EI,stage3_selection,mixed_layer_anom + chla_lag3_anom,79.5622524379635,121
+Pm,EI,stage3_selection,FSLE + temperature_surface_anom + chla_lag3_anom,76.13189535935577,122
+Pm,EI,stage3_selection,fsle_orient + mixed_layer_anom + chla_lag3_anom,63.550206416567676,123
+Pm,EI,stage3_selection,fsle_orient + temperature_surface_anom,38.724261627979175,124
+Pm,EI,stage3_selection,mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,79.17729594138348,125
+Pm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,67.44342981126184,126
+Pm,EI,stage3_selection,chla_lag3_anom,34.92831430509676,127
+Pm,EI,stage3_selection,mixed_layer_anom + chla_lag3_anom,74.76339115517553,128
+Pm,EI,stage3_selection,FSLE + temperature_surface_anom,58.50224690973867,129
+Pm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,71.32252639491337,130
+Pm,EI,stage3_selection,mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,58.88489016347365,131
+Pm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,86.12709173218092,132
+Pm,EI,stage3_selection,mixed_layer_anom + chla_lag3_anom,82.90163897868084,133
+Pm,EI,stage3_selection,chla_lag3_anom,60.57434335253157,134
+Pm,EI,stage3_selection,chla_lag3_anom,74.35343374698625,135
+Pm,EI,stage3_selection,mixed_layer_anom + chla_lag3_anom,64.91195954938492,136
+Pm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,80.2806751644122,137
+Pm,EI,stage3_selection,FSLE + mixed_layer_anom + chla_lag3_anom,91.6982663799159,138
+Pm,EI,stage3_selection,FSLE + mixed_layer_anom + chla_lag3_anom,66.1751968468543,139
+Pm,EI,stage3_selection,chla_lag3_anom,68.28441262303555,140
+Pm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,67.05444741102231,141
+Pm,EI,stage3_selection,fsle_orient + mixed_layer_anom + chla_lag3_anom,87.80649312883145,142
+Pm,EI,stage3_selection,FSLE + mixed_layer_anom + chla_lag3_anom,34.358794742745125,143
+Pm,EI,stage3_selection,fsle_orient + mixed_layer_anom + chla_lag3_anom,68.61935445232052,144
+Pm,EI,stage3_selection,FSLE + mixed_layer_anom + chla_lag3_anom,65.91595522762191,145
+Pm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,86.12709173218092,146
+Pm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,79.62279435844654,147
+Pm,EI,stage3_selection,FSLE + temperature_surface_anom + chla_lag3_anom,68.35343332060066,148
+Pm,EI,stage3_selection,temperature_surface_anom,22.968768412646103,149
+Pm,EI,stage3_selection,mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,75.54048011993395,150
+Pm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,66.34263076393239,151
+Pm,EI,stage3_selection,FSLE + chla_lag3_anom,63.0275948854963,152
+Pm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,79.72299685200926,153
+Pm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,77.51700439369293,154
+Pm,EI,stage3_selection,fsle_orient + temperature_surface_anom + chla_lag3_anom,53.25715355369851,155
+Pm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,51.658973337530036,156
+Pm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,71.4734471838947,157
+Pm,EI,stage3_selection,FSLE + fsle_orient + chla_lag3_anom,83.06882783220854,158
+Pm,EI,stage3_selection,FSLE + temperature_surface_anom + chla_lag3_anom,67.12046118296438,159
+Pm,EI,stage3_selection,mixed_layer_anom + chla_lag3_anom,47.804430534203355,160
+Pm,EI,stage3_selection,FSLE + temperature_surface_anom + chla_lag3_anom,68.35343332060066,161
+Pm,EI,stage3_selection,mixed_layer_anom + chla_lag3_anom,50.295640684697254,162
+Pm,EI,stage3_selection,FSLE + fsle_orient + chla_lag3_anom,70.8134719244117,163
+Pm,EI,stage3_selection,fsle_orient + mixed_layer_anom + temperature_surface_anom,50.07953361575481,164
+Pm,EI,stage3_selection,FSLE + mixed_layer_anom + chla_lag3_anom,54.399010945062024,165
+Pm,EI,stage3_selection,fsle_orient + mixed_layer_anom,75.14432671042199,166
+Pm,EI,stage3_selection,FSLE + mixed_layer_anom + chla_lag3_anom,70.01758704091314,167
+Pm,EI,stage3_selection,fsle_orient + temperature_surface_anom + chla_lag3_anom,53.25715355369851,168
+Pm,EI,stage3_selection,FSLE + temperature_surface_anom + chla_lag3_anom,61.25588551534317,169
+Pm,EI,stage3_selection,fsle_orient + mixed_layer_anom + temperature_surface_anom,87.72950808305876,170
+Pm,EI,stage3_selection,mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,81.67313382917176,171
+Pm,EI,stage3_selection,chla_lag3_anom,59.583471307006484,172
+Pm,EI,stage3_selection,fsle_orient + temperature_surface_anom + chla_lag3_anom,69.24559055702105,173
+Pm,EI,stage3_selection,mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,67.01036567422636,174
+Pm,EI,stage3_selection,chla_lag3_anom,55.22618933100816,175
+Pm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,74.37664584068132,176
+Pm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,82.77620272444159,177
+Pm,EI,stage3_selection,temperature_surface_anom,30.093539578363615,178
+Pm,EI,stage3_selection,mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,41.910859360292555,179
+Pm,EI,stage3_selection,temperature_surface_anom,32.02485376637499,180
+Pm,EI,stage3_selection,chla_lag3_anom,80.6613522854983,181
+Pm,EI,stage3_selection,FSLE + temperature_surface_anom + chla_lag3_anom,81.55325862340848,182
+Pm,EI,stage3_selection,mixed_layer_anom + chla_lag3_anom,50.295640684697254,183
+Pm,EI,stage3_selection,mixed_layer_anom + chla_lag3_anom,69.1056403039338,184
+Pm,EI,stage3_selection,FSLE + chla_lag3_anom,54.51931524800142,185
+Pm,EI,stage3_selection,FSLE + fsle_orient + mixed_layer_anom,64.06621866154552,186
+Pm,EI,stage3_selection,chla_lag3_anom,37.96511172027647,187
+Pm,EI,stage3_selection,chla_lag3_anom,62.0277447921588,188
+Pm,EI,stage3_selection,chla_lag3_anom,29.69205276326683,189
+Pm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,71.4734471838947,190
+Pm,EI,stage3_selection,chla_lag3_anom,49.57745208476382,191
+Pm,EI,stage3_selection,mixed_layer_anom + chla_lag3_anom,63.64563007168951,192
+Pm,EI,stage3_selection,fsle_orient + mixed_layer_anom + chla_lag3_anom,66.58146714664021,193
+Pm,EI,stage3_selection,FSLE + temperature_surface_anom + chla_lag3_anom,72.12225319173552,194
+Pm,EI,stage3_selection,FSLE + temperature_surface_anom + chla_lag3_anom,95.35157478681204,195
+Pm,EI,stage3_selection,chla_lag3_anom,61.72828299034674,196
+Pm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,47.821458635656,197
+Pm,EI,stage3_selection,FSLE + chla_lag3_anom,80.68715344190574,198
+Pm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,67.48681398779952,199
+Pm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,79.72299685200926,200
+Pm,CI,stage3_selection,fsle_orient + mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,49.6565277404086,0
+Pm,CI,stage3_selection,fsle_orient + chla_lag3_anom,15.761273878746909,1
+Pm,CI,stage3_selection,mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,24.569365544456193,2
+Pm,CI,stage3_selection,FSLE + mixed_layer_anom + temperature_surface_anom,30.904590000982683,3
+Pm,CI,stage3_selection,mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,34.92650609570673,4
+Pm,CI,stage3_selection,FSLE + fsle_orient + mixed_layer_anom + chla_lag3_anom,38.14997124589816,5
+Pm,CI,stage3_selection,,0,6
+Pm,CI,stage3_selection,fsle_orient,10.692735025971192,7
+Pm,CI,stage3_selection,FSLE + fsle_orient + mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,54.01534558766461,8
+Pm,CI,stage3_selection,fsle_orient + temperature_surface_anom + chla_lag3_anom,34.08547507780191,9
+Pm,CI,stage3_selection,,0,10
+Pm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,49.90437807116882,11
+Pm,CI,stage3_selection,mixed_layer_anom + chla_lag3_anom,33.17384627154379,12
+Pm,CI,stage3_selection,fsle_orient + mixed_layer_anom + chla_lag3_anom,27.785818216232677,13
+Pm,CI,stage3_selection,FSLE + mixed_layer_anom,16.659338250825623,14
+Pm,CI,stage3_selection,FSLE + temperature_surface_anom + chla_lag3_anom,48.634170981471534,15
+Pm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,36.078121147585485,16
+Pm,CI,stage3_selection,mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,44.88892629976476,17
+Pm,CI,stage3_selection,fsle_orient + mixed_layer_anom,12.479494533251685,18
+Pm,CI,stage3_selection,FSLE + mixed_layer_anom + chla_lag3_anom,57.306033278384625,19
+Pm,CI,stage3_selection,FSLE + temperature_surface_anom,10.628397442104106,20
+Pm,CI,stage3_selection,,0,21
+Pm,CI,stage3_selection,temperature_surface_anom,22.109659053376056,22
+Pm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,29.304446446141686,23
+Pm,CI,stage3_selection,FSLE + chla_lag3_anom,15.488303074622097,24
+Pm,CI,stage3_selection,FSLE + fsle_orient + mixed_layer_anom + temperature_surface_anom,18.668997822530347,25
+Pm,CI,stage3_selection,temperature_surface_anom,20.32116505033485,26
+Pm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,31.840942039735175,27
+Pm,CI,stage3_selection,FSLE + mixed_layer_anom + chla_lag3_anom,42.481578295875856,28
+Pm,CI,stage3_selection,fsle_orient + temperature_surface_anom + chla_lag3_anom,38.18709211833171,29
+Pm,CI,stage3_selection,mixed_layer_anom + chla_lag3_anom,14.783548193168155,30
+Pm,CI,stage3_selection,FSLE + fsle_orient + mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,32.37230357195973,31
+Pm,CI,stage3_selection,FSLE + temperature_surface_anom + chla_lag3_anom,45.00177941332619,32
+Pm,CI,stage3_selection,fsle_orient,11.326348806010833,33
+Pm,CI,stage3_selection,mixed_layer_anom,16.779293417024707,34
+Pm,CI,stage3_selection,FSLE + fsle_orient + temperature_surface_anom + chla_lag3_anom,45.311583549233966,35
+Pm,CI,stage3_selection,fsle_orient + temperature_surface_anom,28.2095987064385,36
+Pm,CI,stage3_selection,chla_lag3_anom,20.869475891139473,37
+Pm,CI,stage3_selection,FSLE + temperature_surface_anom,11.948957718527717,38
+Pm,CI,stage3_selection,FSLE + temperature_surface_anom,26.904511587212422,39
+Pm,CI,stage3_selection,FSLE + fsle_orient + temperature_surface_anom,31.574480618468503,40
+Pm,CI,stage3_selection,FSLE + mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,32.474362897775336,41
+Pm,CI,stage3_selection,FSLE + temperature_surface_anom,20.199882627372673,42
+Pm,CI,stage3_selection,,0,43
+Pm,CI,stage3_selection,FSLE + fsle_orient + temperature_surface_anom + chla_lag3_anom,45.311583549233966,44
+Pm,CI,stage3_selection,FSLE + fsle_orient,18.87223070154632,45
+Pm,CI,stage3_selection,fsle_orient + temperature_surface_anom,11.346910966229814,46
+Pm,CI,stage3_selection,FSLE + chla_lag3_anom,16.45540055857535,47
+Pm,CI,stage3_selection,mixed_layer_anom,5.742218373314169,48
+Pm,CI,stage3_selection,chla_lag3_anom,30.68343943091482,49
+Pm,CI,stage3_selection,FSLE + temperature_surface_anom + chla_lag3_anom,34.8823839204294,50
+Pm,CI,stage3_selection,FSLE,9.29586246303698,51
+Pm,CI,stage3_selection,mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,27.021849260607382,52
+Pm,CI,stage3_selection,fsle_orient + chla_lag3_anom,26.412606338753324,53
+Pm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,23.899095093511608,54
+Pm,CI,stage3_selection,fsle_orient + mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,32.083352584271466,55
+Pm,CI,stage3_selection,chla_lag3_anom,30.68343943091482,56
+Pm,CI,stage3_selection,FSLE + fsle_orient + mixed_layer_anom + chla_lag3_anom,31.42730740938181,57
+Pm,CI,stage3_selection,FSLE + mixed_layer_anom + chla_lag3_anom,17.435641784803106,58
+Pm,CI,stage3_selection,mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,33.014785071690376,59
+Pm,CI,stage3_selection,FSLE + temperature_surface_anom + chla_lag3_anom,22.06754190792597,60
+Pm,CI,stage3_selection,FSLE + fsle_orient + temperature_surface_anom + chla_lag3_anom,45.919580663776,61
+Pm,CI,stage3_selection,mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,28.916066911042364,62
+Pm,CI,stage3_selection,temperature_surface_anom,7.327202425707832,63
+Pm,CI,stage3_selection,temperature_surface_anom,9.462323312606074,64
+Pm,CI,stage3_selection,FSLE + temperature_surface_anom,16.394272738338067,65
+Pm,CI,stage3_selection,FSLE + chla_lag3_anom,26.754313345839538,66
+Pm,CI,stage3_selection,FSLE + fsle_orient + mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,58.479167643247784,67
+Pm,CI,stage3_selection,fsle_orient + mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,43.649456587558966,68
+Pm,CI,stage3_selection,fsle_orient + mixed_layer_anom,12.865232272095492,69
+Pm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,23.879344449560595,70
+Pm,CI,stage3_selection,FSLE + chla_lag3_anom,13.926125451366309,71
+Pm,CI,stage3_selection,FSLE + fsle_orient + chla_lag3_anom,37.323377584458235,72
+Pm,CI,stage3_selection,FSLE + mixed_layer_anom + chla_lag3_anom,29.60718562284018,73
+Pm,CI,stage3_selection,FSLE + temperature_surface_anom + chla_lag3_anom,45.74114583405808,74
+Pm,CI,stage3_selection,mixed_layer_anom,13.129276376576932,75
+Pm,CI,stage3_selection,FSLE,7.400424599351473,76
+Pm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,25.24155519298975,77
+Pm,CI,stage3_selection,chla_lag3_anom,18.629543842988543,78
+Pm,CI,stage3_selection,fsle_orient + mixed_layer_anom,24.201130850760425,79
+Pm,CI,stage3_selection,FSLE + fsle_orient + temperature_surface_anom,43.167565308030845,80
+Pm,CI,stage3_selection,FSLE + chla_lag3_anom,22.28802518006625,81
+Pm,CI,stage3_selection,fsle_orient + mixed_layer_anom,13.511833562268105,82
+Pm,CI,stage3_selection,FSLE + fsle_orient + chla_lag3_anom,37.78211917894795,83
+Pm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,24.374059749212883,84
+Pm,CI,stage3_selection,FSLE + temperature_surface_anom + chla_lag3_anom,33.49263767957911,85
+Pm,CI,stage3_selection,chla_lag3_anom,12.168836703368697,86
+Pm,CI,stage3_selection,FSLE + mixed_layer_anom + temperature_surface_anom,41.05334813446678,87
+Pm,CI,stage3_selection,FSLE + mixed_layer_anom + chla_lag3_anom,49.06710800429423,88
+Pm,CI,stage3_selection,FSLE + mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,41.01120032544717,89
+Pm,CI,stage3_selection,fsle_orient + chla_lag3_anom,24.807556731933527,90
+Pm,CI,stage3_selection,FSLE + mixed_layer_anom + chla_lag3_anom,27.780601690625534,91
+Pm,CI,stage3_selection,chla_lag3_anom,11.988311017579376,92
+Pm,CI,stage3_selection,temperature_surface_anom,21.45500448160287,93
+Pm,CI,stage3_selection,fsle_orient,11.326348806010833,94
+Pm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,17.66262943899668,95
+Pm,CI,stage3_selection,chla_lag3_anom,32.713083475213274,96
+Pm,CI,stage3_selection,fsle_orient + temperature_surface_anom,21.951661785809083,97
+Pm,CI,stage3_selection,FSLE + fsle_orient + mixed_layer_anom + temperature_surface_anom,37.347682190832856,98
+Pm,CI,stage3_selection,fsle_orient,5.412299619287644,99
+Pm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,40.33707585492163,100
+Pm,CI,stage3_selection,fsle_orient + mixed_layer_anom + temperature_surface_anom,25.20552023630301,101
+Pm,CI,stage3_selection,fsle_orient + temperature_surface_anom,19.367146748034713,102
+Pm,CI,stage3_selection,FSLE,7.400424599351473,103
+Pm,CI,stage3_selection,FSLE + mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,38.339075993397,104
+Pm,CI,stage3_selection,fsle_orient + temperature_surface_anom + chla_lag3_anom,26.271464202870416,105
+Pm,CI,stage3_selection,FSLE + temperature_surface_anom,23.757852617693633,106
+Pm,CI,stage3_selection,FSLE + mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,60.54176349129611,107
+Pm,CI,stage3_selection,,0,108
+Pm,CI,stage3_selection,FSLE + fsle_orient + mixed_layer_anom + chla_lag3_anom,43.92513146246929,109
+Pm,CI,stage3_selection,FSLE + temperature_surface_anom + chla_lag3_anom,47.370980410642616,110
+Pm,CI,stage3_selection,mixed_layer_anom + chla_lag3_anom,27.893345360694973,111
+Pm,CI,stage3_selection,FSLE + mixed_layer_anom + chla_lag3_anom,33.78434922477297,112
+Pm,CI,stage3_selection,fsle_orient + mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,50.977535577418735,113
+Pm,CI,stage3_selection,FSLE + chla_lag3_anom,40.57521449109742,114
+Pm,CI,stage3_selection,,0,115
+Pm,CI,stage3_selection,temperature_surface_anom,21.45500448160287,116
+Pm,CI,stage3_selection,mixed_layer_anom + temperature_surface_anom,9.875563246850119,117
+Pm,CI,stage3_selection,FSLE + chla_lag3_anom,32.97824348082103,118
+Pm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,34.9753925471428,119
+Pm,CI,stage3_selection,mixed_layer_anom + chla_lag3_anom,15.878103234194061,120
+Pm,CI,stage3_selection,temperature_surface_anom,25.826632667179144,121
+Pm,CI,stage3_selection,FSLE + temperature_surface_anom + chla_lag3_anom,50.71686871336075,122
+Pm,CI,stage3_selection,FSLE + mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,40.123004387005395,123
+Pm,CI,stage3_selection,mixed_layer_anom,10.3679822501561,124
+Pm,CI,stage3_selection,FSLE + temperature_surface_anom + chla_lag3_anom,53.154846741398885,125
+Pm,CI,stage3_selection,fsle_orient + temperature_surface_anom,23.297418837257272,126
+Pm,CI,stage3_selection,mixed_layer_anom,8.737878031300777,127
+Pm,CI,stage3_selection,mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,44.88892629976476,128
+Pm,CI,stage3_selection,FSLE + mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,58.45013530927565,129
+Pm,CI,stage3_selection,FSLE,7.926773449350216,130
+Pm,CI,stage3_selection,FSLE + fsle_orient + mixed_layer_anom,26.28487013928092,131
+Pm,CI,stage3_selection,FSLE + temperature_surface_anom + chla_lag3_anom,21.751338181528297,132
+Pm,CI,stage3_selection,mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,51.03141548082597,133
+Pm,CI,stage3_selection,fsle_orient + mixed_layer_anom,18.03315659097327,134
+Pm,CI,stage3_selection,fsle_orient + mixed_layer_anom + temperature_surface_anom,20.79126522165948,135
+Pm,CI,stage3_selection,FSLE + chla_lag3_anom,15.488303074622097,136
+Pm,CI,stage3_selection,mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,38.28127272025311,137
+Pm,CI,stage3_selection,mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,33.371604961716336,138
+Pm,CI,stage3_selection,FSLE + chla_lag3_anom,17.385367645324006,139
+Pm,CI,stage3_selection,chla_lag3_anom,15.81685249496338,140
+Pm,CI,stage3_selection,FSLE + mixed_layer_anom,19.226938436533995,141
+Pm,CI,stage3_selection,FSLE + fsle_orient + mixed_layer_anom,20.161485494565042,142
+Pm,CI,stage3_selection,FSLE + temperature_surface_anom + chla_lag3_anom,41.14449783050519,143
+Pm,CI,stage3_selection,FSLE + fsle_orient + mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,54.01534558766461,144
+Pm,CI,stage3_selection,chla_lag3_anom,20.874535644205334,145
+Pm,CI,stage3_selection,FSLE,10.609007344833426,146
+Pm,CI,stage3_selection,FSLE + fsle_orient + mixed_layer_anom + chla_lag3_anom,40.91172948548923,147
+Pm,CI,stage3_selection,mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,33.371604961716336,148
+Pm,CI,stage3_selection,fsle_orient + mixed_layer_anom + temperature_surface_anom,22.350312174034542,149
+Pm,CI,stage3_selection,FSLE,9.29586246303698,150
+Pm,CI,stage3_selection,,0,151
+Pm,CI,stage3_selection,temperature_surface_anom,9.188000629562437,152
+Pm,CI,stage3_selection,mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,26.2561439753381,153
+Pm,CI,stage3_selection,mixed_layer_anom + chla_lag3_anom,16.045382062374934,154
+Pm,CI,stage3_selection,FSLE + fsle_orient + mixed_layer_anom,18.86445589221865,155
+Pm,CI,stage3_selection,FSLE + temperature_surface_anom,19.559366130832966,156
+Pm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,40.38192870114774,157
+Pm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,39.37881200640765,158
+Pm,CI,stage3_selection,FSLE + fsle_orient + temperature_surface_anom + chla_lag3_anom,41.257554199775434,159
+Pm,CI,stage3_selection,FSLE + temperature_surface_anom + chla_lag3_anom,27.84217041071771,160
+Pm,CI,stage3_selection,FSLE + fsle_orient + temperature_surface_anom + chla_lag3_anom,42.432774419345556,161
+Pm,CI,stage3_selection,FSLE + fsle_orient + temperature_surface_anom + chla_lag3_anom,39.043668142802545,162
+Pm,CI,stage3_selection,mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,36.073334906648455,163
+Pm,CI,stage3_selection,chla_lag3_anom,24.405556614608816,164
+Pm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,29.166321199879025,165
+Pm,CI,stage3_selection,fsle_orient + temperature_surface_anom,23.731336313019263,166
+Pm,CI,stage3_selection,mixed_layer_anom,9.112223437459132,167
+Pm,CI,stage3_selection,FSLE + mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,44.56304624856537,168
+Pm,CI,stage3_selection,fsle_orient + mixed_layer_anom + temperature_surface_anom,20.79126522165948,169
+Pm,CI,stage3_selection,FSLE + mixed_layer_anom + chla_lag3_anom,24.579598061417563,170
+Pm,CI,stage3_selection,mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,38.476078675652644,171
+Pm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,38.329951758001215,172
+Pm,CI,stage3_selection,FSLE + chla_lag3_anom,13.926125451366309,173
+Pm,CI,stage3_selection,FSLE + temperature_surface_anom,30.634166988103402,174
+Pm,CI,stage3_selection,fsle_orient + chla_lag3_anom,15.227322137200852,175
+Pm,CI,stage3_selection,mixed_layer_anom + chla_lag3_anom,41.822410967174925,176
+Pm,CI,stage3_selection,mixed_layer_anom + chla_lag3_anom,40.822319637426666,177
+Pm,CI,stage3_selection,FSLE + mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,19.516583687907776,178
+Pm,CI,stage3_selection,chla_lag3_anom,16.141012332857283,179
+Pm,CI,stage3_selection,fsle_orient + chla_lag3_anom,23.032051178192035,180
+Pm,CI,stage3_selection,fsle_orient,17.65636899356844,181
+Pm,CI,stage3_selection,fsle_orient + mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,43.7385851870858,182
+Pm,CI,stage3_selection,FSLE + temperature_surface_anom + chla_lag3_anom,22.360171222334284,183
+Pm,CI,stage3_selection,FSLE + temperature_surface_anom + chla_lag3_anom,25.73617552855167,184
+Pm,CI,stage3_selection,mixed_layer_anom + chla_lag3_anom,30.352266940672457,185
+Pm,CI,stage3_selection,FSLE + fsle_orient + chla_lag3_anom,25.459839312918486,186
+Pm,CI,stage3_selection,FSLE + fsle_orient + mixed_layer_anom + temperature_surface_anom,30.557394668998032,187
+Pm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,26.590077678118927,188
+Pm,CI,stage3_selection,mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,32.683867131917296,189
+Pm,CI,stage3_selection,fsle_orient + chla_lag3_anom,39.55420261460933,190
+Pm,CI,stage3_selection,FSLE + fsle_orient + chla_lag3_anom,26.04503968483518,191
+Pm,CI,stage3_selection,fsle_orient + chla_lag3_anom,35.04815576033686,192
+Pm,CI,stage3_selection,FSLE + mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,41.90767665896426,193
+Pm,CI,stage3_selection,FSLE + mixed_layer_anom + temperature_surface_anom,41.59856942433786,194
+Pm,CI,stage3_selection,temperature_surface_anom,20.313175806347527,195
+Pm,CI,stage3_selection,mixed_layer_anom + chla_lag3_anom,20.08127680781561,196
+Pm,CI,stage3_selection,temperature_surface_anom,16.540169685871085,197
+Pm,CI,stage3_selection,FSLE + mixed_layer_anom,13.967258557282204,198
+Pm,CI,stage3_selection,FSLE + temperature_surface_anom + chla_lag3_anom,31.575730129962597,199
+Pm,CI,stage3_selection,temperature_surface_anom,20.547313953183135,200
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,84.67459692159909,0
+Gm,EI,stage3_selection,mixed_layer_anom,37.48904571511831,1
+Gm,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom,62.45293356051894,2
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,29.961895628168044,3
+Gm,EI,stage3_selection,temperature_surface_anom,54.852797316135295,4
+Gm,EI,stage3_selection,temperature_surface_anom,52.874052039996364,5
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,61.67379820742881,6
+Gm,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom,81.3862420611995,7
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,70.25177319527161,8
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,41.90390554711569,9
+Gm,EI,stage3_selection,temperature_surface_anom,20.31638556512076,10
+Gm,EI,stage3_selection,temperature_surface_anom,55.187309193134226,11
+Gm,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom,39.897753297066,12
+Gm,EI,stage3_selection,temperature_surface_anom + mixed_layer_anom,42.65072319570679,13
+Gm,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom,69.49498680252027,14
+Gm,EI,stage3_selection,temperature_surface_anom,44.88780798433456,15
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,54.61585608597973,16
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,49.763762478989754,17
+Gm,EI,stage3_selection,temperature_surface_anom + mixed_layer_anom,32.15731324965228,18
+Gm,EI,stage3_selection,temperature_surface_anom + mixed_layer_anom,61.15625754899957,19
+Gm,EI,stage3_selection,temperature_surface_anom,55.01469342213412,20
+Gm,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom,57.34845963315524,21
+Gm,EI,stage3_selection,temperature_surface_anom,35.80103219176659,22
+Gm,EI,stage3_selection,temperature_surface_anom,50.22919479728786,23
+Gm,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom,74.61015113717242,24
+Gm,EI,stage3_selection,temperature_surface_anom + mixed_layer_anom,53.7868438102589,25
+Gm,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom,82.4850944085602,26
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,69.65342863437513,27
+Gm,EI,stage3_selection,temperature_surface_anom + mixed_layer_anom,46.89138709220626,28
+Gm,EI,stage3_selection,chla_lag3_anom,77.48781590336313,29
+Gm,EI,stage3_selection,temperature_surface_anom + mixed_layer_anom,58.098188604841084,30
+Gm,EI,stage3_selection,chla_lag3_anom,48.28027568070699,31
+Gm,EI,stage3_selection,temperature_surface_anom,74.95560975177071,32
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,71.1291528991467,33
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,85.73430199346386,34
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,69.54321548482173,35
+Gm,EI,stage3_selection,chla_lag3_anom,70.60115304011151,36
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,62.36699578384162,37
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,73.95623530744608,38
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,60.14724745440246,39
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,49.14831133685288,40
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,57.04195655300821,41
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,70.18614517232199,42
+Gm,EI,stage3_selection,temperature_surface_anom + mixed_layer_anom,53.10377513998841,43
+Gm,EI,stage3_selection,temperature_surface_anom,65.95878066742917,44
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,73.83715160052371,45
+Gm,EI,stage3_selection,temperature_surface_anom + mixed_layer_anom,64.11189146469441,46
+Gm,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom,82.98146669427774,47
+Gm,EI,stage3_selection,temperature_surface_anom + mixed_layer_anom,31.177732734039772,48
+Gm,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom,65.59435345235744,49
+Gm,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom,61.24240239890691,50
+Gm,EI,stage3_selection,temperature_surface_anom + mixed_layer_anom,40.45754905713884,51
+Gm,EI,stage3_selection,temperature_surface_anom,58.888051420614055,52
+Gm,EI,stage3_selection,mixed_layer_anom,35.57143816936376,53
+Gm,EI,stage3_selection,temperature_surface_anom + mixed_layer_anom,40.13243587328865,54
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,71.69663357234383,55
+Gm,EI,stage3_selection,temperature_surface_anom,34.428578237084764,56
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,79.97493852702561,57
+Gm,EI,stage3_selection,temperature_surface_anom,16.16566195954086,58
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,58.37231574976738,59
+Gm,EI,stage3_selection,mixed_layer_anom,55.1009281356521,60
+Gm,EI,stage3_selection,temperature_surface_anom + mixed_layer_anom,78.92938988998633,61
+Gm,EI,stage3_selection,temperature_surface_anom,17.983546507092054,62
+Gm,EI,stage3_selection,chla_lag3_anom,26.063678171814015,63
+Gm,EI,stage3_selection,chla_lag3_anom,72.81286711857842,64
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,65.69539135843372,65
+Gm,EI,stage3_selection,mixed_layer_anom,31.68966753943235,66
+Gm,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom,45.933039537361196,67
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,45.848555323039186,68
+Gm,EI,stage3_selection,temperature_surface_anom + mixed_layer_anom,87.66131154409288,69
+Gm,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom,77.95850113118166,70
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,80.34059572497101,71
+Gm,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom,82.98146669427774,72
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,63.83253233878384,73
+Gm,EI,stage3_selection,temperature_surface_anom,27.591107409282145,74
+Gm,EI,stage3_selection,chla_lag3_anom,26.267713111414707,75
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,79.57880024527074,76
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,44.997266177335966,77
+Gm,EI,stage3_selection,chla_lag3_anom,68.08410991419369,78
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,72.80860482080693,79
+Gm,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom,77.95850113118166,80
+Gm,EI,stage3_selection,,0,81
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,44.997266177335966,82
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,73.59133857856357,83
+Gm,EI,stage3_selection,temperature_surface_anom,55.72759976136642,84
+Gm,EI,stage3_selection,chla_lag3_anom,37.350676281796815,85
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,53.3389769410003,86
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,53.64354634988765,87
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,69.88608632789283,88
+Gm,EI,stage3_selection,,0,89
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,45.76673993483125,90
+Gm,EI,stage3_selection,temperature_surface_anom,74.95560975177071,91
+Gm,EI,stage3_selection,temperature_surface_anom + mixed_layer_anom,56.195461307047744,92
+Gm,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom,85.19338160699002,93
+Gm,EI,stage3_selection,temperature_surface_anom + mixed_layer_anom,79.17196298105506,94
+Gm,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom,80.61333358326979,95
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,62.36699578384162,96
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,62.75634309680576,97
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,88.68083594862414,98
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,62.70834984780866,99
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,54.08117018211127,100
+Gm,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom,81.3862420611995,101
+Gm,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom,87.99532775557616,102
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,52.82521999669666,103
+Gm,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom,66.9623991813149,104
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,69.13645488249317,105
+Gm,EI,stage3_selection,temperature_surface_anom,50.44769313570252,106
+Gm,EI,stage3_selection,temperature_surface_anom,49.43913993696338,107
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,64.75783884405793,108
+Gm,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom,66.62779008840955,109
+Gm,EI,stage3_selection,chla_lag3_anom,44.56008717875551,110
+Gm,EI,stage3_selection,chla_lag3_anom,69.97012222815209,111
+Gm,EI,stage3_selection,mixed_layer_anom,51.54800989085556,112
+Gm,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom,56.011247567808454,113
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,77.6933808917826,114
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,47.67322919301024,115
+Gm,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom,61.918048426904384,116
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,71.23176243918627,117
+Gm,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom,61.918048426904384,118
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,78.45117590193847,119
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,74.29405915353259,120
+Gm,EI,stage3_selection,temperature_surface_anom,43.59620267353084,121
+Gm,EI,stage3_selection,mixed_layer_anom,22.721474507926434,122
+Gm,EI,stage3_selection,chla_lag3_anom,70.05945043680953,123
+Gm,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom,82.98146669427774,124
+Gm,EI,stage3_selection,chla_lag3_anom,74.25177662058263,125
+Gm,EI,stage3_selection,temperature_surface_anom + mixed_layer_anom,64.14110765155885,126
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,76.57389280082243,127
+Gm,EI,stage3_selection,chla_lag3_anom,72.57669553715903,128
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,62.51459482095528,129
+Gm,EI,stage3_selection,temperature_surface_anom + mixed_layer_anom,64.80321289984211,130
+Gm,EI,stage3_selection,temperature_surface_anom,27.388969526138425,131
+Gm,EI,stage3_selection,chla_lag3_anom,63.55655208055674,132
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,44.60245821126107,133
+Gm,EI,stage3_selection,chla_lag3_anom,83.52163365790449,134
+Gm,EI,stage3_selection,temperature_surface_anom,48.741352266157904,135
+Gm,EI,stage3_selection,chla_lag3_anom,75.82551854072413,136
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,66.67146188418943,137
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,78.41328254199055,138
+Gm,EI,stage3_selection,temperature_surface_anom + mixed_layer_anom,48.83818302546549,139
+Gm,EI,stage3_selection,,0,140
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,75.97220212460292,141
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,66.46420479226755,142
+Gm,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom,67.693535188923,143
+Gm,EI,stage3_selection,mixed_layer_anom,57.20296874087762,144
+Gm,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom,79.56647014481861,145
+Gm,EI,stage3_selection,temperature_surface_anom + mixed_layer_anom,60.74527113784779,146
+Gm,EI,stage3_selection,temperature_surface_anom + mixed_layer_anom,56.95872951401923,147
+Gm,EI,stage3_selection,mixed_layer_anom,35.57143816936376,148
+Gm,EI,stage3_selection,chla_lag3_anom,56.12461084996055,149
+Gm,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom,67.39595564173287,150
+Gm,EI,stage3_selection,mixed_layer_anom,29.72821377253017,151
+Gm,EI,stage3_selection,temperature_surface_anom,42.974839339259,152
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,82.31850341781981,153
+Gm,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom,61.10265552414421,154
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,59.15965797298526,155
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,57.417351225805405,156
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,62.13424564259166,157
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,77.09102157942456,158
+Gm,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom,61.147425930756135,159
+Gm,EI,stage3_selection,temperature_surface_anom,53.402254328785425,160
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,77.87732036473007,161
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,77.21571168726736,162
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,73.71411278417874,163
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,73.54748467031068,164
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,74.02971104927654,165
+Gm,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom,81.597654066233,166
+Gm,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom,77.95850113118166,167
+Gm,EI,stage3_selection,temperature_surface_anom,64.34943901173196,168
+Gm,EI,stage3_selection,mixed_layer_anom,12.301987799589181,169
+Gm,EI,stage3_selection,chla_lag3_anom,62.54560634415831,170
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,77.34654219054781,171
+Gm,EI,stage3_selection,temperature_surface_anom,25.770017118326187,172
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,80.76398298858707,173
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,68.29265998606463,174
+Gm,EI,stage3_selection,temperature_surface_anom + mixed_layer_anom,42.65072319570679,175
+Gm,EI,stage3_selection,chla_lag3_anom,75.88950460306386,176
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,71.1291528991467,177
+Gm,EI,stage3_selection,temperature_surface_anom,52.4544438273141,178
+Gm,EI,stage3_selection,temperature_surface_anom + mixed_layer_anom,64.80321289984211,179
+Gm,EI,stage3_selection,chla_lag3_anom,32.38332435877933,180
+Gm,EI,stage3_selection,temperature_surface_anom,39.12909164952703,181
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,71.53123116424086,182
+Gm,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom,51.427582354639966,183
+Gm,EI,stage3_selection,chla_lag3_anom,74.3750000945545,184
+Gm,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom,61.59538037202383,185
+Gm,EI,stage3_selection,chla_lag3_anom,13.718858654279167,186
+Gm,EI,stage3_selection,temperature_surface_anom,42.87159362027439,187
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,66.80595217913998,188
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,49.14831133685288,189
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,76.18885670658246,190
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,77.78256549235117,191
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,61.2251696131198,192
+Gm,EI,stage3_selection,,0,193
+Gm,EI,stage3_selection,temperature_surface_anom,50.69226367674277,194
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,59.45841505767221,195
+Gm,EI,stage3_selection,chla_lag3_anom,30.225417548481587,196
+Gm,EI,stage3_selection,temperature_surface_anom,74.95560975177071,197
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,45.76673993483125,198
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,71.99543563546885,199
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,74.62540351386082,200
+Gm,KGI,stage3_selection,temperature_surface_anom + mixed_layer_anom,58.266003501012385,0
+Gm,KGI,stage3_selection,chla_lag3_anom,32.94459117763768,1
+Gm,KGI,stage3_selection,,0,2
+Gm,KGI,stage3_selection,temperature_surface_anom,25.521540985073933,3
+Gm,KGI,stage3_selection,temperature_surface_anom + mixed_layer_anom,25.77806318114071,4
+Gm,KGI,stage3_selection,temperature_surface_anom + chla_lag3_anom,24.033882755499658,5
+Gm,KGI,stage3_selection,chla_lag3_anom,52.11519701914873,6
+Gm,KGI,stage3_selection,temperature_surface_anom + chla_lag3_anom,39.435601578745896,7
+Gm,KGI,stage3_selection,chla_lag3_anom,40.87174892386835,8
+Gm,KGI,stage3_selection,temperature_surface_anom,33.48873500684606,9
+Gm,KGI,stage3_selection,temperature_surface_anom + chla_lag3_anom,62.16690549768044,10
+Gm,KGI,stage3_selection,chla_lag3_anom,43.458237254463036,11
+Gm,KGI,stage3_selection,temperature_surface_anom + mixed_layer_anom,37.497894718111944,12
+Gm,KGI,stage3_selection,chla_lag3_anom,25.430253110427504,13
+Gm,KGI,stage3_selection,chla_lag3_anom,33.966491151693205,14
+Gm,KGI,stage3_selection,temperature_surface_anom + mixed_layer_anom,44.404919909963006,15
+Gm,KGI,stage3_selection,chla_lag3_anom + mixed_layer_anom,50.097798720171014,16
+Gm,KGI,stage3_selection,,0,17
+Gm,KGI,stage3_selection,temperature_surface_anom + chla_lag3_anom,41.35772829449833,18
+Gm,KGI,stage3_selection,chla_lag3_anom,54.9512273829753,19
+Gm,KGI,stage3_selection,chla_lag3_anom,43.068153126906736,20
+Gm,KGI,stage3_selection,,0,21
+Gm,KGI,stage3_selection,chla_lag3_anom,31.44228960847678,22
+Gm,KGI,stage3_selection,temperature_surface_anom + chla_lag3_anom,37.89664786884877,23
+Gm,KGI,stage3_selection,chla_lag3_anom + mixed_layer_anom,46.21799624393805,24
+Gm,KGI,stage3_selection,temperature_surface_anom,25.396165236191663,25
+Gm,KGI,stage3_selection,temperature_surface_anom,25.724241682269184,26
+Gm,KGI,stage3_selection,temperature_surface_anom,30.65929002838399,27
+Gm,KGI,stage3_selection,chla_lag3_anom,38.29743204258634,28
+Gm,KGI,stage3_selection,chla_lag3_anom + mixed_layer_anom,39.672539898162896,29
+Gm,KGI,stage3_selection,chla_lag3_anom,48.02458298149915,30
+Gm,KGI,stage3_selection,chla_lag3_anom,56.94916437468699,31
+Gm,KGI,stage3_selection,chla_lag3_anom,17.346787061581608,32
+Gm,KGI,stage3_selection,temperature_surface_anom + chla_lag3_anom,45.22790369173734,33
+Gm,KGI,stage3_selection,temperature_surface_anom,36.684141623157196,34
+Gm,KGI,stage3_selection,temperature_surface_anom + chla_lag3_anom,36.70818448529323,35
+Gm,KGI,stage3_selection,chla_lag3_anom,32.827325880630994,36
+Gm,KGI,stage3_selection,,0,37
+Gm,KGI,stage3_selection,chla_lag3_anom,57.68189237308531,38
+Gm,KGI,stage3_selection,,0,39
+Gm,KGI,stage3_selection,chla_lag3_anom + mixed_layer_anom,52.805318715828854,40
+Gm,KGI,stage3_selection,chla_lag3_anom,46.57333364514264,41
+Gm,KGI,stage3_selection,chla_lag3_anom,53.62839024442653,42
+Gm,KGI,stage3_selection,chla_lag3_anom,53.201418264779775,43
+Gm,KGI,stage3_selection,chla_lag3_anom,29.47331519481466,44
+Gm,KGI,stage3_selection,temperature_surface_anom + chla_lag3_anom,46.11916170348545,45
+Gm,KGI,stage3_selection,temperature_surface_anom + mixed_layer_anom,22.0904604522001,46
+Gm,KGI,stage3_selection,chla_lag3_anom + mixed_layer_anom,43.43209216176686,47
+Gm,KGI,stage3_selection,,0,48
+Gm,KGI,stage3_selection,temperature_surface_anom + chla_lag3_anom,49.08105575801828,49
+Gm,KGI,stage3_selection,temperature_surface_anom,39.6759935247301,50
+Gm,KGI,stage3_selection,temperature_surface_anom,29.913043603782373,51
+Gm,KGI,stage3_selection,chla_lag3_anom,46.10271582008179,52
+Gm,KGI,stage3_selection,chla_lag3_anom + mixed_layer_anom,48.42274146447566,53
+Gm,KGI,stage3_selection,chla_lag3_anom,33.76036300653599,54
+Gm,KGI,stage3_selection,chla_lag3_anom,33.617303677987984,55
+Gm,KGI,stage3_selection,temperature_surface_anom + mixed_layer_anom,25.15666215922504,56
+Gm,KGI,stage3_selection,temperature_surface_anom,39.32517679678341,57
+Gm,KGI,stage3_selection,,0,58
+Gm,KGI,stage3_selection,temperature_surface_anom + chla_lag3_anom,38.39747140331713,59
+Gm,KGI,stage3_selection,chla_lag3_anom,31.68567583559327,60
+Gm,KGI,stage3_selection,temperature_surface_anom + chla_lag3_anom,46.75073125113666,61
+Gm,KGI,stage3_selection,chla_lag3_anom,53.14062202010758,62
+Gm,KGI,stage3_selection,chla_lag3_anom,42.24100159412427,63
+Gm,KGI,stage3_selection,temperature_surface_anom,24.16200090379336,64
+Gm,KGI,stage3_selection,chla_lag3_anom,41.49444860533144,65
+Gm,KGI,stage3_selection,chla_lag3_anom,28.240967826104978,66
+Gm,KGI,stage3_selection,temperature_surface_anom + chla_lag3_anom,45.79892755465981,67
+Gm,KGI,stage3_selection,temperature_surface_anom,39.81323622103608,68
+Gm,KGI,stage3_selection,temperature_surface_anom + chla_lag3_anom,33.33050929888557,69
+Gm,KGI,stage3_selection,chla_lag3_anom,50.71225800515444,70
+Gm,KGI,stage3_selection,temperature_surface_anom + chla_lag3_anom,48.03701117677815,71
+Gm,KGI,stage3_selection,temperature_surface_anom + chla_lag3_anom,45.62184318663148,72
+Gm,KGI,stage3_selection,mixed_layer_anom,28.80951834947346,73
+Gm,KGI,stage3_selection,temperature_surface_anom + mixed_layer_anom,40.114791921708616,74
+Gm,KGI,stage3_selection,chla_lag3_anom,21.467281315074032,75
+Gm,KGI,stage3_selection,chla_lag3_anom,21.43908504947706,76
+Gm,KGI,stage3_selection,chla_lag3_anom,38.009031670108136,77
+Gm,KGI,stage3_selection,chla_lag3_anom,23.75078738107873,78
+Gm,KGI,stage3_selection,temperature_surface_anom + chla_lag3_anom,36.90581170994414,79
+Gm,KGI,stage3_selection,temperature_surface_anom + mixed_layer_anom,41.12403800454364,80
+Gm,KGI,stage3_selection,chla_lag3_anom,15.226537769922551,81
+Gm,KGI,stage3_selection,temperature_surface_anom + mixed_layer_anom,40.21714455838047,82
+Gm,KGI,stage3_selection,,0,83
+Gm,KGI,stage3_selection,temperature_surface_anom,25.24689137927189,84
+Gm,KGI,stage3_selection,temperature_surface_anom + mixed_layer_anom,32.675444419461805,85
+Gm,KGI,stage3_selection,chla_lag3_anom,48.079127041805506,86
+Gm,KGI,stage3_selection,chla_lag3_anom,23.059430550007274,87
+Gm,KGI,stage3_selection,temperature_surface_anom + chla_lag3_anom,33.90113501411005,88
+Gm,KGI,stage3_selection,temperature_surface_anom + chla_lag3_anom,49.85192688835415,89
+Gm,KGI,stage3_selection,mixed_layer_anom,36.57566119930785,90
+Gm,KGI,stage3_selection,temperature_surface_anom,15.846833625361544,91
+Gm,KGI,stage3_selection,temperature_surface_anom + chla_lag3_anom,27.83678314044622,92
+Gm,KGI,stage3_selection,temperature_surface_anom,33.69748656135003,93
+Gm,KGI,stage3_selection,temperature_surface_anom + mixed_layer_anom,41.70131269696289,94
+Gm,KGI,stage3_selection,temperature_surface_anom + chla_lag3_anom,42.699688754481926,95
+Gm,KGI,stage3_selection,chla_lag3_anom + mixed_layer_anom,39.98111805965658,96
+Gm,KGI,stage3_selection,chla_lag3_anom,24.099475562761064,97
+Gm,KGI,stage3_selection,temperature_surface_anom,26.170441712993892,98
+Gm,KGI,stage3_selection,temperature_surface_anom,29.007248850508045,99
+Gm,KGI,stage3_selection,temperature_surface_anom,31.59926852049005,100
+Gm,KGI,stage3_selection,temperature_surface_anom,37.956304518097475,101
+Gm,KGI,stage3_selection,chla_lag3_anom,39.1393617292424,102
+Gm,KGI,stage3_selection,chla_lag3_anom,33.617303677987984,103
+Gm,KGI,stage3_selection,chla_lag3_anom,48.52442087842019,104
+Gm,KGI,stage3_selection,chla_lag3_anom,32.827325880630994,105
+Gm,KGI,stage3_selection,mixed_layer_anom,24.72836470729797,106
+Gm,KGI,stage3_selection,temperature_surface_anom,33.69748656135003,107
+Gm,KGI,stage3_selection,chla_lag3_anom,37.21540104515488,108
+Gm,KGI,stage3_selection,chla_lag3_anom,25.430253110427504,109
+Gm,KGI,stage3_selection,temperature_surface_anom + mixed_layer_anom,47.46130835006041,110
+Gm,KGI,stage3_selection,temperature_surface_anom + mixed_layer_anom,52.95344521173201,111
+Gm,KGI,stage3_selection,temperature_surface_anom,30.65929002838399,112
+Gm,KGI,stage3_selection,mixed_layer_anom,36.62992505113027,113
+Gm,KGI,stage3_selection,temperature_surface_anom + chla_lag3_anom,54.41418593683495,114
+Gm,KGI,stage3_selection,temperature_surface_anom,29.117391716035673,115
+Gm,KGI,stage3_selection,temperature_surface_anom + chla_lag3_anom,47.01672342009257,116
+Gm,KGI,stage3_selection,temperature_surface_anom,18.56164879193552,117
+Gm,KGI,stage3_selection,temperature_surface_anom + chla_lag3_anom,55.17114219619824,118
+Gm,KGI,stage3_selection,temperature_surface_anom + chla_lag3_anom,41.279707129308896,119
+Gm,KGI,stage3_selection,temperature_surface_anom + chla_lag3_anom,52.75992263256624,120
+Gm,KGI,stage3_selection,temperature_surface_anom + mixed_layer_anom,21.744805552988446,121
+Gm,KGI,stage3_selection,temperature_surface_anom,28.75434307160311,122
+Gm,KGI,stage3_selection,,0,123
+Gm,KGI,stage3_selection,temperature_surface_anom + mixed_layer_anom,52.854658026867476,124
+Gm,KGI,stage3_selection,temperature_surface_anom + mixed_layer_anom,32.749802851390314,125
+Gm,KGI,stage3_selection,temperature_surface_anom,40.00445189416173,126
+Gm,KGI,stage3_selection,temperature_surface_anom + chla_lag3_anom,42.33434375905113,127
+Gm,KGI,stage3_selection,chla_lag3_anom,37.21540104515488,128
+Gm,KGI,stage3_selection,temperature_surface_anom,15.82644450633508,129
+Gm,KGI,stage3_selection,temperature_surface_anom + chla_lag3_anom,34.71370839948333,130
+Gm,KGI,stage3_selection,temperature_surface_anom,32.04125431559132,131
+Gm,KGI,stage3_selection,chla_lag3_anom,33.399110122442124,132
+Gm,KGI,stage3_selection,temperature_surface_anom + mixed_layer_anom,37.497894718111944,133
+Gm,KGI,stage3_selection,temperature_surface_anom + chla_lag3_anom,43.314972073612196,134
+Gm,KGI,stage3_selection,temperature_surface_anom + chla_lag3_anom,46.93157885330555,135
+Gm,KGI,stage3_selection,temperature_surface_anom + chla_lag3_anom,46.4260693439927,136
+Gm,KGI,stage3_selection,temperature_surface_anom,20.021672433520123,137
+Gm,KGI,stage3_selection,chla_lag3_anom,50.71225800515444,138
+Gm,KGI,stage3_selection,temperature_surface_anom + mixed_layer_anom,42.040742622328295,139
+Gm,KGI,stage3_selection,temperature_surface_anom,42.30518912848662,140
+Gm,KGI,stage3_selection,temperature_surface_anom,39.32517679678341,141
+Gm,KGI,stage3_selection,chla_lag3_anom,33.617303677987984,142
+Gm,KGI,stage3_selection,mixed_layer_anom,41.1425004134293,143
+Gm,KGI,stage3_selection,chla_lag3_anom + mixed_layer_anom,38.278175851450776,144
+Gm,KGI,stage3_selection,chla_lag3_anom + mixed_layer_anom,44.22066246725815,145
+Gm,KGI,stage3_selection,temperature_surface_anom + mixed_layer_anom,52.81939684632583,146
+Gm,KGI,stage3_selection,temperature_surface_anom + chla_lag3_anom,42.920229301988684,147
+Gm,KGI,stage3_selection,temperature_surface_anom,36.684141623157196,148
+Gm,KGI,stage3_selection,temperature_surface_anom + mixed_layer_anom,35.14298831795507,149
+Gm,KGI,stage3_selection,temperature_surface_anom + chla_lag3_anom,39.59008305026947,150
+Gm,KGI,stage3_selection,temperature_surface_anom,32.613732208170546,151
+Gm,KGI,stage3_selection,chla_lag3_anom,45.42974815808619,152
+Gm,KGI,stage3_selection,chla_lag3_anom,44.760178234943396,153
+Gm,KGI,stage3_selection,temperature_surface_anom + mixed_layer_anom,37.7330334386418,154
+Gm,KGI,stage3_selection,temperature_surface_anom,17.278840070147695,155
+Gm,KGI,stage3_selection,chla_lag3_anom + mixed_layer_anom,33.312402318886164,156
+Gm,KGI,stage3_selection,temperature_surface_anom + chla_lag3_anom,47.6358509237484,157
+Gm,KGI,stage3_selection,temperature_surface_anom + chla_lag3_anom,35.35569236920914,158
+Gm,KGI,stage3_selection,chla_lag3_anom + mixed_layer_anom,50.53967538116726,159
+Gm,KGI,stage3_selection,temperature_surface_anom,41.35751602005618,160
+Gm,KGI,stage3_selection,temperature_surface_anom,20.826524795907048,161
+Gm,KGI,stage3_selection,chla_lag3_anom + mixed_layer_anom,44.50667491540706,162
+Gm,KGI,stage3_selection,temperature_surface_anom,14.137255810430721,163
+Gm,KGI,stage3_selection,temperature_surface_anom + chla_lag3_anom,62.56497669638108,164
+Gm,KGI,stage3_selection,chla_lag3_anom,32.6332057856144,165
+Gm,KGI,stage3_selection,temperature_surface_anom + chla_lag3_anom,45.457461563713046,166
+Gm,KGI,stage3_selection,temperature_surface_anom,31.37777294945201,167
+Gm,KGI,stage3_selection,chla_lag3_anom,57.68189237308531,168
+Gm,KGI,stage3_selection,chla_lag3_anom,48.079127041805506,169
+Gm,KGI,stage3_selection,temperature_surface_anom,21.33024362949521,170
+Gm,KGI,stage3_selection,temperature_surface_anom + chla_lag3_anom,34.53474457290231,171
+Gm,KGI,stage3_selection,,0,172
+Gm,KGI,stage3_selection,chla_lag3_anom,39.755631527427965,173
+Gm,KGI,stage3_selection,temperature_surface_anom,19.31163855323618,174
+Gm,KGI,stage3_selection,temperature_surface_anom + chla_lag3_anom,39.435601578745896,175
+Gm,KGI,stage3_selection,temperature_surface_anom + chla_lag3_anom,43.80808688367143,176
+Gm,KGI,stage3_selection,temperature_surface_anom + chla_lag3_anom,26.911962585133303,177
+Gm,KGI,stage3_selection,chla_lag3_anom,40.01752865700603,178
+Gm,KGI,stage3_selection,temperature_surface_anom + chla_lag3_anom,40.18467415183499,179
+Gm,KGI,stage3_selection,temperature_surface_anom + chla_lag3_anom,27.720654975583987,180
+Gm,KGI,stage3_selection,mixed_layer_anom,17.476494719359806,181
+Gm,KGI,stage3_selection,chla_lag3_anom + mixed_layer_anom,50.55758811247591,182
+Gm,KGI,stage3_selection,chla_lag3_anom,22.308655777343162,183
+Gm,KGI,stage3_selection,chla_lag3_anom + mixed_layer_anom,50.55758811247591,184
+Gm,KGI,stage3_selection,temperature_surface_anom + chla_lag3_anom,43.0012747283789,185
+Gm,KGI,stage3_selection,temperature_surface_anom,18.601237044833198,186
+Gm,KGI,stage3_selection,temperature_surface_anom + mixed_layer_anom,22.0904604522001,187
+Gm,KGI,stage3_selection,chla_lag3_anom,40.69616490513788,188
+Gm,KGI,stage3_selection,chla_lag3_anom,50.71225800515444,189
+Gm,KGI,stage3_selection,chla_lag3_anom,42.46854639872459,190
+Gm,KGI,stage3_selection,temperature_surface_anom,33.51352501372942,191
+Gm,KGI,stage3_selection,temperature_surface_anom + chla_lag3_anom,26.15893319883084,192
+Gm,KGI,stage3_selection,temperature_surface_anom,17.67395122907944,193
+Gm,KGI,stage3_selection,temperature_surface_anom,19.343264355148417,194
+Gm,KGI,stage3_selection,chla_lag3_anom,52.88054916943068,195
+Gm,KGI,stage3_selection,mixed_layer_anom,41.48679103059219,196
+Gm,KGI,stage3_selection,chla_lag3_anom,48.4125253330035,197
+Gm,KGI,stage3_selection,chla_lag3_anom,34.11912483490801,198
+Gm,KGI,stage3_selection,temperature_surface_anom + mixed_layer_anom,48.52521827109371,199
+Gm,KGI,stage3_selection,temperature_surface_anom,13.67665566227605,200
+Gm,CI,stage3_selection,temperature_surface_anom + mixed_layer_anom,49.367897572775554,0
+Gm,CI,stage3_selection,temperature_surface_anom,54.8716594112746,1
+Gm,CI,stage3_selection,temperature_surface_anom,55.87167644716212,2
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,45.41817929018583,3
+Gm,CI,stage3_selection,temperature_surface_anom + mixed_layer_anom,51.74682097977845,4
+Gm,CI,stage3_selection,temperature_surface_anom,31.55146960755809,5
+Gm,CI,stage3_selection,temperature_surface_anom,25.98685829439732,6
+Gm,CI,stage3_selection,temperature_surface_anom,23.288981748158108,7
+Gm,CI,stage3_selection,temperature_surface_anom + mixed_layer_anom,37.07928186500191,8
+Gm,CI,stage3_selection,temperature_surface_anom + mixed_layer_anom,41.04739316650005,9
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,49.43702604417281,10
+Gm,CI,stage3_selection,chla_lag3_anom,25.872520840330747,11
+Gm,CI,stage3_selection,temperature_surface_anom,21.09716766630972,12
+Gm,CI,stage3_selection,chla_lag3_anom + mixed_layer_anom,39.9087868540002,13
+Gm,CI,stage3_selection,temperature_surface_anom + mixed_layer_anom,40.14696395336074,14
+Gm,CI,stage3_selection,temperature_surface_anom,16.528076304234666,15
+Gm,CI,stage3_selection,,0,16
+Gm,CI,stage3_selection,temperature_surface_anom,23.752634025129222,17
+Gm,CI,stage3_selection,temperature_surface_anom,57.059029104530055,18
+Gm,CI,stage3_selection,temperature_surface_anom,20.36378106530019,19
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,52.113435541763884,20
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,56.993768820543586,21
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,50.51975635592271,22
+Gm,CI,stage3_selection,temperature_surface_anom + mixed_layer_anom,44.98384970543892,23
+Gm,CI,stage3_selection,temperature_surface_anom,20.240125729578452,24
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,57.54643653377875,25
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,47.351632439118255,26
+Gm,CI,stage3_selection,temperature_surface_anom + mixed_layer_anom,51.57467515632826,27
+Gm,CI,stage3_selection,chla_lag3_anom,19.934510368427024,28
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,47.120690857016086,29
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,55.947448395552854,30
+Gm,CI,stage3_selection,chla_lag3_anom + mixed_layer_anom,65.55877955836543,31
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,53.64397714990583,32
+Gm,CI,stage3_selection,temperature_surface_anom,48.813892735055035,33
+Gm,CI,stage3_selection,temperature_surface_anom,42.19849434288586,34
+Gm,CI,stage3_selection,chla_lag3_anom,47.09906895733326,35
+Gm,CI,stage3_selection,temperature_surface_anom,39.235057937808826,36
+Gm,CI,stage3_selection,mixed_layer_anom,53.278901683539495,37
+Gm,CI,stage3_selection,chla_lag3_anom + mixed_layer_anom,35.079517230575505,38
+Gm,CI,stage3_selection,temperature_surface_anom,34.41149703415035,39
+Gm,CI,stage3_selection,chla_lag3_anom,23.675273225301538,40
+Gm,CI,stage3_selection,temperature_surface_anom,35.802035687314884,41
+Gm,CI,stage3_selection,chla_lag3_anom,41.365467207403974,42
+Gm,CI,stage3_selection,chla_lag3_anom,30.908522564493264,43
+Gm,CI,stage3_selection,temperature_surface_anom,34.72324314112569,44
+Gm,CI,stage3_selection,temperature_surface_anom + mixed_layer_anom,63.00771721167152,45
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,62.171788615574165,46
+Gm,CI,stage3_selection,temperature_surface_anom,34.822876427040626,47
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,48.66744460366175,48
+Gm,CI,stage3_selection,temperature_surface_anom + mixed_layer_anom,41.360847341042486,49
+Gm,CI,stage3_selection,temperature_surface_anom,52.99476661050293,50
+Gm,CI,stage3_selection,temperature_surface_anom,23.752634025129222,51
+Gm,CI,stage3_selection,temperature_surface_anom,20.143971989697977,52
+Gm,CI,stage3_selection,,0,53
+Gm,CI,stage3_selection,temperature_surface_anom,34.64041027239718,54
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,48.44459812568014,55
+Gm,CI,stage3_selection,chla_lag3_anom,51.807968917761315,56
+Gm,CI,stage3_selection,,0,57
+Gm,CI,stage3_selection,temperature_surface_anom,47.68067315192493,58
+Gm,CI,stage3_selection,chla_lag3_anom + mixed_layer_anom,53.21496897421007,59
+Gm,CI,stage3_selection,chla_lag3_anom,34.24878915068761,60
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,45.86561175760454,61
+Gm,CI,stage3_selection,temperature_surface_anom,25.85885254740465,62
+Gm,CI,stage3_selection,,0,63
+Gm,CI,stage3_selection,temperature_surface_anom + mixed_layer_anom,57.853062145366565,64
+Gm,CI,stage3_selection,temperature_surface_anom,29.267276370599465,65
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,39.84577977153504,66
+Gm,CI,stage3_selection,chla_lag3_anom,43.301733346947465,67
+Gm,CI,stage3_selection,temperature_surface_anom,31.2094609922736,68
+Gm,CI,stage3_selection,temperature_surface_anom,31.087687892638893,69
+Gm,CI,stage3_selection,chla_lag3_anom + mixed_layer_anom,65.55877955836543,70
+Gm,CI,stage3_selection,temperature_surface_anom,31.068716955108684,71
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,45.734352892629225,72
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,57.11380662063842,73
+Gm,CI,stage3_selection,temperature_surface_anom,20.081659566461248,74
+Gm,CI,stage3_selection,temperature_surface_anom,25.102727902801302,75
+Gm,CI,stage3_selection,temperature_surface_anom + mixed_layer_anom,39.289439434770124,76
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,43.31722608457072,77
+Gm,CI,stage3_selection,temperature_surface_anom,23.288981748158108,78
+Gm,CI,stage3_selection,temperature_surface_anom + mixed_layer_anom,41.7553800881052,79
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,43.31678879340519,80
+Gm,CI,stage3_selection,temperature_surface_anom,31.109212251599878,81
+Gm,CI,stage3_selection,temperature_surface_anom,16.778747855540715,82
+Gm,CI,stage3_selection,temperature_surface_anom,20.36378106530019,83
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,53.48250574918144,84
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,35.84713123738473,85
+Gm,CI,stage3_selection,temperature_surface_anom,29.327537006046526,86
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,42.06734271240396,87
+Gm,CI,stage3_selection,temperature_surface_anom,38.95583498681789,88
+Gm,CI,stage3_selection,chla_lag3_anom,19.760680762352578,89
+Gm,CI,stage3_selection,,0,90
+Gm,CI,stage3_selection,temperature_surface_anom,55.60083633212912,91
+Gm,CI,stage3_selection,chla_lag3_anom,41.325851566060145,92
+Gm,CI,stage3_selection,temperature_surface_anom,24.609787869169164,93
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,57.64338540975535,94
+Gm,CI,stage3_selection,temperature_surface_anom,27.974716490041686,95
+Gm,CI,stage3_selection,temperature_surface_anom,48.456450408130586,96
+Gm,CI,stage3_selection,temperature_surface_anom + mixed_layer_anom,33.860419862202576,97
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,59.25627111019763,98
+Gm,CI,stage3_selection,chla_lag3_anom,45.70796747836855,99
+Gm,CI,stage3_selection,chla_lag3_anom + mixed_layer_anom,56.41598066096481,100
+Gm,CI,stage3_selection,temperature_surface_anom,19.14627182038891,101
+Gm,CI,stage3_selection,temperature_surface_anom + mixed_layer_anom,52.30742216474729,102
+Gm,CI,stage3_selection,temperature_surface_anom,39.995523925329785,103
+Gm,CI,stage3_selection,temperature_surface_anom + mixed_layer_anom,49.16899467920018,104
+Gm,CI,stage3_selection,temperature_surface_anom,29.267276370599465,105
+Gm,CI,stage3_selection,,0,106
+Gm,CI,stage3_selection,temperature_surface_anom,35.538901216999705,107
+Gm,CI,stage3_selection,chla_lag3_anom + mixed_layer_anom,57.67969368707738,108
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,61.72766773954892,109
+Gm,CI,stage3_selection,temperature_surface_anom,40.15184767461075,110
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,42.33586847339902,111
+Gm,CI,stage3_selection,temperature_surface_anom,31.972085288549895,112
+Gm,CI,stage3_selection,temperature_surface_anom + mixed_layer_anom,37.16456958972504,113
+Gm,CI,stage3_selection,temperature_surface_anom,26.326720148886896,114
+Gm,CI,stage3_selection,temperature_surface_anom,29.54270053433608,115
+Gm,CI,stage3_selection,temperature_surface_anom,22.47678112968014,116
+Gm,CI,stage3_selection,temperature_surface_anom,36.44870006548472,117
+Gm,CI,stage3_selection,temperature_surface_anom,51.31069356166724,118
+Gm,CI,stage3_selection,temperature_surface_anom,53.71027338187692,119
+Gm,CI,stage3_selection,temperature_surface_anom,44.127446540896905,120
+Gm,CI,stage3_selection,temperature_surface_anom + mixed_layer_anom,32.135561252877714,121
+Gm,CI,stage3_selection,temperature_surface_anom,48.813892735055035,122
+Gm,CI,stage3_selection,temperature_surface_anom + mixed_layer_anom,57.63561008989816,123
+Gm,CI,stage3_selection,temperature_surface_anom + mixed_layer_anom,41.04739316650005,124
+Gm,CI,stage3_selection,temperature_surface_anom,38.891178232148235,125
+Gm,CI,stage3_selection,temperature_surface_anom,26.661669107843878,126
+Gm,CI,stage3_selection,temperature_surface_anom + mixed_layer_anom,40.14696395336074,127
+Gm,CI,stage3_selection,temperature_surface_anom,26.809433634628682,128
+Gm,CI,stage3_selection,temperature_surface_anom,49.5729099636765,129
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,46.5092492067022,130
+Gm,CI,stage3_selection,temperature_surface_anom,26.3288090198603,131
+Gm,CI,stage3_selection,,0,132
+Gm,CI,stage3_selection,chla_lag3_anom,16.90670890296408,133
+Gm,CI,stage3_selection,chla_lag3_anom,35.70516685529476,134
+Gm,CI,stage3_selection,temperature_surface_anom,47.77787504664628,135
+Gm,CI,stage3_selection,chla_lag3_anom,19.760680762352578,136
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,37.20894664129451,137
+Gm,CI,stage3_selection,temperature_surface_anom,41.19564321732458,138
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,34.71530625434352,139
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,45.401217854966376,140
+Gm,CI,stage3_selection,temperature_surface_anom + mixed_layer_anom,47.18699473110411,141
+Gm,CI,stage3_selection,temperature_surface_anom,29.26149458973557,142
+Gm,CI,stage3_selection,temperature_surface_anom,27.927298338003098,143
+Gm,CI,stage3_selection,chla_lag3_anom,28.28817411034462,144
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,56.993768820543586,145
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,50.62363700795003,146
+Gm,CI,stage3_selection,temperature_surface_anom,57.80326759472616,147
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,38.802848818683024,148
+Gm,CI,stage3_selection,chla_lag3_anom,25.547252907358793,149
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,55.773503412844306,150
+Gm,CI,stage3_selection,temperature_surface_anom + mixed_layer_anom,41.99995658883709,151
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,48.50813054261708,152
+Gm,CI,stage3_selection,temperature_surface_anom,49.93861487388853,153
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,50.51061451929174,154
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,34.08884465688876,155
+Gm,CI,stage3_selection,temperature_surface_anom,48.87785062217907,156
+Gm,CI,stage3_selection,temperature_surface_anom,24.39644465029688,157
+Gm,CI,stage3_selection,mixed_layer_anom,48.97669705694952,158
+Gm,CI,stage3_selection,temperature_surface_anom + mixed_layer_anom,48.419972684638346,159
+Gm,CI,stage3_selection,chla_lag3_anom,21.554633987873988,160
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,54.3891689633308,161
+Gm,CI,stage3_selection,chla_lag3_anom,16.90670890296408,162
+Gm,CI,stage3_selection,temperature_surface_anom + mixed_layer_anom,39.44076554452042,163
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,39.749591918226635,164
+Gm,CI,stage3_selection,chla_lag3_anom,42.094519553560666,165
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,56.04392821601879,166
+Gm,CI,stage3_selection,temperature_surface_anom + mixed_layer_anom,43.14340401697063,167
+Gm,CI,stage3_selection,chla_lag3_anom,30.877954909490597,168
+Gm,CI,stage3_selection,temperature_surface_anom,37.12587924551033,169
+Gm,CI,stage3_selection,temperature_surface_anom,37.05608190407475,170
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,46.08579662352311,171
+Gm,CI,stage3_selection,chla_lag3_anom,43.76709716221846,172
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,56.04392821601879,173
+Gm,CI,stage3_selection,temperature_surface_anom,27.848187826511882,174
+Gm,CI,stage3_selection,temperature_surface_anom + mixed_layer_anom,36.65748744573857,175
+Gm,CI,stage3_selection,temperature_surface_anom,29.058239741065794,176
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,37.07307681989523,177
+Gm,CI,stage3_selection,chla_lag3_anom,15.22184662226564,178
+Gm,CI,stage3_selection,temperature_surface_anom,25.45841372193199,179
+Gm,CI,stage3_selection,temperature_surface_anom,23.65503298056375,180
+Gm,CI,stage3_selection,temperature_surface_anom + mixed_layer_anom,60.41800199203006,181
+Gm,CI,stage3_selection,temperature_surface_anom,13.36629519323879,182
+Gm,CI,stage3_selection,temperature_surface_anom,35.802035687314884,183
+Gm,CI,stage3_selection,temperature_surface_anom + mixed_layer_anom,54.642726926179186,184
+Gm,CI,stage3_selection,temperature_surface_anom,32.88733118230828,185
+Gm,CI,stage3_selection,temperature_surface_anom,16.111300206262158,186
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,56.11730378746841,187
+Gm,CI,stage3_selection,temperature_surface_anom,27.614046185843712,188
+Gm,CI,stage3_selection,,0,189
+Gm,CI,stage3_selection,temperature_surface_anom,58.515593340186236,190
+Gm,CI,stage3_selection,temperature_surface_anom,51.96031173832571,191
+Gm,CI,stage3_selection,chla_lag3_anom,26.094287125977335,192
+Gm,CI,stage3_selection,mixed_layer_anom,51.65340513052396,193
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,62.31347103132171,194
+Gm,CI,stage3_selection,chla_lag3_anom + mixed_layer_anom,59.41996360228301,195
+Gm,CI,stage3_selection,temperature_surface_anom + chla_lag3_anom,58.18797208451849,196
+Gm,CI,stage3_selection,temperature_surface_anom,58.861088205638,197
+Gm,CI,stage3_selection,temperature_surface_anom + mixed_layer_anom,58.15674967238187,198
+Gm,CI,stage3_selection,temperature_surface_anom,36.503641987433625,199
+Gm,CI,stage3_selection,temperature_surface_anom + mixed_layer_anom,49.16899467920018,200
+Oo,CI,stage3_selection,EKE_mid + temperature_surface_anom,27.062939981483293,0
+Oo,CI,stage3_selection,EKE_mid,24.53245393471097,1
+Oo,CI,stage3_selection,EKE_mid,9.018619224368486,2
+Oo,CI,stage3_selection,temperature_surface_anom,15.062793811739011,3
+Oo,CI,stage3_selection,,0,4
+Oo,CI,stage3_selection,,0,5
+Oo,CI,stage3_selection,EKE_mid,22.378148705723902,6
+Oo,CI,stage3_selection,,0,7
+Oo,CI,stage3_selection,EKE_mid,21.050068845185148,8
+Oo,CI,stage3_selection,temperature_surface_anom,20.945057299556215,9
+Oo,CI,stage3_selection,,0,10
+Oo,CI,stage3_selection,,0,11
+Oo,CI,stage3_selection,,0,12
+Oo,CI,stage3_selection,,0,13
+Oo,CI,stage3_selection,temperature_surface_anom,12.14357260719764,14
+Oo,CI,stage3_selection,EKE_mid,18.769952658403586,15
+Oo,CI,stage3_selection,EKE_mid + temperature_surface_anom,27.92752565078948,16
+Oo,CI,stage3_selection,,0,17
+Oo,CI,stage3_selection,EKE_mid + temperature_surface_anom,27.167182187414372,18
+Oo,CI,stage3_selection,temperature_surface_anom,12.608193248906591,19
+Oo,CI,stage3_selection,,0,20
+Oo,CI,stage3_selection,temperature_surface_anom,13.320379485027873,21
+Oo,CI,stage3_selection,,0,22
+Oo,CI,stage3_selection,temperature_surface_anom,9.275022193886814,23
+Oo,CI,stage3_selection,,0,24
+Oo,CI,stage3_selection,,0,25
+Oo,CI,stage3_selection,temperature_surface_anom,19.54366189276141,26
+Oo,CI,stage3_selection,EKE_mid,40.74051798041979,27
+Oo,CI,stage3_selection,,0,28
+Oo,CI,stage3_selection,,0,29
+Oo,CI,stage3_selection,,0,30
+Oo,CI,stage3_selection,,0,31
+Oo,CI,stage3_selection,,0,32
+Oo,CI,stage3_selection,,0,33
+Oo,CI,stage3_selection,EKE_mid,22.718798184288243,34
+Oo,CI,stage3_selection,,0,35
+Oo,CI,stage3_selection,,0,36
+Oo,CI,stage3_selection,EKE_mid,16.42832539336156,37
+Oo,CI,stage3_selection,temperature_surface_anom,17.619452928999596,38
+Oo,CI,stage3_selection,temperature_surface_anom,16.138101178981817,39
+Oo,CI,stage3_selection,,0,40
+Oo,CI,stage3_selection,,0,41
+Oo,CI,stage3_selection,,0,42
+Oo,CI,stage3_selection,temperature_surface_anom,19.602479880997553,43
+Oo,CI,stage3_selection,EKE_mid,17.98822106775136,44
+Oo,CI,stage3_selection,temperature_surface_anom,18.55997169158601,45
+Oo,CI,stage3_selection,,0,46
+Oo,CI,stage3_selection,,0,47
+Oo,CI,stage3_selection,,0,48
+Oo,CI,stage3_selection,EKE_mid + temperature_surface_anom,38.5222562241135,49
+Oo,CI,stage3_selection,temperature_surface_anom,15.731009390711215,50
+Oo,CI,stage3_selection,temperature_surface_anom,13.262042223910841,51
+Oo,CI,stage3_selection,,0,52
+Oo,CI,stage3_selection,temperature_surface_anom,14.378005638931127,53
+Oo,CI,stage3_selection,,0,54
+Oo,CI,stage3_selection,temperature_surface_anom,11.476308586570863,55
+Oo,CI,stage3_selection,temperature_surface_anom,20.72236437999495,56
+Oo,CI,stage3_selection,temperature_surface_anom,12.19294876299493,57
+Oo,CI,stage3_selection,,0,58
+Oo,CI,stage3_selection,,0,59
+Oo,CI,stage3_selection,,0,60
+Oo,CI,stage3_selection,,0,61
+Oo,CI,stage3_selection,,0,62
+Oo,CI,stage3_selection,,0,63
+Oo,CI,stage3_selection,,0,64
+Oo,CI,stage3_selection,EKE_mid,13.710297575563384,65
+Oo,CI,stage3_selection,EKE_mid,25.520179245409786,66
+Oo,CI,stage3_selection,EKE_mid,14.174180831939864,67
+Oo,CI,stage3_selection,EKE_mid,14.094859070642043,68
+Oo,CI,stage3_selection,,0,69
+Oo,CI,stage3_selection,,0,70
+Oo,CI,stage3_selection,,0,71
+Oo,CI,stage3_selection,,0,72
+Oo,CI,stage3_selection,,0,73
+Oo,CI,stage3_selection,,0,74
+Oo,CI,stage3_selection,,0,75
+Oo,CI,stage3_selection,,0,76
+Oo,CI,stage3_selection,,0,77
+Oo,CI,stage3_selection,EKE_mid + temperature_surface_anom,39.30084185748377,78
+Oo,CI,stage3_selection,,0,79
+Oo,CI,stage3_selection,,0,80
+Oo,CI,stage3_selection,EKE_mid,15.742907288790464,81
+Oo,CI,stage3_selection,,0,82
+Oo,CI,stage3_selection,,0,83
+Oo,CI,stage3_selection,temperature_surface_anom,11.14436261050806,84
+Oo,CI,stage3_selection,,0,85
+Oo,CI,stage3_selection,,0,86
+Oo,CI,stage3_selection,,0,87
+Oo,CI,stage3_selection,,0,88
+Oo,CI,stage3_selection,,0,89
+Oo,CI,stage3_selection,,0,90
+Oo,CI,stage3_selection,temperature_surface_anom,14.039258433082754,91
+Oo,CI,stage3_selection,temperature_surface_anom,15.635186608718646,92
+Oo,CI,stage3_selection,,0,93
+Oo,CI,stage3_selection,,0,94
+Oo,CI,stage3_selection,,0,95
+Oo,CI,stage3_selection,EKE_mid,17.95986196608406,96
+Oo,CI,stage3_selection,,0,97
+Oo,CI,stage3_selection,,0,98
+Oo,CI,stage3_selection,,0,99
+Oo,CI,stage3_selection,EKE_mid,15.024454157655862,100
+Oo,CI,stage3_selection,EKE_mid,16.166145951201138,101
+Oo,CI,stage3_selection,,0,102
+Oo,CI,stage3_selection,EKE_mid,15.629879267153063,103
+Oo,CI,stage3_selection,,0,104
+Oo,CI,stage3_selection,,0,105
+Oo,CI,stage3_selection,,0,106
+Oo,CI,stage3_selection,,0,107
+Oo,CI,stage3_selection,EKE_mid + temperature_surface_anom,27.92752565078948,108
+Oo,CI,stage3_selection,,0,109
+Oo,CI,stage3_selection,temperature_surface_anom,15.486737434212358,110
+Oo,CI,stage3_selection,EKE_mid,21.806358823667964,111
+Oo,CI,stage3_selection,,0,112
+Oo,CI,stage3_selection,temperature_surface_anom,13.01207446872559,113
+Oo,CI,stage3_selection,temperature_surface_anom,10.313660890079657,114
+Oo,CI,stage3_selection,,0,115
+Oo,CI,stage3_selection,EKE_mid,22.496132826142105,116
+Oo,CI,stage3_selection,EKE_mid + temperature_surface_anom,25.777209409566826,117
+Oo,CI,stage3_selection,,0,118
+Oo,CI,stage3_selection,,0,119
+Oo,CI,stage3_selection,,0,120
+Oo,CI,stage3_selection,temperature_surface_anom,12.581243519742433,121
+Oo,CI,stage3_selection,,0,122
+Oo,CI,stage3_selection,temperature_surface_anom,29.233088890081156,123
+Oo,CI,stage3_selection,,0,124
+Oo,CI,stage3_selection,,0,125
+Oo,CI,stage3_selection,,0,126
+Oo,CI,stage3_selection,temperature_surface_anom,24.53731595743662,127
+Oo,CI,stage3_selection,EKE_mid,20.027281288245476,128
+Oo,CI,stage3_selection,temperature_surface_anom,17.561233657618082,129
+Oo,CI,stage3_selection,EKE_mid,20.159375449963147,130
+Oo,CI,stage3_selection,temperature_surface_anom,27.618880524293637,131
+Oo,CI,stage3_selection,EKE_mid + temperature_surface_anom,45.80775866214854,132
+Oo,CI,stage3_selection,EKE_mid,22.478200479158424,133
+Oo,CI,stage3_selection,,0,134
+Oo,CI,stage3_selection,,0,135
+Oo,CI,stage3_selection,temperature_surface_anom,11.533566081126978,136
+Oo,CI,stage3_selection,EKE_mid,23.736899832526905,137
+Oo,CI,stage3_selection,,0,138
+Oo,CI,stage3_selection,,0,139
+Oo,CI,stage3_selection,,0,140
+Oo,CI,stage3_selection,,0,141
+Oo,CI,stage3_selection,EKE_mid,20.339185157944264,142
+Oo,CI,stage3_selection,,0,143
+Oo,CI,stage3_selection,,0,144
+Oo,CI,stage3_selection,temperature_surface_anom,17.921184878196804,145
+Oo,CI,stage3_selection,EKE_mid,27.492444397817067,146
+Oo,CI,stage3_selection,EKE_mid,14.106454385715706,147
+Oo,CI,stage3_selection,,0,148
+Oo,CI,stage3_selection,,0,149
+Oo,CI,stage3_selection,,0,150
+Oo,CI,stage3_selection,,0,151
+Oo,CI,stage3_selection,,0,152
+Oo,CI,stage3_selection,,0,153
+Oo,CI,stage3_selection,EKE_mid,13.934351006062082,154
+Oo,CI,stage3_selection,EKE_mid,18.827694586681748,155
+Oo,CI,stage3_selection,temperature_surface_anom,12.115647488017176,156
+Oo,CI,stage3_selection,,0,157
+Oo,CI,stage3_selection,,0,158
+Oo,CI,stage3_selection,,0,159
+Oo,CI,stage3_selection,temperature_surface_anom,17.921184878196804,160
+Oo,CI,stage3_selection,,0,161
+Oo,CI,stage3_selection,,0,162
+Oo,CI,stage3_selection,EKE_mid,21.57941689399631,163
+Oo,CI,stage3_selection,EKE_mid + temperature_surface_anom,27.344251954510007,164
+Oo,CI,stage3_selection,,0,165
+Oo,CI,stage3_selection,,0,166
+Oo,CI,stage3_selection,EKE_mid,15.705182052822812,167
+Oo,CI,stage3_selection,temperature_surface_anom,13.096699074604262,168
+Oo,CI,stage3_selection,temperature_surface_anom,11.353056066862944,169
+Oo,CI,stage3_selection,EKE_mid,17.613211135522153,170
+Oo,CI,stage3_selection,,0,171
+Oo,CI,stage3_selection,EKE_mid,9.769617902822416,172
+Oo,CI,stage3_selection,temperature_surface_anom,9.913302493270173,173
+Oo,CI,stage3_selection,,0,174
+Oo,CI,stage3_selection,EKE_mid,22.730182855197885,175
+Oo,CI,stage3_selection,,0,176
+Oo,CI,stage3_selection,EKE_mid,20.440932471486303,177
+Oo,CI,stage3_selection,,0,178
+Oo,CI,stage3_selection,EKE_mid,17.865638707993234,179
+Oo,CI,stage3_selection,EKE_mid,19.697649870009894,180
+Oo,CI,stage3_selection,EKE_mid + temperature_surface_anom,27.07724946747239,181
+Oo,CI,stage3_selection,,0,182
+Oo,CI,stage3_selection,,0,183
+Oo,CI,stage3_selection,temperature_surface_anom,15.062793811739011,184
+Oo,CI,stage3_selection,temperature_surface_anom,14.65491437913701,185
+Oo,CI,stage3_selection,,0,186
+Oo,CI,stage3_selection,,0,187
+Oo,CI,stage3_selection,temperature_surface_anom,20.380879966675845,188
+Oo,CI,stage3_selection,,0,189
+Oo,CI,stage3_selection,,0,190
+Oo,CI,stage3_selection,EKE_mid,21.806358823667964,191
+Oo,CI,stage3_selection,,0,192
+Oo,CI,stage3_selection,,0,193
+Oo,CI,stage3_selection,,0,194
+Oo,CI,stage3_selection,EKE_mid,12.696233945385146,195
+Oo,CI,stage3_selection,EKE_mid,23.715914844165585,196
+Oo,CI,stage3_selection,,0,197
+Oo,CI,stage3_selection,temperature_surface_anom,26.58529359471001,198
+Oo,CI,stage3_selection,EKE_mid,19.338334038990563,199
+Oo,CI,stage3_selection,,0,200
+BW29,EI,stage3_selection,EKE_deep + chla_lag3_anom,46.629225493614776,0
+BW29,EI,stage3_selection,FSLE + chla_lag3_anom + temperature_surface_anom,57.65556840826799,1
+BW29,EI,stage3_selection,FSLE + temperature_surface_anom,52.816540586350705,2
+BW29,EI,stage3_selection,chla_lag3_anom + temperature_surface_anom,68.4446127100066,3
+BW29,EI,stage3_selection,EKE_deep + chla_lag3_anom,40.9921184775857,4
+BW29,EI,stage3_selection,EKE_deep + FSLE + chla_lag3_anom,64.50547081309797,5
+BW29,EI,stage3_selection,EKE_deep + FSLE + mixed_layer_anom,61.957929233548924,6
+BW29,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom + temperature_surface_anom,54.498380384983605,7
+BW29,EI,stage3_selection,EKE_deep + chla_lag3_anom,42.72921415160037,8
+BW29,EI,stage3_selection,FSLE + temperature_surface_anom,38.6260643667254,9
+BW29,EI,stage3_selection,FSLE + chla_lag3_anom,63.684695097709465,10
+BW29,EI,stage3_selection,FSLE + chla_lag3_anom + temperature_surface_anom,59.945500448223996,11
+BW29,EI,stage3_selection,,0,12
+BW29,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom + temperature_surface_anom,65.59597371607673,13
+BW29,EI,stage3_selection,EKE_deep + FSLE + chla_lag3_anom,56.03570739901463,14
+BW29,EI,stage3_selection,EKE_deep,33.41102588585214,15
+BW29,EI,stage3_selection,mixed_layer_anom + temperature_surface_anom,53.49430253660069,16
+BW29,EI,stage3_selection,FSLE + mixed_layer_anom,51.96567757534479,17
+BW29,EI,stage3_selection,mixed_layer_anom + temperature_surface_anom,49.50392745868894,18
+BW29,EI,stage3_selection,EKE_deep + chla_lag3_anom,38.89324463063532,19
+BW29,EI,stage3_selection,chla_lag3_anom + temperature_surface_anom,34.99918863351385,20
+BW29,EI,stage3_selection,mixed_layer_anom,18.390941452780606,21
+BW29,EI,stage3_selection,chla_lag3_anom,61.41432510722559,22
+BW29,EI,stage3_selection,chla_lag3_anom + temperature_surface_anom,46.10480466665232,23
+BW29,EI,stage3_selection,EKE_deep + temperature_surface_anom,56.245614768159044,24
+BW29,EI,stage3_selection,EKE_deep + mixed_layer_anom + temperature_surface_anom,43.193244569857875,25
+BW29,EI,stage3_selection,FSLE + mixed_layer_anom,56.23283901913708,26
+BW29,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom + temperature_surface_anom,54.30262429360706,27
+BW29,EI,stage3_selection,EKE_deep + mixed_layer_anom,34.440836638507356,28
+BW29,EI,stage3_selection,chla_lag3_anom,48.004313013689696,29
+BW29,EI,stage3_selection,mixed_layer_anom + temperature_surface_anom,52.922984662581484,30
+BW29,EI,stage3_selection,chla_lag3_anom,53.23936768220686,31
+BW29,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom + temperature_surface_anom,66.87421513925567,32
+BW29,EI,stage3_selection,mixed_layer_anom,23.679630662086705,33
+BW29,EI,stage3_selection,FSLE + chla_lag3_anom + temperature_surface_anom,59.701065572532976,34
+BW29,EI,stage3_selection,temperature_surface_anom,21.08994180200395,35
+BW29,EI,stage3_selection,EKE_deep + mixed_layer_anom + temperature_surface_anom,62.49214818748189,36
+BW29,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom,45.57036769108823,37
+BW29,EI,stage3_selection,EKE_deep + chla_lag3_anom + mixed_layer_anom,41.45480036700287,38
+BW29,EI,stage3_selection,EKE_deep + FSLE + mixed_layer_anom,69.72044447753395,39
+BW29,EI,stage3_selection,chla_lag3_anom,14.254176963670215,40
+BW29,EI,stage3_selection,FSLE + chla_lag3_anom + mixed_layer_anom,62.30753245169609,41
+BW29,EI,stage3_selection,,0,42
+BW29,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom + temperature_surface_anom,55.876066001552836,43
+BW29,EI,stage3_selection,EKE_deep + temperature_surface_anom,50.97100504635629,44
+BW29,EI,stage3_selection,mixed_layer_anom + temperature_surface_anom,63.176158660901294,45
+BW29,EI,stage3_selection,EKE_deep + chla_lag3_anom + temperature_surface_anom,66.64107660541728,46
+BW29,EI,stage3_selection,EKE_deep + chla_lag3_anom,42.550679633996324,47
+BW29,EI,stage3_selection,FSLE + temperature_surface_anom,37.92426282338518,48
+BW29,EI,stage3_selection,EKE_deep + chla_lag3_anom + temperature_surface_anom,64.91414845558042,49
+BW29,EI,stage3_selection,EKE_deep + chla_lag3_anom,47.132516229492026,50
+BW29,EI,stage3_selection,FSLE + chla_lag3_anom + temperature_surface_anom,57.28895977538671,51
+BW29,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom,53.713428209461625,52
+BW29,EI,stage3_selection,EKE_deep + chla_lag3_anom,54.02072511443776,53
+BW29,EI,stage3_selection,FSLE + chla_lag3_anom,46.92310844706948,54
+BW29,EI,stage3_selection,chla_lag3_anom,21.074915636959183,55
+BW29,EI,stage3_selection,FSLE + chla_lag3_anom + mixed_layer_anom,43.213442158685716,56
+BW29,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom + temperature_surface_anom,62.75794369239943,57
+BW29,EI,stage3_selection,EKE_deep + chla_lag3_anom + temperature_surface_anom,53.46101405463909,58
+BW29,EI,stage3_selection,EKE_deep + temperature_surface_anom,44.94234337180208,59
+BW29,EI,stage3_selection,chla_lag3_anom + temperature_surface_anom,57.29710941986743,60
+BW29,EI,stage3_selection,FSLE + chla_lag3_anom,35.62746289344135,61
+BW29,EI,stage3_selection,chla_lag3_anom,23.05270688739572,62
+BW29,EI,stage3_selection,chla_lag3_anom,33.587427606318094,63
+BW29,EI,stage3_selection,FSLE + chla_lag3_anom,75.56017122245017,64
+BW29,EI,stage3_selection,EKE_deep + temperature_surface_anom,36.76065372818601,65
+BW29,EI,stage3_selection,EKE_deep + chla_lag3_anom + temperature_surface_anom,63.45259100465209,66
+BW29,EI,stage3_selection,temperature_surface_anom,30.452225017224798,67
+BW29,EI,stage3_selection,FSLE + temperature_surface_anom,58.957553632056694,68
+BW29,EI,stage3_selection,EKE_deep + FSLE + mixed_layer_anom,66.3740476757933,69
+BW29,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom + temperature_surface_anom,38.827441352862365,70
+BW29,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom,37.181030868387175,71
+BW29,EI,stage3_selection,FSLE + temperature_surface_anom,40.89207921159351,72
+BW29,EI,stage3_selection,chla_lag3_anom + temperature_surface_anom,45.57788313016229,73
+BW29,EI,stage3_selection,EKE_deep + mixed_layer_anom + temperature_surface_anom,37.32784933927892,74
+BW29,EI,stage3_selection,FSLE + mixed_layer_anom + temperature_surface_anom,56.32564954148279,75
+BW29,EI,stage3_selection,EKE_deep + FSLE + chla_lag3_anom,63.72592832213362,76
+BW29,EI,stage3_selection,FSLE + chla_lag3_anom + temperature_surface_anom,62.35965888740623,77
+BW29,EI,stage3_selection,EKE_deep + chla_lag3_anom,40.957618860027445,78
+BW29,EI,stage3_selection,EKE_deep + chla_lag3_anom,39.63402075302865,79
+BW29,EI,stage3_selection,EKE_deep + chla_lag3_anom + mixed_layer_anom,37.74508641494311,80
+BW29,EI,stage3_selection,chla_lag3_anom + temperature_surface_anom,53.527675752800675,81
+BW29,EI,stage3_selection,temperature_surface_anom,23.86267011770671,82
+BW29,EI,stage3_selection,EKE_deep + chla_lag3_anom + temperature_surface_anom,55.78913270231139,83
+BW29,EI,stage3_selection,temperature_surface_anom,19.794170703527847,84
+BW29,EI,stage3_selection,chla_lag3_anom + temperature_surface_anom,33.76770152790036,85
+BW29,EI,stage3_selection,FSLE + chla_lag3_anom,37.318915912232484,86
+BW29,EI,stage3_selection,EKE_deep + mixed_layer_anom + temperature_surface_anom,64.68325106550766,87
+BW29,EI,stage3_selection,FSLE + mixed_layer_anom + temperature_surface_anom,50.09594942847385,88
+BW29,EI,stage3_selection,chla_lag3_anom,61.23389431791141,89
+BW29,EI,stage3_selection,EKE_deep + temperature_surface_anom,39.013134192389856,90
+BW29,EI,stage3_selection,EKE_deep + temperature_surface_anom,29.594314589290242,91
+BW29,EI,stage3_selection,FSLE,34.856022720798016,92
+BW29,EI,stage3_selection,FSLE + chla_lag3_anom + temperature_surface_anom,63.677441470106146,93
+BW29,EI,stage3_selection,chla_lag3_anom + temperature_surface_anom,51.4681991761149,94
+BW29,EI,stage3_selection,FSLE + mixed_layer_anom + temperature_surface_anom,56.32564954148279,95
+BW29,EI,stage3_selection,chla_lag3_anom + temperature_surface_anom,54.91057206283473,96
+BW29,EI,stage3_selection,,0,97
+BW29,EI,stage3_selection,FSLE + chla_lag3_anom + temperature_surface_anom,56.56191068884879,98
+BW29,EI,stage3_selection,FSLE + temperature_surface_anom,33.37045454318841,99
+BW29,EI,stage3_selection,FSLE + temperature_surface_anom,36.35838877025759,100
+BW29,EI,stage3_selection,EKE_deep + chla_lag3_anom + mixed_layer_anom,61.517149251344215,101
+BW29,EI,stage3_selection,chla_lag3_anom,38.24752461862296,102
+BW29,EI,stage3_selection,EKE_deep + temperature_surface_anom,68.43849454596149,103
+BW29,EI,stage3_selection,mixed_layer_anom,8.973238108264491,104
+BW29,EI,stage3_selection,chla_lag3_anom,19.869603517775587,105
+BW29,EI,stage3_selection,EKE_deep + temperature_surface_anom,68.79714347872056,106
+BW29,EI,stage3_selection,EKE_deep + mixed_layer_anom + temperature_surface_anom,53.1033008971774,107
+BW29,EI,stage3_selection,EKE_deep + chla_lag3_anom + mixed_layer_anom,66.85258234955776,108
+BW29,EI,stage3_selection,EKE_deep + chla_lag3_anom + temperature_surface_anom,38.283898558213,109
+BW29,EI,stage3_selection,FSLE + temperature_surface_anom,43.96853118770634,110
+BW29,EI,stage3_selection,FSLE + chla_lag3_anom + temperature_surface_anom,61.8510963831543,111
+BW29,EI,stage3_selection,chla_lag3_anom,15.181330342731094,112
+BW29,EI,stage3_selection,FSLE + temperature_surface_anom,33.37045454318841,113
+BW29,EI,stage3_selection,chla_lag3_anom + temperature_surface_anom,31.253192215145077,114
+BW29,EI,stage3_selection,FSLE + temperature_surface_anom,55.915130030622116,115
+BW29,EI,stage3_selection,chla_lag3_anom + temperature_surface_anom,66.50833776340043,116
+BW29,EI,stage3_selection,EKE_deep + mixed_layer_anom + temperature_surface_anom,72.92188844895094,117
+BW29,EI,stage3_selection,chla_lag3_anom,38.24752461862296,118
+BW29,EI,stage3_selection,chla_lag3_anom + temperature_surface_anom,57.90538420552118,119
+BW29,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom,32.08180143879959,120
+BW29,EI,stage3_selection,EKE_deep + FSLE + chla_lag3_anom,60.646323800144486,121
+BW29,EI,stage3_selection,chla_lag3_anom + temperature_surface_anom,54.73808468641628,122
+BW29,EI,stage3_selection,mixed_layer_anom + temperature_surface_anom,49.334026766588416,123
+BW29,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom,61.62373131730994,124
+BW29,EI,stage3_selection,chla_lag3_anom + temperature_surface_anom,56.87587611845275,125
+BW29,EI,stage3_selection,EKE_deep + mixed_layer_anom,53.04951000159388,126
+BW29,EI,stage3_selection,FSLE,26.931293882654867,127
+BW29,EI,stage3_selection,FSLE + mixed_layer_anom + temperature_surface_anom,40.59718213010028,128
+BW29,EI,stage3_selection,FSLE + chla_lag3_anom,31.353337281877458,129
+BW29,EI,stage3_selection,chla_lag3_anom,18.502215866291664,130
+BW29,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom,34.8093528444403,131
+BW29,EI,stage3_selection,EKE_deep + temperature_surface_anom,56.245614768159044,132
+BW29,EI,stage3_selection,chla_lag3_anom,17.883548242568324,133
+BW29,EI,stage3_selection,chla_lag3_anom + temperature_surface_anom,41.69133382079509,134
+BW29,EI,stage3_selection,EKE_deep + chla_lag3_anom,85.96999062309916,135
+BW29,EI,stage3_selection,EKE_deep + FSLE + temperature_surface_anom,44.27941552846543,136
+BW29,EI,stage3_selection,EKE_deep + chla_lag3_anom + temperature_surface_anom,56.44780154533669,137
+BW29,EI,stage3_selection,FSLE + chla_lag3_anom + mixed_layer_anom,44.67347781997565,138
+BW29,EI,stage3_selection,chla_lag3_anom,41.06647513739081,139
+BW29,EI,stage3_selection,,0,140
+BW29,EI,stage3_selection,chla_lag3_anom + temperature_surface_anom,54.73808468641628,141
+BW29,EI,stage3_selection,EKE_deep + mixed_layer_anom + temperature_surface_anom,61.18833991418528,142
+BW29,EI,stage3_selection,EKE_deep,15.401095415733113,143
+BW29,EI,stage3_selection,mixed_layer_anom + temperature_surface_anom,52.9942644502592,144
+BW29,EI,stage3_selection,,0,145
+BW29,EI,stage3_selection,,0,146
+BW29,EI,stage3_selection,FSLE + chla_lag3_anom,50.831077457612885,147
+BW29,EI,stage3_selection,EKE_deep + FSLE,34.383939932604235,148
+BW29,EI,stage3_selection,FSLE + chla_lag3_anom,46.03525343103926,149
+BW29,EI,stage3_selection,FSLE + chla_lag3_anom + temperature_surface_anom,51.5046821970807,150
+BW29,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom + temperature_surface_anom,40.043340810169084,151
+BW29,EI,stage3_selection,FSLE + chla_lag3_anom + temperature_surface_anom,61.27606774571747,152
+BW29,EI,stage3_selection,temperature_surface_anom,24.418655874040944,153
+BW29,EI,stage3_selection,EKE_deep + mixed_layer_anom,34.440836638507356,154
+BW29,EI,stage3_selection,FSLE + chla_lag3_anom,39.05843768551146,155
+BW29,EI,stage3_selection,FSLE + chla_lag3_anom + mixed_layer_anom,48.89116265437271,156
+BW29,EI,stage3_selection,EKE_deep + mixed_layer_anom + temperature_surface_anom,66.49523742433978,157
+BW29,EI,stage3_selection,FSLE + chla_lag3_anom + mixed_layer_anom,60.51191216879545,158
+BW29,EI,stage3_selection,EKE_deep + chla_lag3_anom + mixed_layer_anom,64.71598960881829,159
+BW29,EI,stage3_selection,EKE_deep + chla_lag3_anom,32.94359254363225,160
+BW29,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom + temperature_surface_anom,47.71376873452344,161
+BW29,EI,stage3_selection,EKE_deep + chla_lag3_anom + temperature_surface_anom,56.44780154533669,162
+BW29,EI,stage3_selection,FSLE + temperature_surface_anom,57.54186009968022,163
+BW29,EI,stage3_selection,,0,164
+BW29,EI,stage3_selection,EKE_deep + FSLE + temperature_surface_anom,63.192823910710224,165
+BW29,EI,stage3_selection,FSLE + chla_lag3_anom,68.0744019666733,166
+BW29,EI,stage3_selection,EKE_deep + chla_lag3_anom + temperature_surface_anom,59.13144471926625,167
+BW29,EI,stage3_selection,EKE_deep + chla_lag3_anom,44.101827916750175,168
+BW29,EI,stage3_selection,EKE_deep,15.401095415733113,169
+BW29,EI,stage3_selection,mixed_layer_anom + temperature_surface_anom,32.14211533575442,170
+BW29,EI,stage3_selection,chla_lag3_anom,53.85083836289149,171
+BW29,EI,stage3_selection,EKE_deep + chla_lag3_anom + mixed_layer_anom,41.45480036700287,172
+BW29,EI,stage3_selection,chla_lag3_anom,61.9502255863709,173
+BW29,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom + temperature_surface_anom,50.88714321210311,174
+BW29,EI,stage3_selection,FSLE + chla_lag3_anom + temperature_surface_anom,70.12607138235035,175
+BW29,EI,stage3_selection,chla_lag3_anom,48.004313013689696,176
+BW29,EI,stage3_selection,FSLE + chla_lag3_anom,51.99790003498295,177
+BW29,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom + temperature_surface_anom,54.598522859853084,178
+BW29,EI,stage3_selection,FSLE,18.130350752641586,179
+BW29,EI,stage3_selection,temperature_surface_anom,21.08994180200395,180
+BW29,EI,stage3_selection,chla_lag3_anom + temperature_surface_anom,38.85413398924262,181
+BW29,EI,stage3_selection,FSLE + temperature_surface_anom,37.87538373393679,182
+BW29,EI,stage3_selection,EKE_deep + FSLE,29.192423629520558,183
+BW29,EI,stage3_selection,chla_lag3_anom + temperature_surface_anom,49.61776458435166,184
+BW29,EI,stage3_selection,temperature_surface_anom,59.033233232381676,185
+BW29,EI,stage3_selection,chla_lag3_anom,53.875733203817624,186
+BW29,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom + temperature_surface_anom,74.22961071090988,187
+BW29,EI,stage3_selection,chla_lag3_anom + temperature_surface_anom,50.05708023903273,188
+BW29,EI,stage3_selection,FSLE + chla_lag3_anom,46.92310844706948,189
+BW29,EI,stage3_selection,temperature_surface_anom,28.819959745456668,190
+BW29,EI,stage3_selection,FSLE + chla_lag3_anom,32.87465297968731,191
+BW29,EI,stage3_selection,EKE_deep + mixed_layer_anom,63.234639950587216,192
+BW29,EI,stage3_selection,chla_lag3_anom + temperature_surface_anom,46.574065347162225,193
+BW29,EI,stage3_selection,EKE_deep + FSLE + mixed_layer_anom,73.02452543879406,194
+BW29,EI,stage3_selection,chla_lag3_anom + temperature_surface_anom,47.603329811006255,195
+BW29,EI,stage3_selection,EKE_deep + temperature_surface_anom,50.7450774603391,196
+BW29,EI,stage3_selection,EKE_deep + chla_lag3_anom,28.283997384431096,197
+BW29,EI,stage3_selection,chla_lag3_anom + mixed_layer_anom + temperature_surface_anom,58.877805020243336,198
+BW29,EI,stage3_selection,chla_lag3_anom + temperature_surface_anom,59.154893692587116,199
+BW29,EI,stage3_selection,temperature_surface_anom,24.166030718388903,200
+BW29,KGI,stage3_selection,chla_lag3_anom,42.110415713591074,0
+BW29,KGI,stage3_selection,temperature_surface_anom,49.087805353021395,1
+BW29,KGI,stage3_selection,chla_lag3_anom,63.32148901186435,2
+BW29,KGI,stage3_selection,EKE_deep + temperature_surface_anom,40.556947708447986,3
+BW29,KGI,stage3_selection,chla_lag3_anom + temperature_surface_anom,50.36318955980248,4
+BW29,KGI,stage3_selection,mixed_layer_anom + temperature_surface_anom,55.634142470568825,5
+BW29,KGI,stage3_selection,FSLE + temperature_surface_anom,56.4334154561343,6
+BW29,KGI,stage3_selection,EKE_deep + chla_lag3_anom,44.05186941292919,7
+BW29,KGI,stage3_selection,EKE_deep + temperature_surface_anom,53.400993057613945,8
+BW29,KGI,stage3_selection,chla_lag3_anom + temperature_surface_anom,59.99944543987679,9
+BW29,KGI,stage3_selection,mixed_layer_anom,12.231762359834963,10
+BW29,KGI,stage3_selection,mixed_layer_anom + temperature_surface_anom,65.61464142662439,11
+BW29,KGI,stage3_selection,temperature_surface_anom,26.950823585155355,12
+BW29,KGI,stage3_selection,EKE_deep + mixed_layer_anom,23.68202294272748,13
+BW29,KGI,stage3_selection,chla_lag3_anom + temperature_surface_anom,41.08613517445111,14
+BW29,KGI,stage3_selection,chla_lag3_anom,12.788009578989703,15
+BW29,KGI,stage3_selection,EKE_deep + chla_lag3_anom,57.811438151232,16
+BW29,KGI,stage3_selection,EKE_deep + temperature_surface_anom,47.70184530178793,17
+BW29,KGI,stage3_selection,EKE_deep + temperature_surface_anom,50.939009252739396,18
+BW29,KGI,stage3_selection,mixed_layer_anom + temperature_surface_anom,51.14284426530779,19
+BW29,KGI,stage3_selection,temperature_surface_anom,48.071012481952216,20
+BW29,KGI,stage3_selection,EKE_deep + temperature_surface_anom,51.03081722157897,21
+BW29,KGI,stage3_selection,,0,22
+BW29,KGI,stage3_selection,temperature_surface_anom,52.037225286159426,23
+BW29,KGI,stage3_selection,mixed_layer_anom + temperature_surface_anom,63.41478123255978,24
+BW29,KGI,stage3_selection,temperature_surface_anom,26.39136419819587,25
+BW29,KGI,stage3_selection,FSLE + temperature_surface_anom,28.517108565890993,26
+BW29,KGI,stage3_selection,chla_lag3_anom + temperature_surface_anom,52.53594905803748,27
+BW29,KGI,stage3_selection,temperature_surface_anom,30.09653414327037,28
+BW29,KGI,stage3_selection,FSLE + temperature_surface_anom,39.603336399314934,29
+BW29,KGI,stage3_selection,FSLE,26.178315126775452,30
+BW29,KGI,stage3_selection,EKE_deep,24.415102246578694,31
+BW29,KGI,stage3_selection,mixed_layer_anom,17.481637198905034,32
+BW29,KGI,stage3_selection,temperature_surface_anom,54.63545613523242,33
+BW29,KGI,stage3_selection,FSLE + temperature_surface_anom,39.264661609307524,34
+BW29,KGI,stage3_selection,FSLE + temperature_surface_anom,25.824317885685073,35
+BW29,KGI,stage3_selection,temperature_surface_anom,54.64028957947149,36
+BW29,KGI,stage3_selection,FSLE + temperature_surface_anom,50.84756295966814,37
+BW29,KGI,stage3_selection,FSLE + mixed_layer_anom,33.707917133458935,38
+BW29,KGI,stage3_selection,FSLE + chla_lag3_anom,55.71198051342561,39
+BW29,KGI,stage3_selection,,0,40
+BW29,KGI,stage3_selection,,0,41
+BW29,KGI,stage3_selection,mixed_layer_anom,10.862383305218813,42
+BW29,KGI,stage3_selection,temperature_surface_anom,52.55263148088895,43
+BW29,KGI,stage3_selection,temperature_surface_anom,53.22964223484631,44
+BW29,KGI,stage3_selection,FSLE + temperature_surface_anom,45.53776016505097,45
+BW29,KGI,stage3_selection,EKE_deep + temperature_surface_anom,56.41664897182278,46
+BW29,KGI,stage3_selection,EKE_deep + temperature_surface_anom,49.31583002430317,47
+BW29,KGI,stage3_selection,mixed_layer_anom + temperature_surface_anom,54.706293216782775,48
+BW29,KGI,stage3_selection,chla_lag3_anom + temperature_surface_anom,56.90231506267798,49
+BW29,KGI,stage3_selection,EKE_deep + chla_lag3_anom,56.67847818460603,50
+BW29,KGI,stage3_selection,FSLE + temperature_surface_anom,49.3867178435323,51
+BW29,KGI,stage3_selection,FSLE + temperature_surface_anom,50.073696061575035,52
+BW29,KGI,stage3_selection,FSLE + temperature_surface_anom,22.48829123267196,53
+BW29,KGI,stage3_selection,mixed_layer_anom,29.212428306856175,54
+BW29,KGI,stage3_selection,chla_lag3_anom,21.149984576428942,55
+BW29,KGI,stage3_selection,chla_lag3_anom + mixed_layer_anom,48.82615321864334,56
+BW29,KGI,stage3_selection,FSLE + mixed_layer_anom,33.71087742103887,57
+BW29,KGI,stage3_selection,EKE_deep + chla_lag3_anom,53.0556380766347,58
+BW29,KGI,stage3_selection,chla_lag3_anom + mixed_layer_anom,76.02871505450057,59
+BW29,KGI,stage3_selection,FSLE + temperature_surface_anom,34.519273062276376,60
+BW29,KGI,stage3_selection,FSLE + chla_lag3_anom,44.06259723930532,61
+BW29,KGI,stage3_selection,FSLE + chla_lag3_anom,57.06898325752257,62
+BW29,KGI,stage3_selection,temperature_surface_anom,35.64706779771841,63
+BW29,KGI,stage3_selection,chla_lag3_anom + temperature_surface_anom,48.324078200388385,64
+BW29,KGI,stage3_selection,temperature_surface_anom,48.83239857862832,65
+BW29,KGI,stage3_selection,temperature_surface_anom,29.6710448916079,66
+BW29,KGI,stage3_selection,temperature_surface_anom,45.27819025130752,67
+BW29,KGI,stage3_selection,FSLE + temperature_surface_anom,59.94304310899564,68
+BW29,KGI,stage3_selection,temperature_surface_anom,43.819062904683214,69
+BW29,KGI,stage3_selection,FSLE + chla_lag3_anom,44.06259723930532,70
+BW29,KGI,stage3_selection,chla_lag3_anom + temperature_surface_anom,62.1545846625026,71
+BW29,KGI,stage3_selection,FSLE + temperature_surface_anom,35.79307866965921,72
+BW29,KGI,stage3_selection,EKE_deep + chla_lag3_anom,56.67847818460603,73
+BW29,KGI,stage3_selection,EKE_deep + FSLE,30.133599715983557,74
+BW29,KGI,stage3_selection,chla_lag3_anom + temperature_surface_anom,56.34759493275352,75
+BW29,KGI,stage3_selection,temperature_surface_anom,44.38394625348819,76
+BW29,KGI,stage3_selection,chla_lag3_anom + temperature_surface_anom,52.56538743287816,77
+BW29,KGI,stage3_selection,FSLE + temperature_surface_anom,49.37049530395245,78
+BW29,KGI,stage3_selection,,0,79
+BW29,KGI,stage3_selection,mixed_layer_anom + temperature_surface_anom,47.025171733873,80
+BW29,KGI,stage3_selection,FSLE + mixed_layer_anom,46.58903631130173,81
+BW29,KGI,stage3_selection,temperature_surface_anom,43.43611365556896,82
+BW29,KGI,stage3_selection,EKE_deep + chla_lag3_anom,57.19756152809193,83
+BW29,KGI,stage3_selection,,0,84
+BW29,KGI,stage3_selection,EKE_deep + temperature_surface_anom,46.40521305047591,85
+BW29,KGI,stage3_selection,chla_lag3_anom + temperature_surface_anom,29.69432013232177,86
+BW29,KGI,stage3_selection,chla_lag3_anom + temperature_surface_anom,18.201643961115003,87
+BW29,KGI,stage3_selection,chla_lag3_anom + temperature_surface_anom,54.44187837221995,88
+BW29,KGI,stage3_selection,FSLE + chla_lag3_anom,45.45142369946464,89
+BW29,KGI,stage3_selection,EKE_deep + temperature_surface_anom,30.710850854491245,90
+BW29,KGI,stage3_selection,temperature_surface_anom,46.30863456959494,91
+BW29,KGI,stage3_selection,temperature_surface_anom,52.34739374233808,92
+BW29,KGI,stage3_selection,FSLE + temperature_surface_anom,52.47713230348363,93
+BW29,KGI,stage3_selection,FSLE + chla_lag3_anom,47.95592358131307,94
+BW29,KGI,stage3_selection,EKE_deep,15.367783099260729,95
+BW29,KGI,stage3_selection,FSLE + temperature_surface_anom,25.824317885685073,96
+BW29,KGI,stage3_selection,EKE_deep + temperature_surface_anom,46.600404235012086,97
+BW29,KGI,stage3_selection,EKE_deep + chla_lag3_anom,38.76959336182214,98
+BW29,KGI,stage3_selection,FSLE + temperature_surface_anom,45.53776016505097,99
+BW29,KGI,stage3_selection,FSLE + temperature_surface_anom,71.26716790956753,100
+BW29,KGI,stage3_selection,FSLE + chla_lag3_anom,57.06898325752257,101
+BW29,KGI,stage3_selection,EKE_deep + chla_lag3_anom,56.6862506735861,102
+BW29,KGI,stage3_selection,FSLE + chla_lag3_anom,37.576603218944484,103
+BW29,KGI,stage3_selection,temperature_surface_anom,49.65478289447387,104
+BW29,KGI,stage3_selection,temperature_surface_anom,47.06800269520327,105
+BW29,KGI,stage3_selection,mixed_layer_anom + temperature_surface_anom,65.61464142662439,106
+BW29,KGI,stage3_selection,chla_lag3_anom,67.2736137446178,107
+BW29,KGI,stage3_selection,EKE_deep + FSLE,46.75180299677684,108
+BW29,KGI,stage3_selection,chla_lag3_anom + temperature_surface_anom,54.15564012534101,109
+BW29,KGI,stage3_selection,temperature_surface_anom,22.083748886692632,110
+BW29,KGI,stage3_selection,chla_lag3_anom + mixed_layer_anom,76.02871505450057,111
+BW29,KGI,stage3_selection,FSLE + chla_lag3_anom,45.45142369946464,112
+BW29,KGI,stage3_selection,FSLE + temperature_surface_anom,49.02438632539133,113
+BW29,KGI,stage3_selection,EKE_deep + mixed_layer_anom,31.171901799384077,114
+BW29,KGI,stage3_selection,temperature_surface_anom,54.63545613523242,115
+BW29,KGI,stage3_selection,EKE_deep + temperature_surface_anom,56.41664897182278,116
+BW29,KGI,stage3_selection,chla_lag3_anom + temperature_surface_anom,39.4491519861794,117
+BW29,KGI,stage3_selection,temperature_surface_anom,44.88447825332649,118
+BW29,KGI,stage3_selection,FSLE,7.180459400558171,119
+BW29,KGI,stage3_selection,mixed_layer_anom + temperature_surface_anom,49.16197596259785,120
+BW29,KGI,stage3_selection,chla_lag3_anom + temperature_surface_anom,35.32105297373324,121
+BW29,KGI,stage3_selection,,0,122
+BW29,KGI,stage3_selection,temperature_surface_anom,32.99404371820756,123
+BW29,KGI,stage3_selection,EKE_deep + chla_lag3_anom,33.17184369329352,124
+BW29,KGI,stage3_selection,temperature_surface_anom,32.99404371820756,125
+BW29,KGI,stage3_selection,EKE_deep + FSLE,48.70843300947859,126
+BW29,KGI,stage3_selection,mixed_layer_anom + temperature_surface_anom,47.025171733873,127
+BW29,KGI,stage3_selection,temperature_surface_anom,51.3920717658764,128
+BW29,KGI,stage3_selection,EKE_deep + temperature_surface_anom,48.991644327517896,129
+BW29,KGI,stage3_selection,chla_lag3_anom + temperature_surface_anom,32.769615676540404,130
+BW29,KGI,stage3_selection,chla_lag3_anom + temperature_surface_anom,23.09830176755917,131
+BW29,KGI,stage3_selection,chla_lag3_anom,46.199376193636674,132
+BW29,KGI,stage3_selection,temperature_surface_anom,49.95026319299233,133
+BW29,KGI,stage3_selection,temperature_surface_anom,42.18053136490382,134
+BW29,KGI,stage3_selection,chla_lag3_anom,38.631087722975245,135
+BW29,KGI,stage3_selection,chla_lag3_anom + temperature_surface_anom,57.31475604556587,136
+BW29,KGI,stage3_selection,FSLE + chla_lag3_anom,49.50452723457796,137
+BW29,KGI,stage3_selection,temperature_surface_anom,51.70896730259573,138
+BW29,KGI,stage3_selection,chla_lag3_anom + temperature_surface_anom,36.7899619857653,139
+BW29,KGI,stage3_selection,FSLE + chla_lag3_anom,40.53117024556166,140
+BW29,KGI,stage3_selection,chla_lag3_anom + mixed_layer_anom,19.205022747082545,141
+BW29,KGI,stage3_selection,EKE_deep + temperature_surface_anom,31.71740744245949,142
+BW29,KGI,stage3_selection,chla_lag3_anom + temperature_surface_anom,35.941409574741144,143
+BW29,KGI,stage3_selection,mixed_layer_anom + temperature_surface_anom,65.61464142662439,144
+BW29,KGI,stage3_selection,EKE_deep + temperature_surface_anom,27.595140910679227,145
+BW29,KGI,stage3_selection,EKE_deep + temperature_surface_anom,44.54681700045855,146
+BW29,KGI,stage3_selection,FSLE,26.178315126775452,147
+BW29,KGI,stage3_selection,chla_lag3_anom + temperature_surface_anom,43.641282244195224,148
+BW29,KGI,stage3_selection,FSLE + chla_lag3_anom,44.0951951977018,149
+BW29,KGI,stage3_selection,EKE_deep + temperature_surface_anom,51.03081722157897,150
+BW29,KGI,stage3_selection,FSLE + temperature_surface_anom,55.61010808300948,151
+BW29,KGI,stage3_selection,chla_lag3_anom + temperature_surface_anom,48.43912044383186,152
+BW29,KGI,stage3_selection,FSLE + chla_lag3_anom,59.34327562536935,153
+BW29,KGI,stage3_selection,temperature_surface_anom,41.51560869642687,154
+BW29,KGI,stage3_selection,EKE_deep,19.834835316530715,155
+BW29,KGI,stage3_selection,temperature_surface_anom,54.63545613523242,156
+BW29,KGI,stage3_selection,chla_lag3_anom + temperature_surface_anom,25.971435076896025,157
+BW29,KGI,stage3_selection,temperature_surface_anom,52.39117651816245,158
+BW29,KGI,stage3_selection,chla_lag3_anom + temperature_surface_anom,58.04509078934452,159
+BW29,KGI,stage3_selection,FSLE + mixed_layer_anom,46.58903631130173,160
+BW29,KGI,stage3_selection,temperature_surface_anom,47.26389431474687,161
+BW29,KGI,stage3_selection,chla_lag3_anom + temperature_surface_anom,54.457186357934106,162
+BW29,KGI,stage3_selection,FSLE + chla_lag3_anom,57.06898325752257,163
+BW29,KGI,stage3_selection,chla_lag3_anom + mixed_layer_anom,32.196261489239895,164
+BW29,KGI,stage3_selection,chla_lag3_anom,45.43765185132819,165
+BW29,KGI,stage3_selection,mixed_layer_anom,13.948266782320228,166
+BW29,KGI,stage3_selection,,0,167
+BW29,KGI,stage3_selection,FSLE + temperature_surface_anom,48.99814266914489,168
+BW29,KGI,stage3_selection,,0,169
+BW29,KGI,stage3_selection,temperature_surface_anom,54.14521719479845,170
+BW29,KGI,stage3_selection,EKE_deep + temperature_surface_anom,52.056198650866584,171
+BW29,KGI,stage3_selection,temperature_surface_anom,33.089121090633455,172
+BW29,KGI,stage3_selection,chla_lag3_anom + temperature_surface_anom,55.0604470639408,173
+BW29,KGI,stage3_selection,temperature_surface_anom,46.170780010211246,174
+BW29,KGI,stage3_selection,chla_lag3_anom + mixed_layer_anom,32.225986882006126,175
+BW29,KGI,stage3_selection,EKE_deep + chla_lag3_anom,41.483046752209674,176
+BW29,KGI,stage3_selection,temperature_surface_anom,51.4667976575237,177
+BW29,KGI,stage3_selection,FSLE + mixed_layer_anom,30.161832989481102,178
+BW29,KGI,stage3_selection,EKE_deep + chla_lag3_anom,40.04874911480814,179
+BW29,KGI,stage3_selection,EKE_deep + temperature_surface_anom,32.268512421377885,180
+BW29,KGI,stage3_selection,EKE_deep + FSLE,37.44939897504917,181
+BW29,KGI,stage3_selection,mixed_layer_anom + temperature_surface_anom,51.040394000532594,182
+BW29,KGI,stage3_selection,,0,183
+BW29,KGI,stage3_selection,FSLE + temperature_surface_anom,45.817292006383845,184
+BW29,KGI,stage3_selection,mixed_layer_anom,29.212428306856175,185
+BW29,KGI,stage3_selection,FSLE + temperature_surface_anom,59.263881666159804,186
+BW29,KGI,stage3_selection,chla_lag3_anom,20.506938764990135,187
+BW29,KGI,stage3_selection,temperature_surface_anom,28.16684890524042,188
+BW29,KGI,stage3_selection,mixed_layer_anom + temperature_surface_anom,35.24509753186731,189
+BW29,KGI,stage3_selection,temperature_surface_anom,48.73825092097611,190
+BW29,KGI,stage3_selection,temperature_surface_anom,26.44642713210455,191
+BW29,KGI,stage3_selection,temperature_surface_anom,50.78276380476795,192
+BW29,KGI,stage3_selection,FSLE + temperature_surface_anom,49.2358180320097,193
+BW29,KGI,stage3_selection,,0,194
+BW29,KGI,stage3_selection,chla_lag3_anom + temperature_surface_anom,52.56538743287816,195
+BW29,KGI,stage3_selection,,0,196
+BW29,KGI,stage3_selection,temperature_surface_anom,47.37817463503288,197
+BW29,KGI,stage3_selection,chla_lag3_anom + temperature_surface_anom,28.620603316675908,198
+BW29,KGI,stage3_selection,EKE_deep + temperature_surface_anom,47.41927210745765,199
+BW29,KGI,stage3_selection,EKE_deep + FSLE,22.95455997907544,200
+BW29,CI,stage3_selection,FSLE + chla_lag3_anom + mixed_layer_anom + temperature_surface_anom,64.81492775357353,0
+BW29,CI,stage3_selection,EKE_deep + temperature_surface_anom,35.984283911060025,1
+BW29,CI,stage3_selection,EKE_deep + temperature_surface_anom,35.02488775784593,2
+BW29,CI,stage3_selection,chla_lag3_anom + mixed_layer_anom + temperature_surface_anom,54.94332680245117,3
+BW29,CI,stage3_selection,temperature_surface_anom,47.73135420456217,4
+BW29,CI,stage3_selection,FSLE + mixed_layer_anom,23.502184629508047,5
+BW29,CI,stage3_selection,EKE_deep + chla_lag3_anom + mixed_layer_anom + temperature_surface_anom,64.98823914289503,6
+BW29,CI,stage3_selection,EKE_deep + FSLE,31.869947301782254,7
+BW29,CI,stage3_selection,FSLE + chla_lag3_anom + temperature_surface_anom,56.10534248976362,8
+BW29,CI,stage3_selection,temperature_surface_anom,34.46106777286331,9
+BW29,CI,stage3_selection,chla_lag3_anom + mixed_layer_anom + temperature_surface_anom,61.22984082052202,10
+BW29,CI,stage3_selection,EKE_deep + FSLE + chla_lag3_anom,54.04406062876449,11
+BW29,CI,stage3_selection,EKE_deep + chla_lag3_anom + temperature_surface_anom,52.43495057387536,12
+BW29,CI,stage3_selection,EKE_deep,12.624688641241203,13
+BW29,CI,stage3_selection,EKE_deep,7.109235947374508,14
+BW29,CI,stage3_selection,FSLE + chla_lag3_anom,44.14943925015445,15
+BW29,CI,stage3_selection,EKE_deep + FSLE + chla_lag3_anom,60.16579534053334,16
+BW29,CI,stage3_selection,EKE_deep + mixed_layer_anom,28.000761973475928,17
+BW29,CI,stage3_selection,FSLE + chla_lag3_anom + temperature_surface_anom,62.35851085406083,18
+BW29,CI,stage3_selection,EKE_deep + chla_lag3_anom + mixed_layer_anom,53.33707988033501,19
+BW29,CI,stage3_selection,EKE_deep + FSLE + mixed_layer_anom + temperature_surface_anom,70.88108351474196,20
+BW29,CI,stage3_selection,chla_lag3_anom,44.31953363302341,21
+BW29,CI,stage3_selection,EKE_deep + FSLE,53.63560241978992,22
+BW29,CI,stage3_selection,EKE_deep + chla_lag3_anom + mixed_layer_anom + temperature_surface_anom,57.869299363122195,23
+BW29,CI,stage3_selection,FSLE,25.027459769078554,24
+BW29,CI,stage3_selection,chla_lag3_anom + temperature_surface_anom,51.94123852240544,25
+BW29,CI,stage3_selection,EKE_deep + mixed_layer_anom,37.039205739691056,26
+BW29,CI,stage3_selection,EKE_deep + mixed_layer_anom,16.644676684883404,27
+BW29,CI,stage3_selection,FSLE + chla_lag3_anom + mixed_layer_anom + temperature_surface_anom,67.26865442080985,28
+BW29,CI,stage3_selection,EKE_deep + mixed_layer_anom + temperature_surface_anom,53.89438915164519,29
+BW29,CI,stage3_selection,EKE_deep + chla_lag3_anom + temperature_surface_anom,54.039263758365244,30
+BW29,CI,stage3_selection,EKE_deep + FSLE + chla_lag3_anom + mixed_layer_anom,78.02261765400084,31
+BW29,CI,stage3_selection,EKE_deep + chla_lag3_anom + temperature_surface_anom,53.92713166373472,32
+BW29,CI,stage3_selection,temperature_surface_anom,9.586799556571165,33
+BW29,CI,stage3_selection,EKE_deep + FSLE + temperature_surface_anom,55.16935219775952,34
+BW29,CI,stage3_selection,EKE_deep + chla_lag3_anom + temperature_surface_anom,54.59581817271092,35
+BW29,CI,stage3_selection,FSLE + temperature_surface_anom,34.79286361548511,36
+BW29,CI,stage3_selection,EKE_deep,12.61608603097847,37
+BW29,CI,stage3_selection,EKE_deep + FSLE + temperature_surface_anom,49.54703816564838,38
+BW29,CI,stage3_selection,EKE_deep + chla_lag3_anom,28.664519527462417,39
+BW29,CI,stage3_selection,FSLE + mixed_layer_anom + temperature_surface_anom,46.53487495478312,40
+BW29,CI,stage3_selection,EKE_deep + chla_lag3_anom + temperature_surface_anom,46.11761515697738,41
+BW29,CI,stage3_selection,FSLE + temperature_surface_anom,51.86693124002114,42
+BW29,CI,stage3_selection,EKE_deep + FSLE + chla_lag3_anom + mixed_layer_anom,45.80912931806214,43
+BW29,CI,stage3_selection,FSLE + chla_lag3_anom,48.266570687699314,44
+BW29,CI,stage3_selection,chla_lag3_anom + mixed_layer_anom,47.400966488504636,45
+BW29,CI,stage3_selection,EKE_deep + FSLE + chla_lag3_anom,51.187781076002906,46
+BW29,CI,stage3_selection,chla_lag3_anom,36.25271226685133,47
+BW29,CI,stage3_selection,temperature_surface_anom,27.42560695194668,48
+BW29,CI,stage3_selection,FSLE + mixed_layer_anom + temperature_surface_anom,47.446161051724715,49
+BW29,CI,stage3_selection,chla_lag3_anom + mixed_layer_anom + temperature_surface_anom,55.78438225988926,50
+BW29,CI,stage3_selection,EKE_deep + FSLE + mixed_layer_anom,37.932374025208176,51
+BW29,CI,stage3_selection,EKE_deep + chla_lag3_anom + temperature_surface_anom,68.8087041564592,52
+BW29,CI,stage3_selection,EKE_deep + FSLE,63.78893225890483,53
+BW29,CI,stage3_selection,chla_lag3_anom + temperature_surface_anom,60.80625671044204,54
+BW29,CI,stage3_selection,EKE_deep + mixed_layer_anom,20.978021379546902,55
+BW29,CI,stage3_selection,chla_lag3_anom + mixed_layer_anom + temperature_surface_anom,47.07651239955432,56
+BW29,CI,stage3_selection,FSLE + chla_lag3_anom + temperature_surface_anom,60.62347537213434,57
+BW29,CI,stage3_selection,chla_lag3_anom + temperature_surface_anom,46.48392919876142,58
+BW29,CI,stage3_selection,chla_lag3_anom,27.69550786909151,59
+BW29,CI,stage3_selection,chla_lag3_anom,19.790763485320195,60
+BW29,CI,stage3_selection,chla_lag3_anom,14.281428954708042,61
+BW29,CI,stage3_selection,EKE_deep + chla_lag3_anom + temperature_surface_anom,70.36134900015774,62
+BW29,CI,stage3_selection,FSLE + chla_lag3_anom + temperature_surface_anom,64.4658337412435,63
+BW29,CI,stage3_selection,chla_lag3_anom,34.75427869341956,64
+BW29,CI,stage3_selection,FSLE + chla_lag3_anom + temperature_surface_anom,63.73518440700667,65
+BW29,CI,stage3_selection,EKE_deep + FSLE + chla_lag3_anom,60.46009477695922,66
+BW29,CI,stage3_selection,EKE_deep + chla_lag3_anom,55.63938607799294,67
+BW29,CI,stage3_selection,EKE_deep + chla_lag3_anom + mixed_layer_anom,55.9828634283168,68
+BW29,CI,stage3_selection,FSLE + temperature_surface_anom,63.62149086073896,69
+BW29,CI,stage3_selection,EKE_deep + FSLE + chla_lag3_anom + temperature_surface_anom,57.84028889321598,70
+BW29,CI,stage3_selection,EKE_deep + FSLE + chla_lag3_anom + mixed_layer_anom,53.69603077622598,71
+BW29,CI,stage3_selection,EKE_deep + temperature_surface_anom,47.467350743039546,72
+BW29,CI,stage3_selection,EKE_deep + FSLE,36.47386120069378,73
+BW29,CI,stage3_selection,EKE_deep,25.16792428356268,74
+BW29,CI,stage3_selection,EKE_deep + chla_lag3_anom + mixed_layer_anom + temperature_surface_anom,60.12348977108548,75
+BW29,CI,stage3_selection,EKE_deep + chla_lag3_anom + temperature_surface_anom,66.01257385360161,76
+BW29,CI,stage3_selection,EKE_deep + FSLE + mixed_layer_anom,41.56149891801586,77
+BW29,CI,stage3_selection,EKE_deep + FSLE + chla_lag3_anom + temperature_surface_anom,72.86621020509268,78
+BW29,CI,stage3_selection,EKE_deep + chla_lag3_anom + mixed_layer_anom + temperature_surface_anom,56.2453261597583,79
+BW29,CI,stage3_selection,EKE_deep + FSLE + chla_lag3_anom + temperature_surface_anom,58.813609455101236,80
+BW29,CI,stage3_selection,chla_lag3_anom,34.77139207139098,81
+BW29,CI,stage3_selection,EKE_deep + FSLE + chla_lag3_anom + temperature_surface_anom,50.98187690106124,82
+BW29,CI,stage3_selection,EKE_deep + mixed_layer_anom + temperature_surface_anom,42.500411221921716,83
+BW29,CI,stage3_selection,FSLE + chla_lag3_anom + temperature_surface_anom,62.35851085406083,84
+BW29,CI,stage3_selection,EKE_deep,17.534342051239744,85
+BW29,CI,stage3_selection,chla_lag3_anom + temperature_surface_anom,56.54915214959988,86
+BW29,CI,stage3_selection,EKE_deep + chla_lag3_anom,66.67210295443141,87
+BW29,CI,stage3_selection,chla_lag3_anom + mixed_layer_anom,40.379999345160876,88
+BW29,CI,stage3_selection,EKE_deep + chla_lag3_anom,61.131106650842995,89
+BW29,CI,stage3_selection,EKE_deep + chla_lag3_anom + mixed_layer_anom + temperature_surface_anom,60.17502860177758,90
+BW29,CI,stage3_selection,FSLE + mixed_layer_anom,40.39623096318669,91
+BW29,CI,stage3_selection,FSLE + mixed_layer_anom,42.578634607919184,92
+BW29,CI,stage3_selection,EKE_deep + temperature_surface_anom,29.39000976681282,93
+BW29,CI,stage3_selection,FSLE + chla_lag3_anom + temperature_surface_anom,59.478617573249316,94
+BW29,CI,stage3_selection,chla_lag3_anom,36.25271226685133,95
+BW29,CI,stage3_selection,chla_lag3_anom,27.69550786909151,96
+BW29,CI,stage3_selection,chla_lag3_anom + mixed_layer_anom,62.14050966480759,97
+BW29,CI,stage3_selection,chla_lag3_anom,34.11238956649001,98
+BW29,CI,stage3_selection,EKE_deep + temperature_surface_anom,53.54794900775309,99
+BW29,CI,stage3_selection,EKE_deep + chla_lag3_anom + mixed_layer_anom + temperature_surface_anom,60.98907460807032,100
+BW29,CI,stage3_selection,FSLE + mixed_layer_anom,40.39623096318669,101
+BW29,CI,stage3_selection,FSLE,27.225441430303864,102
+BW29,CI,stage3_selection,EKE_deep + FSLE + temperature_surface_anom,56.780089769908926,103
+BW29,CI,stage3_selection,FSLE + chla_lag3_anom + mixed_layer_anom,84.14404792374324,104
+BW29,CI,stage3_selection,chla_lag3_anom + temperature_surface_anom,68.3048313815673,105
+BW29,CI,stage3_selection,chla_lag3_anom,79.2551580126004,106
+BW29,CI,stage3_selection,temperature_surface_anom,47.73135420456217,107
+BW29,CI,stage3_selection,EKE_deep + FSLE + chla_lag3_anom,55.178192726738075,108
+BW29,CI,stage3_selection,temperature_surface_anom,27.42560695194668,109
+BW29,CI,stage3_selection,EKE_deep + FSLE + chla_lag3_anom + temperature_surface_anom,69.32706264237456,110
+BW29,CI,stage3_selection,EKE_deep + FSLE + chla_lag3_anom + mixed_layer_anom,45.80912931806214,111
+BW29,CI,stage3_selection,EKE_deep + temperature_surface_anom,25.06431282382276,112
+BW29,CI,stage3_selection,chla_lag3_anom,34.77139207139098,113
+BW29,CI,stage3_selection,FSLE + chla_lag3_anom + mixed_layer_anom + temperature_surface_anom,62.56684854701835,114
+BW29,CI,stage3_selection,temperature_surface_anom,22.32696513747661,115
+BW29,CI,stage3_selection,FSLE + chla_lag3_anom + mixed_layer_anom,52.04761861234209,116
+BW29,CI,stage3_selection,FSLE + mixed_layer_anom,40.39623096318669,117
+BW29,CI,stage3_selection,chla_lag3_anom + mixed_layer_anom,59.07762556641987,118
+BW29,CI,stage3_selection,EKE_deep + chla_lag3_anom + mixed_layer_anom,58.505417354005885,119
+BW29,CI,stage3_selection,,0,120
+BW29,CI,stage3_selection,EKE_deep + chla_lag3_anom + temperature_surface_anom,61.225817070047086,121
+BW29,CI,stage3_selection,chla_lag3_anom + temperature_surface_anom,56.54915214959988,122
+BW29,CI,stage3_selection,EKE_deep + temperature_surface_anom,38.95098892424615,123
+BW29,CI,stage3_selection,EKE_deep + FSLE + chla_lag3_anom,57.871074775357066,124
+BW29,CI,stage3_selection,mixed_layer_anom + temperature_surface_anom,55.65557393647082,125
+BW29,CI,stage3_selection,EKE_deep,12.624688641241203,126
+BW29,CI,stage3_selection,EKE_deep + chla_lag3_anom + mixed_layer_anom,68.22932660154338,127
+BW29,CI,stage3_selection,FSLE + chla_lag3_anom + mixed_layer_anom + temperature_surface_anom,66.03788226764995,128
+BW29,CI,stage3_selection,EKE_deep + FSLE + chla_lag3_anom + temperature_surface_anom,79.68220480392424,129
+BW29,CI,stage3_selection,FSLE + chla_lag3_anom + temperature_surface_anom,56.37819092925371,130
+BW29,CI,stage3_selection,FSLE + chla_lag3_anom,57.49495013879846,131
+BW29,CI,stage3_selection,EKE_deep + temperature_surface_anom,34.90615549851757,132
+BW29,CI,stage3_selection,chla_lag3_anom,67.31135755318114,133
+BW29,CI,stage3_selection,chla_lag3_anom,27.69550786909151,134
+BW29,CI,stage3_selection,chla_lag3_anom,32.46431183636233,135
+BW29,CI,stage3_selection,temperature_surface_anom,8.908559201283936,136
+BW29,CI,stage3_selection,EKE_deep + FSLE,17.501639955202382,137
+BW29,CI,stage3_selection,EKE_deep + FSLE + chla_lag3_anom + temperature_surface_anom,71.51469656391757,138
+BW29,CI,stage3_selection,chla_lag3_anom,50.06345011945189,139
+BW29,CI,stage3_selection,FSLE + chla_lag3_anom,82.14582839516295,140
+BW29,CI,stage3_selection,temperature_surface_anom,27.42560695194668,141
+BW29,CI,stage3_selection,FSLE,14.231812659441626,142
+BW29,CI,stage3_selection,FSLE + chla_lag3_anom + temperature_surface_anom,48.3434485481601,143
+BW29,CI,stage3_selection,EKE_deep + chla_lag3_anom + temperature_surface_anom,47.973423270540124,144
+BW29,CI,stage3_selection,FSLE + temperature_surface_anom,39.15256285016306,145
+BW29,CI,stage3_selection,chla_lag3_anom + mixed_layer_anom + temperature_surface_anom,50.39214237673673,146
+BW29,CI,stage3_selection,temperature_surface_anom,27.083176065444984,147
+BW29,CI,stage3_selection,EKE_deep + FSLE + chla_lag3_anom + mixed_layer_anom + temperature_surface_anom,77.38504305709402,148
+BW29,CI,stage3_selection,EKE_deep + FSLE + mixed_layer_anom,42.093685419815216,149
+BW29,CI,stage3_selection,mixed_layer_anom + temperature_surface_anom,55.65557393647082,150
+BW29,CI,stage3_selection,EKE_deep + FSLE,38.4103057667283,151
+BW29,CI,stage3_selection,FSLE + temperature_surface_anom,46.62071169484414,152
+BW29,CI,stage3_selection,EKE_deep,22.740147487483746,153
+BW29,CI,stage3_selection,FSLE + chla_lag3_anom + temperature_surface_anom,58.064990842667996,154
+BW29,CI,stage3_selection,chla_lag3_anom + mixed_layer_anom + temperature_surface_anom,59.21745337616068,155
+BW29,CI,stage3_selection,chla_lag3_anom + mixed_layer_anom + temperature_surface_anom,49.677091887687105,156
+BW29,CI,stage3_selection,EKE_deep + mixed_layer_anom + temperature_surface_anom,39.66229834123087,157
+BW29,CI,stage3_selection,EKE_deep + FSLE,47.361467613668864,158
+BW29,CI,stage3_selection,chla_lag3_anom + mixed_layer_anom + temperature_surface_anom,65.09513989740935,159
+BW29,CI,stage3_selection,FSLE + chla_lag3_anom + temperature_surface_anom,53.981289202505366,160
+BW29,CI,stage3_selection,chla_lag3_anom + temperature_surface_anom,44.220548592886225,161
+BW29,CI,stage3_selection,FSLE + chla_lag3_anom,86.40564717637679,162
+BW29,CI,stage3_selection,EKE_deep + FSLE + chla_lag3_anom + temperature_surface_anom,58.813609455101236,163
+BW29,CI,stage3_selection,FSLE + chla_lag3_anom + temperature_surface_anom,55.96358275353549,164
+BW29,CI,stage3_selection,EKE_deep + mixed_layer_anom + temperature_surface_anom,45.042904413306225,165
+BW29,CI,stage3_selection,EKE_deep + chla_lag3_anom + temperature_surface_anom,53.97921593846957,166
+BW29,CI,stage3_selection,EKE_deep + FSLE + temperature_surface_anom,65.66844399224529,167
+BW29,CI,stage3_selection,EKE_deep + chla_lag3_anom + temperature_surface_anom,44.05910535187415,168
+BW29,CI,stage3_selection,FSLE + temperature_surface_anom,60.16634185535368,169
+BW29,CI,stage3_selection,FSLE + temperature_surface_anom,42.941507487293755,170
+BW29,CI,stage3_selection,EKE_deep + chla_lag3_anom + mixed_layer_anom + temperature_surface_anom,49.74938025028513,171
+BW29,CI,stage3_selection,EKE_deep + FSLE + chla_lag3_anom + temperature_surface_anom,62.54272972862353,172
+BW29,CI,stage3_selection,EKE_deep + chla_lag3_anom + mixed_layer_anom,59.24225604404254,173
+BW29,CI,stage3_selection,chla_lag3_anom + temperature_surface_anom,36.5788108513044,174
+BW29,CI,stage3_selection,FSLE + chla_lag3_anom + mixed_layer_anom,80.073543246822,175
+BW29,CI,stage3_selection,FSLE + mixed_layer_anom + temperature_surface_anom,45.75733484525053,176
+BW29,CI,stage3_selection,EKE_deep + chla_lag3_anom + temperature_surface_anom,48.57970330747132,177
+BW29,CI,stage3_selection,mixed_layer_anom,26.951476559440508,178
+BW29,CI,stage3_selection,EKE_deep + mixed_layer_anom,16.644676684883404,179
+BW29,CI,stage3_selection,,0,180
+BW29,CI,stage3_selection,chla_lag3_anom + temperature_surface_anom,56.808884786990696,181
+BW29,CI,stage3_selection,FSLE + chla_lag3_anom + mixed_layer_anom + temperature_surface_anom,66.13139296640469,182
+BW29,CI,stage3_selection,EKE_deep + FSLE + temperature_surface_anom,55.76707766588071,183
+BW29,CI,stage3_selection,mixed_layer_anom,32.45262732179487,184
+BW29,CI,stage3_selection,EKE_deep,9.377204972772029,185
+BW29,CI,stage3_selection,EKE_deep + chla_lag3_anom,57.621931300654616,186
+BW29,CI,stage3_selection,EKE_deep + FSLE + temperature_surface_anom,57.59913712371557,187
+BW29,CI,stage3_selection,temperature_surface_anom,15.313764438659385,188
+BW29,CI,stage3_selection,chla_lag3_anom + temperature_surface_anom,46.58775007869975,189
+BW29,CI,stage3_selection,EKE_deep,17.534342051239744,190
+BW29,CI,stage3_selection,chla_lag3_anom + mixed_layer_anom,57.3963535671091,191
+BW29,CI,stage3_selection,FSLE + temperature_surface_anom,58.44962360835644,192
+BW29,CI,stage3_selection,FSLE + mixed_layer_anom + temperature_surface_anom,37.11372120350364,193
+BW29,CI,stage3_selection,EKE_deep + FSLE + chla_lag3_anom,50.92787086724171,194
+BW29,CI,stage3_selection,FSLE + chla_lag3_anom + mixed_layer_anom,84.14404792374324,195
+BW29,CI,stage3_selection,chla_lag3_anom + temperature_surface_anom,46.48392919876142,196
+BW29,CI,stage3_selection,chla_lag3_anom + mixed_layer_anom + temperature_surface_anom,71.12916839180191,197
+BW29,CI,stage3_selection,temperature_surface_anom,24.146651023994725,198
+BW29,CI,stage3_selection,EKE_deep,23.446964161766136,199
+BW29,CI,stage3_selection,chla_lag3_anom + mixed_layer_anom + temperature_surface_anom,56.68811373187578,200
+BW37,EI,stage3_selection,FSLE + fsle_orient,47.79725180467652,0
+BW37,EI,stage3_selection,FSLE + mixed_layer_anom,45.74359736881592,1
+BW37,EI,stage3_selection,FSLE + fsle_orient,51.350083958833196,2
+BW37,EI,stage3_selection,FSLE,25.694323920306637,3
+BW37,EI,stage3_selection,mixed_layer_anom,28.7872466249836,4
+BW37,EI,stage3_selection,fsle_orient + mixed_layer_anom,23.315100023990905,5
+BW37,EI,stage3_selection,FSLE + mixed_layer_anom,27.696477986046002,6
+BW37,EI,stage3_selection,fsle_orient,12.759185675458573,7
+BW37,EI,stage3_selection,FSLE + mixed_layer_anom,33.808530879269696,8
+BW37,EI,stage3_selection,,0,9
+BW37,EI,stage3_selection,fsle_orient,21.938593653817346,10
+BW37,EI,stage3_selection,FSLE + mixed_layer_anom,36.15440961863066,11
+BW37,EI,stage3_selection,mixed_layer_anom,25.074668516759335,12
+BW37,EI,stage3_selection,FSLE + fsle_orient,16.605452934539063,13
+BW37,EI,stage3_selection,fsle_orient,12.955091776046036,14
+BW37,EI,stage3_selection,,0,15
+BW37,EI,stage3_selection,fsle_orient + temperature_deep_anom,56.94776580814115,16
+BW37,EI,stage3_selection,FSLE + temperature_deep_anom,39.34756577184613,17
+BW37,EI,stage3_selection,,0,18
+BW37,EI,stage3_selection,fsle_orient,29.69274084668626,19
+BW37,EI,stage3_selection,,0,20
+BW37,EI,stage3_selection,mixed_layer_anom,27.540182642267354,21
+BW37,EI,stage3_selection,mixed_layer_anom + temperature_deep_anom,36.584752695793746,22
+BW37,EI,stage3_selection,fsle_orient,27.3435193741745,23
+BW37,EI,stage3_selection,fsle_orient,42.2881665724733,24
+BW37,EI,stage3_selection,FSLE + temperature_deep_anom,39.828861748685725,25
+BW37,EI,stage3_selection,temperature_deep_anom,14.956157076150303,26
+BW37,EI,stage3_selection,,0,27
+BW37,EI,stage3_selection,fsle_orient + temperature_deep_anom,47.078629608906205,28
+BW37,EI,stage3_selection,,0,29
+BW37,EI,stage3_selection,,0,30
+BW37,EI,stage3_selection,FSLE + mixed_layer_anom,57.84573660768055,31
+BW37,EI,stage3_selection,,0,32
+BW37,EI,stage3_selection,FSLE,16.716708706577567,33
+BW37,EI,stage3_selection,,0,34
+BW37,EI,stage3_selection,mixed_layer_anom,11.019792478715864,35
+BW37,EI,stage3_selection,FSLE + temperature_deep_anom,41.60408469727573,36
+BW37,EI,stage3_selection,fsle_orient + temperature_deep_anom,49.33180981877444,37
+BW37,EI,stage3_selection,fsle_orient + mixed_layer_anom,40.49168210765326,38
+BW37,EI,stage3_selection,mixed_layer_anom + temperature_deep_anom,28.81117264525541,39
+BW37,EI,stage3_selection,FSLE + temperature_deep_anom,20.282869787499518,40
+BW37,EI,stage3_selection,FSLE + temperature_deep_anom,40.03944101567779,41
+BW37,EI,stage3_selection,temperature_deep_anom,27.598685747424952,42
+BW37,EI,stage3_selection,FSLE,20.87300716469156,43
+BW37,EI,stage3_selection,,0,44
+BW37,EI,stage3_selection,mixed_layer_anom,18.466377408977625,45
+BW37,EI,stage3_selection,fsle_orient + mixed_layer_anom,54.68909285484421,46
+BW37,EI,stage3_selection,fsle_orient,29.69274084668626,47
+BW37,EI,stage3_selection,,0,48
+BW37,EI,stage3_selection,FSLE + temperature_deep_anom,50.01161803369266,49
+BW37,EI,stage3_selection,,0,50
+BW37,EI,stage3_selection,FSLE,27.82264504948439,51
+BW37,EI,stage3_selection,FSLE,37.33760024898275,52
+BW37,EI,stage3_selection,fsle_orient + mixed_layer_anom,32.91867071442786,53
+BW37,EI,stage3_selection,FSLE + temperature_deep_anom,28.86591156091745,54
+BW37,EI,stage3_selection,mixed_layer_anom + temperature_deep_anom,50.53524031226648,55
+BW37,EI,stage3_selection,mixed_layer_anom + temperature_deep_anom,42.752353163194705,56
+BW37,EI,stage3_selection,mixed_layer_anom + temperature_deep_anom,36.35571682624649,57
+BW37,EI,stage3_selection,fsle_orient + temperature_deep_anom,26.749550290414486,58
+BW37,EI,stage3_selection,FSLE + temperature_deep_anom,41.161617214596575,59
+BW37,EI,stage3_selection,mixed_layer_anom,13.844594002239244,60
+BW37,EI,stage3_selection,fsle_orient + mixed_layer_anom,46.92492353217415,61
+BW37,EI,stage3_selection,fsle_orient + temperature_deep_anom,61.01282392819045,62
+BW37,EI,stage3_selection,mixed_layer_anom + temperature_deep_anom,50.53524031226648,63
+BW37,EI,stage3_selection,fsle_orient + mixed_layer_anom,44.612182348919184,64
+BW37,EI,stage3_selection,temperature_deep_anom,11.731273378147874,65
+BW37,EI,stage3_selection,,0,66
+BW37,EI,stage3_selection,mixed_layer_anom + temperature_deep_anom,34.87038156614914,67
+BW37,EI,stage3_selection,FSLE,25.79501939856487,68
+BW37,EI,stage3_selection,mixed_layer_anom + temperature_deep_anom,43.239861470886325,69
+BW37,EI,stage3_selection,temperature_deep_anom,13.465221591098059,70
+BW37,EI,stage3_selection,FSLE + temperature_deep_anom,32.73467992921989,71
+BW37,EI,stage3_selection,fsle_orient + mixed_layer_anom,56.00173201329473,72
+BW37,EI,stage3_selection,mixed_layer_anom + temperature_deep_anom,43.33688753973003,73
+BW37,EI,stage3_selection,,0,74
+BW37,EI,stage3_selection,temperature_deep_anom,18.895391454978636,75
+BW37,EI,stage3_selection,temperature_deep_anom,32.25506420856077,76
+BW37,EI,stage3_selection,FSLE,28.41532029937034,77
+BW37,EI,stage3_selection,FSLE + fsle_orient,34.68161007286686,78
+BW37,EI,stage3_selection,,0,79
+BW37,EI,stage3_selection,temperature_deep_anom,29.241954116444013,80
+BW37,EI,stage3_selection,FSLE + mixed_layer_anom,46.66444718256999,81
+BW37,EI,stage3_selection,mixed_layer_anom + temperature_deep_anom,31.812471160832516,82
+BW37,EI,stage3_selection,FSLE + temperature_deep_anom,30.538439665045747,83
+BW37,EI,stage3_selection,fsle_orient,13.553658494385196,84
+BW37,EI,stage3_selection,fsle_orient + mixed_layer_anom,24.026847106152548,85
+BW37,EI,stage3_selection,FSLE + temperature_deep_anom,49.52742663249527,86
+BW37,EI,stage3_selection,mixed_layer_anom,31.015620248407537,87
+BW37,EI,stage3_selection,fsle_orient + mixed_layer_anom,33.73009541038819,88
+BW37,EI,stage3_selection,fsle_orient + mixed_layer_anom,48.807552563968045,89
+BW37,EI,stage3_selection,FSLE + fsle_orient,26.16864924644866,90
+BW37,EI,stage3_selection,,0,91
+BW37,EI,stage3_selection,FSLE + temperature_deep_anom,49.27858783768909,92
+BW37,EI,stage3_selection,FSLE + mixed_layer_anom,48.61679973598701,93
+BW37,EI,stage3_selection,fsle_orient + temperature_deep_anom,39.372054828492786,94
+BW37,EI,stage3_selection,FSLE + mixed_layer_anom,44.82466413165793,95
+BW37,EI,stage3_selection,,0,96
+BW37,EI,stage3_selection,fsle_orient + temperature_deep_anom,48.99611705883908,97
+BW37,EI,stage3_selection,temperature_deep_anom,32.25506420856077,98
+BW37,EI,stage3_selection,,0,99
+BW37,EI,stage3_selection,,0,100
+BW37,EI,stage3_selection,FSLE + mixed_layer_anom,50.24568693447278,101
+BW37,EI,stage3_selection,mixed_layer_anom,32.91484850511024,102
+BW37,EI,stage3_selection,,0,103
+BW37,EI,stage3_selection,FSLE + mixed_layer_anom,25.443169093430928,104
+BW37,EI,stage3_selection,,0,105
+BW37,EI,stage3_selection,mixed_layer_anom,21.615814358080634,106
+BW37,EI,stage3_selection,FSLE,38.360942380866234,107
+BW37,EI,stage3_selection,temperature_deep_anom,23.418516455741596,108
+BW37,EI,stage3_selection,fsle_orient + temperature_deep_anom,37.31726625002783,109
+BW37,EI,stage3_selection,mixed_layer_anom + temperature_deep_anom,61.518733154848185,110
+BW37,EI,stage3_selection,FSLE + mixed_layer_anom,57.84573660768055,111
+BW37,EI,stage3_selection,,0,112
+BW37,EI,stage3_selection,FSLE,29.713239532375933,113
+BW37,EI,stage3_selection,fsle_orient,28.56396730720664,114
+BW37,EI,stage3_selection,FSLE,46.34711919357116,115
+BW37,EI,stage3_selection,fsle_orient + temperature_deep_anom,49.33180981877444,116
+BW37,EI,stage3_selection,temperature_deep_anom,36.730429647528396,117
+BW37,EI,stage3_selection,,0,118
+BW37,EI,stage3_selection,mixed_layer_anom + temperature_deep_anom,52.5655743540041,119
+BW37,EI,stage3_selection,,0,120
+BW37,EI,stage3_selection,,0,121
+BW37,EI,stage3_selection,mixed_layer_anom,15.652089626960782,122
+BW37,EI,stage3_selection,mixed_layer_anom + temperature_deep_anom,26.86449168710715,123
+BW37,EI,stage3_selection,fsle_orient,24.921311280364563,124
+BW37,EI,stage3_selection,mixed_layer_anom + temperature_deep_anom,57.347095810557114,125
+BW37,EI,stage3_selection,,0,126
+BW37,EI,stage3_selection,mixed_layer_anom,28.967342557922386,127
+BW37,EI,stage3_selection,mixed_layer_anom + temperature_deep_anom,28.574067833656358,128
+BW37,EI,stage3_selection,mixed_layer_anom,27.098448529977315,129
+BW37,EI,stage3_selection,FSLE,40.78734522213413,130
+BW37,EI,stage3_selection,fsle_orient + mixed_layer_anom,56.00173201329473,131
+BW37,EI,stage3_selection,mixed_layer_anom,17.782411227509222,132
+BW37,EI,stage3_selection,fsle_orient + mixed_layer_anom,39.025108063631514,133
+BW37,EI,stage3_selection,mixed_layer_anom + temperature_deep_anom,31.812471160832516,134
+BW37,EI,stage3_selection,mixed_layer_anom + temperature_deep_anom,50.46954038915856,135
+BW37,EI,stage3_selection,FSLE + temperature_deep_anom,41.60408469727573,136
+BW37,EI,stage3_selection,FSLE + temperature_deep_anom,33.800517812560685,137
+BW37,EI,stage3_selection,fsle_orient + mixed_layer_anom,49.22044502007783,138
+BW37,EI,stage3_selection,,0,139
+BW37,EI,stage3_selection,temperature_deep_anom,46.47508613131574,140
+BW37,EI,stage3_selection,FSLE + temperature_deep_anom,50.01161803369266,141
+BW37,EI,stage3_selection,FSLE + mixed_layer_anom,32.982161808825204,142
+BW37,EI,stage3_selection,FSLE,16.937822212182517,143
+BW37,EI,stage3_selection,FSLE + temperature_deep_anom,51.50090359747129,144
+BW37,EI,stage3_selection,FSLE + mixed_layer_anom,27.696477986046002,145
+BW37,EI,stage3_selection,mixed_layer_anom,21.615814358080634,146
+BW37,EI,stage3_selection,FSLE + temperature_deep_anom,46.18993607597931,147
+BW37,EI,stage3_selection,mixed_layer_anom,17.692714435517946,148
+BW37,EI,stage3_selection,FSLE,30.750873508372823,149
+BW37,EI,stage3_selection,fsle_orient,30.718109754125717,150
+BW37,EI,stage3_selection,FSLE + mixed_layer_anom,47.44643785850915,151
+BW37,EI,stage3_selection,FSLE,25.391865774212576,152
+BW37,EI,stage3_selection,FSLE + temperature_deep_anom,49.326446098043625,153
+BW37,EI,stage3_selection,FSLE,14.782044319091042,154
+BW37,EI,stage3_selection,mixed_layer_anom,30.18709730171062,155
+BW37,EI,stage3_selection,,0,156
+BW37,EI,stage3_selection,,0,157
+BW37,EI,stage3_selection,FSLE + mixed_layer_anom,48.64480395576036,158
+BW37,EI,stage3_selection,temperature_deep_anom,41.41513260823004,159
+BW37,EI,stage3_selection,FSLE + fsle_orient,32.714466527640596,160
+BW37,EI,stage3_selection,mixed_layer_anom,20.60983225457096,161
+BW37,EI,stage3_selection,fsle_orient + mixed_layer_anom,35.54549061615934,162
+BW37,EI,stage3_selection,FSLE + fsle_orient,43.7495768856521,163
+BW37,EI,stage3_selection,mixed_layer_anom + temperature_deep_anom,28.153394770338142,164
+BW37,EI,stage3_selection,,0,165
+BW37,EI,stage3_selection,FSLE + mixed_layer_anom,35.119567110995334,166
+BW37,EI,stage3_selection,mixed_layer_anom + temperature_deep_anom,35.385859099600964,167
+BW37,EI,stage3_selection,,0,168
+BW37,EI,stage3_selection,mixed_layer_anom + temperature_deep_anom,23.386950873925535,169
+BW37,EI,stage3_selection,mixed_layer_anom,10.644355519013567,170
+BW37,EI,stage3_selection,,0,171
+BW37,EI,stage3_selection,fsle_orient + temperature_deep_anom,30.750036292491057,172
+BW37,EI,stage3_selection,fsle_orient,27.3435193741745,173
+BW37,EI,stage3_selection,mixed_layer_anom,21.407613059953928,174
+BW37,EI,stage3_selection,mixed_layer_anom,11.580259340698404,175
+BW37,EI,stage3_selection,temperature_deep_anom,40.15726695358649,176
+BW37,EI,stage3_selection,mixed_layer_anom + temperature_deep_anom,63.759028272565274,177
+BW37,EI,stage3_selection,FSLE,21.466417708603966,178
+BW37,EI,stage3_selection,FSLE,20.654051745339423,179
+BW37,EI,stage3_selection,mixed_layer_anom + temperature_deep_anom,44.589356139153715,180
+BW37,EI,stage3_selection,mixed_layer_anom,23.46712475500989,181
+BW37,EI,stage3_selection,mixed_layer_anom,25.670448860707634,182
+BW37,EI,stage3_selection,mixed_layer_anom + temperature_deep_anom,61.518733154848185,183
+BW37,EI,stage3_selection,fsle_orient + mixed_layer_anom,49.61792473970337,184
+BW37,EI,stage3_selection,FSLE,22.967637032356127,185
+BW37,EI,stage3_selection,fsle_orient + temperature_deep_anom,31.096011796506396,186
+BW37,EI,stage3_selection,mixed_layer_anom,42.08834239083652,187
+BW37,EI,stage3_selection,FSLE,14.924166992748129,188
+BW37,EI,stage3_selection,temperature_deep_anom,52.9408715126095,189
+BW37,EI,stage3_selection,FSLE + fsle_orient,51.365316148561135,190
+BW37,EI,stage3_selection,,0,191
+BW37,EI,stage3_selection,mixed_layer_anom,31.63602686752957,192
+BW37,EI,stage3_selection,temperature_deep_anom,25.488879674015603,193
+BW37,EI,stage3_selection,FSLE,17.477755203520747,194
+BW37,EI,stage3_selection,,0,195
+BW37,EI,stage3_selection,mixed_layer_anom,28.05825013634488,196
+BW37,EI,stage3_selection,mixed_layer_anom + temperature_deep_anom,44.32039170360782,197
+BW37,EI,stage3_selection,FSLE,29.03189554131177,198
+BW37,EI,stage3_selection,mixed_layer_anom,30.399384467252126,199
+BW37,EI,stage3_selection,fsle_orient,23.319124614032173,200
+BW37,KGI,stage3_selection,mixed_layer_anom + temperature_deep_anom,42.45755151810843,0
+BW37,KGI,stage3_selection,temperature_deep_anom,27.9803689236598,1
+BW37,KGI,stage3_selection,FSLE,9.235689234202669,2
+BW37,KGI,stage3_selection,temperature_deep_anom,40.32783170459912,3
+BW37,KGI,stage3_selection,temperature_deep_anom,27.490324215987517,4
+BW37,KGI,stage3_selection,,0,5
+BW37,KGI,stage3_selection,FSLE + mixed_layer_anom,33.83986247460976,6
+BW37,KGI,stage3_selection,fsle_orient + temperature_deep_anom,32.3337891083494,7
+BW37,KGI,stage3_selection,mixed_layer_anom + temperature_deep_anom,28.73658667642241,8
+BW37,KGI,stage3_selection,mixed_layer_anom + temperature_deep_anom,35.622088847643425,9
+BW37,KGI,stage3_selection,mixed_layer_anom,16.337713008019243,10
+BW37,KGI,stage3_selection,FSLE,15.995860624651842,11
+BW37,KGI,stage3_selection,FSLE + temperature_deep_anom,33.261942464063345,12
+BW37,KGI,stage3_selection,FSLE + temperature_deep_anom,27.784225168621074,13
+BW37,KGI,stage3_selection,FSLE,31.443554717549922,14
+BW37,KGI,stage3_selection,FSLE + fsle_orient + mixed_layer_anom,42.799796828709944,15
+BW37,KGI,stage3_selection,FSLE + temperature_deep_anom,40.25527965738121,16
+BW37,KGI,stage3_selection,temperature_deep_anom,39.012450808749996,17
+BW37,KGI,stage3_selection,mixed_layer_anom + temperature_deep_anom,36.40410120064199,18
+BW37,KGI,stage3_selection,fsle_orient + temperature_deep_anom,35.174208465748656,19
+BW37,KGI,stage3_selection,FSLE,7.5630323789987814,20
+BW37,KGI,stage3_selection,fsle_orient,14.30337808079853,21
+BW37,KGI,stage3_selection,temperature_deep_anom,8.897397899374116,22
+BW37,KGI,stage3_selection,mixed_layer_anom,9.950463454262511,23
+BW37,KGI,stage3_selection,FSLE + temperature_deep_anom,23.270991543263932,24
+BW37,KGI,stage3_selection,FSLE + temperature_deep_anom,24.528988980230082,25
+BW37,KGI,stage3_selection,mixed_layer_anom,8.527378641484002,26
+BW37,KGI,stage3_selection,FSLE + temperature_deep_anom,33.52339948647132,27
+BW37,KGI,stage3_selection,fsle_orient,14.25126709646301,28
+BW37,KGI,stage3_selection,mixed_layer_anom,35.747168559895,29
+BW37,KGI,stage3_selection,,0,30
+BW37,KGI,stage3_selection,mixed_layer_anom,13.45629003094648,31
+BW37,KGI,stage3_selection,,0,32
+BW37,KGI,stage3_selection,mixed_layer_anom + temperature_deep_anom,19.547821262457074,33
+BW37,KGI,stage3_selection,FSLE + temperature_deep_anom,31.612928471760622,34
+BW37,KGI,stage3_selection,FSLE + temperature_deep_anom,41.19788765790371,35
+BW37,KGI,stage3_selection,FSLE,18.8654417259547,36
+BW37,KGI,stage3_selection,FSLE + fsle_orient,29.799395389792267,37
+BW37,KGI,stage3_selection,fsle_orient + temperature_deep_anom,27.611763365405338,38
+BW37,KGI,stage3_selection,mixed_layer_anom,19.103700935335425,39
+BW37,KGI,stage3_selection,FSLE,14.108491485752495,40
+BW37,KGI,stage3_selection,FSLE + temperature_deep_anom,29.842662127247742,41
+BW37,KGI,stage3_selection,mixed_layer_anom,13.13233062915669,42
+BW37,KGI,stage3_selection,mixed_layer_anom,21.417890720250394,43
+BW37,KGI,stage3_selection,temperature_deep_anom,21.775035798620728,44
+BW37,KGI,stage3_selection,fsle_orient + mixed_layer_anom,40.522880548400956,45
+BW37,KGI,stage3_selection,fsle_orient + temperature_deep_anom,27.52203091050882,46
+BW37,KGI,stage3_selection,mixed_layer_anom,34.45953818396847,47
+BW37,KGI,stage3_selection,fsle_orient + temperature_deep_anom,35.174208465748656,48
+BW37,KGI,stage3_selection,,0,49
+BW37,KGI,stage3_selection,temperature_deep_anom,18.538172325687835,50
+BW37,KGI,stage3_selection,,0,51
+BW37,KGI,stage3_selection,FSLE + temperature_deep_anom,40.0428672051242,52
+BW37,KGI,stage3_selection,temperature_deep_anom,32.31939808496617,53
+BW37,KGI,stage3_selection,FSLE,16.059733469630256,54
+BW37,KGI,stage3_selection,FSLE + temperature_deep_anom,28.747901430399807,55
+BW37,KGI,stage3_selection,temperature_deep_anom,10.108682030818015,56
+BW37,KGI,stage3_selection,,0,57
+BW37,KGI,stage3_selection,fsle_orient + temperature_deep_anom,35.228583416906716,58
+BW37,KGI,stage3_selection,FSLE + mixed_layer_anom,41.88300257110921,59
+BW37,KGI,stage3_selection,fsle_orient + temperature_deep_anom,28.09283981320888,60
+BW37,KGI,stage3_selection,mixed_layer_anom + temperature_deep_anom,19.690546448174654,61
+BW37,KGI,stage3_selection,temperature_deep_anom,13.737723551623526,62
+BW37,KGI,stage3_selection,FSLE,15.621959936082707,63
+BW37,KGI,stage3_selection,fsle_orient,17.228205968585588,64
+BW37,KGI,stage3_selection,temperature_deep_anom,36.6786944359386,65
+BW37,KGI,stage3_selection,mixed_layer_anom,25.284140911388885,66
+BW37,KGI,stage3_selection,FSLE + temperature_deep_anom,44.4368267820823,67
+BW37,KGI,stage3_selection,temperature_deep_anom,38.035333098419365,68
+BW37,KGI,stage3_selection,mixed_layer_anom + temperature_deep_anom,18.79888946520714,69
+BW37,KGI,stage3_selection,temperature_deep_anom,32.77007352942017,70
+BW37,KGI,stage3_selection,fsle_orient,10.78112451985215,71
+BW37,KGI,stage3_selection,mixed_layer_anom + temperature_deep_anom,23.437125976472185,72
+BW37,KGI,stage3_selection,FSLE + fsle_orient + temperature_deep_anom,38.764800972071,73
+BW37,KGI,stage3_selection,fsle_orient + temperature_deep_anom,27.418234661628453,74
+BW37,KGI,stage3_selection,FSLE + temperature_deep_anom,32.42547344936417,75
+BW37,KGI,stage3_selection,mixed_layer_anom,9.03448359074836,76
+BW37,KGI,stage3_selection,,0,77
+BW37,KGI,stage3_selection,fsle_orient + temperature_deep_anom,22.72499643910245,78
+BW37,KGI,stage3_selection,temperature_deep_anom,13.510339438703603,79
+BW37,KGI,stage3_selection,,0,80
+BW37,KGI,stage3_selection,temperature_deep_anom,27.42601055285355,81
+BW37,KGI,stage3_selection,temperature_deep_anom,28.992639750394627,82
+BW37,KGI,stage3_selection,fsle_orient + temperature_deep_anom,15.523281784520456,83
+BW37,KGI,stage3_selection,FSLE + fsle_orient,22.97544085706359,84
+BW37,KGI,stage3_selection,temperature_deep_anom,35.122210646297184,85
+BW37,KGI,stage3_selection,mixed_layer_anom + temperature_deep_anom,18.79888946520714,86
+BW37,KGI,stage3_selection,FSLE + mixed_layer_anom + temperature_deep_anom,41.8277630739585,87
+BW37,KGI,stage3_selection,temperature_deep_anom,29.43495994863687,88
+BW37,KGI,stage3_selection,temperature_deep_anom,38.035333098419365,89
+BW37,KGI,stage3_selection,FSLE,23.472557134609787,90
+BW37,KGI,stage3_selection,temperature_deep_anom,31.41950223839004,91
+BW37,KGI,stage3_selection,FSLE,12.153770752837415,92
+BW37,KGI,stage3_selection,temperature_deep_anom,14.431097448769176,93
+BW37,KGI,stage3_selection,fsle_orient,17.966086422619966,94
+BW37,KGI,stage3_selection,fsle_orient + mixed_layer_anom + temperature_deep_anom,28.439565831357704,95
+BW37,KGI,stage3_selection,FSLE + temperature_deep_anom,34.57575302740026,96
+BW37,KGI,stage3_selection,FSLE,12.902209852612714,97
+BW37,KGI,stage3_selection,FSLE + temperature_deep_anom,22.73111928926005,98
+BW37,KGI,stage3_selection,,0,99
+BW37,KGI,stage3_selection,,0,100
+BW37,KGI,stage3_selection,mixed_layer_anom,21.417890720250394,101
+BW37,KGI,stage3_selection,fsle_orient + mixed_layer_anom,42.76353745175508,102
+BW37,KGI,stage3_selection,FSLE + mixed_layer_anom,18.465835212057172,103
+BW37,KGI,stage3_selection,fsle_orient,12.75393989278569,104
+BW37,KGI,stage3_selection,temperature_deep_anom,37.8102703585345,105
+BW37,KGI,stage3_selection,temperature_deep_anom,23.433887422502135,106
+BW37,KGI,stage3_selection,,0,107
+BW37,KGI,stage3_selection,temperature_deep_anom,35.62915170499938,108
+BW37,KGI,stage3_selection,temperature_deep_anom,32.88031839727772,109
+BW37,KGI,stage3_selection,FSLE + mixed_layer_anom,43.98444404085613,110
+BW37,KGI,stage3_selection,temperature_deep_anom,36.692950355542834,111
+BW37,KGI,stage3_selection,FSLE + mixed_layer_anom + temperature_deep_anom,36.00381486170457,112
+BW37,KGI,stage3_selection,FSLE + temperature_deep_anom,35.827127047362744,113
+BW37,KGI,stage3_selection,FSLE,8.804043485316097,114
+BW37,KGI,stage3_selection,temperature_deep_anom,36.9461527451888,115
+BW37,KGI,stage3_selection,temperature_deep_anom,25.462411137054048,116
+BW37,KGI,stage3_selection,fsle_orient + mixed_layer_anom + temperature_deep_anom,39.602262687973635,117
+BW37,KGI,stage3_selection,temperature_deep_anom,23.744100729376107,118
+BW37,KGI,stage3_selection,FSLE + temperature_deep_anom,25.23094600608948,119
+BW37,KGI,stage3_selection,FSLE + mixed_layer_anom + temperature_deep_anom,25.389980441520084,120
+BW37,KGI,stage3_selection,FSLE + mixed_layer_anom + temperature_deep_anom,41.32171791097235,121
+BW37,KGI,stage3_selection,temperature_deep_anom,32.682639691985656,122
+BW37,KGI,stage3_selection,temperature_deep_anom,32.91020662779708,123
+BW37,KGI,stage3_selection,mixed_layer_anom,16.821577482408344,124
+BW37,KGI,stage3_selection,FSLE + temperature_deep_anom,31.612928471760622,125
+BW37,KGI,stage3_selection,FSLE + temperature_deep_anom,33.226260627753575,126
+BW37,KGI,stage3_selection,mixed_layer_anom,27.69508522156222,127
+BW37,KGI,stage3_selection,temperature_deep_anom,32.45158096578638,128
+BW37,KGI,stage3_selection,fsle_orient,7.777198183670368,129
+BW37,KGI,stage3_selection,FSLE + fsle_orient + temperature_deep_anom,36.48930795729707,130
+BW37,KGI,stage3_selection,temperature_deep_anom,15.935347605215435,131
+BW37,KGI,stage3_selection,fsle_orient + mixed_layer_anom + temperature_deep_anom,39.51131940580487,132
+BW37,KGI,stage3_selection,mixed_layer_anom,15.775033874549885,133
+BW37,KGI,stage3_selection,FSLE,7.989706043796072,134
+BW37,KGI,stage3_selection,temperature_deep_anom,32.91020662779708,135
+BW37,KGI,stage3_selection,mixed_layer_anom,8.985527046704721,136
+BW37,KGI,stage3_selection,FSLE + fsle_orient + temperature_deep_anom,37.20826206686814,137
+BW37,KGI,stage3_selection,fsle_orient + temperature_deep_anom,17.844065206579675,138
+BW37,KGI,stage3_selection,temperature_deep_anom,34.655064509812725,139
+BW37,KGI,stage3_selection,temperature_deep_anom,12.442882756919246,140
+BW37,KGI,stage3_selection,FSLE + temperature_deep_anom,28.190589016714046,141
+BW37,KGI,stage3_selection,mixed_layer_anom,24.174190093185793,142
+BW37,KGI,stage3_selection,fsle_orient + mixed_layer_anom,36.505680816214216,143
+BW37,KGI,stage3_selection,FSLE + fsle_orient,26.079912283443363,144
+BW37,KGI,stage3_selection,mixed_layer_anom + temperature_deep_anom,33.86009601886067,145
+BW37,KGI,stage3_selection,fsle_orient + temperature_deep_anom,28.73655956965816,146
+BW37,KGI,stage3_selection,FSLE + temperature_deep_anom,42.152542218500365,147
+BW37,KGI,stage3_selection,,0,148
+BW37,KGI,stage3_selection,mixed_layer_anom,6.437460935858451,149
+BW37,KGI,stage3_selection,temperature_deep_anom,25.462411137054048,150
+BW37,KGI,stage3_selection,temperature_deep_anom,34.50820457009738,151
+BW37,KGI,stage3_selection,,0,152
+BW37,KGI,stage3_selection,fsle_orient + mixed_layer_anom + temperature_deep_anom,46.75233966013923,153
+BW37,KGI,stage3_selection,mixed_layer_anom,18.405283609327466,154
+BW37,KGI,stage3_selection,temperature_deep_anom,35.273746552124315,155
+BW37,KGI,stage3_selection,temperature_deep_anom,44.18992413985179,156
+BW37,KGI,stage3_selection,temperature_deep_anom,29.054008797642783,157
+BW37,KGI,stage3_selection,FSLE,12.153770752837415,158
+BW37,KGI,stage3_selection,temperature_deep_anom,14.431097448769176,159
+BW37,KGI,stage3_selection,fsle_orient,11.697345750503787,160
+BW37,KGI,stage3_selection,mixed_layer_anom,27.991710808542532,161
+BW37,KGI,stage3_selection,temperature_deep_anom,13.510339438703603,162
+BW37,KGI,stage3_selection,temperature_deep_anom,36.67573374005889,163
+BW37,KGI,stage3_selection,temperature_deep_anom,12.764987399331046,164
+BW37,KGI,stage3_selection,FSLE + fsle_orient + temperature_deep_anom,38.764800972071,165
+BW37,KGI,stage3_selection,fsle_orient + temperature_deep_anom,30.44421451442953,166
+BW37,KGI,stage3_selection,temperature_deep_anom,10.706366841685512,167
+BW37,KGI,stage3_selection,,0,168
+BW37,KGI,stage3_selection,,0,169
+BW37,KGI,stage3_selection,fsle_orient + temperature_deep_anom,22.187068628796563,170
+BW37,KGI,stage3_selection,FSLE + mixed_layer_anom + temperature_deep_anom,32.032958835371815,171
+BW37,KGI,stage3_selection,FSLE + temperature_deep_anom,32.96460060159569,172
+BW37,KGI,stage3_selection,fsle_orient + mixed_layer_anom,27.384947993677972,173
+BW37,KGI,stage3_selection,mixed_layer_anom,33.6915184148442,174
+BW37,KGI,stage3_selection,fsle_orient,14.708214340800874,175
+BW37,KGI,stage3_selection,temperature_deep_anom,26.5452548995314,176
+BW37,KGI,stage3_selection,,0,177
+BW37,KGI,stage3_selection,temperature_deep_anom,25.535667343169205,178
+BW37,KGI,stage3_selection,mixed_layer_anom + temperature_deep_anom,32.925154011804985,179
+BW37,KGI,stage3_selection,FSLE,28.76175655320822,180
+BW37,KGI,stage3_selection,FSLE + mixed_layer_anom,41.88300257110921,181
+BW37,KGI,stage3_selection,FSLE + temperature_deep_anom,33.94116658822113,182
+BW37,KGI,stage3_selection,FSLE,27.632898652357152,183
+BW37,KGI,stage3_selection,temperature_deep_anom,34.1238007529918,184
+BW37,KGI,stage3_selection,temperature_deep_anom,11.662919934230299,185
+BW37,KGI,stage3_selection,temperature_deep_anom,30.93357690304378,186
+BW37,KGI,stage3_selection,mixed_layer_anom + temperature_deep_anom,21.295825309525142,187
+BW37,KGI,stage3_selection,mixed_layer_anom + temperature_deep_anom,25.942224138481606,188
+BW37,KGI,stage3_selection,FSLE + fsle_orient + mixed_layer_anom,36.6335859243782,189
+BW37,KGI,stage3_selection,FSLE,8.126343386515149,190
+BW37,KGI,stage3_selection,FSLE + mixed_layer_anom,39.64445311342648,191
+BW37,KGI,stage3_selection,temperature_deep_anom,32.91020662779708,192
+BW37,KGI,stage3_selection,,0,193
+BW37,KGI,stage3_selection,FSLE,9.100431616003174,194
+BW37,KGI,stage3_selection,fsle_orient + temperature_deep_anom,18.953873787249112,195
+BW37,KGI,stage3_selection,mixed_layer_anom,16.794500129766746,196
+BW37,KGI,stage3_selection,fsle_orient,23.017199173662178,197
+BW37,KGI,stage3_selection,FSLE + fsle_orient + temperature_deep_anom,22.46060728961389,198
+BW37,KGI,stage3_selection,FSLE + mixed_layer_anom,38.766753753859405,199
+BW37,KGI,stage3_selection,mixed_layer_anom,32.29932325205239,200

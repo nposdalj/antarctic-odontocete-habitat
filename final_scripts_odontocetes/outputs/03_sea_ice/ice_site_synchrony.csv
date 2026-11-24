@@ -1,0 +1,7 @@
+metric,pair,spearman_r
+cumulative_ice_days,EI-KGI,0.89
+cumulative_ice_days,EI-CI,0.77
+cumulative_ice_days,KGI-CI,0.77
+max_pct,EI-KGI,1
+max_pct,EI-CI,0.09
+max_pct,KGI-CI,0.09

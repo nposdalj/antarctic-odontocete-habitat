@@ -35,29 +35,13 @@ source(file.path(FINAL_DIR, "06_statistical_analyses", "00_gam_parameters.R"))
 source(file.path(FINAL_DIR, "06_statistical_analyses", "00_gam_functions.R"))
 
 # -----------------------------------------------------------------------------
-# 1. Harmonized terms (chosen by N. Posdaljian, 2026-11-19)
+# 1. Candidate sets: a priori hypothesis sets (HYPOTHESIS_SETS in
+#    00_gam_parameters.R; decision N. Posdaljian 2026-11-20). The same set is
+#    used at every modeled site of a species. Replaces the earlier union of
+#    the Stage 1 selections, which was derived from the same data.
 # -----------------------------------------------------------------------------
-# One row per species (site = "all": every modeled site of that species) or
-# per species x site (a site-specific row overrides the "all" row). `terms`
-# holds candidate column names exactly as in stage2_decision_table.csv; each
-# becomes s(term, k = GAM_K). One predictor set per species, used at every
-# site: the union of the Stage 1 selections across that species' sites, one
-# per theme, with the common 3-month chl-a lag and layer-averaged water-column
-# variables, temperature as the only water-mass variable (review page,
-# version 7). No species had sites disagreeing within a theme.
-# Approved by N. Posdaljian, 2026-11-19.
-harmonized_terms <- tribble(
-  ~species, ~site, ~terms,
-  # Union of the Stage 1 picks per species (re-derived 2026-11-20 after the
-  # switch to per-cell EKE and standardized chl-a anomalies)
-  "Pm",   "all", c("FSLE", "fsle_orient", "mixed_layer_anom",
-                   "temperature_surface_anom", "chla_lag3_anom"),
-  "Gm",   "all", c("temperature_surface_anom", "chla_lag3_anom", "mixed_layer_anom"),
-  "Oo",   "all", c("EKE_mid", "temperature_surface_anom"),
-  "BW29", "all", c("EKE_deep", "FSLE", "chla_lag3_anom", "mixed_layer_anom",
-                   "temperature_surface_anom"),
-  "BW37", "all", c("FSLE", "fsle_orient", "mixed_layer_anom", "temperature_deep_anom")
-)
+harmonized_terms <- tibble(species = names(HYPOTHESIS_SETS), site = "all",
+                           terms = unname(HYPOTHESIS_SETS))
 
 if (nrow(harmonized_terms) == 0) {
   stop("[INSERT] harmonized_terms is empty: fill in the formulas after reviewing ",
@@ -105,6 +89,7 @@ write_csv(inclusion, file.path(table_dir, "model_inclusion.csv"))
 # backward elimination within the harmonized term set with the term caps.
 docs <- list()
 backward_tbl <- list()
+vif_tbl <- list()
 for (i in seq_len(nrow(model_plan))) {
   sp <- model_plan$species[i]
   st <- model_plan$site[i]
@@ -122,7 +107,10 @@ for (i in seq_len(nrow(model_plan))) {
 
   low_sample <- model_plan$status[i] == "modeled (low sample)"
   cap <- term_cap(nrow(dat), low_sample)
-  be <- backward_eliminate(dat, sp, terms, max_terms = cap)
+  # Backward elimination with the term cap from the full candidate set; the
+  # final model must have every VIF <= VIF_THRESH (select_vif_checked).
+  be <- select_vif_checked(dat, sp, terms, max_terms = cap)   # rule 3: VIF check on final model
+  vif_tbl[[id]] <- mutate(be$vif_checks, species = sp, site = st, .before = 1)
   backward_tbl[[id]] <- mutate(be$steps, species = sp, site = st, .before = 1)
   message(id, ": ", deparse1(formula(be$model)),
           if (be$no_significant_terms) " (no significant terms)" else "")
@@ -138,5 +126,6 @@ for (i in seq_len(nrow(model_plan))) {
 }
 
 write_csv(bind_rows(backward_tbl), file.path(table_dir, "backward_elimination.csv"))
+write_csv(bind_rows(vif_tbl), file.path(table_dir, "vif_checks_final_models.csv"))
 write_model_tables(docs, table_dir)
 message("Stage 3 complete: ", length(docs), " models. Outputs in ", out_dir)

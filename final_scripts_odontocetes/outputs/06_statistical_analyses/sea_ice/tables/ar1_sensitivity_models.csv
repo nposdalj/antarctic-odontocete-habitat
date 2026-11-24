@@ -1,12 +1,4 @@
 species,site,ljung_box_p_gam,resid_acf_lag1_gam,delta_aic_ar1,ar1_phi,status,ar1_supported,n_terms,n_hold,terms_not_holding
-BW29,CI,0,0.555,-12.087,0.648,ok,TRUE,1,1,
-BW29,EI,0.001,0.507,-11.424,0.775,ok,TRUE,1,0,s(ice_conc)
-BW29,KGI,0,0.45,NA,NA,AR(1) fit failed,FALSE,1,1,
-BW37,EI,0.514,0.327,-6.489,0.554,ok,TRUE,1,0,s(ice_conc)
-BW37,KGI,0,0.38,-11.398,0.872,ok,TRUE,1,1,
-Gm,CI,0,0.346,-9.213,0.922,ok,TRUE,1,0,s(ice_conc)
-Gm,EI,0.004,0.504,-21.087,0.976,ok,TRUE,1,0,s(ice_conc)
-Gm,KGI,0,0.577,-17.266,0.902,ok,TRUE,1,0,s(ice_conc)
-Oo,CI,0.173,0.048,-19.544,0.026,ok,TRUE,1,0,s(ice_conc)
-Pm,CI,0,0.399,-46.201,0.578,ok,TRUE,1,0,s(ice_conc)
-Pm,EI,0,0.85,-58.064,0.935,ok,TRUE,1,0,s(ice_conc)
+Gm,CI,0,0.41,-9.096,0.882,ok,TRUE,1,0,s(ice_conc)
+Oo,CI,0.921,-0.024,-14.353,0.101,ok,TRUE,1,1,
+Pm,CI,0,0.393,-41.529,0.557,ok,TRUE,1,0,s(ice_conc)

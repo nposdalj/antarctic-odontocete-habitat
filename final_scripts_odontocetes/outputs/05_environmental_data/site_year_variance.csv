@@ -1,5 +1,5 @@
 variable,pct_site,pct_year,pct_site_x_year,pct_residual,pct_total_seasonal
-ice_conc,7.2,15.7,1,76,54.8
+ice_conc,14.1,8.2,1.5,76.2,37.7
 temperature_surface,12.1,2.4,5,80.6,77.4
 temperature_mid,83.6,1.8,2.4,12.3,2.5
 temperature_deep,89.2,1.2,1.8,7.8,0.6

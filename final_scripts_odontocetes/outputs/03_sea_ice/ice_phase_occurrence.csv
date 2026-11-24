@@ -1,0 +1,67 @@
+site,species,phase,recording_days,detection_days,pct_days_detected,mean_ice_pct
+EI,BW29,no ice season,135,57,42.2,0
+EI,BW37,no ice season,135,28,20.7,0
+EI,BW58,no ice season,135,1,0.7,0
+EI,Gm,no ice season,135,47,34.8,0
+EI,Oo,no ice season,135,3,2.2,0
+EI,Pm,no ice season,135,66,48.9,0
+KGI,BW29,before advance,142,21,14.8,1.2
+KGI,BW29,advance (first 30 d),30,0,0,45.5
+KGI,BW29,ice season,30,0,0,61.7
+KGI,BW29,retreat (last 30 d),30,0,0,57.6
+KGI,BW29,after retreat,122,6,4.9,0.4
+KGI,BW37,before advance,142,16,11.3,1.2
+KGI,BW37,advance (first 30 d),30,0,0,45.5
+KGI,BW37,ice season,30,0,0,61.7
+KGI,BW37,retreat (last 30 d),30,0,0,57.6
+KGI,BW37,after retreat,122,34,27.9,0.4
+KGI,BW58,before advance,142,0,0,1.2
+KGI,BW58,advance (first 30 d),30,0,0,45.5
+KGI,BW58,ice season,30,0,0,61.7
+KGI,BW58,retreat (last 30 d),30,0,0,57.6
+KGI,BW58,after retreat,122,2,1.6,0.4
+KGI,Gm,before advance,142,29,20.4,1.2
+KGI,Gm,advance (first 30 d),30,0,0,45.5
+KGI,Gm,ice season,30,0,0,61.7
+KGI,Gm,retreat (last 30 d),30,0,0,57.6
+KGI,Gm,after retreat,122,3,2.5,0.4
+KGI,Oo,before advance,142,2,1.4,1.2
+KGI,Oo,advance (first 30 d),30,0,0,45.5
+KGI,Oo,ice season,30,0,0,61.7
+KGI,Oo,retreat (last 30 d),30,1,3.3,57.6
+KGI,Oo,after retreat,122,0,0,0.4
+KGI,Pm,before advance,142,0,0,1.2
+KGI,Pm,advance (first 30 d),30,0,0,45.5
+KGI,Pm,ice season,30,0,0,61.7
+KGI,Pm,retreat (last 30 d),30,0,0,57.6
+KGI,Pm,after retreat,122,0,0,0.4
+CI,BW29,before advance,63,16,25.4,3.3
+CI,BW29,advance (first 30 d),30,0,0,29.1
+CI,BW29,ice season,68,1,1.5,7.2
+CI,BW29,retreat (last 30 d),30,0,0,63.5
+CI,BW29,after retreat,111,34,30.6,0
+CI,BW37,before advance,63,6,9.5,3.3
+CI,BW37,advance (first 30 d),30,0,0,29.1
+CI,BW37,ice season,68,0,0,7.2
+CI,BW37,retreat (last 30 d),30,0,0,63.5
+CI,BW37,after retreat,111,5,4.5,0
+CI,BW58,before advance,63,0,0,3.3
+CI,BW58,advance (first 30 d),30,0,0,29.1
+CI,BW58,ice season,68,0,0,7.2
+CI,BW58,retreat (last 30 d),30,0,0,63.5
+CI,BW58,after retreat,111,0,0,0
+CI,Gm,before advance,63,1,1.6,3.3
+CI,Gm,advance (first 30 d),30,0,0,29.1
+CI,Gm,ice season,68,9,13.2,7.2
+CI,Gm,retreat (last 30 d),30,2,6.7,63.5
+CI,Gm,after retreat,111,3,2.7,0
+CI,Oo,before advance,63,0,0,3.3
+CI,Oo,advance (first 30 d),30,5,16.7,29.1
+CI,Oo,ice season,68,1,1.5,7.2
+CI,Oo,retreat (last 30 d),30,6,20,63.5
+CI,Oo,after retreat,111,2,1.8,0
+CI,Pm,before advance,63,55,87.3,3.3
+CI,Pm,advance (first 30 d),30,23,76.7,29.1
+CI,Pm,ice season,68,36,52.9,7.2
+CI,Pm,retreat (last 30 d),30,23,76.7,63.5
+CI,Pm,after retreat,111,44,39.6,0

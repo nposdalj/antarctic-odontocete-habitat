@@ -105,17 +105,30 @@ diagnostics_table <- function(summaries, ar1 = NULL) {
 # One row per species x site, including those not modeled.
 ice <- read_stage("sea_ice")
 ice_ar1 <- read_ar1("sea_ice")
+# Shape of every fitted sea-ice smooth, also when not significant (reported
+# as a weak, non-significant tendency; decision N. Posdaljian 2026-11-20).
+# Models may keep concentration and/or distance to the ice edge: one row per
+# term (decision N. Posdaljian 2026-11-20).
+ice_fitted_shape <- map_dfr(read_stage_models("sea_ice"), function(obj) {
+  map_dfr(obj$terms$variable, function(v) {
+    g <- smooth_grid(obj$model, v)
+    tibble(species = obj$species, site = obj$site, variable = v,
+           fitted_shape = classify_smooth_shape(g$.estimate, p_value = 0, x = g$x))
+  })
+})
 sea_ice_table <- ice$inclusion |>
-  left_join(ice$terms |> select(species, site, edf, p_value, shape, direction),
+  left_join(ice$terms |> select(species, site, variable, edf, p_value, shape, direction),
             by = c("species", "site")) |>
+  left_join(ice_fitted_shape, by = c("species", "site", "variable")) |>
   left_join(ice$summaries |> select(species, site, dev_expl), by = c("species", "site")) |>
-  left_join(if (!is.null(ice_ar1)) ice_ar1$terms |> select(-variable) else
-              tibble(species = character(), site = character(), robust_ar1 = logical()),
-            by = c("species", "site")) |>
-  transmute(species, species_name = species_label(species), site, status,
+  left_join(if (!is.null(ice_ar1)) ice_ar1$terms else
+              tibble(species = character(), site = character(), variable = character(),
+                     robust_ar1 = logical()),
+            by = c("species", "site", "variable")) |>
+  transmute(species, species_name = species_label(species), site, status, variable,
             n_bins, n_detection_bins, low_sample = status == "modeled (low sample)",
             edf = round(edf, 2), p_value = format_p(p_value),
-            dev_expl_pct = round(100 * dev_expl, 1), shape, direction,
+            dev_expl_pct = round(100 * dev_expl, 1), shape, direction, fitted_shape,
             robust_ar1 = if_else(p_value <= P_THRESH, robust_ar1, NA)) |>
   order_rows()
 write_csv(sea_ice_table, out_file("main_sea_ice_gam_table.csv"))

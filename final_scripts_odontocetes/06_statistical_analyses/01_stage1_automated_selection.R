@@ -175,7 +175,7 @@ for (sp in MODELED_SPECIES) {
 
   binned <- model_input |>
     group_split(site) |>
-    map(\(d) bin_site_data(d, sp, bin_days, c(sp_candidates, ICE_MODEL_VAR))) |>
+    map(\(d) bin_site_data(d, sp, bin_days, c(sp_candidates, ICE_MODEL_VAR, ICE_EDGE_VAR))) |>
     bind_rows()
 
   # --- 3c. Ice filter ---------------------------------------------------------

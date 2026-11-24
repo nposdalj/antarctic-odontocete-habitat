@@ -1,14 +1,14 @@
 
 Method: REML   Optimizer: outer newton
-full convergence after 12 iterations.
-Gradient range [-2.914538e-05,8.560873e-06]
-(score 64.91149 & scale 10.69794).
-Hessian positive definite, eigenvalue range [6.457374e-06,21.67971].
+full convergence after 13 iterations.
+Gradient range [-8.293697e-06,4.360259e-06]
+(score 63.72417 & scale 9.869352).
+Hessian positive definite, eigenvalue range [6.768666e-06,21.54033].
 Model rank =  7 / 7 
 
 Basis dimension (k) checking results. Low p-value (k-index<1) may
 indicate that k is too low, especially if edf is close to k'.
 
                                k'   edf k-index p-value
-s(temperature_surface_anom) 3.000 0.919    0.74    0.35
-s(mixed_layer_anom)         3.000 1.522    0.81    0.68
+s(mixed_layer_anom)         3.000 1.576    0.85    0.72
+s(temperature_surface_anom) 3.000 0.928    0.77    0.47

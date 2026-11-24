@@ -1,0 +1,12 @@
+species,site,test,observed_terms,observed_dev_expl,n_null,null_median_dev_expl,null_95th_dev_expl,p_perm,p_holm,p_bh
+BW29,CI,stage3_selection,FSLE + chla_lag3_anom + mixed_layer_anom + temperature_surface_anom,64.8,200,50.2,71.6,0.13930348258706468,0.6965174129353234,0.21890547263681592
+BW29,EI,stage3_selection,EKE_deep + chla_lag3_anom,46.6,200,49.4,68.1,0.5472636815920398,1,0.5970149253731343
+BW29,KGI,stage3_selection,chla_lag3_anom,42.1,200,46.2,60.1,0.5970149253731343,1,0.5970149253731343
+BW37,EI,stage3_selection,FSLE + fsle_orient,47.8,200,29.1,54.8,0.1691542288557214,0.6965174129353234,0.23258706467661694
+BW37,KGI,stage3_selection,mixed_layer_anom + temperature_deep_anom,42.5,200,27,41.3,0.03482587064676617,0.31343283582089554,0.11857379767827528
+Gm,CI,stage3_selection,temperature_surface_anom + mixed_layer_anom,49.4,200,40.1,58.5,0.2736318407960199,0.8208955223880596,0.33443891652846874
+Gm,EI,stage3_selection,temperature_surface_anom + chla_lag3_anom,84.7,200,62,82.3,0.029850746268656716,0.29850746268656714,0.11857379767827528
+Gm,KGI,stage3_selection,temperature_surface_anom + mixed_layer_anom,58.3,200,37.6,53.1,0.014925373134328358,0.16417910447761194,0.11857379767827528
+Oo,CI,stage3_selection,EKE_mid + temperature_surface_anom,27.1,200,0,27.2,0.06467661691542288,0.417910447761194,0.11857379767827528
+Pm,CI,stage3_selection,fsle_orient + mixed_layer_anom + temperature_surface_anom + chla_lag3_anom,49.7,200,25.9,49.9,0.05970149253731343,0.417910447761194,0.11857379767827528
+Pm,EI,stage3_selection,FSLE + mixed_layer_anom + chla_lag3_anom,87.7,200,67.5,86.6,0.04975124378109453,0.39800995024875624,0.11857379767827528
