@@ -1,15 +1,15 @@
 species,species_name,site,status,n_bins,n_detection_bins,low_sample,term_cap,dev_expl_model_pct,terms
-Pm,Sperm whale,EI,modeled,34,23,FALSE,3,87.7,"FSLE (d-1) (edf 2.51, p <0.001, 9%); Anomaly: Mixed layer depth (m) (edf 1.16, p 0.004, 6.7%); Standardized anomaly: log10 chl-a (SD), 3-month lag (edf 1.93, p <0.001, 26%)"
+Pm,Sperm whale,EI,modeled,34,23,FALSE,3,75.6,"FSLE (d-1) (edf 2.23, p <0.001, 48.7%); Anomaly: Mixed layer depth (m) (edf 1.17, p 0.007, 8.3%); Anomaly: Temperature (°C), deep layer (500-1000 m) (edf 0.94, p <0.001, 13.9%)"
 Pm,Sperm whale,KGI,descriptive only,89,0,FALSE,NA,NA,NA
 Pm,Sperm whale,CI,modeled,76,65,FALSE,7,48.9,"FSLE (d-1) (edf 0.94, p <0.001, 13%); Anomaly: Temperature (°C), deep layer (500-1000 m) (edf 2.63, p <0.001, 38%); EKE (cm2 s-2), mid-water layer (100-500 m) (edf 1.84, p <0.001, 12.3%)"
-Gm,Long-finned pilot whale,EI,modeled (low sample),34,19,TRUE,2,84.7,"Standardized anomaly: log10 chl-a (SD), 3-month lag (edf 0.97, p <0.001, 26.1%); Anomaly: Temperature (°C), surface layer (0-100 m) (edf 2.79, p <0.001, 18.3%)"
+Gm,Long-finned pilot whale,EI,modeled (low sample),34,19,TRUE,2,77.2,"Anomaly: Temperature (°C), surface layer (0-100 m) (edf 2.72, p 0.003, 25.4%); Anomaly: Temperature (°C), mid-water layer (100-500 m) (edf 1.77, p <0.001, 18.7%)"
 Gm,Long-finned pilot whale,KGI,modeled (low sample),66,18,TRUE,2,55.7,"Anomaly: Mixed layer depth (m) (edf 1.76, p <0.001, 24.1%); Anomaly: Temperature (°C), surface layer (0-100 m) (edf 0.97, p <0.001, 55.7%)"
 Gm,Long-finned pilot whale,CI,modeled (low sample),62,11,TRUE,2,53.4,"Anomaly: Mixed layer depth (m) (edf 1.58, p 0.006, 20.4%); Anomaly: Temperature (°C), surface layer (0-100 m) (edf 0.93, p <0.001, 26.1%)"
 Oo,Killer whale,EI,descriptive only,68,3,FALSE,NA,NA,NA
 Oo,Killer whale,KGI,descriptive only,177,3,FALSE,NA,NA,NA
-Oo,Killer whale,CI,modeled (low sample),152,11,TRUE,2,37,"Anomaly: Mixed layer depth (m) (edf 1.31, p 0.033, 18.2%); Standardized anomaly: log10 chl-a (SD), 3-month lag (edf 2.51, p <0.001, 37%)"
-BW29,Southern bottlenose whale,EI,modeled,34,26,FALSE,3,46.6,"Standardized anomaly: log10 chl-a (SD), 3-month lag (edf 1.64, p 0.004, 16.8%); EKE (cm2 s-2), deep layer (500-1000 m) (edf 1.57, p 0.019, 13%)"
-BW29,Southern bottlenose whale,KGI,modeled (low sample),57,20,TRUE,2,40.2,"Standardized anomaly: log10 chl-a (SD), 3-month lag (edf 1.99, p 0.004, 40.2%)"
+Oo,Killer whale,CI,modeled (low sample),152,11,TRUE,2,26.7,"Anomaly: Temperature (°C), surface layer (0-100 m) (edf 1.65, p 0.006, 24.8%); EKE (cm2 s-2), mid-water layer (100-500 m) (edf 0.88, p 0.007, 18.3%)"
+BW29,Southern bottlenose whale,EI,modeled,34,26,FALSE,3,29.9,"EKE (cm2 s-2), deep layer (500-1000 m) (edf 1.69, p <0.001, 29.9%)"
+BW29,Southern bottlenose whale,KGI,modeled (low sample),57,20,TRUE,2,21.3,"Anomaly: Mixed layer depth (m) (edf 1.36, p 0.024, 11.8%); Anomaly: Temperature (°C), deep layer (500-1000 m) (edf 0.83, p 0.024, 9%)"
 BW29,Southern bottlenose whale,CI,modeled,51,24,FALSE,5,42.7,"Anomaly: Mixed layer depth (m) (edf 0.89, p 0.005, 7.2%); Anomaly: Temperature (°C), deep layer (500-1000 m) (edf 0.97, p <0.001, 39.2%)"
 BW37,BW37 beaked whale,EI,modeled (low sample),34,17,TRUE,2,47.8,"FSLE (d-1) (edf 1.84, p <0.001, 34.7%); FSLV orientation (°; cyclic, -90 = 90) (edf 1.35, p 0.029, 11.5%)"
 BW37,BW37 beaked whale,KGI,modeled,58,27,FALSE,5,43.3,"Anomaly: Mixed layer depth (m) (edf 1.35, p 0.025, 7.5%); Anomaly: Temperature (°C), deep layer (500-1000 m) (edf 1.83, p <0.001, 37.3%)"

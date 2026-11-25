@@ -220,8 +220,8 @@ ice_plot <- ggplot(ice_plot_data, aes(x_plot, .estimate, colour = site, fill = s
            sides = "b", alpha = 0.6, length = unit(0.04, "npc")) +
   facet_grid(species ~ variable, scales = "free", switch = "x",
              labeller = labeller(species = as_labeller(\(x) species_label(x)))) +
-  scale_colour_manual(values = SITE_COLORS, drop = FALSE, name = "Site") +
-  scale_fill_manual(values = SITE_COLORS, drop = FALSE, name = "Site") +
+  scale_colour_manual(values = SITE_COLORS, guide = "none") +
+  scale_fill_manual(values = SITE_COLORS, guide = "none") +
   labs(x = NULL, y = "Centered partial effect (log scale)") +
   theme_bw(base_size = 9) +
   guides(colour = guide_legend(order = 1), fill = guide_legend(order = 1)) +

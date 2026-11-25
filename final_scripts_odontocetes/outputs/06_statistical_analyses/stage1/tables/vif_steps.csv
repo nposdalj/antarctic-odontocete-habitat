@@ -4,10 +4,10 @@ Pm,EI,2,8,drop (max VIF),EKE_mid,9.50183195228557
 Pm,EI,3,7,stop (all VIF <= threshold),FSLE,3.291400753421133
 Pm,CI,1,9,drop (max VIF),temperature_deep_anom,15.788891517191908
 Pm,CI,2,8,stop (all VIF <= threshold),temperature_mid_anom,1.9298913982132917
-Gm,EI,1,7,stop (all VIF <= threshold),temperature_deep_anom,3.330383676291429
-Gm,KGI,1,7,drop (max VIF),temperature_surface_anom,5.214547216224471
-Gm,KGI,2,6,stop (all VIF <= threshold),fsle_orient,1.686877658607585
-Gm,CI,1,7,stop (all VIF <= threshold),temperature_deep_anom,4.202892194333768
+Gm,EI,1,7,stop (all VIF <= threshold),FSLE,3.3332712174881887
+Gm,KGI,1,7,drop (max VIF),temperature_surface_anom,5.158498305213181
+Gm,KGI,2,6,stop (all VIF <= threshold),fsle_orient,1.6891928946607249
+Gm,CI,1,7,stop (all VIF <= threshold),temperature_mid_anom,2.2041244148159724
 Oo,CI,1,7,stop (all VIF <= threshold),temperature_mid_anom,1.8193190946259146
 BW29,EI,1,7,stop (all VIF <= threshold),temperature_deep_anom,3.3303836762914307
 BW29,KGI,1,7,drop (max VIF),temperature_surface_anom,6.006124316996456

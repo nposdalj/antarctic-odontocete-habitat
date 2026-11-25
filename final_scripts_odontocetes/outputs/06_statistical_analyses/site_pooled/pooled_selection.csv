@@ -1,0 +1,11 @@
+species,sites,n_bins,n_detection_bins,term_cap,terms,dev_expl_pct,max_vif_with_site,vif_dropped,max_concurvity
+BW29,EI+KGI+CI,142,70,14,mixed_layer_anom + EKE_deep,35.4,2.85,temperature_deep_anom (VIF 5.7),0.81
+BW29,EI+KGI,91,46,9,mixed_layer_anom + EKE_deep,57.2,2.32,,0.72
+BW29,EI+CI,85,50,8,mixed_layer_anom + EKE_deep,16,3.02,temperature_deep_anom (VIF 9.1),0.97
+BW29,KGI+CI,108,44,10,mixed_layer_anom + temperature_deep_anom,43.1,1.31,,0.27
+BW37,EI+KGI,92,44,9,fsle_orient + mixed_layer_anom + temperature_deep_anom,30.9,4.54,,0.86
+Gm,EI+KGI+CI,162,48,16,mixed_layer_anom + temperature_surface_anom + temperature_mid_anom,50.7,2.98,,0.71
+Gm,EI+KGI,100,37,10,mixed_layer_anom + temperature_surface_anom + temperature_mid_anom + EKE_mid,71.5,3.47,,0.74
+Gm,EI+CI,96,30,9,mixed_layer_anom + temperature_mid_anom,52.3,3.93,,0.87
+Gm,KGI+CI,128,29,12,FSLE + fsle_orient + mixed_layer_anom + temperature_mid_anom + EKE_mid,55.9,1.37,,0.55
+Pm,EI+CI,110,88,11,FSLE + fsle_orient + mixed_layer_anom,43.1,1.84,temperature_mid_anom (VIF 12.4); temperature_deep_anom (VIF 6.9),0.64

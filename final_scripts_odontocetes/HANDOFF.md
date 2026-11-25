@@ -36,10 +36,10 @@ the pipeline, the current results, and what is still open.
 8. `06_statistical_analyses/04_sea_ice_models.R`
 9. `06_statistical_analyses/05_ar1_sensitivity.R stage3` and `... sea_ice`
 10. `07_results_occurrence/occurrence_summary.R`, `occurrence_figures.R`, `rare_detections.R`
-11. `08_results_gams/results_tables.R`, `response_curves.R`, `sea_ice_occurrence.R`
+11. `08_results_gams/results_tables.R`, `response_curves.R`, `sea_ice_occurrence.R`, `ice_edge_detections.R`
 12. `02_deep_oceanography/deep_oceanography.R`
 13. `03_sea_ice/sea_ice_exploration.R`, `bremen_02_compare_maps.R` (needs `modis_01_fetch.R` images)
-14. `05_environmental_data/07_site_year_comparison.R`
+14. `05_environmental_data/07_site_year_comparison.R`, `08_site_year_tests.R`
 15. Optional checks: `06_statistical_analyses/07_permutation_hypotheses.R C` (~40 min),
     `08_daily_ar1_check.R`
 16. Render the manuscript.
@@ -55,7 +55,9 @@ the pipeline, the current results, and what is still open.
 - Water mass = **temperature only** (validated against WOD profiles; salinity/O2 poorly reproduced).
 - Predictors are anomalies from a 10-year climatology except EKE, FSLE, FSLV orientation.
 - **EKE = per-cell definition** (u′, v′ per grid cell vs that cell's 10-yr mean, then box/layer mean; Ducet et al. 2000 [CONFIRM]). EKE comparison NOT reported.
-- **Chl-a = log10, 30-day mean ending 3 months earlier, standardized anomaly** (anomaly ÷ monthly SD; Wilks [CONFIRM]).
+- **Chl-a REMOVED completely (2026-11-25, after PI feedback)** and not mentioned anywhere in the paper or supplement. Reason: no mechanism for a specific lag; the 3-month lag had been chosen from the same data. Unreported check `06_statistical_analyses/09_chla_sensitivity.R`: adding lag-0 or lag-3 chl-a changed 3 / 5 of 11 models, never the same ones, rarely robust to AR(1); prewhitened CCF (lags 0–180 d) had no lag outside the 95% bounds.
+- **Pilot whales = mid-water forager** (2026-11-25, PI feedback): config depths 0/16/375 m; candidates surface + mid temperature, mid EKE (tag studies: Baird 2002, Heide-Jørgensen 2002, Visser 2017).
+- Species-depth and predictor rationale with literature: Methods 2.6 + Table 3; references in `manuscript/references_pending.md`.
 - **Sea ice = AMSR2 ASI (Univ. Bremen, 6.25 km)** everywhere. Copernicus ice eliminated, with **no comparison reported**. Context record 2013–2021; gaps ≤5 days interpolated in the exploration.
 - Daily AMSR2 metrics: box-mean concentration, open-water fraction, signed distance to ice edge (15%; coast buffer 12.5 km, isolated pixels ignored).
 
@@ -67,6 +69,8 @@ the pipeline, the current results, and what is still open.
 - **VIF used as a check on the final model, not a filter** (threshold 5; `select_vif_checked()`); highest final VIF 1.6.
 - Selection: backward elimination (p ≤ 0.05) with term cap.
 - **Reporting decision (agreed 2026-11-23):** report the models as exploratory, with AR(1) robustness markers; permutation test at most one supplementary sentence. No pooling of sites (responses differ among sites).
+- **Site as a variable (2026-11-25):** `06_statistical_analyses/10_site_pooled_models.R` (shared smooth + site intercept vs site-specific smooths; all sites and pairs). Mostly site-specific or unclear; only BW29 ~ MLD shared in every combination, and not AR(1)-robust. Decision: one Discussion sentence, not in the supplement.
+- **Site/year tests (2026-11-25, PI request):** `05_environmental_data/08_site_year_tests.R`. Annual means 2011–2019 with years as replicates (two-way ANOVA, year block + site; paired t-tests, Holm); recording-window ranks; EI 2014 temperature figure. Sites differ in every variable except surface temperature; EI ≈ KGI except EKE/FSLE; CI distinct. EI 2014 cold mid/deep anomaly from late Feb 2014 (similar in 2009–2010 at EI); not confirmed in situ, HYCOM does not reproduce the deep part. Supplement S7 rewritten (old variance-partition table dropped; monthly figure kept).
 
 ### Sea-ice models (agreed 2026-11-23)
 - Concentration only (fit better than distance to ice edge by AIC everywhere).
@@ -81,23 +85,25 @@ the pipeline, the current results, and what is still open.
 
 ---
 
-## 3. Current results (AMSR2, hypothesis sets)
+## 3. Current results (AMSR2, hypothesis sets, no chl-a, Gm mid-water; 2026-11-25)
 
 | Model | Final terms | Dev. % |
 |---|---|---|
-| Pm EI | FSLE + MLD + chl-a | 87.7 |
+| Pm EI | FSLE + MLD + deep temperature | 75.6 |
 | Pm CI | FSLE + deep temperature + mid-water EKE | 48.9 |
-| Gm EI | surface temperature + chl-a | 84.7 |
+| Gm EI | surface temperature + mid-water temperature | 77.2 |
 | Gm KGI | MLD + surface temperature | 55.7 |
 | Gm CI | MLD + surface temperature | 53.4 |
-| Oo CI | MLD + chl-a | 37.0 |
-| BW29 EI | chl-a + deep EKE | 46.6 |
-| BW29 KGI | chl-a | 40.2 |
+| Oo CI | surface temperature + mid-water EKE | 26.7 |
+| BW29 EI | deep EKE | 29.9 |
+| BW29 KGI | MLD + deep temperature | 21.3 |
 | BW29 CI | MLD + deep temperature | 42.7 |
 | BW37 EI | FSLE + FSLV | 47.8 |
 | BW37 KGI | MLD + deep temperature | 43.3 |
 
-- Cross-site consistency is weak: Gm surface temperature increasing at EI/KGI but decreasing at CI; Pm FSLE peaked (EI) vs decreasing (CI); BW29 chl-a increasing at EI and KGI; Gm MLD peaked at KGI and CI.
+- Highest final VIF 1.26. AR(1)-robust terms (binned): Pm EI FSLE, MLD; Pm CI deep T; Gm all except CI MLD; BW37 EI both, KGI deep T; none for Oo CI or BW29.
+- Daily AR(1) check (`08_daily_ar1_check.R`) agrees with binned check, slightly stricter → daily GAMM NOT adopted.
+- MLD + deep temperature recurs in BW29 KGI/CI and BW37 KGI (candidate shared response for the site-as-variable step).
 - Permutation test (time-shift null, test C): only Gm EI p = 0.04 unadjusted; none after BH correction. Flaws: low power, conservative for stable predictors, overlapping null samples.
 - Sea-ice story (descriptive): CI has a long heavy ice season, EI/KGI short and patchy; KGI 2015 = heaviest/longest ice year in its record, CI 2016 one of the lightest, EI 2014 essentially no ice season (recording ended before ice). Beaked whales never detected with any ice; sperm whales at CI detected up to 77 km inside the ice edge; killer whales mostly at advance/retreat (CI) and once 35 km inside 96% pack (KGI). MODIS shows leads/broken pack on heavy-ice days.
 
@@ -105,7 +111,7 @@ the pipeline, the current results, and what is still open.
 
 ## 4. Open tasks (in order)
 
-1. **Daily AR(1) check** (`08_daily_ar1_check.R`): run was interrupted; `daily_ar1_models.csv` exists but `daily_ar1_terms.csv` does not. Re-run (~20 s) and compare with the binned results to decide whether a daily GAMM (glmmTMB + AR(1)) is worth adopting (user was curious).
+1. **Next:** sea-ice detections vs distance to the ice edge (Results/supplement) + leads in the Discussion; then rerun the permutation test once the models are final. (Site as a variable and site/year tests: done.)
 2. **Manuscript pass** (`manuscript.qmd`):
    - Replace all Copernicus ice text with AMSR2 (Spreen et al. 2008 [CONFIRM]); add ice-edge distance metric and coast buffer to Methods 2.3.
    - Methods 2.6: hypothesis sets (Table 2 with references), VIF-check rule, shrinkage/edf sentence, sea-ice model changes, exploratory framing; optional one-sentence permutation sensitivity.
@@ -115,3 +121,4 @@ the pipeline, the current results, and what is still open.
 3. **Cleanup:** delete exploratory outputs (sensitivity_* folders, `_previous_run_*`, box40 comparison, `06_permutation_test.R` Stage-1 version, tests A/B files) — ask first. Update `INVENTORY.md`/READMEs.
 4. **Placeholders still open:** detection ranges (killer/pilot whale; sperm whale 20 km ref), killer whale LTSA method, site characterization, species-depth literature, product DOIs, BW29 species attribution (southern bottlenose whale vs *Mesoplodon* sp.? — user's old table used *Mesoplodon* sp.), hypothesis-set citations.
 5. References → BibTeX at the end.
+6. **After the analysis is final:** update Natalie's existing summary artifact (made in another Claude Code session): https://claude.ai/artifact/G3oyxeQrGcrpDWAv3o9hA9 — read it first, then republish to the same URL.

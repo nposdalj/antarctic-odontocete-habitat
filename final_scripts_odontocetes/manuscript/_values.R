@@ -76,6 +76,9 @@ n_models <- sum(startsWith(hab_models$status, "modeled"))
 # ---- Habitat model terms and diagnostics -------------------------------------
 hab_terms <- rd("08_results_gams", "main_stage3_habitat_gam_table_terms.csv")
 edf_median <- f1(median(hab_terms$edf)); edf_min <- f1(min(hab_terms$edf)); edf_max <- f1(max(hab_terms$edf))
+# Highest VIF among the final habitat models (VIF check on the final model)
+vif_final_max <- rd("06_statistical_analyses/stage3/tables", "vif_checks_final_models.csv") |>
+  pull(max_vif) |> max(na.rm = TRUE) |> f2()
 hab_diag <- rd("08_results_gams", "supplementary_stage3_habitat_gam_diagnostics.csv") |> order_rows()
 n_lb_fail <- sum(hab_diag$ljung_box_p <= 0.05)
 lb_fail_phrase <- combo_phrase(filter(hab_diag, ljung_box_p <= 0.05))
@@ -221,6 +224,58 @@ site_year_table <- function() {
               `Site × year (%)` = f1(pct_site_x_year), `Residual (%)` = f1(pct_residual),
               `Seasonal share of total (%)` = f1(pct_total_seasonal))
 }
+# ---- Detections relative to the ice edge (08_results_gams/ice_edge_detections.R)
+ice_edge <- rd("08_results_gams", "ice_edge_detections_table.csv")
+ie <- function(sp, s, col) ice_edge[[col]][ice_edge$species == sp & ice_edge$site == s]
+ie_date <- function(sp, s) {
+  d <- as.Date(ie(sp, s, "date_max_inside"))
+  paste(as.integer(format(d, "%d")), format(d, "%B %Y"))
+}
+
+# ---- Site/year tests (05_environmental_data/08_site_year_tests.R) -------------
+sy_sites <- rd("05_environmental_data", "site_year_tests_sites.csv")
+sy_pairs <- rd("05_environmental_data", "site_year_tests_pairs.csv")
+sy_rank  <- rd("05_environmental_data", "site_year_tests_recording_rank.csv")
+sy_split <- rd("05_environmental_data", "site_year_tests_recording_split.csv")
+SY_LABELS <- c(ice_conc = "Sea-ice concentration (%)", temperature_surface = "Temperature, surface (°C)",
+               temperature_mid = "Temperature, mid-water (°C)", temperature_deep = "Temperature, deep (°C)",
+               mixed_layer = "Mixed layer depth (m)", FSLE = "FSLE (per day)",
+               EKE_mid = "EKE, mid-water (cm²/s²)", EKE_deep = "EKE, deep (cm²/s²)")
+sy_years <- sy_sites |> filter(window == "annual", variable == "temperature_mid") |> pull(years)
+sy_n_years <- sy_sites |> filter(window == "annual", variable == "temperature_mid") |> pull(n_years)
+sy_p_site <- function(v, w = "annual") fp(sy_sites$p_site[sy_sites$window == w & sy_sites$variable == v])
+sy_pct <- function(v, col, w = "annual") f1(sy_sites[[col]][sy_sites$window == w & sy_sites$variable == v])
+sy_pair_p <- function(v, pr, w = "annual") fp(sy_pairs$p_holm[sy_pairs$window == w & sy_pairs$variable == v & sy_pairs$pair == pr])
+sy_rec <- function(s, v, col) sy_rank[[col]][sy_rank$site == s & sy_rank$variable == v]
+sy_split_val <- function(v, pr, col) sy_split[[col]][sy_split$variable == v & sy_split$pair == pr]
+site_year_test_table <- function() {
+  diff_txt <- function(d) {
+    star <- ifelse(d$p_holm <= 0.05, "*", "")
+    dig <- ifelse(abs(d$mean_diff) < 0.1, 3, ifelse(abs(d$mean_diff) < 10, 2, 0))
+    paste0(formatC(d$mean_diff, format = "f", digits = dig), star, " (", d$n_same_sign, "/", d$n_years, ")")
+  }
+  pw <- sy_pairs |> filter(window == "annual") |>
+    group_by(variable, pair) |> group_modify(\(d, k) tibble(txt = diff_txt(d))) |> ungroup() |>
+    tidyr::pivot_wider(names_from = pair, values_from = txt)
+  sy_sites |> filter(window == "annual") |>
+    left_join(pw, by = "variable") |>
+    mutate(variable = factor(variable, names(SY_LABELS))) |> arrange(variable) |>
+    transmute(Variable = SY_LABELS[as.character(variable)], Years = years,
+              `F (site)` = f1(F_site), p = fp(p_site),
+              `Site (%)` = f1(pct_var_site), `Year (%)` = f1(pct_var_year),
+              `EI - KGI`, `EI - CI`, `KGI - CI`)
+}
+site_year_rank_table <- function() {
+  sy_rank |>
+    mutate(variable = factor(variable, names(SY_LABELS)),
+           txt = paste0(rank_low_to_high, "/", n_years, " (", formatC(z, format = "f", digits = 1), ")")) |>
+    select(variable, site, txt) |>
+    tidyr::pivot_wider(names_from = site, values_from = txt) |>
+    arrange(variable) |>
+    transmute(Variable = SY_LABELS[as.character(variable)],
+              `EI 2014` = EI, `KGI 2015–16` = KGI, `CI 2016` = CI)
+}
+
 not_holding <- ar1_terms |>
   filter(holds %in% FALSE) |>
   mutate(variable = strip_s(term),

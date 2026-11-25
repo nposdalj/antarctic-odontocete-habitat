@@ -1,0 +1,25 @@
+variable,pair,observed_diff,site_part,year_part
+EKE_deep,EI 2014 - KGI 2015,172,66.2,105
+EKE_deep,EI 2014 - CI 2016,201,86.1,115
+EKE_deep,KGI 2015 - CI 2016,29.9,19.8,10
+EKE_mid,EI 2014 - KGI 2015,116,71.5,45
+EKE_mid,EI 2014 - CI 2016,145,87.9,56.7
+EKE_mid,KGI 2015 - CI 2016,28.2,16.4,11.8
+FSLE,EI 2014 - KGI 2015,-0.0148,-0.0092,-0.00562
+FSLE,EI 2014 - CI 2016,-0.0335,-0.0303,-0.00322
+FSLE,KGI 2015 - CI 2016,-0.0187,-0.0211,0.00239
+ice_conc,EI 2014 - KGI 2015,-0.751,-0.27,-0.481
+ice_conc,EI 2014 - CI 2016,-11.4,-20,8.59
+ice_conc,KGI 2015 - CI 2016,-10.7,-19.7,9.07
+mixed_layer,EI 2014 - KGI 2015,-13.5,-1.8,-11.7
+mixed_layer,EI 2014 - CI 2016,-6.95,10.4,-17.4
+mixed_layer,KGI 2015 - CI 2016,6.5,12.2,-5.74
+temperature_deep,EI 2014 - KGI 2015,-0.931,-0.152,-0.778
+temperature_deep,EI 2014 - CI 2016,0.332,1.16,-0.826
+temperature_deep,KGI 2015 - CI 2016,1.26,1.31,-0.0477
+temperature_mid,EI 2014 - KGI 2015,-0.893,-0.0167,-0.876
+temperature_mid,EI 2014 - CI 2016,0.322,1.19,-0.869
+temperature_mid,KGI 2015 - CI 2016,1.22,1.21,0.00757
+temperature_surface,EI 2014 - KGI 2015,-0.113,0.0677,-0.18
+temperature_surface,EI 2014 - CI 2016,0.505,0.29,0.215
+temperature_surface,KGI 2015 - CI 2016,0.618,0.223,0.396

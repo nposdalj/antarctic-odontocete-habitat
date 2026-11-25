@@ -1,0 +1,29 @@
+species,sites,term,aic_G,aic_GI,aic_I,dAIC_GI_vs_G,dAIC_I_vs_G,p_shared,p_site_deviations,verdict,ar1_used,p_shared_ar1,p_site_specific_vs_shared_ar1,concurvity
+BW29,EI+KGI+CI,mixed_layer_anom,736.3,736.3,740,-0,3.7,0.00858,0.59; 0.54; 0.66,shared,TRUE,0.375,0.997,0.47
+BW29,EI+KGI+CI,EKE_deep,736.3,735.2,735.4,-1.1,-0.8,0.00183,0.0018; 0.79; 0.067,unclear,TRUE,0.691,0.997,0.81
+BW29,EI+KGI,mixed_layer_anom,431.7,431.7,433.3,-0,1.6,0.0131,0.63; 0.55,shared,TRUE,0.567,0.988,0.33
+BW29,EI+KGI,EKE_deep,431.7,417.7,430.6,-14,-1.1,9.53e-5,3.8e-07; 0.66,site-specific,TRUE,0.522,0.903,0.72
+BW29,EI+CI,mixed_layer_anom,564.9,564.9,566.6,0,1.7,0.0351,0.54; 0.7,shared,TRUE,0.352,0.922,0.67
+BW29,EI+CI,EKE_deep,564.9,564.4,564.8,-0.5,-0.1,0.00314,0.11; 0.068,shared,TRUE,0.545,0.996,0.97
+BW29,KGI+CI,mixed_layer_anom,457.1,457.1,459,-0,1.9,0.00297,0.55; 0.85,shared,TRUE,0.605,0.961,0.27
+BW29,KGI+CI,temperature_deep_anom,457.1,445,440.1,-12,-17,1.24e-4,0.29; 0,site-specific,TRUE,0.92,0.0558,0.1
+BW37,EI+KGI,fsle_orient,339.1,339.2,338.9,0.1,-0.2,0.0436,0.064; 0.59,shared,TRUE,0.133,0.915,0.19
+BW37,EI+KGI,mixed_layer_anom,339.1,338.5,338.5,-0.6,-0.7,0.0167,0.92; 0.0094,unclear,TRUE,0.655,0.454,0.32
+BW37,EI+KGI,temperature_deep_anom,339.1,339.9,337.8,0.8,-1.3,3.09e-6,0.42; 0.011,unclear,TRUE,0.109,0.16,0.86
+Gm,EI+KGI+CI,mixed_layer_anom,527.8,522.7,528.2,-5.1,0.3,7.57e-5,0.51; 0.022; 0.00046,site-specific,TRUE,0.446,NA,0.58
+Gm,EI+KGI+CI,temperature_surface_anom,527.8,482.2,475.1,-45.6,-52.7,0.0334,0.0053; 5.5e-06; 1e-04,site-specific,TRUE,0.295,NA,0.29
+Gm,EI+KGI+CI,temperature_mid_anom,527.8,526,528.8,-1.8,1,0,0.64; 0.032; 0.66,unclear,TRUE,0.297,0.916,0.71
+Gm,EI+KGI,mixed_layer_anom,360.6,354.7,347.9,-5.9,-12.7,5.89e-4,0.092; 0.2,unclear,TRUE,0.0662,0.902,0.57
+Gm,EI+KGI,temperature_surface_anom,360.6,343.5,349.8,-17.1,-10.8,0,0.00036; 0.82,site-specific,TRUE,0.00321,0.874,0.5
+Gm,EI+KGI,temperature_mid_anom,360.6,347.3,363,-13.3,2.3,3.24e-5,0.68; 0.58,unclear,TRUE,0.261,NA,0.74
+Gm,EI+KGI,EKE_mid,360.6,359.1,358.3,-1.5,-2.3,0.0239,0.0081; 0.68,site-specific,TRUE,0.514,1,0.73
+Gm,EI+CI,mixed_layer_anom,342.1,344.2,344.4,2.1,2.3,2.87e-5,0.48; 0.0015,unclear,FALSE,NA,NA,0.67
+Gm,EI+CI,temperature_mid_anom,342.1,342.1,344,0,1.9,1.76e-5,0.69; 0.76,shared,FALSE,NA,NA,0.87
+Gm,KGI+CI,FSLE,304,304,305.5,0,1.5,0.0272,0.9; 0.42,shared,TRUE,0.682,1,0.42
+Gm,KGI+CI,fsle_orient,304,304,307.5,0,3.5,5.26e-4,0.64; 0.37,shared,TRUE,NA,0.755,0.31
+Gm,KGI+CI,mixed_layer_anom,304,306.6,311.7,2.5,7.7,1.27e-6,0.0041; 0.0028,unclear,TRUE,0.147,0.883,0.53
+Gm,KGI+CI,temperature_mid_anom,304,299.3,303.1,-4.7,-0.9,0.00289,0.0014; 0.49,site-specific,TRUE,0.415,0.639,0.5
+Gm,KGI+CI,EKE_mid,304,303.2,303.7,-0.9,-0.4,0.00214,0.71; 0.037,unclear,TRUE,0.582,0.207,0.55
+Pm,EI+CI,FSLE,909,895.1,891.1,-13.9,-17.9,0,0; 0.29,site-specific,TRUE,0.232,0.0138,0.49
+Pm,EI+CI,fsle_orient,909,907.7,907.7,-1.4,-1.4,0.0359,0.83; 0.014,unclear,TRUE,0.227,0.916,0.17
+Pm,EI+CI,mixed_layer_anom,909,909.4,910.5,0.4,1.5,0.0101,0.33; 0.35,shared,TRUE,0.912,0.499,0.64

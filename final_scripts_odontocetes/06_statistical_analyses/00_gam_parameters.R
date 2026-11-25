@@ -230,17 +230,22 @@ SHAPE_SLOPE_NEGLIG  <- 0.05  # |slope| below this share of max |slope| is ignore
 # 2026-11-20). Replaces the Stage 1 union sets: each species' candidates are
 # defined from the literature and its foraging layers, not from the data.
 #   All species : surface fronts (FSLE, FSLV orientation), stratification
-#                 (mixed layer depth anomaly), delayed productivity (chl-a,
-#                 3-month lag, standardized anomaly)
+#                 (mixed layer depth anomaly)
 #   + water mass (temperature anomaly) and eddy activity (EKE) in the layers
 #     each species forages in; + surface temperature for the shallower
 #     foragers (pilot and killer whales)
+# Chl-a removed from the main sets (decision N. Posdaljian 2026-11-25, PI
+# feedback): no mechanistic basis for a specific lag at 3-4 trophic levels
+# above phytoplankton; the 3-month lag was chosen from the same data. Not
+# reported anywhere in the paper (decision 2026-11-25); the unreported check
+# is 09_chla_sensitivity.R (none / lag 0 / lag 3; no consistent signal).
+# Pilot whales use the mid-water layer (was deep; decision 2026-11-25).
 # Used by 03_stage3_harmonized_models.R and 07_permutation_hypotheses.R (C).
 # -----------------------------------------------------------------------------
-COMMON_SET <- c("FSLE", "fsle_orient", "mixed_layer_anom", "chla_lag3_anom")
+COMMON_SET <- c("FSLE", "fsle_orient", "mixed_layer_anom")
 HYPOTHESIS_SETS <- list(
   Pm   = c(COMMON_SET, "temperature_mid_anom", "temperature_deep_anom", "EKE_mid", "EKE_deep"),
-  Gm   = c(COMMON_SET, "temperature_surface_anom", "temperature_deep_anom", "EKE_deep"),
+  Gm   = c(COMMON_SET, "temperature_surface_anom", "temperature_mid_anom", "EKE_mid"),
   Oo   = c(COMMON_SET, "temperature_surface_anom", "temperature_mid_anom", "EKE_mid"),
   BW29 = c(COMMON_SET, "temperature_deep_anom", "EKE_deep"),
   BW37 = c(COMMON_SET, "temperature_deep_anom", "EKE_deep")

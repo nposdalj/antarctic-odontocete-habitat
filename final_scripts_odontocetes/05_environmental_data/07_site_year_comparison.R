@@ -40,14 +40,14 @@ VARS <- c(ice_conc = "Sea-ice concentration (%)",
           mixed_layer = "Mixed layer depth (m)",
           FSLE = "FSLE (per day)",
           EKE_mid = "EKE, mid-water layer (cm2 s-2)",
-          EKE_deep = "EKE, deep layer (cm2 s-2)",
-          chla_lag3 = "log10 chl-a, 3-month lag (mg m-3)")
+          EKE_deep = "EKE, deep layer (cm2 s-2)")
+# Chl-a removed (decision N. Posdaljian 2026-11-25: not used in the paper).
 RECORDING <- tibble(site = c("EI", "KGI", "CI"),
                     start = as.Date(c("2014-03-05", "2015-02-10", "2016-02-04")),
                     end   = as.Date(c("2014-07-17", "2016-01-29", "2016-12-02")))
 
 env <- read_csv(F_ENV_DAILY, show_col_types = FALSE) |>
-  mutate(date = as.Date(date), ice_conc = 100 * ice_conc, chla_lag3 = log10(chla_lag3),
+  mutate(date = as.Date(date), ice_conc = 100 * ice_conc,
          fsle_orient_cos = cos(2 * fsle_orient * pi / 180),
          fsle_orient_sin = sin(2 * fsle_orient * pi / 180))
 vars_all <- c(names(VARS), "fsle_orient_cos", "fsle_orient_sin")

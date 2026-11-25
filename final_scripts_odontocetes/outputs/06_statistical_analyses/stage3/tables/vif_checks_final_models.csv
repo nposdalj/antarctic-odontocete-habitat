@@ -1,11 +1,11 @@
 species,site,check,terms,max_vif,worst_vif
-Pm,EI,1,FSLE + mixed_layer_anom + chla_lag3_anom,1.599241411406024,FSLE
+Pm,EI,1,FSLE + mixed_layer_anom + temperature_deep_anom,1.224067422394105,FSLE
 Pm,CI,1,FSLE + temperature_deep_anom + EKE_mid,1.200110886592887,EKE_mid
-Gm,EI,1,chla_lag3_anom + temperature_surface_anom,1.0293026124310383,chla_lag3_anom
+Gm,EI,1,temperature_surface_anom + temperature_mid_anom,1.0945865618811976,temperature_surface_anom
 Gm,KGI,1,mixed_layer_anom + temperature_surface_anom,1.1760256216190734,mixed_layer_anom
 Gm,CI,1,mixed_layer_anom + temperature_surface_anom,1.0024814093123486,mixed_layer_anom
-Oo,CI,1,mixed_layer_anom + chla_lag3_anom,1.0004798715896324,mixed_layer_anom
-BW29,EI,1,chla_lag3_anom + EKE_deep,1.1605734718531484,chla_lag3_anom
+Oo,CI,1,temperature_surface_anom + EKE_mid,1.2052132326267135,temperature_surface_anom
+BW29,KGI,1,mixed_layer_anom + temperature_deep_anom,1.0000054658596622,mixed_layer_anom
 BW29,CI,1,mixed_layer_anom + temperature_deep_anom,1.1678227523701692,mixed_layer_anom
 BW37,EI,1,FSLE + fsle_orient,1.2649449744523293,FSLE
 BW37,KGI,1,mixed_layer_anom + temperature_deep_anom,1.0003799458382947,mixed_layer_anom

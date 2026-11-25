@@ -113,7 +113,11 @@ CLIM_HALF_WINDOW_YEARS <- 5
 # use the nearest Copernicus model level to each nominal depth.
 SPECIES <- list(
   Pm   = list(name = "Sperm whale",                 depths_m = c(0, 375, 1665), model = TRUE),
-  Gm   = list(name = "Long-finned pilot whale",     depths_m = c(0, 16, 635),   model = TRUE),
+  # Gm: mid-water forager (decision N. Posdaljian 2026-11-25, PI feedback):
+  # most tagged dives 200-500 m, deeper dives (max ~650-830 m) occasional
+  # (Baird et al. 2002; Heide-Jorgensen et al. 2002; Norway tagging). 375 m
+  # replaces 635 m (same model level as Pm; mid-water layer).
+  Gm   = list(name = "Long-finned pilot whale",     depths_m = c(0, 16, 375),   model = TRUE),
   Oo   = list(name = "Killer whale",                depths_m = c(0, 11, 455),   model = TRUE),
   BW29 = list(name = "Southern bottlenose whale",   depths_m = c(0, 768),       model = TRUE),
   BW37 = list(name = "BW37 beaked whale",           depths_m = c(0, 67, 920),   model = TRUE),
@@ -143,8 +147,8 @@ LAYERS <- tibble::tibble(
                "Deep layer (500-1000 m)")
 )
 # Layer of each nominal species depth (the surface layer is used by every
-# species): Oo 11, Gm 16, BW37 67 -> surface; Pm 375, Oo 455 -> mid;
-# Gm 635, BW29 768, BW37 920, Pm 1665 (capped at 1000 m) -> deep.
+# species): Oo 11, Gm 16, BW37 67 -> surface; Pm 375, Gm 375, Oo 455 -> mid;
+# BW29 768, BW37 920, Pm 1665 (capped at 1000 m) -> deep.
 depth_layer <- function(d) {
   LAYERS$layer[pmin(findInterval(d, LAYERS$top_m), nrow(LAYERS))]
 }
