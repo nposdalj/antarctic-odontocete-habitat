@@ -133,7 +133,8 @@ for (i in seq_len(nrow(inclusion))) {
   env_site <- filter(env_daily, site == st)
   terms_A <- if (MODE == "C") intersect(HYPOTHESIS_SETS[[sp]], names(daily_site)) else
     harmonized$terms[[which(harmonized$species == sp & harmonized$site == st)]]
-  terms_B <- intersect(HYPOTHESES[[sp]], names(daily_site))
+  # Mode C uses only the hypothesis sets (no single-term tests, no chl-a)
+  terms_B <- if (MODE == "C") character(0) else intersect(HYPOTHESES[[sp]], names(daily_site))
   cols <- unique(c(terms_A, terms_B))
   args <- list(sp = sp, st = st, bin_days = inclusion$bin_days[i],
                cutoff = cutoffs$ice_cutoff[cutoffs$species == sp],

@@ -224,6 +224,23 @@ site_year_table <- function() {
               `Site × year (%)` = f1(pct_site_x_year), `Residual (%)` = f1(pct_residual),
               `Seasonal share of total (%)` = f1(pct_total_seasonal))
 }
+# ---- Time-shift permutation test (07_permutation_hypotheses.R C) -------------
+perm <- rd("06_statistical_analyses/permutation", "C_hypothesis_set_summary.csv")
+perm_n <- perm$n_null[1]
+perm_p_range <- paste0(f2(min(perm$p_perm)), "--", f2(max(perm$p_perm)))
+perm_pbh_min <- f2(min(perm$p_bh))
+permutation_table <- function() {
+  perm |>
+    mutate(species = factor(species, c("Pm", "Gm", "Oo", "BW29", "BW37")),
+           site = factor(site, c("EI", "KGI", "CI"))) |>
+    arrange(species, site) |>
+    transmute(Species = as.character(species), Site = as.character(site),
+              `Selected terms` = vapply(strsplit(observed_terms, " [+] "),
+                                        \(v) paste(TERM_LABEL[v], collapse = " + "), ""),
+              `Dev. (%)` = f1(observed_dev_expl), `Null median (%)` = f1(null_median_dev_expl),
+              `Null 95th (%)` = f1(null_95th_dev_expl), p = f2(p_perm), `p (BH)` = f2(p_bh))
+}
+
 # ---- Detections relative to the ice edge (08_results_gams/ice_edge_detections.R)
 ice_edge <- rd("08_results_gams", "ice_edge_detections_table.csv")
 ie <- function(sp, s, col) ice_edge[[col]][ice_edge$species == sp & ice_edge$site == s]

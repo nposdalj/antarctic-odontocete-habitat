@@ -19,7 +19,7 @@
 #             date, site, depth_m, temperature, salinity, coverage, ...
 #           F_COP_BGC_DEPTH  (outputs/05_environmental_data/copernicus_bgc_by_depth.csv)
 #             date, site, depth_m, o2, coverage, ...
-#           F_COP_SURFACE    (outputs/05_environmental_data/copernicus_surface.csv)
+#           outputs/03_sea_ice/amsr2_daily_site.csv (AMSR2 sea ice)
 #             date, site, ice_conc, ...
 #           F_COP_COVERAGE   (outputs/05_environmental_data/copernicus_depth_coverage.csv)
 #             site, product, depth_m, n_cells, coverage
@@ -141,7 +141,8 @@ bgc_all <- read_csv(F_COP_BGC_DEPTH, show_col_types = FALSE) |>
   mutate(date = as.Date(date), site = factor(site, levels = SITE_ORDER)) |>
   filter(depth_m <= max_depth_m + read_margin_m)
 
-ice_all <- read_csv(F_COP_SURFACE, show_col_types = FALSE) |>
+# Sea ice: AMSR2 ASI (03_sea_ice/amsr2_site_series.R), as everywhere else
+ice_all <- read_csv(out_path("03_sea_ice", "amsr2_daily_site.csv"), show_col_types = FALSE) |>
   select(date, site, ice_conc) |>
   mutate(date = as.Date(date), site = factor(site, levels = SITE_ORDER))
 

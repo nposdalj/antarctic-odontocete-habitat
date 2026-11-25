@@ -78,6 +78,15 @@ the pipeline, the current results, and what is still open.
 - For those, open-water bins only: distance-to-ice-edge models (none significant).
 - EI: no ice variation during recording (recorded only before ice advance).
 
+### Manuscript decisions (2026-11-25, after first full read)
+- Species-depth bullets deleted (Table 3 covers them); predictor-rationale bullets condensed to one paragraph.
+- Ice-class occurrence figure moved to Supplement S4; ice-edge detections figure stays in the main text.
+- Figure 3 = weekly mean presence minutes per recorded day (the model response units), not days per week.
+- Response stays minutes/day (hourly/daily 0/1 tested 2026-11-19, rejected).
+- FSLV and mid-water variables stay as candidates (a priori sets; rarely selected is a result).
+- Target: npj Acoustics collection https://www.nature.com/collections/gfdagjjhge (Natalie 2026-11-25). Guidelines pages require sign-in for automated fetches; word/figure limits not yet confirmed.
+- Permutation test C rerun with final hypothesis sets; supplement figure from `06_statistical_analyses/11_permutation_figure.R`.
+
 ### Figures
 - Response curves: kernel densities at panel bottom (all bins grey, detection bins site colour), clipped to data range. Main figure = models with ≥2 terms; single-term models in supplement.
 - BW58 merged into the main weekly-presence figure.

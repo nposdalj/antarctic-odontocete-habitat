@@ -57,7 +57,7 @@ RARE_SPECIES <- "BW58"
 # the habitat-model predictors as they enter the models (revised 2026-11-19),
 # plus sea-ice concentration (sea-ice models, raw). "anom." = anomaly from the
 # 10-yr climatology; layers: surface 0-100 m, mid-water 100-500 m, deep
-# 500-1000 m. Mid-water variables are used by sperm and killer whales only.
+# 500-1000 m. Mid-water variables are used by sperm, pilot and killer whales; chl-a is not used.
 ENV_VARS <- c(
   ice_conc                 = "Sea ice\n(fraction)",
   temperature_surface_anom = "Temp. anom.,\n0–100 m (°C)",
@@ -67,8 +67,7 @@ ENV_VARS <- c(
   FSLE                     = "FSLE\n(day⁻¹)",
   fsle_orient              = "FSLV orient.\n(°)",
   EKE_mid                  = "EKE, 100–\n500 m (cm² s⁻²)",
-  EKE_deep                 = "EKE, 500–\n1000 m (cm² s⁻²)",
-  chla_lag3_anom           = "log10 chl-a std.\nanom. (SD), 3-mo lag"
+  EKE_deep                 = "EKE, 500–\n1000 m (cm² s⁻²)"
 )
 ANOM_PANELS <- grep("_anom$", names(ENV_VARS), value = TRUE)
 
@@ -117,7 +116,10 @@ daily_long <- daily %>%
 weekly <- daily_long %>%
   mutate(week_start = floor_date(date, "week", week_start = 1)) %>%
   group_by(site, species, week_start) %>%
-  summarise(rec_days = n(), det_days = sum(presence_min > 0), .groups = "drop")
+  summarise(rec_days = n(), det_days = sum(presence_min > 0),
+            # Same unit as the habitat-model response: mean presence minutes
+            # per recorded day (positive 5-min bins), here over each week
+            min_per_day = sum(presence_min) / rec_days, .groups = "drop")
 
 # Time without recording, shaded in the weekly plots: before the first
 # deployment, between deployments, and after the last one. Edges are snapped
@@ -176,11 +178,43 @@ plot_weekly <- function(species_codes) {
           panel.spacing.y = unit(0.3, "cm"))
 }
 
+# Weekly mean presence minutes per recorded day (decision N. Posdaljian
+# 2026-11-25: show presence in the units of the habitat-model response instead
+# of days with detections). Free y axis per species; weeks recorded without
+# detections show a grey baseline tick, unrecorded periods are shaded.
+plot_weekly_minutes <- function(species_codes) {
+  wk <- weekly %>%
+    filter(species %in% species_codes) %>%
+    mutate(species = factor(species, levels = species_codes,
+                            labels = species_label(species_codes)),
+           week_mid = week_start + 3.5)
+  ggplot(wk, aes(x = week_mid)) +
+    geom_rect(data = no_recording, inherit.aes = FALSE,
+              aes(xmin = xmin, xmax = xmax, ymin = -Inf, ymax = Inf),
+              fill = "grey72") +
+    geom_segment(aes(xend = week_mid, y = 0, yend = 0), colour = "grey55",
+                 linewidth = 1.2) +
+    geom_col(data = filter(wk, min_per_day > 0),
+             aes(y = min_per_day, fill = as.character(site)), width = 6) +
+    facet_grid(species ~ ., switch = "y", scales = "free_y") +
+    scale_fill_manual(values = SITE_COLORS, limits = SITE_ORDER,
+                      labels = SITE_LABELS[SITE_ORDER], name = NULL) +
+    scale_x_date(limits = x_range, expand = c(0, 0),
+                 date_breaks = "3 months", date_labels = "%b
+%Y",
+                 date_minor_breaks = "1 month") +
+    scale_y_continuous(expand = expansion(mult = c(0, 0.08))) +
+    labs(x = NULL, y = "Presence (minutes per day, weekly mean)") +
+    theme_occurrence +
+    theme(strip.placement = "outside",
+          panel.spacing.y = unit(0.3, "cm"))
+}
+
 # (i) Main text: all species, BW58 included as the last panel
 #     (decision N. Posdaljian 2026-11-20; the separate BW58 supplementary
 #     figure is no longer produced).
 all_species <- c(MAIN_SPECIES, RARE_SPECIES)
-save_figure(plot_weekly(all_species), "fig_weekly_presence",
+save_figure(plot_weekly_minutes(all_species), "fig_weekly_presence",
             height_in = 1.0 + 0.95 * length(all_species))
 
 # -----------------------------------------------------------------------------
