@@ -38,3 +38,4 @@ the cited finding; "check" = details (author list, DOI, pages) still to confirm.
 
 (Chl-a references, e.g., Jaquet et al. 1996 MEPS 145:1-10 and Soldevilla et al.
 2011 MEPS 423:247-260, were dropped with chl-a on 2026-11-25.)
+- Wood SN (2013) On p-values for smooth components of an extended generalized additive model. Biometrika 100:221-228. doi:10.1093/biomet/ass048 — check

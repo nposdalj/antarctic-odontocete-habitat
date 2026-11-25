@@ -1,4 +1,4 @@
-# Handoff — odontocete habitat manuscript (status 2026-11-24)
+# Handoff — odontocete habitat manuscript (status 2026-11-25)
 
 Read this first when resuming work (e.g., in Claude Code on another computer).
 It summarizes every decision made in the cleanup/analysis sessions, how to run
@@ -112,22 +112,34 @@ the pipeline, the current results, and what is still open.
 
 - Highest final VIF 1.26. AR(1)-robust terms (binned): Pm EI FSLE, MLD; Pm CI deep T; Gm all except CI MLD; BW37 EI both, KGI deep T; none for Oo CI or BW29.
 - Daily AR(1) check (`08_daily_ar1_check.R`) agrees with binned check, slightly stricter → daily GAMM NOT adopted.
-- MLD + deep temperature recurs in BW29 KGI/CI and BW37 KGI (candidate shared response for the site-as-variable step).
-- Permutation test (time-shift null, test C): only Gm EI p = 0.04 unadjusted; none after BH correction. Flaws: low power, conservative for stable predictors, overlapping null samples.
+- Site-pooled models: only BW29 ~ MLD shared across sites (not AR(1)-robust); Discussion sentence only.
+- Permutation test (time-shift null, test C, rerun 2026-11-25 with final models): no model beats the null (p = 0.08–0.79; BH p ≥ 0.47). Flaws: low power, conservative for stable predictors, overlapping null samples.
 - Sea-ice story (descriptive): CI has a long heavy ice season, EI/KGI short and patchy; KGI 2015 = heaviest/longest ice year in its record, CI 2016 one of the lightest, EI 2014 essentially no ice season (recording ended before ice). Beaked whales never detected with any ice; sperm whales at CI detected up to 77 km inside the ice edge; killer whales mostly at advance/retreat (CI) and once 35 km inside 96% pack (KGI). MODIS shows leads/broken pack on heavy-ice days.
 
 ---
 
-## 4. Open tasks (in order)
 
-1. **Next:** sea-ice detections vs distance to the ice edge (Results/supplement) + leads in the Discussion; then rerun the permutation test once the models are final. (Site as a variable and site/year tests: done.)
-2. **Manuscript pass** (`manuscript.qmd`):
-   - Replace all Copernicus ice text with AMSR2 (Spreen et al. 2008 [CONFIRM]); add ice-edge distance metric and coast buffer to Methods 2.3.
-   - Methods 2.6: hypothesis sets (Table 2 with references), VIF-check rule, shrinkage/edf sentence, sea-ice model changes, exploratory framing; optional one-sentence permutation sensitivity.
-   - Results: occurrence-led; sea-ice section with phenology/recording-year context and "never detected with ice"; habitat section exploratory with AR(1) markers.
-   - Update figures (combined ice figure, maps, curves) and supplement numbering; check stale references (e.g., Supplement S3 EKE comparison was removed).
-   - Discussion notes: site/year confound, sea-ice interpretation, concurvity, detection vs ambient noise, raw-vs-anomaly validation.
-3. **Cleanup:** delete exploratory outputs (sensitivity_* folders, `_previous_run_*`, box40 comparison, `06_permutation_test.R` Stage-1 version, tests A/B files) — ask first. Update `INVENTORY.md`/READMEs.
-4. **Placeholders still open:** detection ranges (killer/pilot whale; sperm whale 20 km ref), killer whale LTSA method, site characterization, species-depth literature, product DOIs, BW29 species attribution (southern bottlenose whale vs *Mesoplodon* sp.? — user's old table used *Mesoplodon* sp.), hypothesis-set citations.
-5. References → BibTeX at the end.
-6. **After the analysis is final:** update Natalie's existing summary artifact (made in another Claude Code session): https://claude.ai/artifact/G3oyxeQrGcrpDWAv3o9hA9 — read it first, then republish to the same URL.
+## 4. Open tasks (status 2026-11-25, for Monday)
+
+Analysis is complete (final models, AR(1) checks, site/year tests, ice-edge
+detections, permutation test C rerun: no model beats the time-shift null,
+p = 0.08-0.79, BH-adjusted p >= 0.47). The manuscript has been through an
+npj Acoustics pass (methods moved out of the supplement; statistics, LLM-use,
+code availability, data availability, competing interests sections added).
+
+1. **Natalie to fill in** (search the .qmd for `\ins{` and `\conf{`):
+   title, Introduction, Discussion prose (draft notes are in place), author
+   contributions, acknowledgements/funding, data and code repository links/DOIs,
+   LLM statement wording, detection ranges, killer whale LTSA method, site
+   description, product DOIs, BW29 species attribution, companion-paper reference,
+   leads reference.
+2. **References:** convert to Nature numbered style (BibTeX + CSL); list in
+   `manuscript/references_pending.md`; confirm Becker, Biggs, Virgili author lists.
+3. **Figure legends:** each needs a short title sentence followed by a body of at most
+   350 words (all bodies already under 350 words). Abstract is 275 words; npj gives no
+   limit on the pages seen, but check the content-types page for an abstract limit.
+4. **Cleanup:** delete exploratory outputs (sensitivity_* folders, `_previous_run_*`,
+   box40 comparison, `06_permutation_test.R` Stage-1 version, permutation modes A/B)
+   — ask first. Simplify Stage 1 (still bins chl-a). Update `INVENTORY.md`/READMEs.
+5. **After the analysis is final:** update Natalie's summary artifact
+   https://claude.ai/artifact/G3oyxeQrGcrpDWAv3o9hA9 (read first, republish to same URL).
