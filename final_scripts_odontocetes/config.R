@@ -179,6 +179,30 @@ COPERNICUS <- list(
 # predictors (below the euphotic zone they are ~0 and uninformative).
 CHL_PROD_MAX_DEPTH_M <- 50
 
+# Sea-ice concentration source for the models (ice cutoffs, sea-ice GAMs,
+# occurrence by ice class):
+#   "bremen"     : AMSR2 ASI daily sea-ice concentration (University of Bremen,
+#                  3.125 km), box means extracted outside this pipeline and
+#                  imported by 05_environmental_data/04c_import_bremen_ice.R
+#   "copernicus" : GLORYS12 siconc from 04_extract_copernicus.R
+# ice_thickness always comes from Copernicus (not used in any model).
+# Set to "copernicus" at the merge of 2026-11-25: the models use AMSR2 ASI at
+# 6.25 km from 03_sea_ice/amsr2_site_series.R, joined in 05_compile_dataset.R
+# after this block (it replaces ice_conc either way). The 3.125 km route
+# (04c_import_bremen_ice.R) is kept but switched off until Natalie decides
+# between the two products; its extracted files are not on every computer.
+SEA_ICE_SOURCE <- "copernicus"
+# Folder holding the extracted Bremen box-mean CSVs, one subfolder per site:
+#   <BREMEN_ICE_DIR>/EI/*.csv, <BREMEN_ICE_DIR>/KGI/*.csv, <BREMEN_ICE_DIR>/CI/*.csv
+# Each CSV needs a date column (Date/date, yyyy-mm-dd or yyyymmdd, or a MATLAB
+# datenum) and one concentration column (bs_mean as written by EvaSeaIce.py,
+# or ice_conc / sic / concentration), in percent (0-100) or fraction (0-1).
+BREMEN_ICE_DIR <- file.path(ENV_DIR, "Sea Ice Bremen", "extracted")
+# Days missing from the Bremen record inside a recording period are filled by
+# linear interpolation only if the gap is at most this many days; longer gaps
+# stop the import.
+BREMEN_MAX_GAP_DAYS <- 3
+
 # Lagged bottom-up predictors: mean over the 30-day window ending
 # lag * 30 days before each date.
 LAG_MONTHS      <- 1:6
@@ -209,6 +233,9 @@ F_COP_SURFACE      <- out_path("05_environmental_data", "copernicus_surface.csv"
 #   ice_conc_sd, ice_thickness   (ice NA -> 0: NaN = open water in source)
 F_COP_COVERAGE     <- out_path("05_environmental_data", "copernicus_depth_coverage.csv")
 #   site, product, depth_m, coverage (fraction of box cells with water)
+F_BREMEN_ICE       <- out_path("05_environmental_data", "bremen_ice_daily.csv")
+#   date, site, ice_conc (fraction 0-1), filled (TRUE = interpolated gap day),
+#   source_file   (recording periods only; 04c_import_bremen_ice.R)
 F_FSLE_DAILY       <- out_path("05_environmental_data", "fsle_daily.csv")
 #   date, site, FSLE, FSLE_sd, fsle_orient, fsle_orient_sd
 F_ENV_DAILY        <- out_path("05_environmental_data", "env_daily_wide.csv")

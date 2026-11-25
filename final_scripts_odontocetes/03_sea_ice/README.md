@@ -1,5 +1,18 @@
 # 03_sea_ice
 
+> **Update 2026-11-23:** the models now take sea-ice concentration from the
+> AMSR2 ASI product (University of Bremen, 3.125 km), set by
+> `SEA_ICE_SOURCE <- "bremen"` in `config.R`. The box means were extracted
+> outside this pipeline and are imported by
+> `05_environmental_data/04c_import_bremen_ice.R` from
+> `Environmental Data/Sea Ice Bremen/extracted/<site>/*.csv` into
+> `outputs/05_environmental_data/bremen_ice_daily.csv`. `05_compile_dataset.R`
+> then swaps them in for the Copernicus `ice_conc`. The import also writes a
+> Bremen vs Copernicus comparison (`bremen_vs_copernicus_ice.csv/.png`).
+> `ice_thickness` is still Copernicus and is not used in any model. Set
+> `SEA_ICE_SOURCE <- "copernicus"` to restore the description below. The
+> manuscript text (Section 2.3, Table tab:pred) still says Copernicus.
+
 No scripts live in this folder. Sea ice is extracted together with the other
 Copernicus model fields in
 `05_environmental_data/04_extract_copernicus.R`.
